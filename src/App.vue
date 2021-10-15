@@ -1,15 +1,21 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="card">
+  <h5>Horizontal</h5>
+  <Splitter style="height: 300px" class="p-mb-5">
+    <SplitterPanel class="p-d-flex p-ai-center p-jc-center">
+      Panel 1
+    </SplitterPanel>
+    <SplitterPanel class="p-d-flex p-ai-center p-jc-center">
+      Panel 2
+    </SplitterPanel>
+  </Splitter>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
   name: 'App',
   components: {
-    HelloWorld
   }
 }
 </script>
