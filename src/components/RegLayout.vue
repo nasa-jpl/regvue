@@ -5,7 +5,7 @@
     </thead>
     <tbody>
       <tr>
-        <td class="layout_field_name"
+        <td class="layout_field_name" v-responsive-rotate
           v-for="field in reg.fields" :key="field"
           :colspan="field.nbits">
           {{ field.name }}
@@ -34,7 +34,39 @@ defineProps([
 </script>
 
 <script>
+export const canvas = document.createElement("canvas");
+export const getTextWidth = function (text, font) {
+  let context = canvas.getContext("2d");
+  context.font = font;
+  return context.measureText(text).width;
+};
+export const ResponsiveRotateDirective = {
+  mounted: function (element) {
+    const observer = new ResizeObserver(function (entries) {
+      // We use one observer per element, therefore each observer
+      // is observing only a single element.  Entries will always
+      // contain a single entry.
+      let entry = entries[0];
+      let element_width = entry.contentRect.width;
+      let element = entry.target;
+      let text = element.textContent;
+      let font = window.getComputedStyle(element).font;
+      let text_width = getTextWidth(text, font);
+
+      if (text_width > element_width) {
+        element.classList.add("rotate");
+      } else {
+        element.classList.remove("rotate");
+      }
+    });
+
+    observer.observe(element);
+  }
+}
 export default {
+  directives: {
+    'responsive-rotate': ResponsiveRotateDirective,
+  },
   data() {
     return {
     }
