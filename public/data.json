@@ -1,0 +1,344 @@
+{
+"root": {
+  "id": "root",
+  "type": "root",
+  "children": [
+    "regs",
+    "mems"
+  ]
+},
+"regs": {
+  "id": "regs",
+  "name": "regs",
+  "type": "block",
+  "offset": "0x0",
+  "size": "0x10000",
+  "children": [
+    "regs.nand0",
+    "regs.blk0",
+    "regs.blk1",
+    "regs.blk2"
+  ]
+},
+"mems": {
+  "id": "mems",
+  "name": "mems",
+  "type": "block",
+  "offset": "0x200000",
+  "size": "0x20000",
+  "children": [
+    "mems.tx",
+    "mems.rx"
+  ]
+},
+"regs.nand0": {
+  "id": "regs.nand0",
+  "name": "nand0",
+  "type": "block",
+  "offset": "0x0",
+  "size": "0x1000",
+  "children": [
+    "regs.nand0.rev",
+    "regs.nand0.id",
+    "regs.nand0.cmd"
+    ]
+},
+"regs.blk0": {
+  "id": "regs.blk0",
+  "name": "blk0",
+  "type": "block",
+  "offset": "0x0000",
+  "size": "0x1000",
+  "children": [
+    "regs.blk0.reg0",
+    "regs.blk0.reg1"
+  ]
+},
+"regs.blk1": {
+  "id": "regs.blk1",
+  "name": "blk1",
+  "type": "block",
+  "offset": "0x1000",
+  "size": "0x1000",
+  "children": [
+    "regs.blk1.reg0",
+    "regs.blk1.reg1"
+  ]
+},
+"regs.blk2": {
+  "id": "regs.blk2",
+  "name": "blk2",
+  "type": "block",
+  "offset": "0x2000",
+  "size": "0x1000"
+},
+"mems.tx": {
+  "id": "mems.tx",
+  "name": "tx",
+  "type": "mem",
+  "offset": "0x0000",
+  "size": "0x10000"
+},
+"mems.rx": {
+  "id": "mems.rx",
+  "name": "rx",
+  "type": "mem",
+  "offset": "0x0000",
+  "size": "0x10000"
+},
+"regs.nand0.rev": {
+  "id": "regs.nand0.rev",
+  "name": "rev",
+  "type": "reg",
+  "offset": "0x0",
+  "size": "0x4",
+  "address": "0x0",
+  "value": "0x600dc0de",
+  "fields": [
+    {
+      "name": "rsvd0",
+      "nbits": 8,
+      "lsb": 24,
+      "access": "ro",
+      "doc": "Reserved."
+    }, {
+      "name": "major",
+      "nbits": 8,
+      "lsb": 16,
+      "access": "ro",
+      "doc": "Major component of the version number. A change to the major component communicates a breaking change."
+    }, {
+      "name": "minor",
+      "nbits": 8,
+      "lsb": 8,
+      "access": "ro",
+      "doc": "Minor component of the version number. A change to the minor component communicates a non-breaking change that adds functionality."
+    }, {
+      "name": "patch",
+      "nbits": 8,
+      "lsb": 0,
+      "access": "ro",
+      "doc": "Patch component of the version number. A change to the patch component communicates a bug fix."
+    }
+  ]
+},
+"regs.nand0.id": {
+  "id": "regs.nand0.id",
+  "name": "id",
+  "type": "reg",
+  "offset": "0x4",
+  "size": "0x4",
+  "address": "0x4",
+  "value": "0x600dc0de",
+  "fields": [
+    {
+      "name": "rsvd0",
+      "nbits": 28,
+      "lsb": 4,
+      "access": "ro",
+      "doc": "Reserved."
+    }, {
+    "name": "bankid",
+    "nbits": 4,
+    "lsb": 0,
+    "access": "ro",
+    "doc": ""
+    }
+  ]
+},
+"regs.nand0.cmd": {
+  "id": "regs.nand0.cmd",
+  "name": "cmd",
+  "type": "reg",
+  "offset": "0x8",
+  "size": "0x4",
+  "address": "0x8",
+  "value": "0x600dc0de",
+  "fields": [
+    {
+      "name": "cmd",
+      "nbits": 8,
+      "lsb": 24,
+      "access": "rw",
+      "doc": ""
+    }, {
+      "name": "arg",
+      "nbits": 8,
+      "lsb": 16,
+      "access": "rw",
+      "doc": "Command argument for direct commands."
+    }, {
+      "name": "lunid",
+      "nbits": 4,
+      "lsb": 12,
+      "access": "rw",
+      "doc": ""
+    }, {
+      "name": "ignore_descr_cs",
+      "nbits": 1,
+      "lsb": 11,
+      "access": "rw",
+      "doc": ""
+    }, {
+      "name": "rsvd0",
+      "nbits": 2,
+      "lsb": 9,
+      "access": "ro",
+      "doc": "Reserved."
+    }, {
+      "name": "done_irq_mode",
+      "nbits": 1,
+      "lsb": 8,
+      "access": "rw",
+      "doc": ""
+    }, {
+      "name": "tmo_sel",
+      "nbits": 2,
+      "lsb": 6,
+      "access": "rw",
+      "doc": ""
+    }, {
+      "name": "continue_on_abort_fail",
+      "nbits": 6,
+      "lsb": 0,
+      "access": "rw",
+      "doc": ""
+    }
+  ]
+},
+"regs.blk0.reg0": {
+  "id": "regs.blk0.reg0",
+  "name": "reg0",
+  "type": "reg",
+  "offset": "0x0",
+  "size": "0x4",
+  "address": "0x0",
+  "value": "0x600dc0de",
+  "fields": [
+    {
+      "name": "f4",
+      "nbits": 4,
+      "lsb": 28,
+      "access": "rw"
+    }, {
+    "name": "rsvd1",
+    "nbits": 8,
+    "lsb": 20,
+    "access": "ro"
+    }, {
+    "name": "f3",
+    "nbits": 8,
+    "lsb": 12,
+    "access": "rw"
+    }, {
+    "name": "rsvd0",
+    "nbits": 4,
+    "lsb": 8,
+    "access": "ro"
+    }, {
+    "name": "f1",
+    "nbits": 4,
+    "lsb": 4,
+    "access": "rw"
+    }, {
+    "name": "long_field_name",
+    "nbits": 4,
+    "lsb": 0,
+    "access": "rw"
+    }
+  ]
+},
+"regs.blk0.reg1": {
+  "id": "regs.blk0.reg1",
+  "name": "reg1",
+  "type": "reg",
+  "offset": "0x4",
+  "size": "0x4",
+  "address": "0x4",
+  "value": "0x0000000",
+  "fields": [
+    {
+      "name": "f3",
+      "nbits": 8,
+      "lsb": 24,
+      "access": "rw"
+    }, {
+    "name": "f2",
+    "nbits": 8,
+    "lsb": 16,
+    "access": "rw"
+    }, {
+    "name": "f1",
+    "nbits": 8,
+    "lsb": 8,
+    "access": "rw"
+    }, {
+    "name": "f0",
+    "nbits": 8,
+    "lsb": 0,
+    "access": "rw",
+    "doc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    }
+  ]
+},
+"regs.blk1.reg0": {
+  "id": "regs.blk1.reg0",
+  "name": "reg0",
+  "type": "reg",
+  "offset": "0x0",
+  "size": "0x4",
+  "address": "0x1000",
+  "value": "0x0badf00d",
+  "fields": [
+    {
+      "name": "address",
+      "nbits": 32,
+      "lsb": 0,
+      "access": "rw",
+      "doc": "The address of the operation."
+    }
+  ]
+},
+"regs.blk1.reg1": {
+  "id": "regs.blk1.reg1",
+  "name": "reg1",
+  "type": "reg",
+  "offset": "0x4",
+  "size": "0x4",
+  "address": "0x1004",
+  "value": "0x00000002",
+  "fields": [
+    {
+      "name": "rsvd1",
+      "nbits": 8,
+      "lsb": 24,
+      "access": "ro",
+      "doc": "Reserved"
+    }, {
+    "name": "nbytes",
+    "nbits": 16,
+    "lsb": 8,
+    "access": "rw",
+    "doc": "The number of bytes to transmit."
+    }, {
+    "name": "rsvd0",
+    "nbits": 6,
+    "lsb": 2,
+    "access": "ro",
+    "doc": "Reserved"
+    }, {
+    "name": "done",
+    "nbits": 1,
+    "lsb": 1,
+    "access": "w1c",
+    "doc": "Set by hardware when the operation is complete."
+    }, {
+    "name": "start",
+    "nbits": 1,
+    "lsb": 0,
+    "access": "w1s",
+    "doc": "Starts the operation. Cleared by hardware when the operation has started."
+    }
+  ]
+}
+}

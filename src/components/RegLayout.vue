@@ -1,0 +1,92 @@
+<template>
+  <table id="reg-layout-table">
+    <thead>
+      <th class="layout_bit_index" v-for="bit in 32" :key="bit">{{ 32 - bit }}</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="layout_field_name"
+          v-for="field in reg.fields" :key="field"
+          :colspan="field.nbits">
+          {{ field.name }}
+        </td>
+      </tr>
+      <tr>
+        <td class="layout_field_input" v-for="field in reg.fields" :key="field" :colspan="field.nbits">
+          <input type="text"/>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="32">
+          <input type="text"/>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</template>
+
+<script setup>
+import { defineProps } from 'vue'
+
+defineProps([
+  'reg'
+]);
+</script>
+
+<script>
+export default {
+  data() {
+    return {
+    }
+  },
+  methods: {
+  },
+  computed: {
+  },
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+table {
+    width: 100%;
+    font-size: 12px;
+    table-layout: fixed;
+    vertical-align: top;
+}
+th {
+    background-color: lightgray;
+    text-align: center;
+}
+
+td, th {
+    border: thin solid black;
+    padding: 5px;
+}
+
+th:nth-of-type(8n), th:nth-of-type(8n-1), th:nth-of-type(8n-2), th:nth-of-type(8n-3) {
+    background-color: gray;
+}
+
+.rotate {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+
+.layout_bit_index {
+    width: 3.125%;
+    text-align: center;
+}
+
+.layout_field_name {
+    text-align: center;
+    vertical-align: middle;
+}
+
+input[type="text"] {
+    width: 100%;
+    border: 0px;
+    text-align: center;
+    box-sizing: border-box;
+}
+</style>
