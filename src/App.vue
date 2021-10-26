@@ -39,6 +39,14 @@ function item_to_node(items, item) {
   });
 }
 
+function firstReg(items) {
+  for (let key in items) {
+    if (items[key].type == "reg") {
+      return items[key];
+    }
+  }
+}
+
 export default {
   created() {
     this.reg = {};
@@ -47,7 +55,16 @@ export default {
       .then(result => result.json())
       .then(json => {
         this.items = json;
-        this.reg = this.items["regs.blk0.reg0"];
+        this.reg = firstReg(this.items);
+        this.selectionKeys[this.reg.id] = true;
+
+        // Expand all parents of selected
+        let id = this.reg.id;
+        while (id.includes(".")) {
+          id = id.replace(/\.\w+$/, '');
+          this.expandedKeys[id] = true;
+        }
+
         this.nodes = item_to_node(this.items, this.items["root"]);
       });
   },
@@ -57,13 +74,8 @@ export default {
       items: null,
 
       nodes: null,
-      expandedKeys: {
-        regs: true,
-        "regs.blk0": true,
-      },
-      selectionKeys: {
-        "regs.blk0.reg0": true,
-      },
+      expandedKeys: {},
+      selectionKeys: {},
     }
   },
   methods: {
