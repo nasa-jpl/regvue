@@ -13,7 +13,7 @@
       </tr>
       <tr>
         <td class="layout_field_input" v-for="field in reg.fields" :key="field" :colspan="field.nbits">
-          <input type="text"/>
+          <input type="text" :value="field.reset"/>
         </td>
       </tr>
       <tr>
