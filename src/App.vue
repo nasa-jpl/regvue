@@ -2,7 +2,7 @@
   <Splitter style="height: calc(100vh - 20px)">
     <SplitterPanel :size="20">
       <TreeTable class="p-treetable-sm" :value="nodes" :expandedKeys="expandedKeys"
-        :scrollable="true" scrollHeight="100%"
+        :scrollable="true" scrollHeight="calc(100vh - 20px - 53px)"
         v-model:selectionKeys="selectionKeys" selectionMode="single" @node-select="onNodeSelect">
         <template #header>
           Address Map
