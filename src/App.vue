@@ -8,7 +8,7 @@
           Address Map
         </template>
         <Column field="name" header="Name" :expander="true"></Column>
-        <Column field="offset" header="Offset"></Column>
+        <Column field="addr" header="Address"></Column>
       </TreeTable>
     </SplitterPanel>
     <SplitterPanel :size="80">
@@ -27,7 +27,7 @@ function item_to_node(items, item) {
       key: child["id"],
       data: {
         name: child["name"],
-        offset: child["offset"],
+        addr: child["addr"],
       }
     };
 
