@@ -10,7 +10,7 @@
     </thead>
     <tbody>
       <tr v-for="field in reg.fields" :key="field">
-        <td class="fields_nbits">{{ field.nbits }}</td>
+        <td class="fields_bits">{{ bits(field.lsb, field.nbits) }}</td>
         <td class="fields_name">{{ field.name }}</td>
         <td class="fields_access">{{ field.access }}</td>
         <td class="fields_description"><span v-html='field.doc.replaceAll("\n", "<br>")'></span></td>
@@ -33,6 +33,15 @@ export default {
     return {
     }
   },
+  methods: {
+    bits(lsb, nbits) {
+      if (nbits == 1) {
+        return lsb;
+      } else {
+        return (nbits + lsb - 1) + ":" + lsb;
+      }
+    }
+  },
   computed: {
   },
 }
@@ -50,7 +59,7 @@ table {
 th {
     background-color: lightgray;
 }
-.fields_nbits {
+.fields_bits {
     width: 10%;
 }
 .fields_name {
