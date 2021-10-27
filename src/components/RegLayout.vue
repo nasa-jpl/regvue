@@ -13,7 +13,7 @@
       </tr>
       <tr>
         <td class="layout_field_input" v-for="field in reg.fields" :key="field" :colspan="field.nbits">
-          <input type="text" :value="field.reset"/>
+          <input type="text" :value="field_value(field)"/>
         </td>
       </tr>
       <tr>
@@ -72,6 +72,14 @@ export default {
     }
   },
   methods: {
+    field_value(field) {
+      let i = parseInt(field.reset);
+      if (field.nbits == 1) {
+        return i;
+      } else {
+        return "0x" + i.toString(16);
+      }
+    }
   },
   computed: {
   },
