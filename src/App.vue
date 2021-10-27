@@ -12,8 +12,7 @@
       </TreeTable>
     </SplitterPanel>
     <SplitterPanel :size="80">
-      <Reg :reg="reg">
-      </Reg>
+      <Reg :reg="reg"></Reg>
     </SplitterPanel>
   </Splitter>
 </template>
