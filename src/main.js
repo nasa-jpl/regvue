@@ -12,8 +12,6 @@ import RegLayout from '@/components/RegLayout.vue'
 import RegFields from '@/components/RegFields.vue'
 
 import PrimeVue from 'primevue/config';
-import Splitter from 'primevue/splitter';
-import SplitterPanel from 'primevue/splitterpanel';
 import TreeTable from 'primevue/treetable';
 import Column from 'primevue/column';
 
@@ -26,8 +24,6 @@ createApp(App)
   .component('Reg', Reg)
   .component('RegLayout', RegLayout)
   .component('RegFields', RegFields)
-  .component('Splitter', Splitter)
-  .component('SplitterPanel', SplitterPanel)
   .component('TreeTable', TreeTable)
   .component('Column', Column)
   .mount('#app');

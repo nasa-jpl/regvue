@@ -1,20 +1,22 @@
 <template>
-  <Splitter style="height: calc(100vh - 20px)">
-    <SplitterPanel :size="20">
-      <TreeTable class="p-treetable-sm" :value="nodes" :expandedKeys="expandedKeys"
-        :scrollable="true" scrollHeight="calc(100vh - 20px - 53px)"
-        v-model:selectionKeys="selectionKeys" selectionMode="single" @node-select="onNodeSelect">
-        <template #header>
-          Address Map
-        </template>
-        <Column field="name" header="Name" :expander="true"></Column>
-        <Column field="addr" header="Address"></Column>
-      </TreeTable>
-    </SplitterPanel>
-    <SplitterPanel :size="80">
-      <Reg :reg="reg"></Reg>
-    </SplitterPanel>
-  </Splitter>
+  <div class="sidebar">
+    <TreeTable class="p-treetable-sm" :value="nodes" :expandedKeys="expandedKeys"
+      :scrollable="true" scrollHeight="100vh"
+      v-model:selectionKeys="selectionKeys" selectionMode="single" @node-select="onNodeSelect">
+      <template #header>
+      Address Map
+      </template>
+      <Column field="name" header="Name" :expander="true"
+        headerClass="sidebar-name-header" bodyClass="sidebar-name-body">
+      </Column>
+      <Column field="addr" header="Address"
+        headerClass="sidebar-addr-header" bodyClass="sidebar-addr-body">
+      </Column>
+    </TreeTable>
+  </div>
+  <div class="view">
+    <Reg :reg="reg"></Reg>
+  </div>
 </template>
 
 <script>
@@ -99,4 +101,25 @@ export default {
 body {
   margin: 10px;
 }
+
+.sidebar {
+  width: 400px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  margin: 0;
+  box-sizing: border-box;
+  border-right: 1px solid black;
+  overflow-y: auto;
+  min-height: 100vh;
+}
+
+.sidebar-addr-body span {
+  text-align: right;
+}
+
+.view {
+  padding-left: 400px;
+}
+
 </style>
