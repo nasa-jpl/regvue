@@ -51,24 +51,28 @@ export default {
 <style scoped>
 table {
   width: 100%;
-  table-layout: fixed;
-  text-align: left;
-  vertical-align: top;
 }
 
 th {
-    background-color: lightgray;
+  background-color: lightgray;
 }
+
+td {
+  vertical-align: top;
+  text-align: center;
+}
+
 .fields_bits {
-    width: 10%;
+  width: 10%;
 }
 .fields_name {
-    width: 20%;
+  width: 20%;
 }
 .fields_access {
-    width: 10%;
+  width: 10%;
 }
 .fields_description {
-    width: 60%;
+  width: 60%;
+  text-align: left;
 }
 </style>
