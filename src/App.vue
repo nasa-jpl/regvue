@@ -15,7 +15,7 @@
     </TreeTable>
   </div>
   <div class="view">
-    <Reg :reg="reg"></Reg>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -43,36 +43,28 @@ function item_to_node(items, item) {
 function firstReg(items) {
   for (let key in items) {
     if (items[key].type == "reg") {
-      return items[key];
+      return key;
     }
   }
 }
+
+import store from '@/store.js'
 
 export default {
   created() {
     this.reg = {};
 
-    fetch("data.json")
-      .then(result => result.json())
-      .then(json => {
-        this.items = json;
-        this.reg = firstReg(this.items);
-        this.selectionKeys[this.reg.id] = true;
+    store.load("eio.json")
+      .then(_ => {
+        this.selectElement(firstReg(this.sharedState.items))
 
-        // Expand all parents of selected
-        let id = this.reg.id;
-        while (id.includes(".")) {
-          id = id.replace(/\.\w+$/, '');
-          this.expandedKeys[id] = true;
-        }
-
-        this.nodes = item_to_node(this.items, this.items["root"]);
-      });
+        this.nodes = item_to_node(this.sharedState.items, this.sharedState.items["root"]);
+      })
   },
   data() {
     return {
       reg: null,
-      items: null,
+      sharedState: store.sharedState,
 
       nodes: null,
       expandedKeys: {},
@@ -82,7 +74,21 @@ export default {
   methods: {
     onNodeSelect(node) {
       console.log(node);
-      this.reg = this.items[node.key];
+      this.$router.push("/reg/" + node.key)
+    },
+    selectElement(element_id) {
+      this.reg = this.sharedState.items[element_id];
+
+      this.selectionKeys[element_id] = true;
+
+      // Expand all parents of selected
+      let id = element_id;
+      while (id.includes(".")) {
+        id = id.replace(/\.\w+$/, '');
+        this.expandedKeys[id] = true;
+      }
+
+      this.$router.push("/reg/" + element_id)
     },
   },
   name: 'App'

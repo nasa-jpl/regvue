@@ -6,8 +6,8 @@ import "primeicons/primeicons.css";
 import devtools from '@vue/devtools'
 import { createApp } from 'vue'
 import App from './App.vue'
+import { router } from './router'
 
-import Reg from '@/components/Reg.vue'
 import RegLayout from '@/components/RegLayout.vue'
 import RegFields from '@/components/RegFields.vue'
 
@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === 'development') {
 
 createApp(App)
   .use(PrimeVue)
-  .component('Reg', Reg)
+  .use(router)
   .component('RegLayout', RegLayout)
   .component('RegFields', RegFields)
   .component('TreeTable', TreeTable)

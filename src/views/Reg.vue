@@ -1,21 +1,34 @@
 <template>
-  <RegLayout :reg="reg"></RegLayout>
-  <div id="doc"><span v-html='doc'></span></div>
-  <RegFields :reg="reg"></RegFields>
+  <div v-if="reg">
+    <RegLayout :reg="reg"></RegLayout>
+    <div id="doc"><span v-html='doc'></span></div>
+    <RegFields :reg="reg"></RegFields>
+  </div>
 </template>
 
-<script setup>
-import { defineProps } from 'vue'
-
-defineProps([
-  'reg'
-]);
-</script>
-
 <script>
+import store from '@/store.js'
+
 export default {
   data() {
-    return {};
+    return {
+      sharedState: store.sharedState,
+      regid: null,
+      reg: null
+    };
+  },
+  beforeRouteEnter(to, _from, next) {
+    next(vm => {
+        vm.regid = to.params.regid;
+        store.untilLoaded(store)
+          .then(() => {
+            vm.reg = vm.sharedState.items[vm.regid];
+          })
+    });
+  },
+  beforeRouteUpdate(to, _from) {
+    this.regid = to.params.regid;
+    this.reg = this.sharedState.items[this.regid];
   },
   computed: {
     doc() {
