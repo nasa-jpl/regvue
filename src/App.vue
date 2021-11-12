@@ -80,6 +80,7 @@ export default {
     selectElement(element_id) {
       this.reg = this.sharedState.items[element_id];
 
+      this.selectionKeys = {};
       this.selectionKeys[element_id] = true;
 
       // Expand all parents of selected
