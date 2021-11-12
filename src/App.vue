@@ -2,7 +2,7 @@
   <div class="sidebar">
     <input type="text" placeholder="Search" @input="search($event.target.value)">
     <TreeTable class="p-treetable-sm" :value="nodes" :expandedKeys="expandedKeys"
-      :scrollable="true" scrollHeight="100vh"
+      :scrollable="true" scrollHeight="calc(100vh - 75px)"
       v-model:selectionKeys="selectionKeys" selectionMode="single" @node-select="onNodeSelect">
       <template #header>
       Address Map
