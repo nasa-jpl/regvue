@@ -27,6 +27,7 @@ function item_to_node(items, item) {
 
     let node = {
       key: child["id"],
+      styleClass: child["id"],
       data: {
         name: child["name"],
         addr: child["addr"],
@@ -88,6 +89,12 @@ export default {
       while (id.includes(".")) {
         id = id.replace(/\.\w+$/, '');
         this.expandedKeys[id] = true;
+      }
+
+      let elems = document.getElementsByClassName(element_id)
+      if (elems.length) {
+        let elem = elems[0]
+        elem.scrollIntoView({ block: "center" })
       }
 
       this.$router.push("/reg/" + element_id)
