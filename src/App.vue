@@ -44,7 +44,7 @@ export default {
   methods: {
     onNodeSelect(node) {
       console.log(node);
-      this.$router.push("/reg/" + node.key)
+      this.$router.push({ name: "reg", params: { regid: node.key } })
     },
     selectElement(element_id) {
       this.reg = this.sharedState.items[element_id];
@@ -66,7 +66,7 @@ export default {
         elem.scrollIntoView({ block: "center" })
       }
 
-      this.$router.push("/reg/" + element_id)
+      this.$router.push({ name: "reg", params: { regid: element_id } })
     },
   },
   name: 'App'
