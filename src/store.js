@@ -4,6 +4,7 @@ export default {
   sharedState: reactive({
     items: null,
     fields: null,
+    nodes: null,
   }),
 
   loaded: false,
@@ -14,6 +15,11 @@ export default {
       .then(json => {
         this.sharedState.items = json;
         this.sharedState.fields = this.get_field_map(json)
+        this.sharedState.nodes =
+          this.get_nodes(
+            this.sharedState.items,
+            this.sharedState.items["root"]
+          )
         this.loaded = true;
       });
   },
@@ -44,5 +50,26 @@ export default {
     }
 
     return fields
+  },
+
+  get_nodes(items, item) {
+    return item.children.map(child_id => {
+      let child = items[child_id];
+
+      let node = {
+        key: child["id"],
+        styleClass: child["id"],
+        data: {
+          name: child["name"],
+          addr: child["addr"],
+        }
+      };
+
+      if ("children" in child) {
+        node["children"] = this.get_nodes(items, child);
+      }
+
+      return node;
+    });
   },
 };

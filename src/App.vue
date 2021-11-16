@@ -1,7 +1,7 @@
 <template>
   <div class="sidebar">
     <Search @select-element="selectElement"></Search>
-    <TreeTable class="p-treetable-sm" :value="nodes" :expandedKeys="expandedKeys"
+    <TreeTable class="p-treetable-sm" :value="sharedState.nodes" :expandedKeys="expandedKeys"
       :scrollable="true" scrollHeight="calc(100vh - 75px)"
       v-model:selectionKeys="selectionKeys" selectionMode="single" @node-select="onNodeSelect">
       <template #header>
@@ -21,26 +21,6 @@
 </template>
 
 <script>
-function item_to_node(items, item) {
-  return item.children.map(child_id => {
-    let child = items[child_id];
-
-    let node = {
-      key: child["id"],
-      styleClass: child["id"],
-      data: {
-        name: child["name"],
-        addr: child["addr"],
-      }
-    };
-
-    if ("children" in child) {
-      node["children"] = item_to_node(items, child);
-    }
-
-    return node;
-  });
-}
 
 function firstReg(items) {
   for (let key in items) {
@@ -59,8 +39,6 @@ export default {
     store.load("eio.json")
       .then(_ => {
         this.selectElement(firstReg(this.sharedState.items))
-
-        this.nodes = item_to_node(this.sharedState.items, this.sharedState.items["root"]);
       })
   },
   data() {
@@ -68,7 +46,6 @@ export default {
       reg: null,
       sharedState: store.sharedState,
 
-      nodes: null,
       expandedKeys: {},
       selectionKeys: {},
     }
