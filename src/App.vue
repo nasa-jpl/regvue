@@ -21,15 +21,6 @@
 </template>
 
 <script>
-
-function firstReg(items) {
-  for (let key in items) {
-    if (items[key].type == "reg") {
-      return key;
-    }
-  }
-}
-
 import store from '@/store.js'
 
 export default {
@@ -38,7 +29,7 @@ export default {
 
     store.load("eio.json")
       .then(_ => {
-        this.selectElement(firstReg(this.sharedState.items))
+        this.selectElement(store.first_reg())
       })
   },
   data() {

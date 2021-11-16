@@ -72,4 +72,12 @@ export default {
       return node;
     });
   },
+
+  first_reg() {
+    for (let key in this.sharedState.items) {
+      if (this.sharedState.items[key].type == "reg") {
+        return key;
+      }
+    }
+  },
 };
