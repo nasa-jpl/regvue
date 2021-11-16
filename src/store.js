@@ -12,14 +12,10 @@ export default {
   load(filename) {
     return fetch(filename)
       .then(result => result.json())
-      .then(json => {
-        this.sharedState.items = json;
-        this.sharedState.fields = this.get_field_map(json)
-        this.sharedState.nodes =
-          this.get_nodes(
-            this.sharedState.items,
-            this.sharedState.items["root"]
-          )
+      .then(items => {
+        this.sharedState.items = items;
+        this.sharedState.fields = this.get_field_map(items)
+        this.sharedState.nodes = this.get_nodes(items, items["root"])
         this.loaded = true;
       });
   },
