@@ -8,6 +8,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import { router } from './router'
 
+import Search from '@/components/Search.vue'
 import RegLayout from '@/components/RegLayout.vue'
 import RegFields from '@/components/RegFields.vue'
 
@@ -22,6 +23,7 @@ if (process.env.NODE_ENV === 'development') {
 createApp(App)
   .use(PrimeVue)
   .use(router)
+  .component('Search', Search)
   .component('RegLayout', RegLayout)
   .component('RegFields', RegFields)
   .component('TreeTable', TreeTable)

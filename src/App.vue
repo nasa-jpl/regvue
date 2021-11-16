@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar">
-    <input type="text" placeholder="Search" @input="search($event.target.value)">
+    <Search @select-element="selectElement"></Search>
     <TreeTable class="p-treetable-sm" :value="nodes" :expandedKeys="expandedKeys"
       :scrollable="true" scrollHeight="calc(100vh - 75px)"
       v-model:selectionKeys="selectionKeys" selectionMode="single" @node-select="onNodeSelect">
@@ -99,17 +99,6 @@ export default {
 
       this.$router.push("/reg/" + element_id)
     },
-    search(text) {
-      let fields = Array.from(this.sharedState.fields.keys())
-      let matching_fields = fields.filter(field_id => {
-        return field_id.toLowerCase().includes(text.toLowerCase())
-      })
-      if (matching_fields.length == 1) {
-        let field_id = matching_fields[0]
-        let element_id = this.sharedState.fields.get(field_id)
-        this.selectElement(element_id)
-      }
-    }
   },
   name: 'App'
 }
