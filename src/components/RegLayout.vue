@@ -5,7 +5,8 @@
     </thead>
     <tbody>
       <tr>
-        <td class="layout_field_name" v-responsive-rotate
+        <td class="layout_field_name" :class="{ highlight: field_name == field.name }"
+          v-responsive-rotate
           v-for="field in reg.fields" :key="field"
           :colspan="field.nbits">
           {{ field.name }}
@@ -29,7 +30,8 @@
 import { defineProps } from 'vue'
 
 defineProps([
-  'reg'
+  'reg',
+  'field_name',
 ]);
 </script>
 
@@ -128,5 +130,9 @@ input[type="text"] {
     border: 0px;
     text-align: center;
     box-sizing: border-box;
+}
+
+.highlight {
+  background-color: #fffbe5;
 }
 </style>

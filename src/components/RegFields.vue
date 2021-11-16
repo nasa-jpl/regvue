@@ -9,7 +9,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="field in reg.fields" :key="field">
+      <tr v-for="field in reg.fields" :key="field" :class="{ highlight: field_name == field.name }">
         <td class="fields_bits">{{ bits(field.lsb, field.nbits) }}</td>
         <td class="fields_name">{{ field.name }}</td>
         <td class="fields_access">{{ field.access }}</td>
@@ -23,7 +23,8 @@
 import { defineProps } from 'vue'
 
 defineProps([
-  'reg'
+  'reg',
+  'field_name',
 ]);
 </script>
 
@@ -74,5 +75,9 @@ td {
 .fields_description {
   width: 60%;
   text-align: left;
+}
+
+.highlight {
+  background-color: #fffbe5;
 }
 </style>

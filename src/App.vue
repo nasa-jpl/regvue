@@ -43,10 +43,9 @@ export default {
   },
   methods: {
     onNodeSelect(node) {
-      console.log(node);
       this.$router.push({ name: "reg", params: { regid: node.key } })
     },
-    selectElement(element_id) {
+    selectElement(element_id, field_name) {
       this.reg = this.sharedState.items[element_id];
 
       this.selectionKeys = {};
@@ -66,7 +65,11 @@ export default {
         elem.scrollIntoView({ block: "center" })
       }
 
-      this.$router.push({ name: "reg", params: { regid: element_id } })
+      if (field_name) {
+        this.$router.push({ name: "field", params: { regid: element_id, field_name: field_name } })
+      } else {
+        this.$router.push({ name: "reg", params: { regid: element_id } })
+      }
     },
   },
   name: 'App'

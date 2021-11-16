@@ -1,8 +1,8 @@
 <template>
   <div v-if="reg">
-    <RegLayout :reg="reg"></RegLayout>
+    <RegLayout :reg="reg" :field_name="field_name"></RegLayout>
     <div id="doc"><span v-html='doc'></span></div>
-    <RegFields :reg="reg"></RegFields>
+    <RegFields :reg="reg" :field_name="field_name"></RegFields>
   </div>
 </template>
 
@@ -18,6 +18,7 @@ export default {
   },
   props: [
     'regid',
+    'field_name',
   ],
   beforeRouteEnter(_to, _from, next) {
     next(vm => {

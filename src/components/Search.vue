@@ -23,8 +23,8 @@ export default {
       if (matching_fields.length == 1) {
         let field_id = matching_fields[0]
         let element_id = this.sharedState.fields.get(field_id)
-
-        this.$emit("selectElement", element_id)
+        let field_name = field_id.replace(/.*\./, '')
+        this.$emit("selectElement", element_id, field_name)
       }
     }
   }
