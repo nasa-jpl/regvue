@@ -61,13 +61,14 @@ export default {
       this.selectionKeys = {};
       this.selectionKeys[element_id] = true;
 
-      // Expand all parents of selected
+      // Expand all parents of selected element
       let id = element_id;
       while (id.includes(".")) {
         id = id.replace(/\.\w+$/, '');
         this.expandedKeys[id] = true;
       }
 
+      // Scroll to element
       let elems = document.getElementsByClassName(element_id)
       if (elems.length) {
         let elem = elems[0]
