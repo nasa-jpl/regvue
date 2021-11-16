@@ -13,21 +13,21 @@ export default {
   data() {
     return {
       sharedState: store.sharedState,
-      regid: null,
       reg: null
     };
   },
-  beforeRouteEnter(to, _from, next) {
+  props: [
+    'regid',
+  ],
+  beforeRouteEnter(_to, _from, next) {
     next(vm => {
-        vm.regid = to.params.regid;
         store.untilLoaded(store)
           .then(() => {
             vm.reg = vm.sharedState.items[vm.regid];
           })
     });
   },
-  beforeRouteUpdate(to, _from) {
-    this.regid = to.params.regid;
+  beforeRouteUpdate(_to, _from) {
     this.reg = this.sharedState.items[this.regid];
   },
   computed: {
