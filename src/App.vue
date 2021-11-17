@@ -6,11 +6,8 @@
   </div>
   <div class="sidebar">
     <TreeTable class="p-treetable-sm" :value="sharedState.nodes" :expandedKeys="expandedKeys"
-      :scrollable="true" scrollHeight="calc(100vh - 75px)"
+      :scrollable="true" scrollHeight="calc(100vh - 58px)"
       v-model:selectionKeys="selectionKeys" selectionMode="single" @node-select="onNodeSelect">
-      <template #header>
-      Address Map
-      </template>
       <Column field="name" header="Name" :expander="true"
         headerClass="sidebar-name-header" bodyClass="sidebar-name-body">
       </Column>
@@ -137,4 +134,19 @@ body {
   margin-top: 3.6rem;
 }
 
+.p-treetable.p-treetable-sm .p-treetable-header {
+      padding: 0.5rem 0.875rem;
+}
+.p-treetable.p-treetable-sm .p-treetable-thead > tr > th {
+      padding: 0.3rem 0.72845rem;
+}
+.p-treetable.p-treetable-sm .p-treetable-tbody > tr > td {
+      padding: 0.3rem 0.72845rem;
+}
+.p-treetable.p-treetable-sm .p-treetable-tfoot > tr > td {
+      padding: 0.3rem 0.85rem;
+}
+.p-treetable.p-treetable-sm .p-treetable-footer {
+      padding: 0.3rem 0.85rem;
+}
 </style>
