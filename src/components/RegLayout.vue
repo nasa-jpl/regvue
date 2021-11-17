@@ -5,7 +5,8 @@
     </thead>
     <tbody>
       <tr>
-        <td class="layout_field_name" :class="{ highlight: field_name == field.name }"
+        <td class="layout_field_name"
+          :class="{ highlight: field_name == field.name }"
           v-responsive-rotate
           v-for="field in reg.fields" :key="field"
           :colspan="field.nbits">
@@ -13,7 +14,9 @@
         </td>
       </tr>
       <tr>
-        <td class="layout_field_input" v-for="field in reg.fields" :key="field" :colspan="field.nbits">
+        <td class="layout_field_input"
+          :class="{ highlight: field_name == field.name }"
+          v-for="field in reg.fields" :key="field" :colspan="field.nbits">
           <input type="text" :value="field_value(field)"/>
         </td>
       </tr>
@@ -133,6 +136,10 @@ input[type="text"] {
 }
 
 .highlight {
+  background-color: #fffbe5;
+}
+
+.highlight input {
   background-color: #fffbe5;
 }
 </style>
