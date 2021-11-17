@@ -1,6 +1,10 @@
 <template>
+  <div class="topbar">
+    <div class="links">
+      <Search/>
+    </div>
+  </div>
   <div class="sidebar">
-    <Search @select-element="selectElement"></Search>
     <TreeTable class="p-treetable-sm" :value="sharedState.nodes" :expandedKeys="expandedKeys"
       :scrollable="true" scrollHeight="calc(100vh - 75px)"
       v-model:selectionKeys="selectionKeys" selectionMode="single" @node-select="onNodeSelect">
@@ -92,11 +96,30 @@ body {
   margin: 10px;
 }
 
-.sidebar {
-  width: 400px;
+.topbar {
+  z-index: 20;
+  height: 3.6rem;
+  border-bottom: 1px solid black;
   position: fixed;
   left: 0;
+  right: 0;
   top: 0;
+  display: block;
+  background-color: white;
+}
+
+.topbar .links {
+  margin: auto;
+  margin-top: .7rem;
+  top: .7rem;
+}
+
+.sidebar {
+  z-index: 10;
+  width: 20rem;
+  position: fixed;
+  left: 0;
+  top: 3.6rem;
   margin: 0;
   box-sizing: border-box;
   border-right: 1px solid black;
@@ -109,7 +132,9 @@ body {
 }
 
 .view {
-  padding-left: 400px;
+  display: block;
+  padding-left: 20rem;
+  margin-top: 3.6rem;
 }
 
 </style>
