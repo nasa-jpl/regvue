@@ -21,7 +21,11 @@ export default {
   ],
   computed: {
     reg() {
-      return this.sharedState.items[this.regid]
+      if (this.sharedState.items) {
+        return this.sharedState.items[this.regid]
+      } else {
+        return {}
+      }
     },
     doc() {
       // The doc key may not be present
