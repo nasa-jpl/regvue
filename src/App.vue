@@ -28,9 +28,18 @@ export default {
     this.reg = {};
 
     store.load("eio.json")
-      .then(_ => {
-        this.selectElement(store.first_reg())
-      })
+
+    this.$watch(
+      () => this.$route.params,
+      (to, _from) => {
+        if (to.regid) {
+          store.untilLoaded(store)
+            .then(_ => {
+              this.selectElement(to.regid)
+            })
+        }
+      }
+    )
   },
   data() {
     return {
@@ -45,7 +54,7 @@ export default {
     onNodeSelect(node) {
       this.$router.push({ name: "reg", params: { regid: node.key } })
     },
-    selectElement(element_id, field_name) {
+    selectElement(element_id) {
       this.reg = this.sharedState.items[element_id];
 
       this.selectionKeys = {};
@@ -63,12 +72,6 @@ export default {
       if (elems.length) {
         let elem = elems[0]
         elem.scrollIntoView({ block: "center" })
-      }
-
-      if (field_name) {
-        this.$router.push({ name: "field", params: { regid: element_id, field_name: field_name } })
-      } else {
-        this.$router.push({ name: "reg", params: { regid: element_id } })
       }
     },
   },
