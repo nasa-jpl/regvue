@@ -13,25 +13,16 @@ export default {
   data() {
     return {
       sharedState: store.sharedState,
-      reg: null
     };
   },
   props: [
     'regid',
     'field_name',
   ],
-  beforeRouteEnter(_to, _from, next) {
-    next(vm => {
-        store.untilLoaded(store)
-          .then(() => {
-            vm.reg = vm.sharedState.items[vm.regid];
-          })
-    });
-  },
-  beforeRouteUpdate(_to, _from) {
-    this.reg = this.sharedState.items[this.regid];
-  },
   computed: {
+    reg() {
+      return this.sharedState.items[this.regid]
+    },
     doc() {
       // The doc key may not be present
       if (this.reg.doc) {
