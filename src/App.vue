@@ -56,7 +56,7 @@ export default {
       this.$router.push({ name: "reg", params: { regid: node.key } })
     },
     selectElement(element_id) {
-      this.reg = this.sharedState.items[element_id];
+      this.reg = this.sharedState.data.elements[element_id];
 
       this.selectionKeys = {};
       this.selectionKeys[element_id] = true;

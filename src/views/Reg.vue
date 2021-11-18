@@ -21,8 +21,8 @@ export default {
   ],
   computed: {
     reg() {
-      if (this.sharedState.items) {
-        return this.sharedState.items[this.regid]
+      if (this.sharedState.data) {
+        return this.sharedState.data.elements[this.regid]
       } else {
         return {}
       }

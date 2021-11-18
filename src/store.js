@@ -2,7 +2,7 @@ import { reactive } from 'vue'
 
 export default {
   sharedState: reactive({
-    items: null,
+    data: null,
     fields: null,
     nodes: null,
   }),
@@ -12,10 +12,10 @@ export default {
   load(filename) {
     return fetch(filename)
       .then(result => result.json())
-      .then(items => {
-        this.sharedState.items = items;
-        this.sharedState.fields = this.get_field_map(items)
-        this.sharedState.nodes = this.get_nodes(items, items["root"])
+      .then(data => {
+        this.sharedState.data = data;
+        this.sharedState.fields = this.get_field_map(data.elements)
+        this.sharedState.nodes = this.get_nodes(data.elements, data.root)
         this.loaded = true;
       });
   },
@@ -32,13 +32,13 @@ export default {
     return new Promise(pollLoaded);
   },
 
-  get_field_map(items) {
+  get_field_map(elements) {
     let fields = new Map()
 
-    for (let id in items) {
-      let item = items[id]
-      if (item.fields) {
-        for (let field of item.fields) {
+    for (let id in elements) {
+      let element = elements[id]
+      if (element.fields) {
+        for (let field of element.fields) {
           let field_id = id + "." + field.name
           fields.set(field_id, id)
         }
@@ -48,9 +48,9 @@ export default {
     return fields
   },
 
-  get_nodes(items, item) {
-    return item.children.map(child_id => {
-      let child = items[child_id];
+  get_nodes(elements, element) {
+    return element.children.map(child_id => {
+      let child = elements[child_id];
 
       let node = {
         key: child["id"],
@@ -62,7 +62,7 @@ export default {
       };
 
       if ("children" in child) {
-        node["children"] = this.get_nodes(items, child);
+        node["children"] = this.get_nodes(elements, child);
       }
 
       return node;
@@ -70,8 +70,8 @@ export default {
   },
 
   first_reg() {
-    for (let key in this.sharedState.items) {
-      if (this.sharedState.items[key].type == "reg") {
+    for (let key in this.sharedState.data.elements) {
+      if (this.sharedState.data.elements[key].type == "reg") {
         return key;
       }
     }

@@ -106,8 +106,8 @@ export default {
       }
 
       // Registers
-      for (let id in this.sharedState.items) {
-        let item = this.sharedState.items[id]
+      for (let id in this.sharedState.data.elements) {
+        let item = this.sharedState.data.elements[id]
 
         if (item.type == "reg") {
           if (item.name.toLowerCase().includes(query)) {
