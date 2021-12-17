@@ -1,7 +1,9 @@
 <template>
   <div class="search-box">
     <input
-      type="text"
+      type="search"
+      class="form-control"
+      aria-label="Search"
       placeholder="Search"
       :value="query"
       autocomplete="off"
@@ -149,27 +151,6 @@ export default {
   display: inline-block;
   position: relative;
   margin-right: 1rem;
-}
-.search-box input {
-  cursor: text;
-  width: 10rem;
-  height: 2rem;
-  color: #404040;
-  display: inline-block;
-  border: 1px solid #000;
-  border-radius: 2rem;
-  font-size: 0.9rem;
-  line-height: 2rem;
-  /* padding: 0 0.5rem 0 2rem; */
-  outline: none;
-  transition: all 0.2s ease;
-  /* background: #fff url("search.svg") 0.6rem 0.5rem no-repeat; */
-  background-size: 1rem;
-  text-align: center;
-}
-.search-box input:focus {
-  cursor: auto;
-  border-color: #008000;
 }
 .search-box .suggestions {
   background: #fff;

@@ -1,9 +1,5 @@
 <template>
-  <div class="topbar">
-    <div class="links">
-      <Search/>
-    </div>
-  </div>
+  <Header/>
   <div class="sidebar">
     <TreeTable class="p-treetable-sm" :value="sharedState.nodes" :expandedKeys="expandedKeys"
       :scrollable="true" scrollHeight="calc(100vh - 58px)"
@@ -93,18 +89,6 @@ body {
   margin: 10px;
 }
 
-.topbar {
-  z-index: 20;
-  height: 3.6rem;
-  border-bottom: 1px solid black;
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  display: block;
-  background-color: white;
-}
-
 .topbar .links {
   margin: auto;
   margin-top: .7rem;
@@ -131,7 +115,7 @@ body {
 .view {
   display: block;
   padding-left: 20rem;
-  margin-top: 3.6rem;
+  margin-top: 20px;
 }
 
 .p-treetable.p-treetable-sm .p-treetable-header {
