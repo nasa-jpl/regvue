@@ -1,5 +1,5 @@
 <template>
-  <Header/>
+  <Header :title="title" :links="links"/>
   <div class="sidebar">
     <TreeTable class="p-treetable-sm" :value="sharedState.nodes" :expandedKeys="expandedKeys"
       :scrollable="true" scrollHeight="calc(100vh - 58px)"
@@ -70,6 +70,20 @@ export default {
         let elem = elems[0]
         elem.scrollIntoView({ block: "center" })
       }
+    },
+  },
+  computed: {
+    title() {
+      return this.sharedState.data.design.name || "FPGA Registers"
+    },
+    links() {
+      let o = this.sharedState.data.design.links
+
+      return Object.entries(o)
+        .map(([k, v]) => {
+          let e = { href: v, text: k }
+          return e
+        })
     },
   },
   name: 'App'
