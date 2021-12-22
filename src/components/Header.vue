@@ -34,14 +34,4 @@ export default {
 nav {
   box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 5%), inset 0 -1px 0 rgb(0 0 0 / 15%);
 }
-section {
-  /* height: 3.6rem; */
-  /* border-bottom: 1px solid black; */
-  /* position: fixed; */
-  /* left: 0; */
-  /* right: 0; */
-  /* top: 0; */
-  /* display: block; */
-  /* background-color: white; */
-}
 </style>
