@@ -1,5 +1,5 @@
 <template>
-  <Header :title="title" :links="links"/>
+  <Header :title="title" :links="links" :version="version"/>
   <div class="sidebar">
     <TreeTable class="p-treetable-sm" :value="sharedState.nodes" :expandedKeys="expandedKeys"
       :scrollable="true" scrollHeight="calc(100vh - 58px)"
@@ -88,6 +88,9 @@ export default {
       } else {
         return {}
       }
+    },
+    version() {
+      return this.sharedState.data?.design?.version || "Unspecified"
     },
   },
   name: 'App'
