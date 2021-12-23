@@ -74,16 +74,20 @@ export default {
   },
   computed: {
     title() {
-      return this.sharedState.data.design.name || "FPGA Registers"
+      return this.sharedState.data?.design?.name || "FPGA Registers"
     },
     links() {
-      let o = this.sharedState.data.design.links
+      let o = this.sharedState.data?.design?.links
 
-      return Object.entries(o)
-        .map(([k, v]) => {
-          let e = { href: v, text: k }
-          return e
-        })
+      if (o) {
+        return Object.entries(o)
+          .map(([k, v]) => {
+              let e = { href: v, text: k }
+              return e
+              })
+      } else {
+        return {}
+      }
     },
   },
   name: 'App'

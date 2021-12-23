@@ -9,7 +9,7 @@
             <Search/>
           </form>
 
-          <ul class="nav mb-2 justify-content-center mb-md-0">
+          <ul v-if="links" class="nav mb-2 justify-content-center mb-md-0">
             <li v-for="link in links" :key="link"><a :href="link.href" class="nav-link px-2 link-secondary">{{ link.text }}</a></li>
           </ul>
         </div>
