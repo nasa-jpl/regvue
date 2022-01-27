@@ -22,7 +22,7 @@
       </tr>
       <tr>
         <td colspan="32">
-          <input type="text"/>
+          <input type="text" @input="update_fields"/>
         </td>
       </tr>
     </tbody>
@@ -68,6 +68,30 @@ export const ResponsiveRotateDirective = {
     observer.observe(element);
   }
 }
+function parse_int(s) {
+  let {str, base} = parse_base(s.trim())
+  return parseInt(str.replaceAll('_', ''), base)
+}
+function parse_base(s) {
+  let lc = s.toLowerCase()
+
+  if (lc.startsWith("0x")) {
+    return {
+      str: lc.slice(2),
+      base: 16,
+    }
+  } else if (lc.startsWith("0b")) {
+    return {
+      str: lc.slice(2),
+      base: 2,
+    }
+  } else {
+    return {
+      str: lc,
+      base: 10,
+    }
+  }
+}
 export default {
   directives: {
     'responsive-rotate': ResponsiveRotateDirective,
@@ -84,7 +108,22 @@ export default {
       } else {
         return "0x" + i.toString(16);
       }
-    }
+    },
+    update_fields(evt) {
+      let value = parse_int(evt.target.value)
+
+      for (const field of this.reg.fields) {
+        let field_mask = (1 << field.nbits) - 1
+        let field_value = (value >> field.lsb) & field_mask
+        // TODO: Update local field value storage instead
+        //
+        // 1. Create local field value variables
+        // 2. On load/refresh (or whatever its called) initialize local field
+        //    value variables with field reset values
+        // 3. On input, update field local values with parsed input value
+        field.reset = field_value
+      }
+    },
   },
   computed: {
   },
