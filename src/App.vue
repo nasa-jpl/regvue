@@ -121,7 +121,7 @@ body {
   width: 20rem;
   position: fixed;
   left: 0;
-  top: 3.6rem;
+  top: 3.4rem;
   margin: 0;
   box-sizing: border-box;
   border-right: 1px solid black;
