@@ -115,6 +115,9 @@ export default {
       for (const field of this.reg.fields) {
         let field_mask = (1 << field.nbits) - 1
         let field_value = (value >> field.lsb) & field_mask
+        // TODO: make updates both ways: fields to reg, reg to fields
+        // See https://stackoverflow.com/questions/60712430/make-two-inputs-update-each-other-in-two-way-binding
+        // Also array of v-model https://stackoverflow.com/questions/34825065/vuejs-v-model-array-in-multiple-input
         // TODO: Update local field value storage instead
         //
         // 1. Create local field value variables
