@@ -18,5 +18,4 @@ rules:
           - Reg
           - Header
           - Default
-          - Test
           - Search
