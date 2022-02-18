@@ -28,7 +28,7 @@ export default {
   created() {
     this.reg = {};
 
-    store.load("eio.json")
+    store.load("data.json")
 
     this.$watch(
       () => this.$route.params,
