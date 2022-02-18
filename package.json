@@ -1,6 +1,7 @@
 {
   "name": "regvue",
   "version": "0.1.0",
+  "homepage": "https://github.com/rfdonnelly/regvue",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

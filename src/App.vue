@@ -15,10 +15,14 @@
   <div class="view">
     <router-view></router-view>
   </div>
+  <div class="app-version">
+    Powered by <a :href="appInfo.url">{{ appInfo.name }} v{{ appInfo.version }}</a>
+  </div>
 </template>
 
 <script>
 import store from '@/store.js'
+import packageInfo from '@/../package'
 
 export default {
   created() {
@@ -40,6 +44,11 @@ export default {
   },
   data() {
     return {
+      appInfo: {
+        name: packageInfo.name,
+        url: packageInfo.homepage,
+        version: packageInfo.version,
+      },
       reg: null,
       sharedState: store.sharedState,
 
@@ -153,5 +162,17 @@ body {
 }
 .p-treetable.p-treetable-sm .p-treetable-footer {
       padding: 0.3rem 0.85rem;
+}
+
+.app-version {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  background-color: white;
+  border-left: 1px solid black;
+  border-top: 1px solid black;
+  font-size: 10px;
+  padding-left: 2px;
+  padding-right: 2px;
 }
 </style>
