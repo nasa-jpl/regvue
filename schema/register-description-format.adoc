@@ -14,47 +14,65 @@ Register description files are intended to be generated via a register automatio
 .Small complete example
 ----
 schema:
-  version: v0.1
-
-design:
-  name: Example
-  version: v1.0
+  name: register-description-format
+  version: v0.2
 
 root:
+  name: example
+  display_name: Example Design
+  version: v1.0
+  links:
+    GitHub: https://github.com/org/repo
   children:
-    - reg0
-    - reg1
+    - blk0
 
 elements:
-  reg0:
+  blk0:
+    type: blk
+    id: blk0
+    name: blk0
+    children:
+      - blk0.reg0
+      - blk0.reg1
+
+  blk0.reg0:
+    id: blk0.reg0
     type: reg
-    id: reg0
     name: reg0
-    addr: "0x0"
-    offset: "0x0"
+    addr: 0x0
+    offset: 0x0
+    doc: An example register.
     fields:
-      - name: f1
-        lsb: 16
-        nbits: 16
+      - name: rsvd
+        lsb: 5
+        nbits: 28
         access: rw
-        reset: "0x0"
-      - name: f0
+        doc: A reserved field.
+      - name: command
         lsb: 0
-        nbits: 16
+        nbits: 4
         access: rw
-        reset: "0x0"
-  reg1:
+        doc: The command to execute.
+        enum:
+          - name: START
+            value: 0x5
+            doc: Starts the operation.
+          - name: STOP
+            value: 0xA
+            doc: Stops the operation.
+
+  blk0.reg1:
     type: reg
-    id: reg1
+    id: blk0.reg1
     name: reg1
-    addr: "0x4"
-    offset: "0x4"
+    addr: 0x4
+    offset: 0x4
     fields:
       - name: f0
         lsb: 0
         nbits: 32
         access: ro
-        reset: "0x0"
+        reset: 0x0
 ----
 
 == Root Object
@@ -62,7 +80,6 @@ elements:
 The root object contains the following properties:
 
 * `schema` -- Specifies schema version information
-* `design` -- Specifies design version information
 * `root` -- Specifies the top level design elements
 * `elements` -- Defines all design elements and their relationships
 
@@ -74,36 +91,17 @@ The `schema` property specifies the version of the register schema used by the d
 .`schema` snippet
 ----
 schema:
-  version: v0.1
-----
-
-== `design` Property
-
-The `design` property specifies high level design information such as the name and version.
-
-The `design` property contains the following properties.
-
-* `name` -- design name
-* `version` -- design version
-* `links` -- relevant links (text/URI pairs)
-
-[source,yaml]
-.`design` snippet
-----
-design:
-  name: Example Design
-  version: v1.0
-  links:
-    GitHub: https://github.com/org/repo
+  name: register-description-format
+  version: v0.2
 ----
 
 == Element IDs
 
-Element IDs uniquely identify elements and their location in the design's hierarchy.
+Element IDs uniquely identify elements.
 
 === Hierarchy
 
-Hierarchy is denoted via the `.` character.
+By convention, hierarchy is denoted via the `.` character.
 
 For example, the element ID `regs.blk0.reg0` has the following hierarchy:
 
@@ -116,15 +114,22 @@ regs
 
 == `root` Property
 
-The `root` property specifies the top level design elements.
+The `root` property specifies the top level as a block element.
+See also <<block-elements>>.
 
-The `root` property contains one or more children.
-Children are specified as a sequence of element IDs under the `chilren` property.
+The `root` property supports the following additional keys:
+
+* `display_name` -- The design name intended for human consumption.
 
 [source,yaml]
-.`root` property example
+.`root` snippet
 ----
 root:
+  name: example
+  display_name: Example Design
+  version: v1.0
+  links:
+    GitHub: https://github.com/org/repo
   children:
     - element0
     - element1
@@ -145,6 +150,29 @@ There are three element types.
 
 The element type is specified via the `type` property.
 
+All elements support the following keys:
+
+* `id` -- A copy of the element ID.
+Must be unique.
+One convention is to concatenate hierarchical element names (e.g. `blk.sub_blk.reg`).
+Required.
+* `name` -- The name of the element.
+Must be a valid C language identifier.
+Meant for human and machine consumption.
+Required.
+* `display_name` -- The name of the element meant for human consumption.
+Optional.
+* `type` -- One of `blk`, `mem`, or `reg`
+Required.
+* `addr` -- The address (bytes) of the element relative to the root.
+Required.
+* `offset`: The offset (bytes) of the element relative to its parent.
+Required.
+* `doc` -- Documentation for the element.
+Supports HTML.
+Optional.
+
+[#block-elements]
 === Block Elements (`blk`)
 
 Block elements are a grouping of other elements.
@@ -153,14 +181,20 @@ Block elements can contain `reg`, `mem`, and other `blk` elements.
 They have the following keys:
 
 * `type`: `blk`
-* `offset`: The offset (bytes) of the memory relative to its parent.
-* `size`: The size (bytes) of the memory.
+* `version` -- the block version
+Optional.
+* `links` -- relevant links (text/URI pairs)
+Optional.
+* `size`: The size (bytes) of the block.
+Optional.
 * `children`: A sequence of element IDs.
 
 [source,yaml]
 .Block element example
 ----
 block0:
+  id: block0
+  name: block0
   type: blk
   offset: 0x0
   size: 0x1000
@@ -177,10 +211,7 @@ They are identified as registers via the `type: reg` key-value pair.
 They have the following keys:
 
 * `type`: `reg`
-* `id`: A copy of the element ID
-* `offset`: The offset (bytes) of the register relative to its parent.
-* `doc`: The documentation for the register.
-* `fields`: A sequence of field objects.
+* `fields`: A sequence of Field objects.
 
 ==== Field Objects
 
@@ -203,8 +234,7 @@ Optional.
 ** `bin`: Binary (e.g. `0b0101`)
 ** `dec`: Decimal (e.g. `5`)
 ** `hex`: Hexadecimal (e.g. `0x5`)
-* `enum`: Enum ID to use for encode/decode.
-Default: None.
+* `enum`: A sequence of EnumValue objects
 Optional.
 * `custom_decode`: Custom decode function to apply.
 Default: None.
@@ -213,27 +243,49 @@ Optional.
 Default: None.
 Optional.
 
+===== EnumValue Objects
+
+Enum value objects describe a single enumerated value.
+They have the following keys:
+
+* `name`: The symbolic name of the enumerated value.
+Required.
+* `value`: The numeric value of the enumerated value.
+Required.
+* `doc`: The documentation for the enumerated value.
+HTML supportted.
+Optional.
+
 ==== Register Element Example
 
 [source,yaml]
 .Register element example
 ----
-reg0:
+blk0.reg0:
+  id: blk0.reg0
   type: reg
   name: reg0
+  addr: 0x0
   offset: 0x0
   doc: An example register.
   fields:
-    - name: f1
-      lsb: 16
-      nbits: 16
+    - name: rsvd
+      lsb: 5
+      nbits: 28
       access: rw
-      doc: An example field.
-    - name: f0
+      doc: A reserved field.
+    - name: command
       lsb: 0
-      nbits: 16
+      nbits: 4
       access: rw
-      doc: Another example field.
+      doc: The command to execute.
+      enum:
+        - name: START
+          value: 0x5
+          doc: Starts the operation.
+        - name: STOP
+          value: 0xA
+          doc: Stops the operation.
 ----
 
 === Memory Elements (`mem`)
@@ -243,145 +295,4 @@ They are identified as memories via the `type: mem` key-value pair.
 They have the following keys:
 
 * `type`: `mem`
-* `offset`: The offset (bytes) of the memory relative to its parent.
 * `size`: The size (bytes) of the memory.
-* `doc`: The documentation for the memory.
-
-== Register Description File Example
-
-[source,yaml]
-.`register_description.yml`
-----
-metadata:
-  dut:
-    name: Example DUT
-    version: v0.1
-
-types:
-  Block0:
-    type: blk
-    size: 0x1000
-    children:
-      - reg0: Reg0
-      - reg1: Reg1
-
-  Reg0:
-    type: reg
-    doc: |-
-      A 32-bit full read/write register.
-    fields:
-      - name: field
-        lsb: 0
-        nbits: 32
-        access: rw
-
-enums:
-  Enum0:
-    - Variant0: 0x1
-    - Variant1: 0x1
-
-map:
-  root:
-    type: root
-    children:
-      - regs
-      - mems
-
-  regs:
-    type: blk
-    offset: 0x0
-    size: 0x1_0000
-    children:
-      - regs.blk0
-      - regs.blk1
-
-  mems:
-    type: blk
-    offset: 0x1_0000
-    size: 0x1_0000
-    children:
-      - mems.mem0
-      - mems.mem1
-
-  regs.blk0:
-    type: blk
-    offset: 0x0
-    size: 0x1000
-    children:
-      - regs.blk0.reg0
-      - regs.blk0.reg1
-
-  regs.blk1:
-    type: blk
-    offset: 0x1000
-    size: 0x1000
-    children:
-      - regs.blk1.reg0
-      - regs.blk1.reg1
-
-  regs.blk0.reg0:
-    type: reg
-    name: regs.blk0.reg0
-    offset: 0x0
-    fields:
-      - name: field
-        lsb: 0
-        nbits: 32
-        access: rw
-
-  regs.blk0.reg1:
-    type: reg
-    name: regs.blk0.reg1
-    offset: 0x0
-    fields:
-      - name: field
-        lsb: 0
-        nbits: 32
-        access: rw
-
-  regs.blk1.reg0:
-    type: reg
-    name: regs.blk1.reg0
-    offset: 0x0
-    fields:
-      - name: field
-        lsb: 0
-        nbits: 32
-        access: rw
-
-  regs.blk1.reg1:
-    type: reg
-    name: regs.blk1.reg1
-    offset: 0x0
-    fields:
-      - name: field
-        lsb: 0
-        nbits: 32
-        access: rw
-
-  mems.mem0:
-    type: mem
-    offset: 0x0
-    size: 0x8000
-
-  mems.mem1:
-    type: mem
-    offset: 0x8000
-    size: 0x8000
-----
-
-[listing]
-.Visualization of `register_description.yml`
-----
-root
-├── regs
-│   ├── blk0
-│   │   ├── reg0
-│   │   └── reg1
-│   └── blk1
-│       ├── reg0
-│       └── reg1
-└── mems
-    ├── mem0
-    └── mem1
-----
