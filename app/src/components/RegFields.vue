@@ -13,7 +13,7 @@
         <td class="fields_bits">{{ bits(field.lsb, field.nbits) }}</td>
         <td class="fields_name">{{ field.name }}</td>
         <td class="fields_access">{{ field.access }}</td>
-        <td class="fields_description"><span v-html='field.doc.replaceAll("\n", "<br>")'></span></td>
+        <td class="fields_description"><span v-html='field.doc?.replaceAll("\n", "<br>")'></span></td>
       </tr>
     </tbody>
   </table>
