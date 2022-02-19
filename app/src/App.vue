@@ -28,7 +28,7 @@ export default {
   created() {
     this.reg = {};
 
-    store.load("eio.json")
+    store.load("data.json")
 
     this.$watch(
       () => this.$route.params,
@@ -83,10 +83,10 @@ export default {
   },
   computed: {
     title() {
-      return this.sharedState.data?.design?.name || "FPGA Registers"
+      return this.sharedState.data?.root?.display_name || "display_name undefined"
     },
     links() {
-      let o = this.sharedState.data?.design?.links
+      let o = this.sharedState.data?.root?.links
 
       if (o) {
         return Object.entries(o)
@@ -99,7 +99,7 @@ export default {
       }
     },
     version() {
-      return this.sharedState.data?.design?.version || "Unspecified"
+      return this.sharedState.data?.root?.version || "version undefined"
     },
   },
   name: 'App'

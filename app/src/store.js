@@ -1,4 +1,5 @@
 import { reactive } from 'vue'
+import format from '@/format'
 
 export default {
   sharedState: reactive({
@@ -57,7 +58,7 @@ export default {
         styleClass: child["id"],
         data: {
           name: child["name"],
-          addr: child["addr"],
+          addr: format.hex(child["addr"]),
         }
       };
 

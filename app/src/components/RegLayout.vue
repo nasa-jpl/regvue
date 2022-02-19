@@ -37,6 +37,8 @@ defineProps([
 </script>
 
 <script>
+import format from '@/format'
+import parse from '@/parse'
 export const canvas = document.createElement("canvas");
 export const getTextWidth = function (text, font) {
   let context = canvas.getContext("2d");
@@ -66,30 +68,6 @@ export const ResponsiveRotateDirective = {
     observer.observe(element);
   }
 }
-function parse_int(s) {
-  let {str, base} = parse_base(s.trim())
-  return parseInt(str.replaceAll('_', ''), base)
-}
-function parse_base(s) {
-  let lc = s.toLowerCase()
-
-  if (lc.startsWith("0x")) {
-    return {
-      str: lc.slice(2),
-      base: 16,
-    }
-  } else if (lc.startsWith("0b")) {
-    return {
-      str: lc.slice(2),
-      base: 2,
-    }
-  } else {
-    return {
-      str: lc,
-      base: 10,
-    }
-  }
-}
 export default {
   directives: {
     'responsive-rotate': ResponsiveRotateDirective,
@@ -100,19 +78,14 @@ export default {
   },
   methods: {
     field_value(field) {
-      let i = parseInt(field.reset);
-      if (field.nbits == 1) {
-        return i;
-      } else {
-        return "0x" + i.toString(16);
-      }
+      return format.field_value(field, field.reset)
     },
     update_fields(evt) {
-      let value = parse_int(evt.target.value)
+      let value = parse.num(evt.target.value)
 
       for (const field of this.reg.fields) {
-        let field_mask = (1 << field.nbits) - 1
-        let field_value = (value >> field.lsb) & field_mask
+        let field_mask = (1n << BigInt(field.nbits)) - 1n
+        let field_value = BigInt(value >> field.lsb) & field_mask
         // TODO: make updates both ways: fields to reg, reg to fields
         // See https://stackoverflow.com/questions/60712430/make-two-inputs-update-each-other-in-two-way-binding
         // Also array of v-model https://stackoverflow.com/questions/34825065/vuejs-v-model-array-in-multiple-input
