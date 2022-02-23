@@ -1,0 +1,83 @@
+{
+  "schema": {
+    "version": "v0.2",
+    "name": "register-description-format"
+  },
+  "root": {
+    "version": "v1.0",
+    "display_name": "Example Design",
+    "name": "example",
+    "links": {
+      "GitHub": "https://github.com/org/repo"
+    },
+    "children": [
+      "blk0"
+    ]
+  },
+  "elements": {
+    "blk0": {
+      "addr": 0,
+      "type": "blk",
+      "children": [
+        "blk0.reg0",
+        "blk0.reg1"
+      ],
+      "name": "blk0",
+      "id": "blk0"
+    },
+    "blk0.reg0": {
+      "addr": 0,
+      "doc": "An example register.",
+      "fields": [
+        {
+          "access": "rw",
+          "doc": "A reserved field.",
+          "nbits": 28,
+          "lsb": 4,
+          "reset": 0,
+          "name": "rsvd"
+        },
+        {
+          "access": "rw",
+          "nbits": 4,
+          "lsb": 0,
+          "name": "command",
+          "reset": 0,
+          "doc": "The command to execute.",
+          "enum": [
+            {
+              "doc": "Starts the operation.",
+              "name": "START",
+              "value": 5
+            },
+            {
+              "doc": "Stops the operation.",
+              "name": "STOP",
+              "value": 10
+            }
+          ]
+        }
+      ],
+      "offset": 0,
+      "type": "reg",
+      "id": "blk0.reg0",
+      "name": "reg0"
+    },
+    "blk0.reg1": {
+      "addr": 4,
+      "offset": 4,
+      "fields": [
+        {
+          "access": "ro",
+          "reset": 3221344269,
+          "nbits": 32,
+          "lsb": 0,
+          "name": "f0"
+        }
+      ],
+      "type": "reg",
+      "id": "blk0.reg1",
+      "name": "reg1"
+    }
+  }
+}
