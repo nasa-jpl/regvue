@@ -1,0 +1,16 @@
+= regvue
+:imagesdir: images
+
+A modern viewer for FPGA/ASIC register documentation.
+
+https://github.jpl.nasa.gov/pages/rdonnell/regvue/demo[Demo]
+
+== Install
+
+. Download the https://github.jpl.nasa.gov/rdonnell/regvue/releases[latest release].
+. Extract to your `gh-pages` branch
++
+ mkdir regvue
+ tar xf regvue-0.1.0.tar.gz --strip-components 1 -C regvue
+
+. Replace `data.json` with your own
