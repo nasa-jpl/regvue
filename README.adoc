@@ -2,7 +2,7 @@
 :imagesdir: images
 :toc: macro
 
-A modern viewer for FPGA/ASIC register documentation.
+A modern web-based viewer for FPGA/ASIC register documentation.
 
 https://github.jpl.nasa.gov/pages/rdonnell/regvue/demo[Demo]
 
