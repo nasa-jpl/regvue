@@ -19,6 +19,7 @@ import RegFields from '@/components/RegFields.vue'
 import PrimeVue from 'primevue/config';
 import TreeTable from 'primevue/treetable';
 import Column from 'primevue/column';
+import Checkbox from 'primevue/checkbox';
 
 if (process.env.NODE_ENV === 'development') {
   devtools.connect()
@@ -33,4 +34,5 @@ createApp(App)
   .component('RegFields', RegFields)
   .component('TreeTable', TreeTable)
   .component('Column', Column)
+  .component('Checkbox', Checkbox)
   .mount('#app');

@@ -27,6 +27,10 @@
       </tr>
     </tbody>
   </table>
+  <div class="field-checkbox">
+    <Checkbox id="byte_swap" v-model="byte_swap" :binary="true"/>
+    <label for="byte_swap">Byte swap</label>
+  </div>
 </template>
 
 <script setup>
@@ -74,14 +78,33 @@ export default {
   },
   data() {
     return {
+        byte_swap: false,
     }
   },
   methods: {
     field_value(field) {
       return format.field_value(field, field.reset)
     },
+    swap_bytes(value) {
+      let new_value = 0;
+
+      // NOTE: This assumes 32-bit values
+      for (let byte_idx = 0; byte_idx < 32/8; byte_idx++) {
+        let bit_idx = byte_idx * 8;
+        let byte_ = (value >> bit_idx) & 0xFF
+        let swapped_byte_idx = (3 - byte_idx) * 8
+        let swapped_byte = (byte_ << swapped_byte_idx)
+        new_value |= swapped_byte
+      }
+
+      return new_value
+    },
     update_fields(evt) {
       let value = parse.num(evt.target.value)
+
+      if (this.byte_swap) {
+        value = this.swap_bytes(value)
+      }
 
       for (const field of this.reg.fields) {
         let field_mask = (1n << BigInt(field.nbits)) - 1n
