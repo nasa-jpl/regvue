@@ -20,17 +20,17 @@ export interface RegisterField {
 
 // Interface representing a register entry
 export interface Register {
-  display_name: string;
-  version?: string;
-  links: Map<string, string>;
-  children: string[];
   id: string;
-  doc: string;
-  type: string;
   name: string;
   addr: number;
   offset: number;
+  type: string;
+  display_name: string;
+  doc: string;
+  version?: string;
   fields?: RegisterField[];
+  children: string[];
+  links: Map<string, string>;
 }
 
 // Interface representing the fields necessary for a menu node
