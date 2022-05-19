@@ -10,18 +10,13 @@
     "links": {
       "GitHub": "https://github.com/org/repo"
     },
-    "children": [
-      "blk0"
-    ]
+    "children": ["blk0"]
   },
   "elements": {
     "blk0": {
       "addr": 0,
       "type": "blk",
-      "children": [
-        "blk0.reg0",
-        "blk0.reg1"
-      ],
+      "children": ["blk0.reg0", "blk0.reg1"],
       "name": "blk0",
       "id": "blk0"
     },
