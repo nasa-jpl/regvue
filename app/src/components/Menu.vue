@@ -154,7 +154,13 @@ const onNodeSelect = (key: string) => {
             <!--  Display the name and the open button for a menu node-->
             <div class="z-10" @click.stop="toggleChildrenNodes(node)">
               <!-- Show a close button if the node has open children-->
-              <span v-if="node.children && node.children[0].isVisible">
+              <span
+                v-if="
+                  node.children &&
+                  node.children.length > 0 &&
+                  node.children[0].isVisible
+                "
+              >
                 <menu-down />
               </span>
 
