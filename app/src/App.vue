@@ -29,16 +29,16 @@ const version = computed(
 );
 
 const links = computed(() => {
-  let o = sharedState.value.data?.root?.links;
+  let o = sharedState.value.data?.root.links;
 
   if (o != null) {
     return Object.entries(o).map(([k, v]) => {
       let e = { href: v, text: k };
       return e;
     });
-  } else {
-    return {};
   }
+
+  return undefined;
 });
 </script>
 
@@ -47,13 +47,16 @@ const links = computed(() => {
     <Header :title="title" :version="version" :links="links" />
 
     <div class="flex flex-row">
+      <!-- Show the navigation menu on the left -->
       <Menu :nodes="sharedState.nodes" class="h-[91vh] w-[23rem]" />
 
+      <!-- Show the main window -->
       <div class="h-[91vh] flex-grow overflow-y-scroll text-center">
         <router-view />
       </div>
     </div>
 
+    <!-- Display a link to the GitHub repo at the bottom right of the page -->
     <AppVersion
       :url="appInfo.url"
       :name="appInfo.name"

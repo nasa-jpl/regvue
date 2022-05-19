@@ -1,36 +1,6 @@
 import { reactive } from "vue";
+import { MenuNode, Register, SharedState } from "./types";
 import format from "./format";
-
-export interface Register {
-  display_name: string;
-  version: string;
-  links: Map<string, string>;
-  children: Array<string>;
-  id: string;
-  doc: string;
-  type: string;
-  name: string;
-  addr: number;
-  offset: number;
-}
-
-// TODO define nodes and fields interfaces
-export interface SharedState {
-  data: {
-    root: {
-      display_name: string;
-      links: Map<string, string>;
-      version: string;
-    };
-    elements: {
-      [key: string]: Register;
-    };
-  };
-  fields: {
-    [key: string]: any;
-  };
-  nodes: Array<Object>;
-}
 
 export default {
   sharedState: reactive({
@@ -52,20 +22,8 @@ export default {
       });
   },
 
-  untilLoaded(store) {
-    function pollLoaded(resolve) {
-      if (store.loaded) {
-        resolve();
-      } else {
-        setTimeout(() => pollLoaded(resolve), 1000);
-      }
-    }
-
-    return new Promise(pollLoaded);
-  },
-
-  get_field_map(elements) {
-    const fields = new Map();
+  get_field_map(elements: { [key: string]: Register }) {
+    const fields = new Map<string, string>();
 
     for (const id in elements) {
       const element = elements[id];
@@ -80,7 +38,7 @@ export default {
     return fields;
   },
 
-  get_nodes(elements, element) {
+  get_nodes(elements: { [key: string]: Register }, element: Register) {
     return element.children.map((child_id) => {
       const child = elements[child_id];
 
@@ -91,10 +49,10 @@ export default {
           name: child["name"],
           addr: format.hex(child["addr"]),
         },
-      };
+      } as MenuNode;
 
       if ("children" in child) {
-        node["children"] = this.get_nodes(elements, child);
+        node.children = this.get_nodes(elements, child);
       }
 
       return node;

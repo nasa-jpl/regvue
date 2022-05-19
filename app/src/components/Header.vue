@@ -1,18 +1,12 @@
 <script setup lang="ts">
-defineProps({
-  title: {
-    type: String,
-    default: "undefined",
-  },
-  links: {
-    type: Object,
-    default: null,
-  },
-  version: {
-    type: String,
-    default: "undefined",
-  },
-});
+defineProps<{
+  title?: string;
+  version?: string;
+  links?: {
+    href: string;
+    text: string;
+  }[];
+}>();
 </script>
 
 <template>
@@ -23,9 +17,9 @@ defineProps({
       <li>Search Bar</li>
     </ul>
     <ul v-if="links" class="left-0">
-      <li v-for="link in links" :key="link" class="ml-4 w-fit">
-        <a :href="link.href" class="underline hover:text-gray-500">{{
-          link.text
+      <li v-for="link in links" :key="link?.text" class="ml-4 w-fit">
+        <a :href="link?.href" class="underline hover:text-gray-500">{{
+          link?.text
         }}</a>
       </li>
     </ul>
