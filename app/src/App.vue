@@ -48,7 +48,7 @@ const links = computed(() => {
 
     <div class="flex flex-row">
       <!-- Show the navigation menu on the left -->
-      <Menu :nodes="sharedState.nodes" class="h-[91vh] w-[23rem]" />
+      <Menu :nodes="sharedState.nodes" class="h-[91vh] w-[21rem]" />
 
       <!-- Show the main window -->
       <div class="mt-4 h-[91vh] flex-grow overflow-y-scroll">

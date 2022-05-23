@@ -105,7 +105,7 @@ const getIndent = (node: MenuNode) => {
 
   if (node.depth) {
     // 5px of margin per depth level
-    result += (node.depth + 1) * 7;
+    result += (node.depth + 1) * 5;
   }
 
   return result;
