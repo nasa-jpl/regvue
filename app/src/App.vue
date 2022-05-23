@@ -51,7 +51,7 @@ const links = computed(() => {
       <Menu :nodes="sharedState.nodes" class="h-[91vh] w-[23rem]" />
 
       <!-- Show the main window -->
-      <div class="h-[91vh] flex-grow overflow-y-scroll text-center">
+      <div class="h-[91vh] flex-grow overflow-y-scroll">
         <router-view />
       </div>
     </div>

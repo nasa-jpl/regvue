@@ -10,8 +10,10 @@ defineProps<{
 </script>
 
 <template>
-  <div class="border-b-2 border-gray-400 bg-gray-300 py-4">
-    <ul class="mx-6 flex flex-row justify-between text-2xl">
+  <div class="border-b-2 border-gray-400 bg-gray-300 py-2">
+    <ul
+      class="mx-6 flex flex-row justify-between text-xl font-medium text-black"
+    >
       <li>{{ title }} ({{ version }})</li>
       <li class="text-center md:absolute md:w-screen">Regvue</li>
       <li>Search Bar</li>

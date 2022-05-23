@@ -139,49 +139,47 @@ const onNodeSelect = (key: string) => {
 <template>
   <div class="text-md flex flex-shrink-0 flex-col overflow-y-scroll border-r-2">
     <!-- Show the nodes -->
-    <div class="mt-1">
-      <div v-for="node in nodes" :key="node.key">
-        <!--  Display only if the node is marked visible -->
-        <div
-          v-if="node.isVisible"
-          :id="node.key"
-          class="flex flex-row justify-between space-x-4 border-y-[0.5px] px-4 hover:cursor-pointer hover:bg-gray-200"
-          :class="node.key == route.params.regid ? 'bg-blue-200' : ''"
-          :style="`padding-left: ${getIndent(node)}px`"
-          @click="onNodeSelect(node.key)"
-        >
-          <div class="flex flex-row justify-between" :title="node.data.name">
-            <!--  Display the name and the open button for a menu node-->
-            <div class="z-10" @click.stop="toggleChildrenNodes(node)">
-              <!-- Show a close button if the node has open children-->
-              <span
-                v-if="
-                  node.children &&
-                  node.children.length > 0 &&
-                  node.children[0].isVisible
-                "
-              >
-                <menu-down />
-              </span>
-
-              <!-- Show an open button if the node has closed children -->
-              <span v-else-if="node.children">
-                <menu-right />
-              </span>
-            </div>
-
-            <!-- Display the name of the node and truncate it if it is too long -->
-            <div
-              class="ml-0 w-40 truncate text-ellipsis text-left"
-              :class="node.key"
+    <div v-for="node in nodes" :key="node.key">
+      <!--  Display only if the node is marked visible -->
+      <div
+        v-if="node.isVisible"
+        :id="node.key"
+        class="flex flex-row justify-between space-x-4 border-y-[0.5px] px-4 hover:cursor-pointer hover:bg-gray-200"
+        :class="node.key == route.params.regid ? 'bg-blue-200' : ''"
+        :style="`padding-left: ${getIndent(node)}px`"
+        @click="onNodeSelect(node.key)"
+      >
+        <div class="flex flex-row justify-between" :title="node.data.name">
+          <!--  Display the name and the open button for a menu node-->
+          <div class="z-10" @click.stop="toggleChildrenNodes(node)">
+            <!-- Show a close button if the node has open children-->
+            <span
+              v-if="
+                node.children &&
+                node.children.length > 0 &&
+                node.children[0].isVisible
+              "
             >
-              {{ node.data.name }}
-            </div>
+              <menu-down />
+            </span>
+
+            <!-- Show an open button if the node has closed children -->
+            <span v-else-if="node.children">
+              <menu-right />
+            </span>
           </div>
-          <!-- Display the address of the node -->
-          <div>
-            {{ node.data.addr }}
+
+          <!-- Display the name of the node and truncate it if it is too long -->
+          <div
+            class="ml-0 w-40 truncate text-ellipsis text-left"
+            :class="node.key"
+          >
+            {{ node.data.name }}
           </div>
+        </div>
+        <!-- Display the address of the node -->
+        <div>
+          {{ node.data.addr }}
         </div>
       </div>
     </div>
