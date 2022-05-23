@@ -170,10 +170,7 @@ const onNodeSelect = (key: string) => {
           </div>
 
           <!-- Display the name of the node and truncate it if it is too long -->
-          <div
-            class="ml-0 w-40 truncate text-ellipsis text-left"
-            :class="node.key"
-          >
+          <div class="ml-0 w-40 truncate text-left" :class="node.key">
             {{ node.data.name }}
           </div>
         </div>
