@@ -1,35 +1,45 @@
 <script setup lang="ts">
-import { reactive, ComputedRef, computed } from "vue";
-import store, { Register } from "../store";
+import { computed } from "vue";
+import { Register, SharedState } from "../types";
+import store from "../store";
 
-const props = defineProps({
-  regid: String,
-  field_name: String,
-});
+import RegFields from "../components/RegFields.vue";
+import RegLayout from "../components/RegLayout.vue";
 
-let sharedState = reactive(store.sharedState);
+const props = defineProps<{
+  regid: string;
+}>();
+
+let sharedState = store.sharedState as SharedState;
 
 let reg = computed(() => {
   if (sharedState.data) {
     let element_id = props.regid as string;
-    return sharedState.data.elements[element_id];
+    return sharedState.data.elements[element_id] as Register;
   } else {
-    return {};
+    return null;
   }
 });
 
 let doc = computed(() => {
-  let r = reg.value as Register;
-  if (r.doc) {
-    return r.doc.replaceAll("\n", "<br>");
+  if (reg.value && reg.value.doc) {
+    return reg.value.doc.replaceAll("\n", "<br />");
   } else {
-    return "";
+    return null;
   }
 });
 </script>
 
 <template>
-  <p>id: {{ regid }}</p>
-  <p>{{ reg }}</p>
-  <!-- <p v-for="field in reg?.fields">{{ reg.field }}</p> -->
+  <div v-if="reg" class="mt-4">
+    <RegLayout v-if="reg.fields" :fields="reg.fields" class="px-4" />
+
+    <div v-if="doc" class="m-auto mx-4 mt-4">
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <span v-html="doc"></span>
+    </div>
+
+    <!-- <p class="mt-8 text-2xl font-bold">Fields</p> -->
+    <RegFields v-if="reg.fields" :fields="reg.fields" class="m-4" />
+  </div>
 </template>
