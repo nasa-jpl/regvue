@@ -31,7 +31,7 @@ let doc = computed(() => {
 </script>
 
 <template>
-  <div v-if="reg" class="mt-4">
+  <div v-if="reg">
     <RegLayout v-if="reg.fields" :fields="reg.fields" class="px-4" />
 
     <div v-if="doc" class="m-auto mx-4 mt-4">

@@ -10,7 +10,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="border-b-2 border-gray-400 bg-gray-300 py-2">
+  <div class="border-b border-gray-400 bg-gray-300 py-2">
     <ul
       class="mx-6 flex flex-row justify-between text-xl font-medium text-black"
     >

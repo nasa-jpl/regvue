@@ -51,17 +51,18 @@ const links = computed(() => {
       <Menu :nodes="sharedState.nodes" class="h-[91vh] w-[23rem]" />
 
       <!-- Show the main window -->
-      <div class="h-[91vh] flex-grow overflow-y-scroll">
-        <router-view />
+      <div class="mt-4 h-[91vh] flex-grow overflow-y-scroll">
+        <router-view class="main-view" />
+
+        <!-- Display a link to the GitHub repo at the bottom right of the page -->
+        <AppVersion
+          :url="appInfo.url"
+          :name="appInfo.name"
+          :version="appInfo.version"
+          class="float-right mr-4"
+        />
       </div>
     </div>
-
-    <!-- Display a link to the GitHub repo at the bottom right of the page -->
-    <AppVersion
-      :url="appInfo.url"
-      :name="appInfo.name"
-      :version="appInfo.version"
-    />
   </div>
 </template>
 
@@ -76,5 +77,9 @@ const links = computed(() => {
   margin: auto;
   margin-top: 0.7rem;
   top: 0.7rem;
+}
+
+.main-view {
+  min-height: calc(100vh - 6.5rem);
 }
 </style>

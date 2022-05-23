@@ -10,7 +10,7 @@ defineProps<{
   <!-- Only render if the name and version are both not null -->
   <p
     v-if="name && version"
-    class="absolute bottom-4 right-4 mr-2 rounded-md bg-gray-300 p-2"
+    class="w-fit rounded-md border border-gray-400 bg-gray-300 py-1 px-2 text-sm"
   >
     Powered by
 
