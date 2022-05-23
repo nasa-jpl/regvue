@@ -44,14 +44,14 @@ const links = computed(() => {
 
 <template>
   <div class="overflow-hidden text-[#2c3e50]">
-    <Header :title="title" :version="version" :links="links" />
+    <Header :title="title" :version="version" :links="links" class="h-11" />
 
-    <div class="flex flex-row">
+    <div class="app-body flex flex-row">
       <!-- Show the navigation menu on the left -->
-      <Menu :nodes="sharedState.nodes" class="h-[91vh] w-[21rem]" />
+      <Menu :nodes="sharedState.nodes" class="w-[21rem] pb-1" />
 
       <!-- Show the main window -->
-      <div class="mt-4 h-[91vh] flex-grow overflow-y-scroll">
+      <div class="mt-4 flex-grow overflow-y-scroll">
         <router-view class="main-view" />
 
         <!-- Display a link to the GitHub repo at the bottom right of the page -->
@@ -59,7 +59,7 @@ const links = computed(() => {
           :url="appInfo.url"
           :name="appInfo.name"
           :version="appInfo.version"
-          class="float-right mr-4"
+          class="float-right mr-4 mb-4"
         />
       </div>
     </div>
@@ -71,15 +71,16 @@ const links = computed(() => {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100vh;
 }
 
-.topbar .links {
-  margin: auto;
-  margin-top: 0.7rem;
-  top: 0.7rem;
+.app-body {
+  /* Full screen height minus the height of the header */
+  height: calc(100vh - 2.75rem);
 }
 
 .main-view {
-  min-height: calc(100vh - 6.5rem);
+  /* Full screen height minus the height of AppVersion and its bottom margin */
+  min-height: calc(100vh - 6rem - 1rem);
 }
 </style>
