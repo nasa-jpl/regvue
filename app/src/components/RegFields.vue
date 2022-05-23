@@ -3,7 +3,25 @@ import { RegisterField } from "../types";
 
 defineProps<{
   fields: RegisterField[];
+  selectedField?: string;
 }>();
+const emit = defineEmits([
+  "navigate-to-field",
+  "select-field",
+  "deselect-field",
+]);
+
+const navigateToField = (fieldName: string) => {
+  emit("navigate-to-field", fieldName);
+};
+
+const selectField = (fieldName: string) => {
+  emit("select-field", fieldName);
+};
+
+const deselectField = () => {
+  emit("deselect-field");
+};
 </script>
 
 <template>
@@ -20,7 +38,11 @@ defineProps<{
     <div
       v-for="field in fields"
       :key="field.name"
-      class="flex border-b text-left"
+      class="flex border-b text-left hover:cursor-pointer"
+      :class="selectedField == field.name ? 'bg-yellow-50 font-medium' : ''"
+      @mouseenter="selectField(field.name)"
+      @mouseleave="deselectField"
+      @click="navigateToField(field.name)"
     >
       <div class="flex w-20 shrink-0">
         <span class="m-auto">
