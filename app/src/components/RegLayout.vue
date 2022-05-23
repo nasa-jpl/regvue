@@ -30,9 +30,17 @@ defineProps<{
             v-for="field in fields"
             :key="field.name"
             :colspan="field.nbits"
-            class="border border-black px-1 text-center"
+            class="border border-black text-center"
           >
-            {{ field.name }}
+            <span
+              :class="
+                field.name.length > field.nbits * 4
+                  ? 'rotate my-2 rotate-180'
+                  : ''
+              "
+            >
+              {{ field.name }}
+            </span>
           </td>
         </tr>
 
@@ -62,3 +70,9 @@ defineProps<{
     </table>
   </div>
 </template>
+
+<style>
+.rotate {
+  writing-mode: vertical-rl;
+}
+</style>
