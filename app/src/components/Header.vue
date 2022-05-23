@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Search from "./Search.vue";
+
 defineProps<{
   title?: string;
   version?: string;
@@ -16,7 +18,9 @@ defineProps<{
     >
       <li>{{ title }} ({{ version }})</li>
       <li class="text-center md:absolute md:w-screen">Regvue</li>
-      <li>Search Bar</li>
+      <li>
+        <Search />
+      </li>
     </ul>
     <ul v-if="links" class="left-0">
       <li v-for="link in links" :key="link?.text" class="ml-4 w-fit">
