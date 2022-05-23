@@ -24,7 +24,7 @@ export interface Register {
   name: string;
   addr: number;
   offset: number;
-  type: string;
+  type: "reg" | "blk" | "mem";
   display_name: string;
   doc: string;
   version?: string;
