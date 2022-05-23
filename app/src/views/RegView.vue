@@ -49,8 +49,11 @@ const navigateToField = (fieldName: string) => {
 };
 
 const selectField = (fieldName: string) => {
-  selectedField.value = fieldName;
+  if (!props.fieldName) {
+    selectedField.value = fieldName;
+  }
 };
+
 const deselectField = () => {
   selectedField.value = props.fieldName;
 };
