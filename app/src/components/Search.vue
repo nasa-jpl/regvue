@@ -39,8 +39,12 @@ let suggestions = computed(() => {
     all: [] as Suggestion[],
   };
 
+  if (!sharedState.value.data || !sharedState.value.fields) {
+    return res;
+  }
+
   // Registers
-  for (let id in sharedState.value.data.elements) {
+  for (let id in sharedState.value?.data?.elements) {
     let item = sharedState.value.data.elements[id];
 
     if (
@@ -107,10 +111,12 @@ const go = (i: number) => {
 
 const focus = (i: number) => {
   focusIndex.value = i;
-};
+  if (i < -1) {
+    focusIndex.value = -1;
+  }
 
-const unfocus = () => {
-  focusIndex.value = -1;
+  const elem = document.getElementById(`suggestion-${focusIndex.value}`);
+  elem?.scrollIntoView({ block: "center" });
 };
 </script>
 
@@ -126,15 +132,24 @@ const unfocus = () => {
       autocomplete="off"
       spellcheck="false"
       @keyup.enter="go(focusIndex)"
-      @focus="focused = true"
-      @blur="focused = false"
+      @keydown.down="focus(focusIndex + 1)"
+      @keydown.up="focus(focusIndex - 1)"
+      @keydown.left.prevent="focus(0)"
+      @keydown.right.prevent="focus(suggestions.all.length - 1)"
+      @focus="
+        focused = true;
+        focusIndex = 0;
+      "
+      @blur="
+        focused = false;
+        focusIndex = -1;
+      "
     />
 
     <!-- Display the list of suggestions if showSuggestions is true -->
     <div
       v-if="showSuggestions"
       class="absolute top-8 -right-0 z-50 mt-2 max-h-[500px] w-[450px] overflow-y-scroll border border-black bg-white"
-      @mouseleave="unfocus"
     >
       <!-- Display a section for the register suggestions -->
       <section v-if="suggestions.regs.length > 0">
@@ -142,10 +157,12 @@ const unfocus = () => {
         <ul>
           <li
             v-for="(s, i) in suggestions.regs"
+            :id="'suggestion-' + i"
             :key="i"
             class="border-b border-gray-300 px-2 hover:cursor-pointer hover:bg-gray-200 hover:text-green-700"
+            :class="focusIndex == i ? 'bg-gray-200 text-green-700' : ''"
             @mousedown="go(i)"
-            @mouseenter="focus(i)"
+            @mouseenter="focus(-1)"
           >
             <!-- Show the name of the suggestion and truncate if too long -->
             <a :href="router.resolve(s.path).href" @click.prevent>
@@ -161,10 +178,16 @@ const unfocus = () => {
         <ul>
           <li
             v-for="(s, i) in suggestions.fields"
+            :id="'suggestion-' + (i + suggestions.regs.length)"
             :key="i + suggestions.regs.length"
             class="border-b border-gray-300 px-2 hover:cursor-pointer hover:bg-gray-200 hover:text-green-700"
+            :class="
+              focusIndex == i + suggestions.regs.length
+                ? 'bg-gray-200 text-green-700'
+                : ''
+            "
             @mousedown="go(i + suggestions.regs.length)"
-            @mouseenter="focus(i + suggestions.regs.length)"
+            @mouseenter="focus(-1)"
           >
             <!-- Show the name of the suggestion and truncate if too long -->
             <a :href="router.resolve(s.path).href" @click.prevent>
