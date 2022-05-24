@@ -26,18 +26,17 @@ const nodes = ref(
 
       if (node.children) {
         let routeName = (route.params?.regid as string) || "";
-        let routeArr = routeName.split(".");
 
         node.children.forEach((child: MenuNode) => {
           // Only mark a node as visible if it's parent node should be open
           if (routeName == child.key) {
-            child.isVisible = true;
+            openChildrenNodes(node);
           } else if (
-            // Check that each block of the child is in the route
-            child.key.split(".").every((val) => routeArr.includes(val))
+            // Ensure children further down the tree are not visible
+            routeName.includes(child.key) &&
+            !child.key.includes(routeName)
           ) {
-            child.isVisible = true;
-            openChildrenNodes(child);
+            openChildrenNodes(node);
           }
           addNode(child, depth + 1);
         });
