@@ -62,6 +62,9 @@ const onFieldValueChange = (
   selectNextElem: boolean
 ) => {
   // TODO Add validation check here
+  if (value == "") {
+    value = "0";
+  }
   field.value = parse.num(value);
 
   // Deselect the current input box
@@ -83,8 +86,12 @@ const onFieldValueChange = (
 
 // Assigns all fields a new field based on the inputted register value
 const onRegisterInput = (event: Event) => {
-  let value = parse.num((event.target as HTMLInputElement).value);
+  let input = (event.target as HTMLInputElement).value;
+  if (input == "") {
+    input = "0";
+  }
 
+  let value = parse.num(input);
   if (useByteSwap.value) {
     value = byteSwap(value);
   }
