@@ -57,7 +57,7 @@ const updateValue = () => {
         )
       "
       class="w-full bg-inherit text-center shadow-sm"
-      @blur="deactivate"
+      @blur="updateValue"
       @keydown.enter="updateValue"
       @keydown.tab="updateValue"
       @input="field.nbits == 1 ? updateValue() : null"
