@@ -34,7 +34,7 @@ let doc = computed(() => {
 
 const route = useRoute();
 const router = useRouter();
-const navigateToField = (fieldName: string) => {
+const selectField = (fieldName: string) => {
   const regid = route?.params?.regid;
   const fieldParam = route?.params?.fieldName;
 
@@ -48,13 +48,13 @@ const navigateToField = (fieldName: string) => {
   }
 };
 
-const selectField = (fieldName: string) => {
+const highlightField = (fieldName: string) => {
   if (!props.fieldName) {
     selectedField.value = fieldName;
   }
 };
 
-const deselectField = () => {
+const stopHighlightField = () => {
   selectedField.value = props.fieldName;
 };
 </script>
@@ -66,9 +66,9 @@ const deselectField = () => {
       :fields="reg.fields"
       :selected-field="selectedField"
       class="px-4"
-      @navigate-to-field="navigateToField"
       @select-field="selectField"
-      @deselect-field="deselectField"
+      @highlight-field="highlightField"
+      @stop-highlight-field="stopHighlightField"
     />
 
     <div v-if="doc" class="m-auto mx-4 mt-4">
@@ -81,9 +81,9 @@ const deselectField = () => {
       :fields="reg.fields"
       :selected-field="selectedField"
       class="m-4"
-      @navigate-to-field="navigateToField"
       @select-field="selectField"
-      @deselect-field="deselectField"
+      @highlight-field="highlightField"
+      @stop-highlight-field="stopHighlightField"
     />
   </div>
 </template>

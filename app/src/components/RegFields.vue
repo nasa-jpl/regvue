@@ -6,21 +6,21 @@ defineProps<{
   selectedField?: string;
 }>();
 const emit = defineEmits([
-  "navigate-to-field",
   "select-field",
-  "deselect-field",
+  "highlight-field",
+  "stop-highlight-field",
 ]);
 
 const navigateToField = (fieldName: string) => {
-  emit("navigate-to-field", fieldName);
-};
-
-const selectField = (fieldName: string) => {
   emit("select-field", fieldName);
 };
 
+const selectField = (fieldName: string) => {
+  emit("highlight-field", fieldName);
+};
+
 const deselectField = () => {
-  emit("deselect-field");
+  emit("stop-highlight-field");
 };
 </script>
 

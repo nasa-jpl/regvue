@@ -8,9 +8,9 @@ const props = defineProps<{
   selectedField?: string;
 }>();
 const emit = defineEmits([
-  "navigate-to-field",
   "select-field",
-  "deselect-field",
+  "highlight-field",
+  "stop-highlight-field",
 ]);
 
 let useByteSwap = ref(false);
@@ -90,9 +90,9 @@ const onRegisterInput = (event: Event) => {
             :colspan="field.nbits"
             class="border border-black text-center hover:cursor-pointer"
             :class="selectedField == field.name ? 'bg-yellow-50' : ''"
-            @mouseenter="emit('select-field', field.name)"
-            @mouseleave="emit('deselect-field')"
-            @click="emit('navigate-to-field', field.name)"
+            @mouseenter="emit('highlight-field', field.name)"
+            @mouseleave="emit('stop-highlight-field')"
+            @click="emit('select-field', field.name)"
           >
             <span
               :class="
@@ -114,8 +114,8 @@ const onRegisterInput = (event: Event) => {
             class="border border-black"
             :class="selectedField == field.name ? 'bg-yellow-50' : ''"
             :colspan="field.nbits"
-            @mouseenter="emit('select-field', field.name)"
-            @mouseleave="emit('deselect-field')"
+            @mouseenter="emit('highlight-field', field.name)"
+            @mouseleave="emit('stop-highlight-field')"
           >
             <input
               :id="'fieldInput-' + i"
