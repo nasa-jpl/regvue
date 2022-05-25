@@ -13,12 +13,9 @@ defineProps<{
 
 <template>
   <div class="border-b border-gray-400 bg-gray-300 py-2">
-    <ul
-      class="mx-6 flex flex-row justify-between text-xl font-medium text-black"
-    >
-      <li>{{ title }} ({{ version }})</li>
-      <li class="text-center md:absolute md:w-screen">Regvue</li>
-      <li>
+    <ul class="flex flex-row justify-between text-xl font-medium text-black">
+      <li class="ml-6">{{ title }} ({{ version }})</li>
+      <li class="text-center md:absolute md:w-screen">
         <Search />
       </li>
     </ul>

@@ -149,53 +149,59 @@ const focus = (i: number) => {
     <!-- Display the list of suggestions if showSuggestions is true -->
     <div
       v-if="showSuggestions"
-      class="absolute top-8 -right-0 z-50 mt-2 max-h-[500px] w-[450px] overflow-y-scroll border border-black bg-white"
+      class="z-50 m-0 h-screen w-screen bg-gray-300/50 p-0 text-left backdrop-blur-lg"
     >
-      <!-- Display a section for the register suggestions -->
-      <section v-if="suggestions.regs.length > 0">
-        <div class="bg-blue-900 px-2 py-1 text-white">Registers</div>
-        <ul>
-          <li
-            v-for="(s, i) in suggestions.regs"
-            :id="'suggestion-' + i"
-            :key="i"
-            class="border-b border-gray-300 px-2 hover:cursor-pointer hover:bg-gray-200 hover:text-green-700"
-            :class="focusIndex == i ? 'bg-gray-200 text-green-700' : ''"
-            @mousedown="go(i)"
-            @mouseenter="focus(-1)"
-          >
-            <!-- Show the name of the suggestion and truncate if too long -->
-            <a :href="router.resolve(s.path).href" @click.prevent>
-              <div class="truncate" :title="s.name">{{ s.name }}</div>
-            </a>
-          </li>
-        </ul>
-      </section>
+      <div
+        class="m-auto mt-2 max-h-[500px] w-[450px] overflow-y-scroll border border-black bg-white"
+      >
+        <!-- Display a section for the register suggestions -->
+        <section v-if="suggestions.regs.length > 0">
+          <div class="bg-blue-900 px-2 py-1 text-center text-white">
+            Registers
+          </div>
+          <ul>
+            <li
+              v-for="(s, i) in suggestions.regs"
+              :id="'suggestion-' + i"
+              :key="i"
+              class="border-b border-gray-300 px-2 hover:cursor-pointer hover:bg-gray-200 hover:text-green-700"
+              :class="focusIndex == i ? 'bg-gray-200 text-green-700' : ''"
+              @mousedown="go(i)"
+              @mouseenter="focus(-1)"
+            >
+              <!-- Show the name of the suggestion and truncate if too long -->
+              <a :href="router.resolve(s.path).href" @click.prevent>
+                <div class="truncate" :title="s.name">{{ s.name }}</div>
+              </a>
+            </li>
+          </ul>
+        </section>
 
-      <!-- Display a section for the field suggestions -->
-      <section v-if="suggestions.fields.length > 0">
-        <div class="bg-blue-900 px-2 py-1 text-white">Fields</div>
-        <ul>
-          <li
-            v-for="(s, i) in suggestions.fields"
-            :id="'suggestion-' + (i + suggestions.regs.length)"
-            :key="i + suggestions.regs.length"
-            class="border-b border-gray-300 px-2 hover:cursor-pointer hover:bg-gray-200 hover:text-green-700"
-            :class="
-              focusIndex == i + suggestions.regs.length
-                ? 'bg-gray-200 text-green-700'
-                : ''
-            "
-            @mousedown="go(i + suggestions.regs.length)"
-            @mouseenter="focus(-1)"
-          >
-            <!-- Show the name of the suggestion and truncate if too long -->
-            <a :href="router.resolve(s.path).href" @click.prevent>
-              <div class="truncate" :title="s.name">{{ s.name }}</div>
-            </a>
-          </li>
-        </ul>
-      </section>
+        <!-- Display a section for the field suggestions -->
+        <section v-if="suggestions.fields.length > 0">
+          <div class="bg-blue-900 px-2 py-1 text-center text-white">Fields</div>
+          <ul>
+            <li
+              v-for="(s, i) in suggestions.fields"
+              :id="'suggestion-' + (i + suggestions.regs.length)"
+              :key="i + suggestions.regs.length"
+              class="border-b border-gray-300 px-2 hover:cursor-pointer hover:bg-gray-200 hover:text-green-700"
+              :class="
+                focusIndex == i + suggestions.regs.length
+                  ? 'bg-gray-200 text-green-700'
+                  : ''
+              "
+              @mousedown="go(i + suggestions.regs.length)"
+              @mouseenter="focus(-1)"
+            >
+              <!-- Show the name of the suggestion and truncate if too long -->
+              <a :href="router.resolve(s.path).href" @click.prevent>
+                <div class="truncate" :title="s.name">{{ s.name }}</div>
+              </a>
+            </li>
+          </ul>
+        </section>
+      </div>
     </div>
   </div>
 </template>
