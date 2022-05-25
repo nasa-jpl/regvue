@@ -1,4 +1,5 @@
-const plugin = require('tailwindcss/plugin')
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const plugin = require("tailwindcss/plugin");
 
 module.exports = {
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
@@ -6,7 +7,7 @@ module.exports = {
     extend: {},
   },
   plugins: [
-    plugin(function ({ addUtilities, addComponents, e, prefix, config }) {
+    plugin(function ({ addUtilities }) {
       const newUtilities = {
         ".horizontal-tb": {
           writingMode: "horizontal-tb",
