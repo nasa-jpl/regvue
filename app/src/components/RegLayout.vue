@@ -2,6 +2,9 @@
 import { ref, Ref, computed } from "vue";
 import { RegisterField, type DisplayType } from "../types";
 import format from "../format";
+import parse from "../parse";
+
+import FieldInputBox from "./FieldInputBox.vue";
 
 const props = defineProps<{
   fields: RegisterField[];
@@ -17,7 +20,7 @@ let useByteSwap = ref(false);
 let selectedDisplayType: Ref<DisplayType> = ref("hexadecimal");
 let displayTypes = ["hexadecimal", "binary", "decimal"];
 
-// Calculate the overall register value based on the field values
+// Compute the overall register value based on the field values
 const registerValue = computed(() => {
   let valuesArr = props.fields.map((field) => {
     let mask = (1n << BigInt(field.nbits)) - 1n;
@@ -33,22 +36,23 @@ const resetFieldValues = () => {
   props.fields.forEach((field) => (field.value = field.reset));
 };
 
-// Changes a fields value and selects the next input element
-const onFieldInput = (event: Event, field: RegisterField) => {
-  let inputElem = event.target as HTMLInputElement;
-  let value = Number(inputElem.value);
-
+// Parse the user input for the new field value
+const onFieldValueChange = (field: RegisterField, value: string) => {
   // TODO Add validation check here
-  field.value = value;
+  field.value = parse.num(value);
 
-  // Unfocus current input and select next input box
-  let index = Number(inputElem.id.split("-")[1]);
-  inputElem.blur();
-  if (index + 1 < props.fields.length) {
+  // Deselect the current input box
+  let currentElem = document.getElementById(`fieldInput-${field.name}`);
+  currentElem?.blur();
+
+  // Find and click on the next input box
+  let nextFieldIndex = props.fields.indexOf(field) + 1;
+  if (nextFieldIndex < props.fields.length) {
+    let nextFieldName = props.fields[nextFieldIndex].name;
     const nextElem = document.getElementById(
-      `fieldInput-${index + 1}`
+      `fieldInput-${nextFieldName}`
     ) as HTMLInputElement;
-    nextElem.select();
+    nextElem.click();
   }
 };
 
@@ -92,7 +96,9 @@ const onRegisterInput = (event: Event) => {
             :class="selectedField == field.name ? 'bg-yellow-50' : ''"
             @mouseenter="emit('highlight-field', field.name)"
             @mouseleave="emit('stop-highlight-field')"
-            @click="emit('select-field', field.name)"
+            @click="
+              emit('select-field', field.name, selectedField == field.name)
+            "
           >
             <span
               :class="
@@ -109,7 +115,7 @@ const onRegisterInput = (event: Event) => {
         <!-- Display the individual field input boxes -->
         <tr>
           <td
-            v-for="(field, i) in fields"
+            v-for="field in fields"
             :key="'fieldInput-' + field.name"
             class="border border-black"
             :class="selectedField == field.name ? 'bg-yellow-50' : ''"
@@ -117,20 +123,11 @@ const onRegisterInput = (event: Event) => {
             @mouseenter="emit('highlight-field', field.name)"
             @mouseleave="emit('stop-highlight-field')"
           >
-            <input
-              :id="'fieldInput-' + i"
-              type="text"
-              :value="
-                format.getStringRepresentation(
-                  field.value,
-                  selectedDisplayType,
-                  field.nbits
-                )
-              "
-              class="w-full bg-inherit text-center"
-              @keydown.enter="onFieldInput($event, field)"
-              @input="field.nbits == 1 ? onFieldInput($event, field) : null"
-              @focus="field.nbits == 1 ? ($event.target as HTMLInputElement).select() : null"
+            <FieldInputBox
+              :field="field"
+              :selected-display-type="selectedDisplayType"
+              @select-field="emit('select-field', field.name, $event)"
+              @value-changed="onFieldValueChange(field, $event)"
             />
           </td>
         </tr>
@@ -188,7 +185,7 @@ const onRegisterInput = (event: Event) => {
     </div>
 
     <!-- Show byte swap checkbox -->
-    <div>
+    <div class="mt-1">
       <input
         v-model="useByteSwap"
         type="checkbox"

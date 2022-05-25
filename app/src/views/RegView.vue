@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Register, SharedState } from "../types";
 import store from "../store";
@@ -34,11 +34,11 @@ let doc = computed(() => {
 
 const route = useRoute();
 const router = useRouter();
-const selectField = (fieldName: string) => {
+const selectField = (fieldName: string, newValue: boolean) => {
   const regid = route?.params?.regid;
   const fieldParam = route?.params?.fieldName;
 
-  if (fieldParam != fieldName) {
+  if (fieldParam != fieldName && newValue) {
     router.push({
       name: "field",
       params: { regid: regid, fieldName: fieldName },
@@ -57,6 +57,13 @@ const highlightField = (fieldName: string) => {
 const stopHighlightField = () => {
   selectedField.value = props.fieldName;
 };
+
+watch(
+  () => route.params.fieldName,
+  (newValue) => {
+    selectedField.value = newValue as string;
+  }
+);
 </script>
 
 <template>
