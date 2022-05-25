@@ -27,9 +27,27 @@ const registerValue = computed(() => {
     return (BigInt(field.value) & mask) << BigInt(field.lsb);
   });
 
-  let result = valuesArr.reduce((result, curr) => result | curr);
-  return Number(result);
+  let result = Number(valuesArr.reduce((result, curr) => result | curr));
+  if (useByteSwap.value) {
+    result = byteSwap(result);
+  }
+  return result;
 });
+
+const byteSwap = (value: number) => {
+  let newValue = 0;
+
+  // NOTE: This assumes 32-bit values
+  for (let byteIdx = 0; byteIdx < 32 / 8; byteIdx++) {
+    const bitIdx = byteIdx * 8;
+    const byte = (value >> bitIdx) & 0xff;
+    const swappedByteIdx = (3 - byteIdx) * 8;
+    const swappedByte = byte << swappedByteIdx;
+    newValue |= swappedByte;
+  }
+
+  return newValue;
+};
 
 // Assigns each field.value to its field.reset
 const resetFieldValues = () => {
@@ -65,7 +83,11 @@ const onFieldValueChange = (
 
 // Assigns all fields a new field based on the inputted register value
 const onRegisterInput = (event: Event) => {
-  let value = Number((event.target as HTMLInputElement).value);
+  let value = parse.num((event.target as HTMLInputElement).value);
+
+  if (useByteSwap.value) {
+    value = byteSwap(value);
+  }
 
   for (let field of props.fields) {
     let mask = (1n << BigInt(field.nbits)) - 1n;
