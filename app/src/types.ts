@@ -16,6 +16,7 @@ export interface RegisterField {
   name: string;
   nbits: number;
   reset: number;
+  value: number;
 }
 
 // Interface representing a register entry
@@ -57,3 +58,5 @@ export interface SharedState {
   fields: Map<string, string>;
   nodes: MenuNode[];
 }
+
+export type DisplayType = "hexadecimal" | "binary" | "decimal";

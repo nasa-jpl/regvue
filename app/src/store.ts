@@ -1,5 +1,5 @@
 import { reactive } from "vue";
-import { MenuNode, Register, SharedState } from "./types";
+import { MenuNode, Register, RegisterField, SharedState } from "./types";
 import format from "./format";
 
 export default {
@@ -14,6 +14,20 @@ export default {
   load(filename: string) {
     return fetch(filename)
       .then((result) => result.json())
+      .then((data) => {
+        for (const name in data.elements) {
+          const element = data.elements[name];
+          const fields = element.fields;
+          fields?.forEach((field: RegisterField) => {
+            if (field.reset) {
+              field.value = field.reset;
+            } else {
+              field.value = 0;
+            }
+          });
+        }
+        return data;
+      })
       .then((data) => {
         this.sharedState.data = data;
         this.sharedState.fields = this.get_field_map(data.elements);
@@ -31,6 +45,9 @@ export default {
         for (const field of element.fields) {
           const field_id = id + "." + field.name;
           fields.set(field_id, id);
+        }
+        if (fields.has("reset")) {
+          fields.set("value", fields.get("reset") as string);
         }
       }
     }
