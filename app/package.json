@@ -11,9 +11,6 @@
     "format": "npx prettier --write ."
   },
   "dependencies": {
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-html": "^6.2.0",
-    "eslint-plugin-prettier": "^4.0.0",
     "vue": "^3.2.25",
     "vue-router": "^4.0.15"
   },
@@ -24,6 +21,9 @@
     "@vitejs/plugin-vue": "^2.3.3",
     "autoprefixer": "^10.4.7",
     "eslint": "^8.15.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-html": "^6.2.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^9.0.1",
     "postcss": "^8.4.13",
     "prettier": "^2.6.2",
