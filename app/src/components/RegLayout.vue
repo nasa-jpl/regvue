@@ -36,14 +36,21 @@ const resetFieldValues = () => {
   props.fields.forEach((field) => (field.value = field.reset));
 };
 
-// Parse the user input for the new field value
-const onFieldValueChange = (field: RegisterField, value: string) => {
+// Parse the user input for the new field value and conditionally
+// select the next input element
+const onFieldValueChange = (
+  field: RegisterField,
+  value: string,
+  selectNextElem: boolean
+) => {
   // TODO Add validation check here
   field.value = parse.num(value);
 
   // Deselect the current input box
   let currentElem = document.getElementById(`fieldInput-${field.name}`);
   currentElem?.blur();
+
+  if (!selectNextElem) return;
 
   // Find and click on the next input box
   let nextFieldIndex = props.fields.indexOf(field) + 1;
@@ -127,7 +134,9 @@ const onRegisterInput = (event: Event) => {
               :field="field"
               :selected-display-type="selectedDisplayType"
               @select-field="emit('select-field', field.name, $event)"
-              @value-changed="onFieldValueChange(field, $event)"
+              @value-changed="
+                onFieldValueChange(field, $event.value, $event.selectNextElem)
+              "
             />
           </td>
         </tr>

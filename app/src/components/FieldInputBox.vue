@@ -32,12 +32,12 @@ const activate = () => {
 };
 
 // Deactivate the input box and emit the value change
-const updateValue = () => {
+const updateValue = (selectNextElem: boolean) => {
   const elem = document.getElementById(
     "fieldInput-" + props.field.name
   ) as HTMLInputElement;
   const value = elem.value;
-  emit("value-changed", value);
+  emit("value-changed", { value: value, selectNextElem: selectNextElem });
 
   deactivate();
 };
@@ -57,10 +57,10 @@ const updateValue = () => {
         )
       "
       class="w-full bg-inherit text-center shadow-sm"
-      @blur="updateValue"
-      @keydown.enter="updateValue"
-      @keydown.tab="updateValue"
-      @input="field.nbits == 1 ? updateValue() : null"
+      @blur="updateValue(false)"
+      @keydown.enter="updateValue(true)"
+      @keydown.tab.prevent="updateValue(true)"
+      @input="field.nbits == 1 ? updateValue(true) : null"
     />
   </div>
 
