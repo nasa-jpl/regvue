@@ -184,12 +184,12 @@ const onRegisterInput = (event: Event) => {
         </button>
       </div>
 
-      <!-- Show clear values button -->
+      <!-- Show reset values button -->
       <button
         class="rounded border border-gray-400 bg-white px-1 shadow hover:bg-gray-100"
         @click="resetFieldValues"
       >
-        Clear Values
+        Reset Values
       </button>
     </div>
 
