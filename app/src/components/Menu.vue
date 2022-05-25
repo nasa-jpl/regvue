@@ -65,18 +65,11 @@ const toggleChildrenNodes = (node: MenuNode) => {
 };
 
 // Opens all children of a node
-// Optionally recursive to open all grandchildren nodes
-const openChildrenNodes = (node: MenuNode, recursive = false) => {
+const openChildrenNodes = (node: MenuNode) => {
   if (node == null) return;
 
   if (node.children) {
-    node.children.forEach((child: MenuNode) => {
-      child.isVisible = true;
-
-      if (recursive) {
-        openChildrenNodes(child, true);
-      }
-    });
+    node.children.forEach((child: MenuNode) => (child.isVisible = true));
   }
 };
 
