@@ -35,18 +35,17 @@ const registerValue = computed(() => {
 });
 
 const byteSwap = (value: number) => {
-  let newValue = 0;
+  let newValue = 0n;
 
-  // NOTE: This assumes 32-bit values
-  for (let byteIdx = 0; byteIdx < 32 / 8; byteIdx++) {
-    const bitIdx = byteIdx * 8;
-    const byte = (value >> bitIdx) & 0xff;
-    const swappedByteIdx = (3 - byteIdx) * 8;
+  for (let byteIdx = 0n; byteIdx < 32 / 8; byteIdx++) {
+    const bitIdx = byteIdx * 8n;
+    const byte = (BigInt(value) >> bitIdx) & 0xffn;
+    const swappedByteIdx = (3n - byteIdx) * 8n;
     const swappedByte = byte << swappedByteIdx;
     newValue |= swappedByte;
   }
 
-  return newValue;
+  return Number(newValue);
 };
 
 // Assigns each field.value to its field.reset
@@ -76,21 +75,25 @@ const onFieldValueChange = (
   selectNextElem: boolean
 ) => {
   // TODO Add validation check here
-  if (value == "") {
+  if (value == "" || value.includes("-")) {
     value = "0";
   }
-  field.value = parse.num(value);
+  let newValue = parse.num(value);
+
+  // Ensure the new value does not exceed the max field value
+  newValue = newValue & ((1 << field.nbits) - 1);
+  field.value = newValue;
 
   // Deselect the current input box
-  let currentElem = document.getElementById(`fieldInput-${field.name}`);
+  const currentElem = document.getElementById(`fieldInput-${field.name}`);
   currentElem?.blur();
 
   if (!selectNextElem) return;
 
   // Find and click on the next input box
-  let nextFieldIndex = props.fields.indexOf(field) + 1;
+  const nextFieldIndex = props.fields.indexOf(field) + 1;
   if (nextFieldIndex < props.fields.length) {
-    let nextFieldName = props.fields[nextFieldIndex].name;
+    const nextFieldName = props.fields[nextFieldIndex].name;
     const nextElem = document.getElementById(
       `fieldInput-${nextFieldName}`
     ) as HTMLInputElement;
