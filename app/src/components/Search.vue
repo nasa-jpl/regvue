@@ -136,6 +136,7 @@ const focus = (i: number) => {
       @keydown.up="focus(focusIndex - 1)"
       @keydown.left.prevent="focus(0)"
       @keydown.right.prevent="focus(suggestions.all.length - 1)"
+      @keydown.escape="($event.target as HTMLElement).blur()"
       @focus="
         focused = true;
         focusIndex = 0;
