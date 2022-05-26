@@ -47,6 +47,19 @@ export interface MenuNode {
   isVisible?: boolean;
 }
 
+// Interfaces that defines the properties on a entry in the list
+// of suggestions used in Search.vue
+export interface Suggestion {
+  type: string;
+  name: string;
+  path: {
+    name: string;
+    params: {
+      regid: string;
+    };
+  };
+}
+
 // Interface representing the overall sharedState object exported from store.ts
 export interface SharedState {
   data: {

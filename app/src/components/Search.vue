@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, Ref, computed } from "vue";
 import { useRouter } from "vue-router";
+import { Suggestion } from "../types";
 import store from "../store";
 
 const sharedState = ref(store.sharedState);
@@ -15,18 +16,8 @@ let focused = ref(false);
 // Index of the suggestion currently in focus
 let focusIndex = ref(0);
 
-// Interfaces that defines the properties on a entry in the list
-// of suggestions
-interface Suggestion {
-  type: string;
-  name: string;
-  path: {
-    name: string;
-    params: {
-      regid: string;
-    };
-  };
-}
+// Array used to keep track of recently selected suggestions
+let recentSuggestions: Ref<Suggestion[]> = ref([]);
 
 // Create a list of entires that have register or field names that
 // contain the query text
@@ -95,35 +86,80 @@ let suggestions = computed(() => {
 
 // Determine whether or not to show the suggestions
 let showSuggestions = computed(() => {
-  return focused.value && suggestions.value && suggestions.value.all.length;
+  return focused.value && query.value != "" && suggestions.value;
 });
 
-// Change the route to point to the selected suggestion
-const go = (i: number) => {
-  if (!showSuggestions.value) return;
+// Change the route to go to the selected suggestion
+const go = (suggestion: Suggestion) => {
+  // Remove the suggestion if already present to ensure no duplicates
+  removeRecentSuggestion(suggestion);
 
-  let path = suggestions.value.all[i].path;
-  router.push(path);
+  // Add the the recentSuggestions array and limit length to 5
+  recentSuggestions.value.push(suggestion);
+  recentSuggestions.value = recentSuggestions.value.slice(-5);
+
+  // Change the route to the selected reg/field
+  router.push(suggestion.path);
+
+  // Deselect the search input box
+  const searchElem = document.getElementById("search-box-input") as HTMLElement;
+  searchElem.blur();
+
+  // Reset search variables
   query.value = "";
   focusIndex.value = -1;
   focused.value = false;
 };
 
 const focus = (i: number) => {
-  focusIndex.value = i;
+  // The lowest focusIndex should be -1 for "unfocused"
   if (i < -1) {
-    focusIndex.value = -1;
+    i = -1;
   }
 
+  // Perform checks to ensure the focusIndex doesn't go out of bounds
+  if (showSuggestions.value) {
+    if (i > suggestions.value.all.length - 1) {
+      i = suggestions.value.all.length - 1;
+    }
+  } else {
+    if (i > recentSuggestions.value.length - 1) {
+      i = recentSuggestions.value.length - 1;
+    }
+  }
+
+  focusIndex.value = i;
+
+  // Scroll the new focused element into view
   const elem = document.getElementById(`suggestion-${focusIndex.value}`);
   elem?.scrollIntoView({ block: "center" });
+};
+
+// Removes a suggestion from the recentSuggestions array if present
+const removeRecentSuggestion = (suggestion: Suggestion) => {
+  // Find the index of the suggestion to remove
+  let idx = recentSuggestions.value.findIndex(
+    (element) => element.name == suggestion.name
+  );
+
+  // Remove the suggestion if present
+  if (idx != -1) {
+    recentSuggestions.value.splice(idx, 1);
+  }
 };
 </script>
 
 <template>
-  <div class="relative mr-4 text-base">
+  <div
+    class="relative z-40 mr-4 rotate-0 text-base"
+    @keydown.escape="
+      focused = false;
+      focusIndex = -1;
+    "
+  >
     <!-- Show the input box that is bound to the query string -->
     <input
+      id="search-box-input"
       v-model="query"
       type="search"
       aria-label="Search"
@@ -131,19 +167,19 @@ const focus = (i: number) => {
       class="p-1 text-sm"
       autocomplete="off"
       spellcheck="false"
-      @keyup.enter="go(focusIndex)"
+      @keyup.enter="go(suggestions.all[focusIndex])"
       @keydown.down="focus(focusIndex + 1)"
       @keydown.up="focus(focusIndex - 1)"
       @keydown.left.prevent="focus(0)"
-      @keydown.right.prevent="focus(suggestions.all.length - 1)"
+      @keydown.right.prevent="
+        showSuggestions
+          ? focus(suggestions.all.length - 1)
+          : focus(recentSuggestions.length - 1)
+      "
       @keydown.escape="($event.target as HTMLElement).blur()"
       @focus="
         focused = true;
         focusIndex = 0;
-      "
-      @blur="
-        focused = false;
-        focusIndex = -1;
       "
     />
 
@@ -151,6 +187,10 @@ const focus = (i: number) => {
     <div
       v-if="showSuggestions"
       class="z-50 m-0 h-screen w-screen bg-gray-300/50 p-0 text-left backdrop-blur-lg"
+      @click="
+        focused = false;
+        focusIndex = -1;
+      "
     >
       <div
         class="m-auto mt-2 max-h-[500px] w-[450px] overflow-y-scroll border border-black bg-white"
@@ -161,13 +201,14 @@ const focus = (i: number) => {
             Registers
           </div>
           <ul>
+            <!-- Display each individual suggestion -->
             <li
               v-for="(s, i) in suggestions.regs"
               :id="'suggestion-' + i"
               :key="i"
               class="border-b border-gray-300 px-2 hover:cursor-pointer hover:bg-gray-200 hover:text-green-700"
               :class="focusIndex == i ? 'bg-gray-200 text-green-700' : ''"
-              @mousedown="go(i)"
+              @mousedown="go(s)"
               @mouseenter="focus(-1)"
             >
               <!-- Show the name of the suggestion and truncate if too long -->
@@ -182,6 +223,7 @@ const focus = (i: number) => {
         <section v-if="suggestions.fields.length > 0">
           <div class="bg-blue-900 px-2 py-1 text-center text-white">Fields</div>
           <ul>
+            <!-- Display each individual suggestion -->
             <li
               v-for="(s, i) in suggestions.fields"
               :id="'suggestion-' + (i + suggestions.regs.length)"
@@ -192,7 +234,7 @@ const focus = (i: number) => {
                   ? 'bg-gray-200 text-green-700'
                   : ''
               "
-              @mousedown="go(i + suggestions.regs.length)"
+              @mousedown="go(s)"
               @mouseenter="focus(-1)"
             >
               <!-- Show the name of the suggestion and truncate if too long -->
@@ -201,6 +243,76 @@ const focus = (i: number) => {
               </a>
             </li>
           </ul>
+        </section>
+
+        <!-- Display a section if there are no results -->
+        <section v-if="suggestions.all.length == 0">
+          <div class="bg-blue-900 px-2 py-1 text-center text-white">
+            Results
+          </div>
+          <div class="my-10 bg-white text-center text-sm text-gray-500">
+            No results
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- If the query is empty ("") but the search box is focused show a list of recent searches -->
+    <div
+      v-else-if="focused"
+      class="z-50 m-0 h-screen w-screen bg-gray-300/50 p-0 text-left backdrop-blur-lg"
+      @click="
+        focused = false;
+        focusIndex = -1;
+      "
+    >
+      <div
+        class="m-auto mt-2 max-h-[500px] w-[450px] overflow-y-scroll border border-black bg-white"
+      >
+        <section>
+          <!-- Show section title -->
+          <div class="bg-blue-900 px-2 py-1 text-center text-white">
+            Recent Searches
+          </div>
+
+          <ul v-if="recentSuggestions.length" class="min-h-[125px] bg-white">
+            <!-- Display each recent suggestion as a li -->
+            <li
+              v-for="(s, i) in recentSuggestions.slice().reverse()"
+              :id="'suggestion-' + i"
+              :key="i"
+              class="border-b border-gray-300 px-2 hover:cursor-pointer hover:bg-gray-200 hover:text-green-700"
+              :class="focusIndex == i ? 'bg-gray-200 text-green-700' : ''"
+              @mouseenter="focus(-1)"
+            >
+              <div class="flex flex-row justify-between">
+                <!-- Show the name of the suggestion and truncate if too long -->
+                <a
+                  :href="router.resolve(s.path).href"
+                  class="grow"
+                  @click.prevent="go(s)"
+                >
+                  <div class="truncate" :title="s.name">{{ s.name }}</div>
+                </a>
+
+                <!-- Show an "x" button on the right side that will remove the recent suggestion -->
+                <button
+                  class="z-50 pl-3 pr-1 text-gray-500 hover:cursor-pointer"
+                  @click.stop="removeRecentSuggestion(s)"
+                >
+                  x
+                </button>
+              </div>
+            </li>
+          </ul>
+
+          <!-- Display a message if there are no recent suggestions to show -->
+          <div
+            v-else
+            class="flex min-h-[125px] flex-col justify-center bg-white text-center text-sm text-gray-500"
+          >
+            <p>No recent searches</p>
+          </div>
         </section>
       </div>
     </div>
