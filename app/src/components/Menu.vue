@@ -45,7 +45,6 @@ const nodes = ref(
 
     props.nodes.forEach((node: MenuNode) => {
       addNode(node, 0);
-      // visibleKeys.value.add(node.key);
       node.isVisible = true;
     });
     return result;
