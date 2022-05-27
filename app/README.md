@@ -33,9 +33,10 @@ npm run format
 ### Run Cypress tests
 
 ```
+# First ensure the app is running on http://localhost:3000
 npx cypress run
 ```
 
-**Note:** this must be run outside the included dev container. This will require a local version of node.
+Include `--config video=false` to prevent recording and saving videos of the tests
 
-_Include_ `--config video=false` _to prevent recording and saving videos of the tests_
+**Note:** in order to use the cypress testing GUI you can run `npx cypress open` outside of the dev container. This requires a local install of node.
