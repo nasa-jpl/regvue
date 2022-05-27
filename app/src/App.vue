@@ -38,7 +38,7 @@ const links = computed(() => {
     });
   }
 
-  return undefined;
+  return [];
 });
 </script>
 

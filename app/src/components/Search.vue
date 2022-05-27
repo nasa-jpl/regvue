@@ -151,7 +151,7 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
 
 <template>
   <div
-    class="relative z-40 mr-4 rotate-0 text-base"
+    class="absolute z-40 mr-4 w-screen rotate-0 text-center text-base"
     @keydown.escape="
       focused = false;
       focusIndex = -1;
@@ -164,7 +164,7 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
       type="search"
       aria-label="Search"
       placeholder="Search"
-      class="absolute z-50 p-1 text-sm"
+      class="absolute top-2 z-50 p-1 text-sm"
       autocomplete="off"
       spellcheck="false"
       @keyup.enter="go(suggestions.all[focusIndex])"
