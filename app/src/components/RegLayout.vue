@@ -53,20 +53,6 @@ const resetFieldValues = () => {
   props.fields.forEach((field) => (field.value = field.reset));
 };
 
-// Enables byte swapping and updates the field values without changing the displayed register value
-const swapFieldValues = () => {
-  let elem = document.getElementById("register-input") as HTMLInputElement;
-  let input = elem.value;
-  if (input == "") {
-    input = "0";
-  }
-
-  let value = parse.num(input);
-  value = byteSwap(value);
-  populateFieldValuesFromRegisterValue(value);
-  useByteSwap.value = !useByteSwap.value;
-};
-
 // Parse the user input for the new field value and conditionally
 // select the next input element
 const onFieldValueChange = (
@@ -231,15 +217,7 @@ const populateFieldValuesFromRegisterValue = (value: number) => {
           >
             Byte Swap
           </button>
-
-          <!-- Show the swap fields button -->
-          <button
-            class="rounded border border-gray-400 bg-white px-1 shadow hover:bg-gray-100"
-            title="Toggle byte swapping without changing the register value"
-            @click="swapFieldValues"
-          >
-            Swap Field Values
-          </button>
+      </div>
 
           <!-- Show reset values button -->
           <button
