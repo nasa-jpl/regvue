@@ -27,3 +27,6 @@ lerna-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Cypress test result video
+*.mp4
