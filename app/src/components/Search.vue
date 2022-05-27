@@ -164,7 +164,7 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
       type="search"
       aria-label="Search"
       placeholder="Search"
-      class="p-1 text-sm"
+      class="absolute z-50 p-1 text-sm"
       autocomplete="off"
       spellcheck="false"
       @keyup.enter="go(suggestions.all[focusIndex])"
@@ -187,14 +187,14 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
     <div
       v-if="showSuggestions"
       id="search-suggestions-div"
-      class="z-50 m-0 h-screen w-screen bg-gray-300/50 p-0 text-left backdrop-blur-lg"
+      class="absolute z-40 m-0 h-screen w-screen bg-gray-300/50 p-0 text-left backdrop-blur-lg"
       @click="
         focused = false;
         focusIndex = -1;
       "
     >
       <div
-        class="m-auto mt-2 max-h-[500px] w-[450px] overflow-y-scroll border border-black bg-white"
+        class="relative top-9 m-auto mt-2 max-h-[500px] w-[450px] overflow-y-scroll border border-black bg-white left-18"
       >
         <!-- Display a section for the register suggestions -->
         <section v-if="suggestions.regs.length > 0">
@@ -262,14 +262,14 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
     <div
       v-else-if="focused"
       id="search-recents-div"
-      class="z-50 m-0 h-screen w-screen bg-gray-300/50 p-0 text-left backdrop-blur-lg"
+      class="absolute z-40 m-0 h-screen w-screen bg-gray-300/50 p-0 text-left backdrop-blur-lg"
       @click="
         focused = false;
         focusIndex = -1;
       "
     >
       <div
-        class="m-auto mt-2 max-h-[500px] w-[450px] overflow-y-scroll border border-black bg-white"
+        class="relative top-9 m-auto mt-2 max-h-[500px] w-[450px] overflow-y-scroll border border-black bg-white left-18"
       >
         <section>
           <!-- Show section title -->

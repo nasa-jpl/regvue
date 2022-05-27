@@ -18,6 +18,9 @@ module.exports = {
         ".vertical-lr": {
           writingMode: "vertical-lr",
         },
+        ".left-18": {
+          left: "4.5rem",
+        },
       };
       addUtilities(newUtilities);
     }),
