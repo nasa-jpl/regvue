@@ -202,57 +202,49 @@ const populateFieldValuesFromRegisterValue = (value: number) => {
     </table>
 
     <div class="mt-2 flex flex-row justify-between">
-      <div>
-        <div class="flex flex-row space-x-1">
-          <!-- Show byte swap button -->
-          <button
-            class="rounded border border-gray-400 px-1 hover:cursor-pointer"
-            :class="
-              useByteSwap
-                ? 'bg-gray-200 font-semibold text-green-700'
-                : 'hover:bg-gray-100'
-            "
-            title="Toggle byte swapping for the register value"
-            @click="useByteSwap = !useByteSwap"
-          >
-            Byte Swap
-          </button>
+      <!-- Show buttons to change display type -->
+      <div class="space-x-1">
+        <button
+          v-for="displayType in displayTypes"
+          :key="displayType"
+          class="rounded border border-gray-400 px-1 shadow"
+          :class="
+            selectedDisplayType == displayType
+              ? 'bg-gray-200 font-semibold text-green-700'
+              : 'hover:bg-gray-100'
+          "
+          :title="`Change display type to ${displayType}`"
+          @click="selectedDisplayType = (displayType as DisplayType)"
+        >
+          <!-- Display capitalized -->
+          {{
+            displayType.substring(0, 1).toUpperCase() + displayType.substring(1)
+          }}
+        </button>
       </div>
 
-          <!-- Show reset values button -->
-          <button
-            class="rounded border border-gray-400 bg-white px-1 shadow hover:bg-gray-100"
-            title="Set all field values to their reset value"
-            @click="resetFieldValues"
-          >
-            Reset Values
-          </button>
-        </div>
-      </div>
-
-      <div>
-        <!-- Show buttons to change display type -->
-        <div class="space-x-1">
-          <button
-            v-for="displayType in displayTypes"
-            :key="displayType"
-            class="rounded border border-gray-400 px-1 shadow"
-            :class="
-              selectedDisplayType == displayType
-                ? 'bg-gray-200 font-semibold text-green-700'
-                : 'hover:bg-gray-100'
-            "
-            :title="`Change display type to ${displayType}`"
-            @click="selectedDisplayType = (displayType as DisplayType)"
-          >
-            <!-- Display capitalized -->
-            {{
-              displayType.substring(0, 1).toUpperCase() +
-              displayType.substring(1)
-            }}
-          </button>
-        </div>
-      </div>
+      <!-- Show reset values button -->
+      <button
+        class="rounded border border-gray-400 bg-white px-1 shadow hover:bg-gray-100"
+        title="Set all field values to their reset value"
+        @click="resetFieldValues"
+      >
+        Reset Values
+      </button>
     </div>
+
+    <!-- Show byte swap button -->
+    <button
+      class="mt-1 rounded border border-gray-400 px-1 hover:cursor-pointer"
+      :class="
+        useByteSwap
+          ? 'bg-gray-200 font-semibold text-green-700'
+          : 'hover:bg-gray-100'
+      "
+      title="Toggle byte swapping for the register value"
+      @click="useByteSwap = !useByteSwap"
+    >
+      Byte Swap
+    </button>
   </div>
 </template>
