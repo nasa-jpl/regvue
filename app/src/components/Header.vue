@@ -12,11 +12,11 @@ defineProps<{
 </script>
 
 <template>
-  <div class="border-b border-gray-400 bg-gray-300 py-2">
+  <div id="header-bar" class="border-b border-gray-400 bg-gray-300 py-2">
     <ul class="flex flex-row justify-between text-xl font-medium text-black">
-      <li class="ml-6">{{ title }} ({{ version }})</li>
+      <li id="header-title" class="ml-6">{{ title }} ({{ version }})</li>
       <li class="text-center md:absolute md:w-screen">
-        <Search />
+        <Search id="search-box" />
       </li>
     </ul>
     <ul v-if="links" class="left-0">

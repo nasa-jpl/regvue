@@ -102,7 +102,7 @@ const go = (suggestion: Suggestion) => {
   router.push(suggestion.path);
 
   // Deselect the search input box
-  const searchElem = document.getElementById("search-box-input") as HTMLElement;
+  const searchElem = document.getElementById("search-input") as HTMLElement;
   searchElem.blur();
 
   // Reset search variables
@@ -132,7 +132,7 @@ const focus = (i: number) => {
 
   // Scroll the new focused element into view
   const elem = document.getElementById(`suggestion-${focusIndex.value}`);
-  elem?.scrollIntoView({ block: "center" });
+  elem?.scrollIntoView({ block: "end" });
 };
 
 // Removes a suggestion from the recentSuggestions array if present
@@ -159,7 +159,7 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
   >
     <!-- Show the input box that is bound to the query string -->
     <input
-      id="search-box-input"
+      id="search-input"
       v-model="query"
       type="search"
       aria-label="Search"
@@ -186,6 +186,7 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
     <!-- Display the list of suggestions if showSuggestions is true -->
     <div
       v-if="showSuggestions"
+      id="search-suggestions-div"
       class="z-50 m-0 h-screen w-screen bg-gray-300/50 p-0 text-left backdrop-blur-lg"
       @click="
         focused = false;
@@ -260,6 +261,7 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
     <!-- If the query is empty ("") but the search box is focused show a list of recent searches -->
     <div
       v-else-if="focused"
+      id="search-recents-div"
       class="z-50 m-0 h-screen w-screen bg-gray-300/50 p-0 text-left backdrop-blur-lg"
       @click="
         focused = false;

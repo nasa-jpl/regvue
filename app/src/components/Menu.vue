@@ -134,7 +134,7 @@ const onNodeSelect = (key: string) => {
       <!--  Display only if the node is marked visible -->
       <div
         v-if="node.isVisible"
-        :id="node.key"
+        :id="'menu-node-' + node.key.replaceAll('.', '-')"
         class="flex flex-row justify-between space-x-4 border-y-[0.5px] px-4 hover:cursor-pointer hover:bg-gray-200"
         :class="node.key == route.params.regid ? 'bg-blue-200' : ''"
         :style="`padding-left: ${getIndent(node)}px`"
