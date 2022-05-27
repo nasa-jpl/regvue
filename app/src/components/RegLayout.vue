@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, Ref, computed } from "vue";
 import { RegisterField, type DisplayType } from "../types";
-import format from "../format";
 import parse from "../parse";
 
 import FieldInputBox from "./FieldInputBox.vue";
+import RegisterInputBox from "./RegisterInputBox.vue";
 
 const props = defineProps<{
   fields: RegisterField[];
@@ -88,8 +88,8 @@ const onFieldValueChange = (
 };
 
 // Obtains the input register value and uses it to update the field values
-const onRegisterInput = (event: Event) => {
-  let input = (event.target as HTMLInputElement).value;
+const onRegisterInput = (input: string) => {
+  // let input = (event.target as HTMLInputElement).value;
   if (input == "") {
     input = "0";
   }
@@ -181,20 +181,10 @@ const populateFieldValuesFromRegisterValue = (value: number) => {
         <!-- Display the overall register input box -->
         <tr>
           <td colspan="32" class="border border-black px-1">
-            <input
-              id="register-input"
-              type="text"
-              class="w-full text-center"
-              :value="
-                format.getStringRepresentation(
-                  registerValue,
-                  selectedDisplayType,
-                  32
-                )
-              "
-              maxlength="34"
-              @keydown.enter="onRegisterInput"
-              @blur="onRegisterInput"
+            <RegisterInputBox
+              :value="registerValue"
+              :selected-display-type="selectedDisplayType"
+              @value-changed="onRegisterInput($event)"
             />
           </td>
         </tr>
