@@ -2,7 +2,7 @@
 
 import packageInfo from "../../package.json";
 
-describe("app-version-comopnent", () => {
+describe("app-version-component", () => {
   beforeEach(() => {
     cy.visit("localhost:3000");
   });

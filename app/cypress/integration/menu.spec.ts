@@ -3,7 +3,7 @@
 import format from "../../src/format";
 import data from "../../public/data1.json";
 
-describe("menu-componenet", () => {
+describe("menu-component", () => {
   beforeEach(() => {
     cy.visit("localhost:3000");
   });
