@@ -28,7 +28,7 @@
   "forwardPorts": [3000],
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "cd app && npm install",
+  "postCreateCommand": "cd app && npm install && npx cypress install",
 
   "customizations": {
     "vscode": {
