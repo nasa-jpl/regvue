@@ -11,7 +11,7 @@ defineProps<{
   <p
     v-if="name && version"
     id="app-version"
-    class="w-fit rounded-md border border-gray-300 bg-gray-200 py-1 px-2 text-sm"
+    class="w-fit rounded-md border-2 border-gray-500 bg-gray-300 py-1 px-2 text-sm"
   >
     Powered by
 

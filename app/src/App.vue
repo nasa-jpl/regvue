@@ -52,14 +52,14 @@ const links = computed(() => {
 
       <!-- Show the main window -->
       <div class="mt-4 flex-grow overflow-y-scroll">
-        <router-view class="main-view" />
+        <router-view class="pb-10" />
 
         <!-- Display a link to the GitHub repo at the bottom right of the page -->
         <AppVersion
           :url="appInfo.url"
           :name="appInfo.name"
           :version="appInfo.version"
-          class="float-right mr-4 mb-4"
+          class="absolute bottom-4 right-4"
         />
       </div>
     </div>
@@ -77,10 +77,5 @@ const links = computed(() => {
 .app-body {
   /* Full screen height minus the height of the header */
   height: calc(100vh - 2.75rem);
-}
-
-.main-view {
-  /* Full screen height minus the height of AppVersion and its bottom margin */
-  min-height: calc(100vh - 6rem - 1rem);
 }
 </style>
