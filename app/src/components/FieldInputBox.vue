@@ -86,7 +86,6 @@ const getErrorMessage = (value: string) => {
   // Check that the value does not exceed max bit value
   const maxPossibleValue = Number((1n << BigInt(props.nbits)) - 1n);
   if (parse.num(value) > maxPossibleValue) {
-    console.log(parse.num(value), maxPossibleValue);
     return "Exceeds max possible value";
   }
 
