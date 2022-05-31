@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, Ref, computed } from "vue";
+import { ref, Ref, nextTick, watch } from "vue";
+import { useRoute } from "vue-router";
 import { RegisterField, type DisplayType } from "../types";
 import parse from "../parse";
 
 import FieldInputBox from "./FieldInputBox.vue";
-import RegisterInputBox from "./RegisterInputBox.vue";
 
 const props = defineProps<{
   fields: RegisterField[];
@@ -16,24 +16,22 @@ const emit = defineEmits([
   "stop-highlight-field",
 ]);
 
+// Numeric value of the register
+let registerValue = ref(0);
+
+// Control or not to display LSB or MSB first
 let useByteSwap = ref(false);
+
+// Control what base the field/register values should be displayed in
 let selectedDisplayType: Ref<DisplayType> = ref("hexadecimal");
 let displayTypes = ["hexadecimal", "binary", "decimal"];
 
-// Compute the overall register value based on the field values
-const registerValue = computed(() => {
-  let valuesArr = props.fields.map((field) => {
-    let mask = (1n << BigInt(field.nbits)) - 1n;
-    return (BigInt(field.value) & mask) << BigInt(field.lsb);
-  });
+// Index variables that can be incremeneted to force a reload of the child
+// FieldInputBox components
+let fieldKeyIndex = ref(0);
+let registerKeyIndex = ref(0);
 
-  let result = Number(valuesArr.reduce((result, curr) => result | curr));
-  if (useByteSwap.value) {
-    result = byteSwap(result);
-  }
-  return result;
-});
-
+// Perform a mathematical byte swap on a value
 const byteSwap = (value: number) => {
   let newValue = 0n;
 
@@ -48,54 +46,60 @@ const byteSwap = (value: number) => {
   return Number(newValue);
 };
 
-// Assigns each field.value to its field.reset
-const resetFieldValues = () => {
-  props.fields.forEach((field) => (field.value = field.reset));
+// Toggles the useByteSwap variable and forces a reload/recalculate
+// of register value
+const toggleByteSwap = () => {
+  useByteSwap.value = !useByteSwap.value;
+  updateRegisterValue();
+  registerKeyIndex.value += 1;
 };
+
+// Assigns each field.value to its field.reset
+const resetValues = () => {
+  props.fields.forEach((field) => (field.value = field.reset));
+  updateRegisterValue();
+
+  fieldKeyIndex.value += 1;
+  registerKeyIndex.value += 1;
+};
+
+// Ues the field values to obtain a new value for the register
+const updateRegisterValue = () => {
+  let valuesArr = props.fields.map((field) => {
+    let mask = (1n << BigInt(field.nbits)) - 1n;
+    return (BigInt(field.value) & mask) << BigInt(field.lsb);
+  });
+
+  let result = Number(valuesArr.reduce((result, curr) => result | curr));
+  if (useByteSwap.value) {
+    result = byteSwap(result);
+  }
+
+  registerValue.value = result;
+};
+updateRegisterValue(); // Initial call on setup
 
 // Parse the user input for the new field value and conditionally
 // select the next input element
-const onFieldValueChange = (
-  field: RegisterField,
-  value: string,
-  selectNextElem: boolean
-) => {
-  // TODO Add validation check here
-  if (value == "" || value.includes("-")) {
-    value = "0";
-  }
+const onFieldValueChange = (field: RegisterField, value: string) => {
   let newValue = parse.num(value);
 
   // Ensure the new value does not exceed the max field value
   newValue = newValue & ((1 << field.nbits) - 1);
   field.value = newValue;
 
-  // Deselect the current input box
-  const currentElem = document.getElementById(`fieldInput-${field.name}`);
-  currentElem?.blur();
-
-  if (!selectNextElem) return;
-
-  // Find and click on the next input box
-  const nextFieldIndex = props.fields.indexOf(field) + 1;
-  if (nextFieldIndex < props.fields.length) {
-    const nextFieldName = props.fields[nextFieldIndex].name;
-    const nextElem = document.getElementById(
-      `fieldInput-${nextFieldName}`
-    ) as HTMLInputElement;
-    nextElem.click();
-  }
+  // Update the register value
+  updateRegisterValue();
+  registerKeyIndex.value += 1;
 };
 
 // Obtains the input register value and uses it to update the field values
 const onRegisterInput = (input: string) => {
-  // let input = (event.target as HTMLInputElement).value;
-  if (input == "") {
-    input = "0";
-  }
-
   const value = parse.num(input);
+  registerValue.value = value;
+
   populateFieldValuesFromRegisterValue(value);
+  fieldKeyIndex.value += 1;
 };
 
 // Assigns all fields a new value based on a new register value
@@ -111,6 +115,18 @@ const populateFieldValuesFromRegisterValue = (value: number) => {
     field.value = Number(fieldValue);
   }
 };
+
+// Recalculate the register value when leaving the page
+const route = useRoute();
+watch(
+  () => route.params.regid,
+  () => {
+    nextTick(() => {
+      updateRegisterValue();
+      registerKeyIndex.value += 1;
+    });
+  }
+);
 </script>
 
 <template>
@@ -160,7 +176,7 @@ const populateFieldValuesFromRegisterValue = (value: number) => {
         <tr>
           <td
             v-for="field in fields"
-            :key="'fieldInput-' + field.name"
+            :key="field.name"
             class="border border-black"
             :class="selectedField == field.name ? 'bg-yellow-50' : ''"
             :colspan="field.nbits"
@@ -168,12 +184,13 @@ const populateFieldValuesFromRegisterValue = (value: number) => {
             @mouseleave="emit('stop-highlight-field')"
           >
             <FieldInputBox
-              :field="field"
+              :key="field.name + '-' + fieldKeyIndex"
+              :name="field.name"
+              :value="field.value"
+              :nbits="field.nbits"
               :selected-display-type="selectedDisplayType"
               @select-field="emit('select-field', field.name, $event)"
-              @value-changed="
-                onFieldValueChange(field, $event.value, $event.selectNextElem)
-              "
+              @value-changed="onFieldValueChange(field, $event)"
             />
           </td>
         </tr>
@@ -181,8 +198,11 @@ const populateFieldValuesFromRegisterValue = (value: number) => {
         <!-- Display the overall register input box -->
         <tr>
           <td colspan="32" class="border border-black px-1">
-            <RegisterInputBox
+            <FieldInputBox
+              :key="'register-input-' + registerKeyIndex"
+              name="register"
               :value="registerValue"
+              :nbits="32"
               :selected-display-type="selectedDisplayType"
               @value-changed="onRegisterInput($event)"
             />
@@ -217,7 +237,7 @@ const populateFieldValuesFromRegisterValue = (value: number) => {
       <button
         class="rounded border border-gray-400 bg-white px-1 shadow hover:bg-gray-100"
         title="Set all field values to their reset value"
-        @click="resetFieldValues"
+        @click="resetValues"
       >
         Reset Values
       </button>
@@ -232,7 +252,7 @@ const populateFieldValuesFromRegisterValue = (value: number) => {
           : 'hover:bg-gray-100'
       "
       title="Toggle byte swapping for the register value"
-      @click="useByteSwap = !useByteSwap"
+      @click="toggleByteSwap()"
     >
       Byte Swap
     </button>
