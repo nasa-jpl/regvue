@@ -63,14 +63,14 @@ watch(
       @toggle-menu="showMenu = !showMenu"
     />
 
-    <!-- Show the navigation menu on the left -->
-    <Menu
-      :nodes="sharedState.nodes"
-      class="app-body-height absolute z-50 w-[21rem] bg-white pb-1"
-      :class="!showMenu ? 'hidden' : ''"
-    />
-
     <div class="app-body-height flex flex-row">
+      <!-- Show the navigation menu on the left -->
+      <Menu
+        :nodes="sharedState.nodes"
+        class="w-[21rem] bg-white pb-1"
+        :class="!showMenu ? 'hidden' : ''"
+      />
+
       <!-- Show the main window -->
       <div class="mt-4 flex-grow overflow-y-scroll">
         <router-view class="pb-10" />
