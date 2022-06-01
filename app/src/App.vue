@@ -19,6 +19,9 @@ const sharedState = ref(store.sharedState);
 
 // Control whether or not to show navigation menu
 let showMenu = ref(true);
+if (window.innerWidth <= 1024) {
+  showMenu.value = false;
+}
 
 // Parse the data field of sharedState for display variables
 const title = computed(
@@ -60,14 +63,14 @@ watch(
       @toggle-menu="showMenu = !showMenu"
     />
 
-    <div class="app-body flex flex-row">
-      <!-- Show the navigation menu on the left -->
-      <Menu
-        :nodes="sharedState.nodes"
-        class="w-[21rem] pb-1"
-        :class="!showMenu ? 'hidden' : ''"
-      />
+    <!-- Show the navigation menu on the left -->
+    <Menu
+      :nodes="sharedState.nodes"
+      class="app-body-height absolute z-50 w-[21rem] bg-white pb-1"
+      :class="!showMenu ? 'hidden' : ''"
+    />
 
+    <div class="app-body-height flex flex-row">
       <!-- Show the main window -->
       <div class="mt-4 flex-grow overflow-y-scroll">
         <router-view class="pb-10" />
@@ -92,7 +95,7 @@ watch(
   height: 100vh;
 }
 
-.app-body {
+.app-body-height {
   /* Full screen height minus the height of the header */
   height: calc(100vh - 2.75rem);
 }
