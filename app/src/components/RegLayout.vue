@@ -137,7 +137,7 @@ watch(
         <th
           v-for="bit in 32"
           :key="bit"
-          class="border border-black font-medium"
+          class="border border-black font-medium sm:text-sm md:text-base"
           :class="
             Math.floor((bit - 1) / 4) % 2 == 0 ? 'bg-gray-100' : 'bg-gray-300'
           "

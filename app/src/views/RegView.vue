@@ -67,30 +67,32 @@ watch(
 </script>
 
 <template>
-  <div v-if="reg">
-    <RegLayout
-      v-if="reg.fields"
-      :fields="reg.fields"
-      :selected-field="selectedField"
-      class="px-4"
-      @select-field="selectField"
-      @highlight-field="highlightField"
-      @stop-highlight-field="stopHighlightField"
-    />
+  <div class="m-auto max-w-[1200px]">
+    <div v-if="reg">
+      <RegLayout
+        v-if="reg.fields"
+        :fields="reg.fields"
+        :selected-field="selectedField"
+        class="px-4"
+        @select-field="selectField"
+        @highlight-field="highlightField"
+        @stop-highlight-field="stopHighlightField"
+      />
 
-    <div v-if="doc" class="m-auto mx-4 mt-4">
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <span v-html="doc"></span>
+      <div v-if="doc" class="m-auto mx-4 mt-4">
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <span v-html="doc"></span>
+      </div>
+
+      <RegFields
+        v-if="reg.fields"
+        :fields="reg.fields"
+        :selected-field="selectedField"
+        class="m-4"
+        @select-field="selectField"
+        @highlight-field="highlightField"
+        @stop-highlight-field="stopHighlightField"
+      />
     </div>
-
-    <RegFields
-      v-if="reg.fields"
-      :fields="reg.fields"
-      :selected-field="selectedField"
-      class="m-4"
-      @select-field="selectField"
-      @highlight-field="highlightField"
-      @stop-highlight-field="stopHighlightField"
-    />
   </div>
 </template>
