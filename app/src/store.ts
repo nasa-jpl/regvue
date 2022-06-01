@@ -33,7 +33,19 @@ export default {
     this.loaded = true;
   },
 
-  get_field_map(elements: { [key: string]: Register }) {
+  async untilLoaded() {
+    const pollLoaded = (resolve: (value: boolean) => void) => {
+      if (this.loaded) {
+        resolve(true);
+      } else {
+        setTimeout(() => pollLoaded(resolve), 500);
+      }
+    };
+
+    return new Promise(pollLoaded);
+  },
+
+  getFieldMap(elements: { [key: string]: Register }) {
     const fields = new Map<string, string>();
 
     for (const id in elements) {
@@ -52,7 +64,7 @@ export default {
     return fields;
   },
 
-  get_nodes(elements: { [key: string]: Register }, element: Register) {
+  getNodes(elements: { [key: string]: Register }, element: Register) {
     return element.children.map((child_id) => {
       const child = elements[child_id];
 
@@ -66,14 +78,14 @@ export default {
       } as MenuNode;
 
       if ("children" in child) {
-        node.children = this.get_nodes(elements, child);
+        node.children = this.getNodes(elements, child);
       }
 
       return node;
     });
   },
 
-  first_reg() {
+  getFirstRegister() {
     for (const key in this.sharedState.data.elements) {
       if (this.sharedState.data.elements[key].type == "reg") {
         return key;
