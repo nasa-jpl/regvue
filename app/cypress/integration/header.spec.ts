@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import data from "../../public/data1.json";
+import data from "../../public/data.json";
 
 describe("header-component", () => {
   beforeEach(() => {
@@ -20,6 +20,10 @@ describe("header-component", () => {
       "have.text",
       `${data.root.display_name} (${data.root.version})`
     );
+
+    cy.get("#header-links")
+      .children()
+      .should("have.length", Object.keys(data.root.links).length);
 
     cy.get("#search-box").should("exist");
   });

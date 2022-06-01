@@ -13,7 +13,7 @@ describe("app-version-component", () => {
         "contain.text",
         `Powered by ${packageInfo.name} v${packageInfo.version}`
       )
-      .and("have.class", "float-right");
+      .and("have.class", "absolute");
 
     cy.get("#app-source-url")
       .should("have.class", "text-blue-500")

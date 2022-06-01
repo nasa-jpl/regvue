@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 import format from "../../src/format";
-import data from "../../public/data1.json";
+import data from "../../public/data.json";
 
 describe("menu-component", () => {
   beforeEach(() => {
@@ -44,7 +44,7 @@ describe("menu-component", () => {
     const parent = data.root.children[0];
     cy.get("[id^=menu-node-]").should("have.length", data.root.children.length);
 
-    cy.get(".material-design-icon__svg").first().click();
+    cy.get(".open-menu-node-btn").first().click();
     cy.get("[id^=menu-node-]").should(
       "have.length",
       data.root.children.length + data.elements[parent].children.length
@@ -65,7 +65,7 @@ describe("menu-component", () => {
         .should("have.text", format.hex(data.elements[child].addr));
     });
 
-    cy.get(".material-design-icon__svg").first().click();
+    cy.get(".close-menu-node-btn").first().click();
     cy.get("[id^=menu-node-]").should("have.length", data.root.children.length);
   });
 
@@ -84,7 +84,7 @@ describe("menu-component", () => {
     const firstChild = data.elements[firstParent].children[0];
     const firstGrandChild = data.elements[firstChild].children[0];
 
-    cy.visit(`localhost:3000/reg/${firstGrandChild}`);
+    cy.visit(`localhost:3000/#/reg/${firstGrandChild}`);
     cy.get("[id^=menu-node-]").should(
       "have.length",
       data.root.children.length +
