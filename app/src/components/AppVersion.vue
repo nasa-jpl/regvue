@@ -20,6 +20,8 @@ defineProps<{
       v-if="url"
       id="app-source-url"
       :href="url"
+      target="_blank"
+      rel="nonreferrer"
       class="text-blue-500 underline"
       >{{ name }} v{{ version }}</a
     >
