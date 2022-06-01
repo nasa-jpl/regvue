@@ -30,7 +30,10 @@ const emit = defineEmits(["toggle-menu"]);
           </div>
           <li id="header-title">{{ title }} ({{ version }})</li>
         </div>
-        <div class="mr-6 flex flex-row space-x-6 text-base text-gray-600">
+        <div
+          id="header-links"
+          class="mr-6 flex flex-row space-x-6 text-base text-gray-600"
+        >
           <a
             v-for="link in links"
             :key="link?.text"

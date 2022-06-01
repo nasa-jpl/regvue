@@ -151,12 +151,12 @@ const onNodeSelect = (key: string) => {
                 node.children[0].isVisible
               "
             >
-              <menu-down />
+              <menu-down class="close-menu-node-btn" />
             </span>
 
             <!-- Show an open button if the node has closed children -->
             <span v-else-if="node.children">
-              <menu-right />
+              <menu-right class="open-menu-node-btn" />
             </span>
           </div>
 
