@@ -8,4 +8,8 @@ export default defineConfig({
   build: {
     target: "esnext",
   },
+
+  // Allows the app to be run as an embedded deployment (i.e. in a non-root location)
+  // https://vitejs.dev/config/#base
+  base: "",
 });
