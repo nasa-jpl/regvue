@@ -19,9 +19,6 @@ const sharedState = ref(store.sharedState);
 
 // Control whether or not to show navigation menu
 let showMenu = ref(true);
-if (window.innerWidth <= 1024) {
-  showMenu.value = false;
-}
 
 // Parse the data field of sharedState for display variables
 const title = computed(
