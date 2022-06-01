@@ -79,9 +79,14 @@ tag=$($gh release view --json tagName --jq .tagName)
 filename=$($gh release view --json assets --jq ".assets[0].name")
 
 # Download the release
-$gh release download $tag
+if ! test -f "$filename"; then
+    $gh release download $tag
+fi
 
 # Clone the GitHub Pages deployment
+if test -d deployment; then
+    rm -rf deployment
+fi
 git clone --branch gh-pages "$OPT_DEPLOYMENT_REPOSITORY" deployment
 deployment_path="deployment/$OPT_DEPLOYMENT_PATH"
 
