@@ -14,7 +14,7 @@ const appInfo = {
 };
 
 // Load the data.json file into the store object
-store.load("/data1.json");
+store.load("/data.json");
 const sharedState = ref(store.sharedState);
 
 // Control whether or not to show navigation menu
