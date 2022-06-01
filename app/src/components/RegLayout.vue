@@ -224,7 +224,7 @@ watch(
               : 'hover:bg-gray-100'
           "
           :title="`Change display type to ${displayType}`"
-          @click="selectedDisplayType = (displayType as DisplayType)"
+          @click="selectedDisplayType = (displayType as DisplayType); fieldKeyIndex += 1; registerKeyIndex += 1;"
         >
           <!-- Display capitalized -->
           {{
