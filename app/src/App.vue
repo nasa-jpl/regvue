@@ -17,6 +17,9 @@ const appInfo = {
 store.load("/data1.json");
 const sharedState = ref(store.sharedState);
 
+// Control whether or not to show navigation menu
+let showMenu = ref(true);
+
 // Parse the data field of sharedState for display variables
 const title = computed(
   () =>
@@ -44,11 +47,21 @@ const links = computed(() => {
 
 <template>
   <div class="overflow-hidden text-[#2c3e50]">
-    <Header :title="title" :version="version" :links="links" class="h-11" />
+    <Header
+      :title="title"
+      :version="version"
+      :links="links"
+      class="h-11"
+      @toggle-menu="showMenu = !showMenu"
+    />
 
     <div class="app-body flex flex-row">
       <!-- Show the navigation menu on the left -->
-      <Menu :nodes="sharedState.nodes" class="w-[21rem] pb-1" />
+      <Menu
+        :nodes="sharedState.nodes"
+        class="w-[21rem] pb-1"
+        :class="!showMenu ? 'hidden' : ''"
+      />
 
       <!-- Show the main window -->
       <div class="mt-4 flex-grow overflow-y-scroll">
