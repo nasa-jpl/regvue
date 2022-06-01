@@ -10,19 +10,38 @@
     "links": {
       "GitHub": "https://github.com/org/repo"
     },
-    "children": ["blk0"]
+    "children": [
+      "blkA",
+      "blkB"
+    ]
   },
   "elements": {
-    "blk0": {
+    "blkA": {
       "addr": 0,
       "type": "blk",
-      "children": ["blk0.reg0", "blk0.reg1"],
-      "name": "blk0",
-      "id": "blk0"
+      "children": [
+        "blkA.sub_blkA"
+      ],
+      "name": "blkA",
+      "id": "blkA"
     },
-    "blk0.reg0": {
+    "blkA.sub_blkA": {
       "addr": 0,
-      "doc": "An example register.",
+      "type": "blk",
+      "children": [
+        "blkA.sub_blkA.regA0",
+        "blkA.sub_blkA.regA1",
+        "blkA.sub_blkA.regA2",
+        "blkA.sub_blkA.regA3",
+        "blkA.sub_blkA.regA4",
+        "blkA.sub_blkA.regA5"
+      ],
+      "id": "blkA.sub_blkA",
+      "name": "sub_blkA"
+    },
+    "blkA.sub_blkA.regA0": {
+      "addr": 0,
+      "doc": "regA0 - An example register.",
       "fields": [
         {
           "access": "rw",
@@ -55,24 +74,119 @@
       ],
       "offset": 0,
       "type": "reg",
-      "id": "blk0.reg0",
-      "name": "reg0"
+      "id": "blkA.sub_blkA.regA0",
+      "name": "regA0"
     },
-    "blk0.reg1": {
+    "blkA.sub_blkA.regA1": {
       "addr": 4,
-      "offset": 4,
+      "doc": "regA1 - An example register.",
       "fields": [
         {
           "access": "ro",
-          "reset": 3221344269,
+          "reset": 4294967295,
           "nbits": 32,
           "lsb": 0,
           "name": "f0"
         }
       ],
+      "offset": 0,
       "type": "reg",
-      "id": "blk0.reg1",
-      "name": "reg1"
+      "id": "blkA.sub_blkA.regA1",
+      "name": "regA1"
+    },
+    "blkA.sub_blkA.regA2": {
+      "addr": 8,
+      "doc": "regA2 - An example register.",
+      "fields": [
+        {
+          "access": "ro",
+          "reset": 305419896,
+          "nbits": 32,
+          "lsb": 0,
+          "name": "f0"
+        }
+      ],
+      "offset": 0,
+      "type": "reg",
+      "id": "blkA.sub_blkA.regA2",
+      "name": "regA2"
+    },
+    "blkA.sub_blkA.regA3": {
+      "addr": 12,
+      "doc": "regA3 - An example register.",
+      "fields": [
+        {
+          "access": "ro",
+          "reset": 0,
+          "nbits": 32,
+          "lsb": 0,
+          "name": "f0"
+        }
+      ],
+      "offset": 0,
+      "type": "reg",
+      "id": "blkA.sub_blkA.regA3",
+      "name": "regA3"
+    },
+    "blkA.sub_blkA.regA4": {
+      "addr": 12,
+      "doc": "regA4 - An example register.",
+      "fields": [
+        {
+          "access": "ro",
+          "reset": 0,
+          "nbits": 32,
+          "lsb": 0,
+          "name": "f0"
+        }
+      ],
+      "offset": 0,
+      "type": "reg",
+      "id": "blkA.sub_blkA.regA4",
+      "name": "regA4"
+    },
+    "blkA.sub_blkA.regA5": {
+      "addr": 12,
+      "doc": "regA5 - An example register.",
+      "fields": [
+        {
+          "access": "ro",
+          "reset": 0,
+          "nbits": 32,
+          "lsb": 0,
+          "name": "f0"
+        }
+      ],
+      "offset": 0,
+      "type": "reg",
+      "id": "blkA.sub_blkA.regA5",
+      "name": "regA5"
+    },
+    "blkB": {
+      "addr": 16,
+      "type": "blk",
+      "children": [
+        "blkB.regB0"
+      ],
+      "name": "blkB",
+      "id": "blkB"
+    },
+    "blkB.regB0": {
+      "addr": 16,
+      "doc": "regB0 - An example register.",
+      "fields": [
+        {
+          "access": "ro",
+          "reset": 305839190,
+          "nbits": 32,
+          "lsb": 0,
+          "name": "f0"
+        }
+      ],
+      "offset": 0,
+      "type": "reg",
+      "id": "blkB.regB0",
+      "name": "regB0"
     }
   }
 }
