@@ -1,181 +1,261 @@
+<script setup lang="ts">
+import { ref, Ref, nextTick, watch } from "vue";
+import { useRoute } from "vue-router";
+import { RegisterField, type DisplayType } from "../types";
+import parse from "../parse";
+
+import FieldInputBox from "./FieldInputBox.vue";
+
+const props = defineProps<{
+  fields: RegisterField[];
+  selectedField?: string;
+}>();
+const emit = defineEmits([
+  "select-field",
+  "highlight-field",
+  "stop-highlight-field",
+]);
+
+// Numeric value of the register
+let registerValue = ref(0);
+
+// Control whether or not to display LSB or MSB first
+let useByteSwap = ref(false);
+
+// Control what base the field/register values should be displayed in
+let selectedDisplayType: Ref<DisplayType> = ref("hexadecimal");
+let displayTypes = ["hexadecimal", "binary", "decimal"];
+
+// Index variables that can be incremeneted to force a reload of the child
+// FieldInputBox components
+let fieldKeyIndex = ref(0);
+let registerKeyIndex = ref(0);
+
+// Perform a mathematical byte swap on a value
+const byteSwap = (value: number) => {
+  let newValue = 0n;
+
+  for (let byteIdx = 0n; byteIdx < 32 / 8; byteIdx++) {
+    const bitIdx = byteIdx * 8n;
+    const byte = (BigInt(value) >> bitIdx) & 0xffn;
+    const swappedByteIdx = (3n - byteIdx) * 8n;
+    const swappedByte = byte << swappedByteIdx;
+    newValue |= swappedByte;
+  }
+
+  return Number(newValue);
+};
+
+// Toggles the useByteSwap variable and forces a reload/recalculate
+// of register value
+const toggleByteSwap = () => {
+  useByteSwap.value = !useByteSwap.value;
+  updateRegisterValue();
+  registerKeyIndex.value += 1;
+};
+
+// Assigns each field.value to its field.reset
+const resetValues = () => {
+  props.fields.forEach((field) => (field.value = field.reset));
+  updateRegisterValue();
+
+  fieldKeyIndex.value += 1;
+  registerKeyIndex.value += 1;
+};
+
+// Ues the field values to obtain a new value for the register
+const updateRegisterValue = () => {
+  let valuesArr = props.fields.map((field) => {
+    let mask = (1n << BigInt(field.nbits)) - 1n;
+    return (BigInt(field.value) & mask) << BigInt(field.lsb);
+  });
+
+  let result = Number(valuesArr.reduce((result, curr) => result | curr));
+  if (useByteSwap.value) {
+    result = byteSwap(result);
+  }
+
+  registerValue.value = result;
+};
+updateRegisterValue(); // Initial call on setup
+
+// Parse the user input for the new field value and conditionally
+// select the next input element
+const onFieldValueChange = (field: RegisterField, value: string) => {
+  let newValue = parse.num(value);
+
+  // Ensure the new value does not exceed the max field value
+  newValue = newValue & ((1 << field.nbits) - 1);
+  field.value = newValue;
+
+  // Update the register value
+  updateRegisterValue();
+  registerKeyIndex.value += 1;
+};
+
+// Obtains the input register value and uses it to update the field values
+const onRegisterInput = (input: string) => {
+  const value = parse.num(input);
+  registerValue.value = value;
+
+  populateFieldValuesFromRegisterValue(value);
+  fieldKeyIndex.value += 1;
+};
+
+// Assigns all fields a new value based on a new register value
+const populateFieldValuesFromRegisterValue = (value: number) => {
+  if (useByteSwap.value) {
+    value = byteSwap(value);
+  }
+
+  for (let field of props.fields) {
+    let mask = (1n << BigInt(field.nbits)) - 1n;
+    let fieldValue = BigInt(value >> field.lsb) & mask;
+
+    field.value = Number(fieldValue);
+  }
+};
+
+// Recalculate the register value when leaving the page
+const route = useRoute();
+watch(
+  () => route.params.regid,
+  () => {
+    nextTick(() => {
+      updateRegisterValue();
+      fieldKeyIndex.value += 1;
+      registerKeyIndex.value += 1;
+    });
+  }
+);
+</script>
+
 <template>
-  <table id="reg-layout-table">
-    <thead>
-      <th class="layout_bit_index" v-for="bit in 32" :key="bit">{{ 32 - bit }}</th>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="layout_field_name"
-          :class="{ highlight: field_name == field.name }"
-          v-responsive-rotate
-          v-for="field in reg.fields" :key="field"
-          :colspan="field.nbits">
-          {{ field.name }}
-        </td>
-      </tr>
-      <tr>
-        <td class="layout_field_input"
-          :class="{ highlight: field_name == field.name }"
-          v-for="field in reg.fields" :key="field" :colspan="field.nbits">
-          <input type="text" :value="field_value(field)"/>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="32">
-          <input type="text" @input="update_fields"/>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="field-checkbox">
-    <Checkbox id="byte_swap" v-model="byte_swap" :binary="true"/>
-    <label for="byte_swap">Byte swap</label>
+  <div>
+    <table class="w-full table-fixed">
+      <thead>
+        <!-- Display the bit number boxes -->
+        <th
+          v-for="bit in 32"
+          :key="bit"
+          class="border border-black font-medium sm:text-sm md:text-base"
+          :class="
+            Math.floor((bit - 1) / 4) % 2 == 0 ? 'bg-gray-100' : 'bg-gray-300'
+          "
+        >
+          {{ 32 - bit }}
+        </th>
+      </thead>
+      <tbody>
+        <!-- Display the field names -->
+        <tr>
+          <td
+            v-for="field in fields"
+            :key="field.name"
+            :colspan="field.nbits"
+            class="border border-black text-center hover:cursor-pointer"
+            :class="selectedField == field.name ? 'bg-yellow-50' : ''"
+            @mouseenter="emit('highlight-field', field.name)"
+            @mouseleave="emit('stop-highlight-field')"
+            @click="
+              emit('select-field', field.name, selectedField == field.name)
+            "
+          >
+            <span
+              :class="
+                field.name.length > field.nbits * 4
+                  ? 'my-2 rotate-180 vertical-rl'
+                  : ''
+              "
+            >
+              {{ field.name }}
+            </span>
+          </td>
+        </tr>
+
+        <!-- Display the individual field input boxes -->
+        <tr>
+          <td
+            v-for="field in fields"
+            :key="field.name"
+            class="border border-black"
+            :class="selectedField == field.name ? 'bg-yellow-50' : ''"
+            :colspan="field.nbits"
+            @mouseenter="emit('highlight-field', field.name)"
+            @mouseleave="emit('stop-highlight-field')"
+          >
+            <FieldInputBox
+              :key="field.name + '-' + fieldKeyIndex"
+              :name="field.name"
+              :value="field.value"
+              :nbits="field.nbits"
+              :selected-display-type="selectedDisplayType"
+              @select-field="emit('select-field', field.name, $event)"
+              @value-changed="onFieldValueChange(field, $event)"
+            />
+          </td>
+        </tr>
+
+        <!-- Display the overall register input box -->
+        <tr>
+          <td colspan="32" class="border border-black">
+            <FieldInputBox
+              :key="'register-input-' + registerKeyIndex"
+              name="register"
+              :value="registerValue"
+              :nbits="32"
+              :selected-display-type="selectedDisplayType"
+              @value-changed="onRegisterInput($event)"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="mt-2 flex flex-row justify-between">
+      <!-- Show buttons to change display type -->
+      <div class="space-x-1">
+        <button
+          v-for="displayType in displayTypes"
+          :key="displayType"
+          class="rounded border border-gray-400 px-1 shadow"
+          :class="
+            selectedDisplayType == displayType
+              ? 'bg-gray-200 font-semibold text-green-700'
+              : 'hover:bg-gray-100'
+          "
+          :title="`Change display type to ${displayType}`"
+          @click="selectedDisplayType = (displayType as DisplayType); fieldKeyIndex += 1; registerKeyIndex += 1;"
+        >
+          <!-- Display capitalized -->
+          {{
+            displayType.substring(0, 1).toUpperCase() + displayType.substring(1)
+          }}
+        </button>
+      </div>
+
+      <!-- Show reset values button -->
+      <button
+        class="rounded border border-gray-400 bg-white px-1 shadow hover:bg-gray-100"
+        title="Set all field values to their reset value"
+        @click="resetValues"
+      >
+        Reset Values
+      </button>
+    </div>
+
+    <!-- Show byte swap button -->
+    <button
+      class="mt-1 rounded border border-gray-400 px-1 hover:cursor-pointer"
+      :class="
+        useByteSwap
+          ? 'bg-gray-200 font-semibold text-green-700'
+          : 'hover:bg-gray-100'
+      "
+      title="Toggle byte swapping for the register value"
+      @click="toggleByteSwap()"
+    >
+      Byte Swap
+    </button>
   </div>
 </template>
-
-<script setup>
-defineProps([
-  'reg',
-  'field_name',
-]);
-</script>
-
-<script>
-import format from '@/format'
-import parse from '@/parse'
-export const canvas = document.createElement("canvas");
-export const getTextWidth = function (text, font) {
-  let context = canvas.getContext("2d");
-  context.font = font;
-  return context.measureText(text).width;
-};
-export const ResponsiveRotateDirective = {
-  mounted: function (element) {
-    const observer = new ResizeObserver(function (entries) {
-      // We use one observer per element, therefore each observer
-      // is observing only a single element.  Entries will always
-      // contain a single entry.
-      let entry = entries[0];
-      let element_width = entry.contentRect.width;
-      let element = entry.target;
-      let text = element.textContent;
-      let font = window.getComputedStyle(element).font;
-      let text_width = getTextWidth(text, font);
-
-      if (text_width > element_width) {
-        element.classList.add("rotate");
-      } else {
-        element.classList.remove("rotate");
-      }
-    });
-
-    observer.observe(element);
-  }
-}
-export default {
-  directives: {
-    'responsive-rotate': ResponsiveRotateDirective,
-  },
-  data() {
-    return {
-        byte_swap: false,
-    }
-  },
-  methods: {
-    field_value(field) {
-      return format.field_value(field, field.reset)
-    },
-    swap_bytes(value) {
-      let new_value = 0;
-
-      // NOTE: This assumes 32-bit values
-      for (let byte_idx = 0; byte_idx < 32/8; byte_idx++) {
-        let bit_idx = byte_idx * 8;
-        let byte_ = (value >> bit_idx) & 0xFF
-        let swapped_byte_idx = (3 - byte_idx) * 8
-        let swapped_byte = (byte_ << swapped_byte_idx)
-        new_value |= swapped_byte
-      }
-
-      return new_value
-    },
-    update_fields(evt) {
-      let value = parse.num(evt.target.value)
-
-      if (this.byte_swap) {
-        value = this.swap_bytes(value)
-      }
-
-      for (const field of this.reg.fields) {
-        let field_mask = (1n << BigInt(field.nbits)) - 1n
-        let field_value = BigInt(value >> field.lsb) & field_mask
-        // TODO: make updates both ways: fields to reg, reg to fields
-        // See https://stackoverflow.com/questions/60712430/make-two-inputs-update-each-other-in-two-way-binding
-        // Also array of v-model https://stackoverflow.com/questions/34825065/vuejs-v-model-array-in-multiple-input
-        // TODO: Update local field value storage instead
-        //
-        // 1. Create local field value variables
-        // 2. On load/refresh (or whatever its called) initialize local field
-        //    value variables with field reset values
-        // 3. On input, update field local values with parsed input value
-        field.reset = field_value
-      }
-    },
-  },
-  computed: {
-  },
-}
-</script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-table {
-    width: 100%;
-    font-size: 12px;
-    table-layout: fixed;
-    vertical-align: top;
-}
-th {
-    background-color: lightgray;
-    text-align: center;
-}
-
-td, th {
-    border: thin solid black;
-    padding: 5px;
-}
-
-th:nth-of-type(8n), th:nth-of-type(8n-1), th:nth-of-type(8n-2), th:nth-of-type(8n-3) {
-    background-color: gray;
-}
-
-.rotate {
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-}
-
-.layout_bit_index {
-    width: 3.125%;
-    text-align: center;
-}
-
-.layout_field_name {
-    text-align: center;
-    vertical-align: middle;
-}
-
-input[type="text"] {
-    width: 100%;
-    border: 0px;
-    text-align: center;
-    box-sizing: border-box;
-}
-
-.highlight {
-  background-color: #fffbe5;
-}
-
-.highlight input {
-  background-color: #fffbe5;
-}
-</style>

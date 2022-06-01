@@ -1,24 +1,42 @@
 # regvue
 
-## Project setup
+### Project setup
+
 ```
 npm install
 ```
 
 ### Compiles and hot-reloads for development
+
 ```
-npm run serve
+npm run dev
 ```
 
 ### Compiles and minifies for production
+
 ```
 npm run build
 ```
 
-### Lints and fixes files
+### Lints files
+
 ```
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Formats files
+
+```
+npm run format
+```
+
+### Run Cypress tests
+
+```
+# First ensure the app is running on http://localhost:3000
+npx cypress run
+```
+
+Include `--config video=false` to prevent recording and saving videos of the tests
+
+**Note:** in order to use the cypress testing GUI you can run `npx cypress open` outside of the dev container. This requires a local install of node.

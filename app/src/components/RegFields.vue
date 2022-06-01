@@ -1,81 +1,61 @@
-<template>
-  <table>
-    <thead>
-      <tr>
-        <th>Bits</th>
-        <th>Name</th>
-        <th>Access</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="field in reg.fields" :key="field" :class="{ highlight: field_name == field.name }">
-        <td class="fields_bits">{{ bits(field.lsb, field.nbits) }}</td>
-        <td class="fields_name">{{ field.name }}</td>
-        <td class="fields_access">{{ field.access }}</td>
-        <td class="fields_description"><span v-html='field.doc?.replaceAll("\n", "<br>")'></span></td>
-      </tr>
-    </tbody>
-  </table>
-</template>
+<script setup lang="ts">
+import { RegisterField } from "../types";
 
-<script setup>
-defineProps([
-  'reg',
-  'field_name',
+defineProps<{
+  fields: RegisterField[];
+  selectedField?: string;
+}>();
+const emit = defineEmits([
+  "select-field",
+  "highlight-field",
+  "stop-highlight-field",
 ]);
+
+const navigateToField = (fieldName: string) => {
+  emit("select-field", fieldName);
+};
+
+const selectField = (fieldName: string) => {
+  emit("highlight-field", fieldName);
+};
+
+const deselectField = () => {
+  emit("stop-highlight-field");
+};
 </script>
 
-<script>
-export default {
-  data() {
-    return {
-    }
-  },
-  methods: {
-    bits(lsb, nbits) {
-      if (nbits == 1) {
-        return lsb;
-      } else {
-        return (nbits + lsb - 1) + ":" + lsb;
-      }
-    }
-  },
-  computed: {
-  },
-}
-</script>
+<template>
+  <div class="flex flex-col border">
+    <!-- Display headers -->
+    <header class="flex bg-gray-200 py-1 text-left font-bold">
+      <div class="w-20 shrink-0 text-center">Bits</div>
+      <div class="w-40 shrink-0 text-center">Name</div>
+      <div class="w-20 shrink-0 text-center">Access</div>
+      <div class="grow text-center">Description</div>
+    </header>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-table {
-  width: 100%;
-}
-
-th {
-  background-color: lightgray;
-}
-
-td {
-  vertical-align: top;
-  text-align: center;
-}
-
-.fields_bits {
-  width: 10%;
-}
-.fields_name {
-  width: 20%;
-}
-.fields_access {
-  width: 10%;
-}
-.fields_description {
-  width: 60%;
-  text-align: left;
-}
-
-.highlight {
-  background-color: #fffbe5;
-}
-</style>
+    <!-- Display row entries -->
+    <div
+      v-for="field in fields"
+      :key="field.name"
+      class="flex border-b text-left hover:cursor-pointer"
+      :class="selectedField == field.name ? 'bg-yellow-50 font-medium' : ''"
+      @mouseenter="selectField(field.name)"
+      @mouseleave="deselectField"
+      @click="navigateToField(field.name)"
+    >
+      <div class="flex w-20 shrink-0">
+        <span class="m-auto">
+          {{ field.nbits + field.lsb - 1 }}:{{ field.lsb }}
+        </span>
+      </div>
+      <div class="flex w-40 shrink-0 border-l">
+        <span class="m-auto">{{ field.name }}</span>
+      </div>
+      <div class="flex w-20 shrink-0 border-l px-2">
+        <span class="m-auto">{{ field.access }}</span>
+      </div>
+      <div class="m-auto grow border-l px-2">{{ field.doc }}</div>
+    </div>
+  </div>
+</template>

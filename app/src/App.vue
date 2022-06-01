@@ -1,178 +1,99 @@
+<script setup lang="ts">
+import { ref, computed, watch } from "vue";
+import store from "./store";
+import packageInfo from "../package.json";
+
+import AppVersion from "./components/AppVersion.vue";
+import Header from "./components/Header.vue";
+import Menu from "./components/Menu.vue";
+
+const appInfo = {
+  name: packageInfo.name,
+  url: packageInfo.homepage,
+  version: packageInfo.version,
+};
+
+// Load the data.json file into the store object
+store.load("/data.json");
+let sharedState = ref(store.sharedState);
+
+// Control whether or not to show navigation menu
+let showMenu = ref(true);
+
+// Parse the data field of sharedState for display variables
+const title = computed(
+  () =>
+    (sharedState?.value.data?.root.display_name as string) ||
+    "display_name undefined"
+);
+
+const version = computed(
+  () => (sharedState?.value.data?.root.version as string) || "version undefined"
+);
+
+const links = computed(() => {
+  let o = sharedState?.value.data?.root.links;
+
+  if (o != null) {
+    return Object.entries(o).map(([k, v]) => {
+      let e = { href: v, text: k };
+      return e;
+    });
+  }
+
+  return [];
+});
+
+watch(
+  () => title.value,
+  () => (document.title = "regvue - " + title.value)
+);
+</script>
+
 <template>
-  <Header :title="title" :links="links" :version="version"/>
-  <div class="sidebar">
-    <TreeTable class="p-treetable-sm" :value="sharedState.nodes" :expandedKeys="expandedKeys"
-      :scrollable="true" scrollHeight="calc(100vh - 58px)"
-      v-model:selectionKeys="selectionKeys" selectionMode="single" @node-select="onNodeSelect">
-      <Column field="name" header="Name" :expander="true"
-        headerClass="sidebar-name-header" bodyClass="sidebar-name-body">
-      </Column>
-      <Column field="addr" header="Address"
-        headerClass="sidebar-addr-header" bodyClass="sidebar-addr-body">
-      </Column>
-    </TreeTable>
-  </div>
-  <div class="view">
-    <router-view></router-view>
-  </div>
-  <div class="app-version">
-    Powered by <a :href="appInfo.url">{{ appInfo.name }} v{{ appInfo.version }}</a>
+  <div class="overflow-hidden text-[#2c3e50]">
+    <Header
+      :title="title"
+      :version="version"
+      :links="links"
+      class="h-11"
+      @toggle-menu="showMenu = !showMenu"
+    />
+
+    <div class="app-body-height flex flex-row">
+      <!-- Show the navigation menu on the left -->
+      <Menu
+        :nodes="sharedState.nodes"
+        class="w-[21rem] bg-white pb-1"
+        :class="!showMenu ? 'hidden' : ''"
+      />
+
+      <!-- Show the main window -->
+      <div class="mt-4 flex-grow overflow-y-scroll">
+        <router-view class="pb-10" />
+
+        <!-- Display a link to the GitHub repo at the bottom right of the page -->
+        <AppVersion
+          :url="appInfo.url"
+          :name="appInfo.name"
+          :version="appInfo.version"
+          class="absolute bottom-4 right-4"
+        />
+      </div>
+    </div>
   </div>
 </template>
-
-<script>
-import store from '@/store.js'
-import packageInfo from '@/../package'
-
-export default {
-  created() {
-    this.reg = {};
-
-    store.load("data.json")
-
-    this.$watch(
-      () => this.$route.params,
-      (to, _from) => {
-        if (to.regid) {
-          store.untilLoaded(store)
-            .then(_ => {
-              this.selectElement(to.regid)
-            })
-        }
-      }
-    )
-  },
-  data() {
-    return {
-      appInfo: {
-        name: packageInfo.name,
-        url: packageInfo.homepage,
-        version: packageInfo.version,
-      },
-      reg: null,
-      sharedState: store.sharedState,
-
-      expandedKeys: {},
-      selectionKeys: {},
-    }
-  },
-  methods: {
-    onNodeSelect(node) {
-      this.$router.push({ name: "reg", params: { regid: node.key } })
-    },
-    selectElement(element_id) {
-      this.reg = this.sharedState.data.elements[element_id];
-
-      this.selectionKeys = {};
-      this.selectionKeys[element_id] = true;
-
-      // Expand all parents of selected element
-      let id = element_id;
-      while (id.includes(".")) {
-        id = id.replace(/\.\w+$/, '');
-        this.expandedKeys[id] = true;
-      }
-
-      // Scroll to element
-      let elems = document.getElementsByClassName(element_id)
-      if (elems.length) {
-        let elem = elems[0]
-        elem.scrollIntoView({ block: "center" })
-      }
-    },
-  },
-  computed: {
-    title() {
-      return this.sharedState.data?.root?.display_name || "display_name undefined"
-    },
-    links() {
-      let o = this.sharedState.data?.root?.links
-
-      if (o) {
-        return Object.entries(o)
-          .map(([k, v]) => {
-              let e = { href: v, text: k }
-              return e
-              })
-      } else {
-        return {}
-      }
-    },
-    version() {
-      return this.sharedState.data?.root?.version || "version undefined"
-    },
-  },
-  name: 'App'
-}
-</script>
 
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  height: 100vh;
 }
 
-body {
-  margin: 10px;
-}
-
-.topbar .links {
-  margin: auto;
-  margin-top: .7rem;
-  top: .7rem;
-}
-
-.sidebar {
-  z-index: 10;
-  width: 20rem;
-  position: fixed;
-  left: 0;
-  top: 3.4rem;
-  margin: 0;
-  box-sizing: border-box;
-  border-right: 1px solid black;
-  overflow-y: auto;
-  min-height: 100vh;
-}
-
-.sidebar-addr-body span {
-  text-align: right;
-}
-
-.view {
-  display: block;
-  padding-left: 20rem;
-  margin-top: 20px;
-}
-
-.p-treetable.p-treetable-sm .p-treetable-header {
-      padding: 0.5rem 0.875rem;
-}
-.p-treetable.p-treetable-sm .p-treetable-thead > tr > th {
-      padding: 0.3rem 0.72845rem;
-}
-.p-treetable.p-treetable-sm .p-treetable-tbody > tr > td {
-      padding: 0.3rem 0.72845rem;
-}
-.p-treetable.p-treetable-sm .p-treetable-tfoot > tr > td {
-      padding: 0.3rem 0.85rem;
-}
-.p-treetable.p-treetable-sm .p-treetable-footer {
-      padding: 0.3rem 0.85rem;
-}
-
-.app-version {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  background-color: white;
-  border-left: 1px solid black;
-  border-top: 1px solid black;
-  font-size: 10px;
-  padding-left: 2px;
-  padding-right: 2px;
+.app-body-height {
+  /* Full screen height minus the height of the header */
+  height: calc(100vh - 2.75rem);
 }
 </style>
