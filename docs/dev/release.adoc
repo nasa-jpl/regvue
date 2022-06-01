@@ -26,12 +26,13 @@ Update `CHANGELOG.md`.
 
 == Create the Release Package
 
+ cd app
  npm run build
  mv dist regvue-$version
- tar cf regvue-$version.tar.gz $version
+ tar cf regvue-$version.tar.gz regvue-$version
 
 == Create the GitHub Release
 
 Extract relevant portion of `CHANGELOG.md` into `release_notes.md`.
 
- gh release create $tag -F release_notes.md regvue-$version.tar.gz
+ gh release create $tag --title "$tag - $summary" -F release_notes.md regvue-$version.tar.gz
