@@ -19,7 +19,7 @@ const emit = defineEmits([
 // Numeric value of the register
 let registerValue = ref(0);
 
-// Control or not to display LSB or MSB first
+// Control whether or not to display LSB or MSB first
 let useByteSwap = ref(false);
 
 // Control what base the field/register values should be displayed in
@@ -123,6 +123,7 @@ watch(
   () => {
     nextTick(() => {
       updateRegisterValue();
+      fieldKeyIndex.value += 1;
       registerKeyIndex.value += 1;
     });
   }
