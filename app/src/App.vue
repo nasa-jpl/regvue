@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import store from "./store";
 import packageInfo from "../package.json";
 
@@ -43,6 +43,11 @@ const links = computed(() => {
 
   return [];
 });
+
+watch(
+  () => title.value,
+  () => (document.title = "regvue - " + title.value)
+);
 </script>
 
 <template>
