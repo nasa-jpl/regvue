@@ -197,7 +197,7 @@ watch(
 
         <!-- Display the overall register input box -->
         <tr>
-          <td colspan="32" class="border border-black px-1">
+          <td colspan="32" class="border border-black">
             <FieldInputBox
               :key="'register-input-' + registerKeyIndex"
               name="register"
