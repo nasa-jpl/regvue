@@ -164,7 +164,7 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
       type="search"
       aria-label="Search"
       placeholder="Search"
-      class="absolute top-2 z-50 p-1 text-sm"
+      class="absolute top-2 z-50 translate-x-[-50%] p-1 text-sm"
       autocomplete="off"
       spellcheck="false"
       @keyup.enter="go(suggestions.all[focusIndex])"
