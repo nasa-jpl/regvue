@@ -42,6 +42,7 @@ const deactivate = () => {
   }
 
   emit("select-field", false);
+  showErrorTooltip.value = false;
 
   const elem = document.getElementById(
     "input-box-" + props.name
@@ -100,7 +101,7 @@ const getErrorMessage = (value: string) => {
 
     // Characters must be a valid hex character
     for (let char of value) {
-      if (!/[0-9A-Fa-f]/g.test(char)) {
+      if (!/[0-9A-Fa-f]/.test(char)) {
         return `Invalid hex character: '${char}'`;
       }
     }
@@ -114,14 +115,14 @@ const getErrorMessage = (value: string) => {
 
     // Characters must be a valid binary character
     for (let char of value) {
-      if (!/[0-1]/g.test(char)) {
+      if (!/[0-1]/.test(char)) {
         return `Invalid binary character: '${char}'`;
       }
     }
   } else {
     // Characters must be a valid decimal character
     for (let char of value) {
-      if (!/[0-9]/g.test(char)) {
+      if (!/[0-9]/.test(char)) {
         return `Invalid decimal character: '${char}'`;
       }
     }
@@ -139,7 +140,8 @@ const getErrorMessage = (value: string) => {
       :value="displayValue"
       class="w-full bg-inherit text-center shadow-sm"
       :class="isError ? 'inner-border bg-red-300/50' : ''"
-      @focus="($event.target as HTMLInputElement).select()"
+      @focus="($event.target as HTMLInputElement).select(); showErrorTooltip=true;"
+      @click="($event.target as HTMLInputElement).select(); showErrorTooltip=true;"
       @blur="deactivate"
       @keydown.esc="deactivate"
       @keydown.enter="deactivate"
@@ -152,17 +154,19 @@ const getErrorMessage = (value: string) => {
     <!-- Show that the field value has an error -->
     <div
       v-if="isError && showErrorTooltip"
-      class="absolute top-[1.1rem] left-[50%] z-20 w-fit min-w-[250px] translate-x-[-50%] text-center"
+      class="absolute top-[1.1rem] left-[50%] z-20 translate-x-[-50%] text-center"
     >
       <!-- Display small triangle pointing up -->
       <div
         class="m-auto h-0 w-0 border-[6px] border-transparent border-b-red-500"
       ></div>
       <!-- Display error message as a floating tool tip -->
-      <div
-        class="m-auto inline-block rounded border-2 border-t-4 border-gray-300 border-t-red-500 bg-gray-200 px-2 text-gray-800"
-      >
-        {{ errorMessage }}
+      <div class="min-w-[250px]">
+        <div
+          class="rounded border-2 border-t-4 border-gray-300 border-t-red-500 bg-gray-200 px-2 text-gray-800"
+        >
+          {{ errorMessage }}
+        </div>
       </div>
     </div>
   </div>
