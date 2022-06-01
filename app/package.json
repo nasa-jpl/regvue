@@ -1,7 +1,7 @@
 {
   "name": "regvue",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.3.0",
   "homepage": "https://github.com/rfdonnelly/regvue",
   "scripts": {
     "dev": "vite",
