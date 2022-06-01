@@ -1,0 +1,37 @@
+= Create a Release
+:toc:
+
+== Update the Changelog
+
+Update `CHANGELOG.md`.
+
+ git add CHANGELOG.md
+ git commit
+
+== Bump the Version
+
+.app/package.json
+----
+  "version": "$version",
+----
+
+ git add app/package.json
+ git commit
+ git push
+
+== Create a Tag
+
+ git tag $tag
+ git push origin $tag
+
+== Create the Release Package
+
+ npm run build
+ mv dist regvue-$version
+ tar cf regvue-$version.tar.gz $version
+
+== Create the GitHub Release
+
+Extract relevant portion of `CHANGELOG.md` into `release_notes.md`.
+
+ gh release create $tag -F release_notes.md regvue-$version.tar.gz
