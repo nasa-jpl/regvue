@@ -1,0 +1,103 @@
+#!/bin/bash
+
+set -e
+
+REGVUE_REPO="https://github.jpl.nasa.gov/regvue/regvue"
+POSITIONAL_ARGS=()
+OPT_RELEASE="latest"
+
+function show_usage() {
+    cat <<EOF
+SYNOPSYS
+
+    upgrade [options]
+
+DESCRIPTION
+
+    Upgrades an existing GitHub Pages deployment of regvue to the latest
+    version of regvue.
+
+OPTIONS
+
+    --deployment-repository REPO
+
+        The Git repository containing a deployment of regvue in its gh-pages
+        branch.
+
+    --deployment-path PATH
+
+        The path to the regvue deployment in the gh-pages branch.  Relative to
+        the root of the gh-pages branch.
+
+EXAMPLES
+
+    upgrade --deployment-repository https://github.jpl.nasa.gov/org/repo --deployment-path regvue
+EOF
+}
+
+while test $# -gt 0; do
+    case $1 in
+        --release)
+            OPT_RELEASE="$1"
+            shift
+            shift
+            ;;
+        --deployment-repository)
+            OPT_DEPLOYMENT_REPOSITORY="$2"
+            shift
+            shift
+            ;;
+        --deployment-path)
+            OPT_DEPLOYMENT_PATH="$2"
+            shift
+            shift
+            ;;
+        --help)
+            show_usage
+            exit
+            ;;
+        -*|--*)
+            echo "Unknown option $1"
+            exit 1
+            ;;
+        *)
+            POSITIONAL_ARGS+=("$1")
+            shift
+            ;;
+    esac
+done
+
+# restore positional parameters
+set -- "${POSITIONAL_ARGS[@]}"
+
+gh="gh --repo $REGVUE_REPO"
+
+set -x
+
+# Get the latest release information
+tag=$($gh release view --json tagName --jq .tagName)
+filename=$($gh release view --json assets --jq ".assets[0].name")
+
+# Download the release
+$gh release download $tag
+
+# Clone the GitHub Pages deployment
+git clone --branch gh-pages "$OPT_DEPLOYMENT_REPOSITORY" deployment
+deployment_path="deployment/$OPT_DEPLOYMENT_PATH"
+
+# Backup the existing data.json
+cp "$deployment_path/data.json" data.json
+
+# Remove the existing deployment
+rm -rf "$deployment_path"/*
+
+# Install the latest release
+tar xf "$filename" --strip-components 1 -C "$deployment_path"
+
+# Restore data.json
+cp data.json "$deployment_path/data.json"
+
+# Deploy
+git -C deployment add .
+git -C deployment commit -m "Upgrade regvue to $tag"
+git -C deployment push
