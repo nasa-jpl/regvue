@@ -11,29 +11,26 @@ export default {
 
   loaded: false,
 
-  load(filename: string) {
-    return fetch(filename)
-      .then((result) => result.json())
-      .then((data) => {
-        for (const name in data.elements) {
-          const element = data.elements[name];
-          const fields = element.fields;
-          fields?.forEach((field: RegisterField) => {
-            if (field.reset) {
-              field.value = field.reset;
-            } else {
-              field.value = 0;
-            }
-          });
+  async load(filename: string) {
+    const result = await fetch(filename);
+    const data = await result.json();
+
+    for (const name in data.elements) {
+      const element = data.elements[name];
+      const fields = element.fields;
+      fields?.forEach((field: RegisterField) => {
+        if (field.reset) {
+          field.value = field.reset;
+        } else {
+          field.value = 0;
         }
-        return data;
-      })
-      .then((data) => {
-        this.sharedState.data = data;
-        this.sharedState.fields = this.get_field_map(data.elements);
-        this.sharedState.nodes = this.get_nodes(data.elements, data.root);
-        this.loaded = true;
       });
+    }
+
+    this.sharedState.data = data;
+    this.sharedState.fields = this.getFieldMap(data.elements);
+    this.sharedState.nodes = this.getNodes(data.elements, data.root);
+    this.loaded = true;
   },
 
   get_field_map(elements: { [key: string]: Register }) {

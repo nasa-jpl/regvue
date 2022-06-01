@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, onBeforeMount } from "vue";
 import store from "./store";
 import packageInfo from "../package.json";
 
@@ -14,8 +14,11 @@ const appInfo = {
 };
 
 // Load the data.json file into the store object
-store.load("/data.json");
-const sharedState = ref(store.sharedState);
+let sharedState = ref(store.sharedState);
+onBeforeMount(async () => {
+  await store.load("/data.json");
+  sharedState.value = store.sharedState;
+});
 
 // Control whether or not to show navigation menu
 let showMenu = ref(true);
@@ -23,16 +26,16 @@ let showMenu = ref(true);
 // Parse the data field of sharedState for display variables
 const title = computed(
   () =>
-    (sharedState.value.data?.root.display_name as string) ||
+    (sharedState?.value.data?.root.display_name as string) ||
     "display_name undefined"
 );
 
 const version = computed(
-  () => (sharedState.value.data?.root.version as string) || "version undefined"
+  () => (sharedState?.value.data?.root.version as string) || "version undefined"
 );
 
 const links = computed(() => {
-  let o = sharedState.value.data?.root.links;
+  let o = sharedState?.value.data?.root.links;
 
   if (o != null) {
     return Object.entries(o).map(([k, v]) => {
