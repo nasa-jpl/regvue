@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, onBeforeMount } from "vue";
+import { ref, computed, watch } from "vue";
 import store from "./store";
 import packageInfo from "../package.json";
 
@@ -14,11 +14,8 @@ const appInfo = {
 };
 
 // Load the data.json file into the store object
+store.load("/data.json");
 let sharedState = ref(store.sharedState);
-onBeforeMount(async () => {
-  await store.load("/data.json");
-  sharedState.value = store.sharedState;
-});
 
 // Control whether or not to show navigation menu
 let showMenu = ref(true);
