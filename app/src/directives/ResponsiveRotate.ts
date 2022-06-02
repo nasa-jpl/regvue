@@ -16,9 +16,11 @@ export const getTextWidth = (text: string, font: string) => {
   return 0;
 };
 
+let observer: ResizeObserver | null;
+
 export const vResponsiveRotate = {
   mounted: (element: HTMLElement) => {
-    const observer = new ResizeObserver(function (entries) {
+    observer = new ResizeObserver(function (entries) {
       // We use one observer per element, therefore each observer
       // is observing only a single element.  Entries will always
       // contain a single entry.
@@ -36,4 +38,6 @@ export const vResponsiveRotate = {
     });
     observer.observe(element);
   },
+
+  unmounted: () => (observer = null),
 };
