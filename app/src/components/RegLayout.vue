@@ -5,6 +5,7 @@ import { RegisterField, type DisplayType } from "../types";
 import parse from "../parse";
 
 import FieldInputBox from "./FieldInputBox.vue";
+import FieldName from "./FieldName.vue";
 
 const props = defineProps<{
   fields: RegisterField[];
@@ -132,13 +133,15 @@ watch(
 
 <template>
   <div>
-    <table class="w-full table-fixed">
+    <table
+      class="w-full min-w-[525px] table-fixed overflow-x-scroll xs:text-xs sm:text-sm md:text-base"
+    >
       <thead>
         <!-- Display the bit number boxes -->
         <th
           v-for="bit in 32"
           :key="bit"
-          class="border border-black font-medium sm:text-sm md:text-base"
+          class="border border-black font-medium"
           :class="
             Math.floor((bit - 1) / 4) % 2 == 0 ? 'bg-gray-100' : 'bg-gray-300'
           "
@@ -161,15 +164,7 @@ watch(
               emit('select-field', field.name, selectedField == field.name)
             "
           >
-            <span
-              :class="
-                field.name.length > field.nbits * 4
-                  ? 'my-2 rotate-180 vertical-rl'
-                  : ''
-              "
-            >
-              {{ field.name }}
-            </span>
+            <FieldName :name="field.name" :nbits="field.nbits" />
           </td>
         </tr>
 
