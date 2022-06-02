@@ -10,6 +10,13 @@ Update `CHANGELOG.md`.
 
 == Bump the Version
 
+Increment the version according to https://semver.org/[Semantic Versioning 2] which is basically:
+
+* Breaking changes => increment major version
+* Backwards compatible feature additions => increment minor version
+* Bug fixes only => increment patch version
+
+[source,json]
 .app/package.json
 ----
   "version": "$version",
