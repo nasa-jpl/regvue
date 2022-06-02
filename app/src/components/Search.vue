@@ -129,10 +129,6 @@ const focus = (i: number) => {
   }
 
   focusIndex.value = i;
-
-  // Scroll the new focused element into view
-  const elem = document.getElementById(`suggestion-${focusIndex.value}`);
-  elem?.scrollIntoView({ block: "end" });
 };
 
 // Removes a suggestion from the recentSuggestions array if present
@@ -167,15 +163,9 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
       class="absolute top-2 z-50 translate-x-[-50%] p-1 text-sm"
       autocomplete="off"
       spellcheck="false"
-      @keyup.enter="go(suggestions.all[focusIndex])"
-      @keydown.down="focus(focusIndex + 1)"
-      @keydown.up="focus(focusIndex - 1)"
-      @keydown.left.prevent="focus(0)"
-      @keydown.right.prevent="
-        showSuggestions
-          ? focus(suggestions.all.length - 1)
-          : focus(recentSuggestions.length - 1)
-      "
+      @keyup.enter="focusIndex >= 0 ? go(suggestions[focusIndex]) : null"
+      @keydown.down.prevent="focus(focusIndex + 1)"
+      @keydown.up.prevent="focus(focusIndex - 1)"
       @keydown.escape="($event.target as HTMLElement).blur()"
       @focus="
         focused = true;
@@ -194,7 +184,7 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
       "
     >
       <div
-        class="relative top-9 m-auto mt-2 max-h-[500px] w-[450px] overflow-y-scroll border border-black bg-white left-18"
+        class="relative top-9 m-auto mt-2 max-h-[500px] w-[450px] overflow-y-scroll border border-black bg-white"
       >
         <!-- Display a section for the register suggestions -->
         <section v-if="suggestions.regs.length > 0">
@@ -269,7 +259,7 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
       "
     >
       <div
-        class="relative top-9 m-auto mt-2 max-h-[500px] w-[450px] overflow-y-scroll border border-black bg-white left-18"
+        class="relative top-9 m-auto mt-2 max-h-[500px] w-[450px] overflow-y-scroll border border-black bg-white"
       >
         <section>
           <!-- Show section title -->
