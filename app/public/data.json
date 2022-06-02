@@ -46,16 +46,16 @@
         {
           "access": "rw",
           "doc": "A reserved field.",
-          "nbits": 28,
-          "lsb": 4,
+          "nbits": 24,
+          "lsb": 8,
           "reset": 0,
           "name": "rsvd"
         },
         {
           "access": "rw",
           "nbits": 4,
-          "lsb": 0,
-          "name": "command",
+          "lsb": 4,
+          "name": "long_command",
           "reset": 0,
           "doc": "The command to execute.",
           "enum": [
@@ -70,6 +70,38 @@
               "value": 10
             }
           ]
+        },
+        {
+          "access": "rw",
+          "nbits": 1,
+          "lsb": 3,
+          "name": "flag3",
+          "reset": 0,
+          "doc": "Set a flag value"
+        },
+        {
+          "access": "rw",
+          "nbits": 1,
+          "lsb": 2,
+          "name": "flag2",
+          "reset": 0,
+          "doc": "Set a flag value"
+        },
+        {
+          "access": "rw",
+          "nbits": 1,
+          "lsb": 1,
+          "name": "flag1",
+          "reset": 0,
+          "doc": "Set a flag value"
+        },
+        {
+          "access": "rw",
+          "nbits": 1,
+          "lsb": 0,
+          "name": "flag0",
+          "reset": 0,
+          "doc": "Set a flag value"
         }
       ],
       "offset": 0,
@@ -83,10 +115,17 @@
       "fields": [
         {
           "access": "ro",
-          "reset": 4294967295,
-          "nbits": 32,
+          "reset": 19088743,
+          "nbits": 28,
+          "lsb": 4,
+          "name": "rsvd"
+        },
+        {
+          "access": "ro",
+          "reset": 0,
+          "nbits": 4,
           "lsb": 0,
-          "name": "f0"
+          "name": "command"
         }
       ],
       "offset": 0,
