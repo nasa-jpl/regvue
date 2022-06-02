@@ -209,23 +209,39 @@ watch(
 
     <div class="mt-2 flex flex-row justify-between">
       <!-- Show buttons to change display type -->
-      <div class="space-x-1">
+      <div class="flex flex-row space-x-2">
+        <div>
+          <button
+            v-for="(displayType, i) in displayTypes"
+            :key="displayType"
+            class="border-[0.5px] border-gray-400 px-1 shadow"
+            :class="[
+              selectedDisplayType == displayType
+                ? 'bg-gray-200 font-semibold text-green-700'
+                : 'hover:bg-gray-100',
+              i == 0 ? 'rounded-l' : '',
+              i == displayTypes.length - 1 ? 'rounded-r' : '',
+            ]"
+            :title="`Change display type to ${displayType}`"
+            @click="selectedDisplayType = (displayType as DisplayType); fieldKeyIndex += 1; registerKeyIndex += 1;"
+          >
+            <!-- Display first letter capitalized -->
+            {{ displayType.substring(0, 1).toUpperCase() }}
+          </button>
+        </div>
+
+        <!-- Show byte swap button -->
         <button
-          v-for="displayType in displayTypes"
-          :key="displayType"
-          class="rounded border border-gray-400 px-1 shadow"
+          class="rounded border border-gray-400 px-1 hover:cursor-pointer"
           :class="
-            selectedDisplayType == displayType
+            useByteSwap
               ? 'bg-gray-200 font-semibold text-green-700'
               : 'hover:bg-gray-100'
           "
-          :title="`Change display type to ${displayType}`"
-          @click="selectedDisplayType = (displayType as DisplayType); fieldKeyIndex += 1; registerKeyIndex += 1;"
+          title="Toggle byte swapping for the register value"
+          @click="toggleByteSwap()"
         >
-          <!-- Display capitalized -->
-          {{
-            displayType.substring(0, 1).toUpperCase() + displayType.substring(1)
-          }}
+          Byte Swap
         </button>
       </div>
 
@@ -238,19 +254,5 @@ watch(
         Reset Values
       </button>
     </div>
-
-    <!-- Show byte swap button -->
-    <button
-      class="mt-1 rounded border border-gray-400 px-1 hover:cursor-pointer"
-      :class="
-        useByteSwap
-          ? 'bg-gray-200 font-semibold text-green-700'
-          : 'hover:bg-gray-100'
-      "
-      title="Toggle byte swapping for the register value"
-      @click="toggleByteSwap()"
-    >
-      Byte Swap
-    </button>
   </div>
 </template>
