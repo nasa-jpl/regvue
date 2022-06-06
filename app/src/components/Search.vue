@@ -100,6 +100,23 @@ let showSuggestions = computed(() => {
   return focused.value && query.value != "" && suggestions.value;
 });
 
+// Update the query value
+let timer: number;
+const updateQuery = () => {
+  clearTimeout(timer);
+  const elem = document.getElementById("search-input") as HTMLInputElement;
+
+  // Add a buffer before updating if query is small to prevent lag from
+  // multiple searches for small queries
+  if (elem.value.length < 3) {
+    timer = setTimeout(() => {
+      query.value = elem.value;
+    }, 250); // delay updating the value by this amount in milliseconds
+  } else {
+    query.value = elem.value;
+  }
+};
+
 // Change the route to go to the selected suggestion
 const go = (suggestion: Suggestion) => {
   // Remove the suggestion if already present to ensure no duplicates
@@ -172,13 +189,14 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
     <!-- Show the input box that is bound to the query string -->
     <input
       id="search-input"
-      v-model="query"
+      :value="query"
       type="search"
       aria-label="Search"
       placeholder="Search"
       class="absolute top-2 z-50 translate-x-[-50%] p-1 text-sm"
       autocomplete="off"
       spellcheck="false"
+      @input="updateQuery"
       @keyup.enter="focusIndex >= 0 ? go(suggestions[focusIndex]) : null"
       @keydown.down.prevent="focus(focusIndex + 1)"
       @keydown.up.prevent="focus(focusIndex - 1)"
