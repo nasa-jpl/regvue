@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RegisterField } from "../types";
 
-defineProps<{
+const props = defineProps<{
   fields: RegisterField[];
   selectedField?: string;
 }>();
@@ -12,7 +12,7 @@ const emit = defineEmits([
 ]);
 
 const navigateToField = (fieldName: string) => {
-  emit("select-field", fieldName);
+  emit("select-field", fieldName, props.selectedField == fieldName);
 };
 
 const selectField = (fieldName: string) => {
@@ -39,7 +39,7 @@ const deselectField = () => {
       v-for="field in fields"
       :key="field.name"
       class="flex border-b text-left hover:cursor-pointer"
-      :class="selectedField == field.name ? 'bg-yellow-50 font-medium' : ''"
+      :class="selectedField == field.name ? 'bg-yellow-50' : ''"
       @mouseenter="selectField(field.name)"
       @mouseleave="deselectField"
       @click="navigateToField(field.name)"
