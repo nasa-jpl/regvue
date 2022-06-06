@@ -178,14 +178,14 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
       "
     >
       <div
-        class="relative top-9 m-auto mt-2 max-h-[500px] w-[450px] overflow-y-scroll border border-black bg-white"
+        class="relative top-9 m-auto mt-2 w-[450px] border border-black bg-white"
       >
-        <section v-if="suggestions.length > 0">
-          <!-- Search results header -->
-          <div class="bg-blue-900 px-2 py-1 text-center text-white">
-            Results
-          </div>
-
+        <!-- Search results header -->
+        <div class="bg-blue-900 px-2 py-1 text-center text-white">Results</div>
+        <section
+          v-if="suggestions.length > 0"
+          class="max-h-[500px] overflow-y-scroll"
+        >
           <!-- Display each individual suggestion -->
           <SearchResult
             v-for="(suggestion, i) in suggestions"
@@ -202,9 +202,6 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
 
         <!-- Display a section if there are no results -->
         <section v-if="suggestions.length == 0">
-          <div class="bg-blue-900 px-2 py-1 text-center text-white">
-            Results
-          </div>
           <div class="my-10 bg-white text-center text-sm text-gray-500">
             No results
           </div>
@@ -223,14 +220,13 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
       "
     >
       <div
-        class="relative top-9 m-auto mt-2 max-h-[500px] w-[450px] overflow-y-scroll border border-black bg-white"
+        class="relative top-9 m-auto mt-2 w-[450px] border border-black bg-white"
       >
-        <section>
-          <!-- Show recent searches section title -->
-          <div class="bg-blue-900 px-2 py-1 text-center text-white">
-            Recent Searches
-          </div>
-
+        <!-- Show recent searches section title -->
+        <div class="bg-blue-900 px-2 py-1 text-center text-white">
+          Recent Searches
+        </div>
+        <section class="max-h-[500px] overflow-y-scroll">
           <!-- Display each individual recent suggestion -->
           <template v-if="recentSuggestions.length">
             <div
