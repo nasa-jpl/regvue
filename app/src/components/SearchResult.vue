@@ -16,20 +16,51 @@ const props = defineProps<{
 const router = useRouter();
 const sharedState = ref(store.sharedState);
 
-const id = ref(props.suggestion.path.params.regid);
-const doc = computed(() => sharedState.value.data.elements[id.value].doc);
+const regid = ref(props.suggestion.path.params.regid);
+const field = computed(() => {
+  if (props.suggestion.path?.query?.field) {
+    return props.suggestion.path.query.field;
+  }
+  return "";
+});
+
+const id = computed(() => {
+  if (field.value) {
+    return regid.value + ":" + field.value;
+  } else {
+    return regid.value;
+  }
+});
+
+const doc = computed(() => {
+  if (field.value) {
+    const fields = sharedState.value.data.elements[regid.value].fields;
+
+    if (!fields) return "";
+
+    for (let fieldEntry of fields) {
+      if (fieldEntry.name == field.value) {
+        return fieldEntry.doc;
+      }
+    }
+    return "";
+  } else {
+    return sharedState.value.data.elements[regid.value].doc;
+  }
+});
 
 const type = computed(() => {
   if (props.suggestion.type == "reg") return "Register";
   if (props.suggestion.type == "blk") return "Block";
   if (props.suggestion.type == "mem") return "Memory";
+  if (props.suggestion.type == "fld") return "Field";
   return props.suggestion.type;
 });
 
 // Get the address as a hexadecimal string
 const addr = computed(() =>
   format.getStringRepresentation(
-    sharedState.value.data.elements[id.value].addr,
+    sharedState.value.data.elements[regid.value].addr,
     "hexadecimal",
     32
   )

@@ -25,7 +25,7 @@ export interface Register {
   name: string;
   addr: number;
   offset: number;
-  type: "reg" | "blk" | "mem";
+  type: "reg" | "blk" | "mem" | "fld";
   display_name: string;
   doc: string;
   version?: string;
@@ -56,6 +56,9 @@ export interface Suggestion {
     name: string;
     params: {
       regid: string;
+    };
+    query?: {
+      field: string;
     };
   };
 }

@@ -29,11 +29,26 @@ export const createSearchIndex = async () => {
     const keys = Object.keys(store.sharedState.data.elements);
     for (let i = 0; i < keys.length; i++) {
       const document = store.sharedState.data.elements[keys[i]];
-      builder.add({
-        id: document.id,
-        name: document.name,
-        doc: document.doc?.substring(0, 50), // only include the first 50 characters
-        addr: format.getStringRepresentation(document.addr, "hexadecimal", 32),
+      builder.add(
+        {
+          id: document.id,
+          name: document.name,
+          doc: document.doc?.substring(0, 50), // only include the first 50 characters
+          addr: format.getStringRepresentation(
+            document.addr,
+            "hexadecimal",
+            32
+          ),
+        },
+        { boost: 100 }
+      );
+
+      document.fields?.forEach((field) => {
+        builder.add({
+          id: document.id + ":" + field.name,
+          name: field.name,
+          doc: field.doc?.substring(0, 50),
+        });
       });
     }
   });

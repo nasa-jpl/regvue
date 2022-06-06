@@ -50,24 +50,46 @@ let suggestions = computed(() => {
   });
 
   // Limit the amount of search results to return (helps decrease render lag)
-  searchResults.length = Math.min(searchResults.length, 50);
+  searchResults.length = Math.min(searchResults.length, 25);
 
   // Create a Suggestion object for each query result
-  for (let id of searchResults) {
-    let item = sharedState.value.data.elements[id.ref];
+  for (const result of searchResults) {
+    const id = result.ref;
 
-    let path = {
-      name: "reg",
-      params: { regid: id.ref },
-    };
+    if (id.includes(":")) {
+      // Fields will have the id "<reg id>:<field name>"
+      const regid = id.split(":")[0];
+      const fieldName = id.split(":")[1];
 
-    let suggestion = {
-      type: item.type,
-      name: item.name,
-      path: path,
-    };
+      const path = {
+        name: "reg",
+        params: { regid: regid },
+        query: { field: fieldName },
+      };
 
-    res.push(suggestion);
+      const suggestion = {
+        type: "fld",
+        name: fieldName,
+        path: path,
+      };
+      res.push(suggestion);
+    } else {
+      // Otherwise it is a register/mem entry
+
+      const item = sharedState.value.data.elements[id];
+
+      const path = {
+        name: "reg",
+        params: { regid: id },
+      };
+
+      const suggestion = {
+        type: item.type,
+        name: item.name,
+        path: path,
+      };
+      res.push(suggestion);
+    }
   }
 
   return res;

@@ -40,8 +40,6 @@ const selectField = (fieldName: string, newValue: boolean) => {
   const regid = route?.params?.regid;
   const fieldParam = route?.query?.field;
 
-  console.log(fieldParam, fieldName);
-
   if (fieldParam != fieldName && newValue) {
     router.push({
       name: "reg",
