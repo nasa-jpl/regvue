@@ -1,11 +1,21 @@
 <script setup lang="ts">
-import { ref, Ref, computed } from "vue";
+import { ref, Ref, computed, onBeforeMount } from "vue";
 import { useRouter } from "vue-router";
-import { Suggestion } from "../types";
 import store from "../store";
+import { createSearchIndex } from "../search";
+import { Suggestion } from "../types";
+import { Index, Query } from "lunr";
+
+import SearchResult from "./SearchResult.vue";
 
 const sharedState = ref(store.sharedState);
 const router = useRouter();
+
+// Create the search object
+let searchObject: Index;
+onBeforeMount(async () => {
+  searchObject = await createSearchIndex();
+});
 
 // Search query
 let query = ref("");
@@ -19,66 +29,45 @@ let focusIndex = ref(0);
 // Array used to keep track of recently selected suggestions
 let recentSuggestions: Ref<Suggestion[]> = ref([]);
 
-// Create a list of entires that have register or field names that
-// contain the query text
+// Create a list of entires that match the search query
 let suggestions = computed(() => {
-  const formattedQuery = query.value.trim().toLowerCase();
-
-  let res = {
-    regs: [] as Suggestion[],
-    fields: [] as Suggestion[],
-    all: [] as Suggestion[],
-  };
-
+  let res: Suggestion[] = [];
   if (!sharedState.value.data || !sharedState.value.fields) {
     return res;
   }
 
-  // Registers
-  for (let id in sharedState.value?.data?.elements) {
-    let item = sharedState.value.data.elements[id];
+  // Remove whitespace and make the search query lowercase
+  const term = query.value.trim().toLowerCase();
 
-    if (
-      item.type == "reg" &&
-      item.name.toLowerCase().includes(formattedQuery)
-    ) {
-      let path = {
-        name: "reg",
-        params: { regid: id },
-      };
+  // Search for index entries that match the formatted query
+  const searchResults = searchObject.query((q: Query) => {
+    q.term(term, { boost: 100 }); // exact match
+    q.term(term, {
+      usePipeline: false,
+      wildcard: Query.wildcard.LEADING | Query.wildcard.TRAILING,
+      boost: 10,
+    }); // contains the query, no formatting
+  });
 
-      let suggestion = {
-        type: "Register",
-        name: id,
-        path: path,
-      };
+  // Limit the amount of search results to return (helps decrease render lag)
+  searchResults.length = Math.min(searchResults.length, 50);
 
-      res.regs.push(suggestion);
-      res.all.push(suggestion);
-    }
-  }
+  // Create a Suggestion object for each query result
+  for (let id of searchResults) {
+    let item = sharedState.value.data.elements[id.ref];
 
-  // Fields
-  for (let [field_id, element_id] of sharedState.value.fields) {
-    let fieldName = field_id.replace(/.*\./, "");
-    if (fieldName.toLowerCase().includes(formattedQuery)) {
-      const path = {
-        name: "field",
-        params: {
-          regid: element_id,
-          fieldName: fieldName,
-        },
-      };
+    let path = {
+      name: "reg",
+      params: { regid: id.ref },
+    };
 
-      const suggestion = {
-        type: "Field",
-        name: field_id,
-        path: path,
-      };
+    let suggestion = {
+      type: item.type,
+      name: item.name,
+      path: path,
+    };
 
-      res.fields.push(suggestion);
-      res.all.push(suggestion);
-    }
+    res.push(suggestion);
   }
 
   return res;
@@ -119,8 +108,8 @@ const focus = (i: number) => {
 
   // Perform checks to ensure the focusIndex doesn't go out of bounds
   if (showSuggestions.value) {
-    if (i > suggestions.value.all.length - 1) {
-      i = suggestions.value.all.length - 1;
+    if (i > suggestions.value.length - 1) {
+      i = suggestions.value.length - 1;
     }
   } else {
     if (i > recentSuggestions.value.length - 1) {
@@ -186,58 +175,28 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
       <div
         class="relative top-9 m-auto mt-2 max-h-[500px] w-[450px] overflow-y-scroll border border-black bg-white"
       >
-        <!-- Display a section for the register suggestions -->
-        <section v-if="suggestions.regs.length > 0">
+        <section v-if="suggestions.length > 0">
+          <!-- Search results header -->
           <div class="bg-blue-900 px-2 py-1 text-center text-white">
-            Registers
+            Results
           </div>
-          <ul>
-            <!-- Display each individual suggestion -->
-            <li
-              v-for="(s, i) in suggestions.regs"
-              :id="'suggestion-' + i"
-              :key="i"
-              class="border-b border-gray-300 px-2 hover:cursor-pointer hover:bg-gray-200 hover:text-green-700"
-              :class="focusIndex == i ? 'bg-gray-200 text-green-700' : ''"
-              @mousedown="go(s)"
-              @mouseenter="focus(-1)"
-            >
-              <!-- Show the name of the suggestion and truncate if too long -->
-              <a :href="router.resolve(s.path).href" @click.prevent>
-                <div class="truncate" :title="s.name">{{ s.name }}</div>
-              </a>
-            </li>
-          </ul>
-        </section>
 
-        <!-- Display a section for the field suggestions -->
-        <section v-if="suggestions.fields.length > 0">
-          <div class="bg-blue-900 px-2 py-1 text-center text-white">Fields</div>
-          <ul>
-            <!-- Display each individual suggestion -->
-            <li
-              v-for="(s, i) in suggestions.fields"
-              :id="'suggestion-' + (i + suggestions.regs.length)"
-              :key="i + suggestions.regs.length"
-              class="border-b border-gray-300 px-2 hover:cursor-pointer hover:bg-gray-200 hover:text-green-700"
-              :class="
-                focusIndex == i + suggestions.regs.length
-                  ? 'bg-gray-200 text-green-700'
-                  : ''
-              "
-              @mousedown="go(s)"
-              @mouseenter="focus(-1)"
-            >
-              <!-- Show the name of the suggestion and truncate if too long -->
-              <a :href="router.resolve(s.path).href" @click.prevent>
-                <div class="truncate" :title="s.name">{{ s.name }}</div>
-              </a>
-            </li>
-          </ul>
+          <!-- Display each individual suggestion -->
+          <SearchResult
+            v-for="(suggestion, i) in suggestions"
+            :key="suggestion.name + i"
+            :suggestion="suggestion"
+            :index="i"
+            :focus-index="focusIndex"
+            :query="query"
+            @mousedown="go(suggestion)"
+            @mouseenter="focus(i)"
+            @mouseleave="focus(-1)"
+          />
         </section>
 
         <!-- Display a section if there are no results -->
-        <section v-if="suggestions.all.length == 0">
+        <section v-if="suggestions.length == 0">
           <div class="bg-blue-900 px-2 py-1 text-center text-white">
             Results
           </div>
@@ -262,46 +221,43 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
         class="relative top-9 m-auto mt-2 max-h-[500px] w-[450px] overflow-y-scroll border border-black bg-white"
       >
         <section>
-          <!-- Show section title -->
+          <!-- Show recent searches section title -->
           <div class="bg-blue-900 px-2 py-1 text-center text-white">
             Recent Searches
           </div>
 
-          <ul v-if="recentSuggestions.length" class="min-h-[125px] bg-white">
-            <!-- Display each recent suggestion as a li -->
-            <li
-              v-for="(s, i) in recentSuggestions.slice().reverse()"
-              :id="'suggestion-' + i"
-              :key="i"
-              class="border-b border-gray-300 px-2 hover:cursor-pointer hover:bg-gray-200 hover:text-green-700"
-              :class="focusIndex == i ? 'bg-gray-200 text-green-700' : ''"
-              @mouseenter="focus(-1)"
+          <!-- Display each individual recent suggestion -->
+          <template v-if="recentSuggestions.length">
+            <div
+              v-for="(suggestion, i) in recentSuggestions.slice().reverse()"
+              :key="suggestion.name + i"
+              class="flex flex-row justify-between hover:bg-gray-200"
+              :class="focusIndex == i ? 'bg-gray-200 ' : ''"
+              @mouseenter="focus(i, false)"
+              @mouseleave="focus(-1, false)"
             >
-              <div class="flex flex-row justify-between">
-                <!-- Show the name of the suggestion and truncate if too long -->
-                <a
-                  :href="router.resolve(s.path).href"
-                  class="grow"
-                  @click.prevent="go(s)"
-                >
-                  <div class="truncate" :title="s.name">{{ s.name }}</div>
-                </a>
-
-                <!-- Show an "x" button on the right side that will remove the recent suggestion -->
-                <button
-                  class="z-50 pl-3 pr-1 text-gray-500 hover:cursor-pointer"
-                  @click.stop="removeRecentSuggestion(s)"
-                >
-                  x
-                </button>
-              </div>
-            </li>
-          </ul>
+              <SearchResult
+                class="grow"
+                :suggestion="suggestion"
+                :index="i"
+                :focus-index="focusIndex"
+                :query="query"
+                @mousedown="go(suggestion)"
+              />
+              <!-- Show an "x" button on the right side that will remove the recent suggestion -->
+              <button
+                class="z-50 pl-3 pr-1 text-gray-500 hover:cursor-pointer"
+                @click.stop="removeRecentSuggestion(suggestion)"
+              >
+                x
+              </button>
+            </div>
+          </template>
 
           <!-- Display a message if there are no recent suggestions to show -->
           <div
             v-else
-            class="flex min-h-[125px] flex-col justify-center bg-white text-center text-sm text-gray-500"
+            class="flex min-h-[125px] w-full flex-col justify-center bg-white text-center text-sm text-gray-500"
           >
             <p>No recent searches</p>
           </div>
