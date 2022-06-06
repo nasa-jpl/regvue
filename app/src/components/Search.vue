@@ -100,7 +100,7 @@ const go = (suggestion: Suggestion) => {
   focused.value = false;
 };
 
-const focus = (i: number) => {
+const focus = (i: number, scrollIntoView = true) => {
   // The lowest focusIndex should be -1 for "unfocused"
   if (i < -1) {
     i = -1;
@@ -118,6 +118,11 @@ const focus = (i: number) => {
   }
 
   focusIndex.value = i;
+
+  if (scrollIntoView) {
+    const elem = document.getElementById("suggestion-" + i);
+    elem?.scrollIntoView({ block: "nearest" });
+  }
 };
 
 // Removes a suggestion from the recentSuggestions array if present
@@ -190,8 +195,8 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
             :focus-index="focusIndex"
             :query="query"
             @mousedown="go(suggestion)"
-            @mouseenter="focus(i)"
-            @mouseleave="focus(-1)"
+            @mouseenter="focus(i, false)"
+            @mouseleave="focus(-1, false)"
           />
         </section>
 
