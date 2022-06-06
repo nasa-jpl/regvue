@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RegisterField } from "../types";
 
-defineProps<{
+const props = defineProps<{
   fields: RegisterField[];
   selectedField?: string;
 }>();
@@ -12,7 +12,7 @@ const emit = defineEmits([
 ]);
 
 const navigateToField = (fieldName: string) => {
-  emit("select-field", fieldName);
+  emit("select-field", fieldName, props.selectedField == fieldName);
 };
 
 const selectField = (fieldName: string) => {
