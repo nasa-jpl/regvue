@@ -28,7 +28,10 @@ const emit = defineEmits(["toggle-menu"]);
           >
             <hamburger-menu />
           </div>
-          <li id="header-title">{{ title }} ({{ version }})</li>
+          <li id="header-title">
+            {{ title }}
+            <template v-if="version != ''">({{ version }})</template>
+          </li>
         </div>
         <div
           id="header-links"

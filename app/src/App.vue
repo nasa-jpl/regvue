@@ -27,10 +27,16 @@ const title = computed(
     "display_name undefined"
 );
 
-const version = computed(
-  () =>
-    (sharedState?.value?.data?.root?.version as string) || "version undefined"
-);
+const version = computed(() => {
+  if (
+    sharedState?.value?.data?.root?.version ||
+    sharedState?.value?.data?.root?.version == ""
+  ) {
+    return sharedState.value.data.root.version;
+  }
+
+  return "version undefined";
+});
 
 const links = computed(() => {
   let o = sharedState?.value?.data?.root?.links;
