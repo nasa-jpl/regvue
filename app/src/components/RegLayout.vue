@@ -25,7 +25,7 @@ let useByteSwap = ref(false);
 
 // Control what base the field/register values should be displayed in
 let selectedDisplayType: Ref<DisplayType> = ref("hexadecimal");
-let displayTypes = ["hexadecimal", "binary", "decimal"];
+let displayTypes = ["binary", "decimal", "hexadecimal"];
 
 // Index variables that can be incremeneted to force a reload of the child
 // FieldInputBox components
