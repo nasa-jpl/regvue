@@ -81,7 +81,7 @@ watch(
 
       <div v-if="doc" class="m-auto mx-4 mt-4">
         <!-- eslint-disable-next-line vue/no-v-html -->
-        <span v-html="doc"></span>
+        <span class="default-styles" v-html="doc"></span>
       </div>
 
       <RegFields

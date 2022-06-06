@@ -55,8 +55,10 @@ const deselectField = () => {
       <div class="flex w-20 shrink-0 border-l px-2">
         <span class="m-auto">{{ field.access }}</span>
       </div>
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <div class="m-auto grow border-l px-2" v-html="field.doc"></div>
+      <div class="m-auto grow border-l px-2">
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <div class="default-styles" v-html="field.doc"></div>
+      </div>
     </div>
   </div>
 </template>
