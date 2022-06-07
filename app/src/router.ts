@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
+import store from "./store";
 import Default from "./views/Default.vue";
 import RegView from "./views/RegView.vue";
 
@@ -25,6 +26,13 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
+});
+
+router.beforeEach(async (to) => {
+  if (to.path == "/") {
+    await store.untilLoaded();
+    return { name: "reg", params: { regid: store.getFirstRegister() } };
+  }
 });
 
 export default router;
