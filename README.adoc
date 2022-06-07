@@ -6,6 +6,8 @@ A modern web-based viewer for FPGA/ASIC register documentation.
 
 https://github.jpl.nasa.gov/pages/regvue/regvue/demo[Demo]
 
+https://github.jpl.nasa.gov/regvue/demos[Additional demos]
+
 toc::[]
 
 == Install on Local Machine
