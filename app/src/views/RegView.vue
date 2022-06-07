@@ -43,7 +43,7 @@ const selectField = (fieldName: string, newValue: boolean) => {
   if (fieldParam != fieldName && newValue) {
     router.push({
       name: "reg",
-      params: { regid: regid, fieldName: regid },
+      params: { regid: regid },
       query: { field: fieldName },
     });
   } else {

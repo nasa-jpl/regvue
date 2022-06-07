@@ -53,7 +53,7 @@ const type = computed(() => {
   if (props.suggestion.type == "reg") return "Register";
   if (props.suggestion.type == "blk") return "Block";
   if (props.suggestion.type == "mem") return "Memory";
-  if (props.suggestion.type == "fld") return "Field";
+  if (props.suggestion.type == "field") return "Field";
   return props.suggestion.type;
 });
 
