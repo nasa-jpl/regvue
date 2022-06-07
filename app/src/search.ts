@@ -20,7 +20,7 @@ export const createSearchIndex = async () => {
     builder.pipeline.remove(lunr.trimmer);
 
     // Each call to .field() adds a new property that objects can be searched on
-    builder.field("id", { boost: 25 });
+    builder.field("id", { boost: 50 });
     builder.field("name", { boost: 100 });
     builder.field("addr");
     builder.field("doc");
@@ -40,7 +40,7 @@ export const createSearchIndex = async () => {
             32
           ),
         },
-        { boost: 100 }
+        { boost: 25 } // prioritize registers over fields
       );
 
       document.fields?.forEach((field) => {

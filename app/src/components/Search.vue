@@ -45,24 +45,35 @@ let suggestions = computed(() => {
     q.term(term, {
       usePipeline: false,
       wildcard: Query.wildcard.LEADING | Query.wildcard.TRAILING,
-      boost: 10,
+      boost: 50,
     }); // contains the query, no formatting
 
     // fuzzy search if the query is longer than 3 characters
     if (term.length > 3) {
       q.term(term, {
-        editDistance: 3,
+        editDistance: 2,
       });
       q.term(term, {
         usePipeline: false,
         wildcard: Query.wildcard.LEADING | Query.wildcard.TRAILING,
-        editDistance: 3,
+        editDistance: 2,
       });
     }
   });
 
   // Limit the amount of search results to return (helps decrease render lag)
   searchResults.length = Math.min(searchResults.length, 25);
+
+  // Sort elements with same search score alphabetically
+  searchResults.sort((a, b) => {
+    if (a.score > b.score) {
+      return -1;
+    } else if (b.score > a.score) {
+      return 1;
+    } else {
+      return a.ref.localeCompare(b.ref);
+    }
+  });
 
   // Create a Suggestion object for each query result
   for (const result of searchResults) {
