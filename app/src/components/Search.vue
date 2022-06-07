@@ -47,6 +47,18 @@ let suggestions = computed(() => {
       wildcard: Query.wildcard.LEADING | Query.wildcard.TRAILING,
       boost: 10,
     }); // contains the query, no formatting
+
+    // fuzzy search if the query is longer than 3 characters
+    if (term.length > 3) {
+      q.term(term, {
+        editDistance: 3,
+      });
+      q.term(term, {
+        usePipeline: false,
+        wildcard: Query.wildcard.LEADING | Query.wildcard.TRAILING,
+        editDistance: 3,
+      });
+    }
   });
 
   // Limit the amount of search results to return (helps decrease render lag)
