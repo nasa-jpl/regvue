@@ -33,6 +33,7 @@ See the link:docs/install.adoc[install documentation] for more details.
 == Upgrade Regvue
 
 Existing GitHub Pages deployments of Regvue are easily upgraded with the link:scripts/upgrade[upgrade script].
+To use the upgrade script, you must have the https://cli.github.com/[GitHub CLI] installed and it must be authenticated to your GitHub instance.
 
 [source,sh]
 .Example: Upgrade the https://github.jpl.nasa.gov/pages/regvue/regvue/demo[Regvue demo]
