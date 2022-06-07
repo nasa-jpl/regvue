@@ -6,6 +6,8 @@ import { createSearchIndex } from "../search";
 import { Suggestion } from "../types";
 import { Index, Query } from "lunr";
 
+import AppleKeyboardCommand from "vue-material-design-icons/AppleKeyboardCommand.vue";
+import Magnify from "vue-material-design-icons/Magnify.vue";
 import SearchResult from "./SearchResult.vue";
 
 const sharedState = ref(store.sharedState);
@@ -123,6 +125,12 @@ let showSuggestions = computed(() => {
   return focused.value && query.value != "" && suggestions.value;
 });
 
+const isMac = navigator.userAgent.includes("Mac");
+
+const focusOnInput = () => {
+  (document.getElementById("search-input") as HTMLInputElement).focus();
+};
+
 // Update the query value
 let timer: number;
 const updateQuery = () => {
@@ -217,34 +225,69 @@ onBeforeMount(() => {
 </script>
 
 <template>
+  <!-- Show the input box display area -->
   <div
-    class="absolute z-40 mr-4 w-screen rotate-0 text-center text-base"
+    class="absolute left-[50%] z-50 flex h-fit w-56 translate-x-[-50%] flex-row justify-between rounded bg-white px-1"
+    :class="focused ? 'outline outline-2 outline-blue-500' : ''"
+    @click="focusOnInput"
+  >
+    <!-- Display the magnifying icon and input box on the left -->
+    <div class="flex flex-row">
+      <!-- Show a magnifying glass icon -->
+      <magnify class="mt-[0.0625rem] mr-1 text-gray-400" />
+
+      <!-- Show the input box that is bound to the query string -->
+      <input
+        id="search-input"
+        :value="query"
+        type="search"
+        aria-label="Search"
+        placeholder="Search"
+        class="my-1 w-36 text-sm focus:outline-none"
+        :class="focused ? 'grow' : ''"
+        autocomplete="off"
+        spellcheck="false"
+        @input="updateQuery"
+        @keyup.enter="focusIndex >= 0 ? go(suggestions[focusIndex]) : null"
+        @keydown.down.prevent="focus(focusIndex + 1)"
+        @keydown.up.prevent="focus(focusIndex - 1)"
+        @keydown.escape="($event.target as HTMLElement).blur()"
+        @focus="
+          focused = true;
+          focusIndex = 0;
+        "
+        @blur="
+          focused = false;
+          focusIndex = -1;
+        "
+      />
+    </div>
+
+    <!-- Display the keyboard shortcut to focus the search box on the right -->
+    <div class="my-auto">
+      <!-- Only show the shortcut if the input isn't focused -->
+      <div
+        v-if="!focused"
+        class="flex h-fit flex-row rounded bg-gray-200 px-1 text-base text-gray-500/80"
+      >
+        <!-- Change the displayed icon based on if mac or windows -->
+        <template v-if="isMac">
+          <apple-keyboard-command id="apple-command-key" />
+          <span class="mt-[0.05rem] text-[0.99rem]">K</span>
+        </template>
+        <div v-else id="window-ctrl-key" class="text-[0.8rem]">Ctrl+K</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Show grayed-out the background and suggestions window when the input is focused -->
+  <div
+    class="absolute top-2 z-40 mr-4 w-screen rotate-0 text-center text-base"
     @keydown.escape="
       focused = false;
       focusIndex = -1;
     "
   >
-    <!-- Show the input box that is bound to the query string -->
-    <input
-      id="search-input"
-      :value="query"
-      type="search"
-      aria-label="Search"
-      placeholder="Search"
-      class="absolute top-2 z-50 translate-x-[-50%] p-1 text-sm"
-      autocomplete="off"
-      spellcheck="false"
-      @input="updateQuery"
-      @keyup.enter="focusIndex >= 0 ? go(suggestions[focusIndex]) : null"
-      @keydown.down.prevent="focus(focusIndex + 1)"
-      @keydown.up.prevent="focus(focusIndex - 1)"
-      @keydown.escape="($event.target as HTMLElement).blur()"
-      @focus="
-        focused = true;
-        focusIndex = 0;
-      "
-    />
-
     <!-- Display the list of suggestions if showSuggestions is true -->
     <div
       v-if="showSuggestions"
@@ -345,3 +388,10 @@ onBeforeMount(() => {
     </div>
   </div>
 </template>
+
+<style>
+/* Make apple-keyboard-command icon smaller */
+#apple-command-key > svg {
+  width: 1rem;
+}
+</style>

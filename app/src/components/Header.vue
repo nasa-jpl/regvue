@@ -15,8 +15,6 @@ const emit = defineEmits(["toggle-menu"]);
 
 <template>
   <div>
-    <Search id="search-box" />
-
     <div id="header-bar" class="border-b border-gray-400 bg-gray-300 py-2">
       <ul
         class="flex flex-row justify-between font-medium text-black sm:text-lg md:text-xl"
@@ -33,6 +31,9 @@ const emit = defineEmits(["toggle-menu"]);
             <template v-if="version != ''">({{ version }})</template>
           </li>
         </div>
+
+        <Search />
+
         <div
           id="header-links"
           class="mr-6 flex flex-row space-x-6 text-base text-gray-600"
