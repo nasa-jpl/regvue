@@ -253,7 +253,11 @@ onBeforeMount(() => {
         @keyup.enter="focusIndex >= 0 ? go(suggestions[focusIndex]) : null"
         @keydown.down.prevent="focus(focusIndex + 1)"
         @keydown.up.prevent="focus(focusIndex - 1)"
-        @keydown.escape="($event.target as HTMLElement).blur()"
+        @keydown.escape="
+          focused = false;
+          focusIndex = -1;
+          ($event.target as HTMLElement).blur();
+        "
         @focus="
           focused = true;
           focusIndex = 0;
