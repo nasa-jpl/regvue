@@ -299,10 +299,10 @@ onBeforeMount(() => {
       "
     >
       <div
-        class="relative top-9 z-50 m-auto mt-2 w-[450px] border border-black bg-white"
+        class="relative top-9 z-50 m-auto mt-2 w-[450px] rounded-lg border border-black bg-white"
       >
         <!-- Search results header -->
-        <div class="bg-blue-900 px-2 py-1 text-center text-white">
+        <div class="rounded-t-lg bg-blue-900 px-2 py-1 text-center text-white">
           {{ showSuggestions ? "Results" : "Recent Searches" }}
         </div>
 
