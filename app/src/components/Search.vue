@@ -249,7 +249,20 @@ onBeforeMount(() => {
         autocomplete="off"
         spellcheck="false"
         @input="updateQuery"
-        @keyup.enter="focusIndex >= 0 ? go(suggestions[focusIndex]) : null"
+        @keyup.enter="
+          ($event) => {
+            if (focusIndex < 0) {
+              focused = false;
+              focusIndex = -1;
+              ($event.target as HTMLInputElement).blur();
+            }
+            else if (showSuggestions) {
+              go(suggestions[focusIndex]);
+            } else {
+              go(recentSuggestions[recentSuggestions.length - 1 - focusIndex]);
+            }
+          }
+        "
         @keydown.down.prevent="focus(focusIndex + 1)"
         @keydown.up.prevent="focus(focusIndex - 1)"
         @keydown.escape="
@@ -362,7 +375,7 @@ onBeforeMount(() => {
           <!-- Display a message if there are no recent suggestions to show -->
           <div
             v-else-if="!showSuggestions && !recentSuggestions.length"
-            class="flex min-h-[125px] w-full flex-col justify-center bg-white text-center text-sm text-gray-500"
+            class="flex min-h-[102px] w-full flex-col justify-center bg-white text-center text-sm text-gray-500"
           >
             <p>No recent searches</p>
           </div>
