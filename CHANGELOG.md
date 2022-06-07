@@ -10,11 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Included GitHub CLI in devcontainer.
 
+### Fixed
+- Allow back button to navigate out of regvue by changing how to re-route at "/" ([#62](https://github.jpl.nasa.gov/regvue/regvue/pull/62)).
+
 ## [0.4.0] - 2022-06-06
 
 ### Added
 
-- Added ability to have design version not included in header by setting equal to empty string ([#45](https://github.jpl.nasa.gov/regvue/regvue/pull/45))
+- Added ability to have design version not included in header by setting equal to empty string ([#45](https://github.jpl.nasa.gov/regvue/regvue/pull/45)).
 - Added `CHANGELOG.md` ([#53](https://github.jpl.nasa.gov/regvue/regvue/pull/53)).
 - Made the display type selection buttons a button group with abbreviated names ([#41](https://github.jpl.nasa.gov/regvue/regvue/pull/41), [#43](https://github.jpl.nasa.gov/regvue/regvue/pull/43)).
 
