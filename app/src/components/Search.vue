@@ -199,6 +199,21 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
     recentSuggestions.value.splice(idx, 1);
   }
 };
+
+// Add a keyboard shortcut to open the search box
+onBeforeMount(() => {
+  document.addEventListener("keydown", (event: KeyboardEvent) => {
+    if ((event.ctrlKey || event.metaKey) && event.key == "k") {
+      event.preventDefault();
+
+      if (focused.value) {
+        (document.getElementById("search-input") as HTMLInputElement).blur();
+      } else {
+        (document.getElementById("search-input") as HTMLInputElement).focus();
+      }
+    }
+  });
+});
 </script>
 
 <template>
