@@ -215,7 +215,8 @@ onBeforeMount(() => {
       event.preventDefault();
 
       if (focused.value) {
-        (document.getElementById("search-input") as HTMLInputElement).blur();
+        focused.value = false;
+        focusIndex.value = -1;
       } else {
         (document.getElementById("search-input") as HTMLInputElement).focus();
       }
@@ -256,10 +257,6 @@ onBeforeMount(() => {
           focused = true;
           focusIndex = 0;
         "
-        @blur="
-          focused = false;
-          focusIndex = -1;
-        "
       />
     </div>
 
@@ -288,9 +285,8 @@ onBeforeMount(() => {
       focusIndex = -1;
     "
   >
-    <!-- Display the list of suggestions if showSuggestions is true -->
     <div
-      v-if="showSuggestions"
+      v-if="focused"
       id="search-suggestions-div"
       class="absolute z-40 m-0 h-screen w-screen bg-gray-300/50 p-0 text-left backdrop-blur-lg"
       @click="
@@ -299,57 +295,38 @@ onBeforeMount(() => {
       "
     >
       <div
-        class="relative top-9 m-auto mt-2 w-[450px] border border-black bg-white"
+        class="relative top-9 z-50 m-auto mt-2 w-[450px] border border-black bg-white"
       >
         <!-- Search results header -->
-        <div class="bg-blue-900 px-2 py-1 text-center text-white">Results</div>
-        <section
-          v-if="suggestions.length > 0"
-          class="max-h-[500px] overflow-y-scroll"
-        >
-          <!-- Display each individual suggestion -->
-          <SearchResult
-            v-for="(suggestion, i) in suggestions"
-            :key="suggestion.name + i"
-            :suggestion="suggestion"
-            :index="i"
-            :focus-index="focusIndex"
-            :query="query"
-            @mousedown="go(suggestion)"
-            @mouseenter="focus(i, false)"
-            @mouseleave="focus(-1, false)"
-          />
-        </section>
-
-        <!-- Display a section if there are no results -->
-        <section v-if="suggestions.length == 0">
-          <div class="my-10 bg-white text-center text-sm text-gray-500">
-            No results
-          </div>
-        </section>
-      </div>
-    </div>
-
-    <!-- If the query is empty ("") but the search box is focused show a list of recent searches -->
-    <div
-      v-else-if="focused"
-      id="search-recents-div"
-      class="absolute z-40 m-0 h-screen w-screen bg-gray-300/50 p-0 text-left backdrop-blur-lg"
-      @click="
-        focused = false;
-        focusIndex = -1;
-      "
-    >
-      <div
-        class="relative top-9 m-auto mt-2 w-[450px] border border-black bg-white"
-      >
-        <!-- Show recent searches section title -->
         <div class="bg-blue-900 px-2 py-1 text-center text-white">
-          Recent Searches
+          {{ showSuggestions ? "Results" : "Recent Searches" }}
         </div>
+
         <section class="max-h-[500px] overflow-y-scroll">
-          <!-- Display each individual recent suggestion -->
-          <template v-if="recentSuggestions.length">
+          <!-- Display the search results if available and showSuggestions is true -->
+          <template v-if="showSuggestions && suggestions.length > 0">
+            <SearchResult
+              v-for="(suggestion, i) in suggestions"
+              :key="suggestion.name + i"
+              :suggestion="suggestion"
+              :index="i"
+              :focus-index="focusIndex"
+              :query="query"
+              @mousedown="go(suggestion)"
+              @mouseenter="focus(i, false)"
+              @mouseleave="focus(-1, false)"
+            />
+          </template>
+
+          <!-- Display a section if there are no results -->
+          <template v-else-if="showSuggestions && suggestions.length == 0">
+            <div class="my-10 bg-white text-center text-sm text-gray-500">
+              No results
+            </div>
+          </template>
+
+          <!-- Display the recent searches if available and showSuggestions is false -->
+          <template v-else-if="!showSuggestions && recentSuggestions.length">
             <div
               v-for="(suggestion, i) in recentSuggestions.slice().reverse()"
               :key="suggestion.name + i"
@@ -368,8 +345,8 @@ onBeforeMount(() => {
               />
               <!-- Show an "x" button on the right side that will remove the recent suggestion -->
               <button
-                class="z-50 pl-3 pr-1 text-gray-500 hover:cursor-pointer"
-                @click.stop="removeRecentSuggestion(suggestion)"
+                class="z-[60] border-b border-gray-300 pl-3 pr-1 text-gray-500 hover:cursor-pointer"
+                @click.stop.prevent="removeRecentSuggestion(suggestion)"
               >
                 x
               </button>
@@ -378,7 +355,7 @@ onBeforeMount(() => {
 
           <!-- Display a message if there are no recent suggestions to show -->
           <div
-            v-else
+            v-else-if="!showSuggestions && !recentSuggestions.length"
             class="flex min-h-[125px] w-full flex-col justify-center bg-white text-center text-sm text-gray-500"
           >
             <p>No recent searches</p>
