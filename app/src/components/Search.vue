@@ -217,6 +217,7 @@ onBeforeMount(() => {
       if (focused.value) {
         focused.value = false;
         focusIndex.value = -1;
+        (document.getElementById("search-input") as HTMLInputElement).blur();
       } else {
         (document.getElementById("search-input") as HTMLInputElement).focus();
       }
@@ -326,17 +327,19 @@ onBeforeMount(() => {
           </template>
 
           <!-- Display the recent searches if available and showSuggestions is false -->
-          <template v-else-if="!showSuggestions && recentSuggestions.length">
+          <div
+            v-else-if="!showSuggestions && recentSuggestions.length"
+            class="mb-4"
+          >
             <div
               v-for="(suggestion, i) in recentSuggestions.slice().reverse()"
               :key="suggestion.name + i"
-              class="flex flex-row justify-between hover:bg-gray-200"
-              :class="focusIndex == i ? 'bg-gray-200 ' : ''"
+              class="flex flex-row justify-between"
               @mouseenter="focus(i, false)"
               @mouseleave="focus(-1, false)"
             >
               <SearchResult
-                class="grow"
+                class="mr-0 mb-0 grow"
                 :suggestion="suggestion"
                 :index="i"
                 :focus-index="focusIndex"
@@ -345,13 +348,13 @@ onBeforeMount(() => {
               />
               <!-- Show an "x" button on the right side that will remove the recent suggestion -->
               <button
-                class="z-[60] border-b border-gray-300 pl-3 pr-1 text-gray-500 hover:cursor-pointer"
+                class="z-[60] mt-3 px-3 text-gray-500 hover:cursor-pointer"
                 @click.stop.prevent="removeRecentSuggestion(suggestion)"
               >
                 x
               </button>
             </div>
-          </template>
+          </div>
 
           <!-- Display a message if there are no recent suggestions to show -->
           <div
@@ -361,6 +364,47 @@ onBeforeMount(() => {
             <p>No recent searches</p>
           </div>
         </section>
+
+        <!-- Display the navigation options as icons -->
+        <div
+          class="flex flex-row content-center justify-between space-x-2 border-t border-gray-300 p-2 text-gray-400"
+        >
+          <!-- Display the select icon -->
+          <div class="flex flex-row">
+            <div
+              class="mt-[0.125rem] mr-1 h-5 w-5 rounded bg-gray-200 text-gray-800"
+            >
+              <div class="m-auto mt-1 h-fit w-fit text-sm">↩</div>
+            </div>
+            <div>select</div>
+          </div>
+
+          <!-- Display the navigation icons -->
+          <div class="flex flex-row">
+            <!-- <arrow-left-bottom id="select-icon" /> -->
+            <div
+              class="mt-[0.125rem] mr-1 h-5 w-5 rounded bg-gray-200 text-gray-800"
+            >
+              <div class="m-auto h-fit w-fit text-sm">↑</div>
+            </div>
+            <div
+              class="mt-[0.125rem] mr-1 h-5 w-5 rounded bg-gray-200 text-gray-800"
+            >
+              <div class="m-auto h-fit w-fit text-sm">↓</div>
+            </div>
+            <span>navigate</span>
+          </div>
+
+          <!-- Display the exit icon -->
+          <div class="flex flex-row">
+            <div
+              class="mt-[0.125rem] mr-1 flex h-5 w-7 justify-center rounded bg-gray-200 text-gray-800"
+            >
+              <div class="h-fit w-fit text-sm">esc</div>
+            </div>
+            <div>exit</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -370,5 +414,17 @@ onBeforeMount(() => {
 /* Make apple-keyboard-command icon smaller */
 #apple-command-key > svg {
   width: 1rem;
+}
+
+#navigation-icon > svg {
+  stroke: white;
+  stroke-width: 0.5px;
+  width: 1.5rem;
+}
+
+#select-icon > svg {
+  width: 1.25rem;
+  stroke: white;
+  stroke-width: 0.5px;
 }
 </style>

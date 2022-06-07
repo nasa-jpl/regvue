@@ -82,8 +82,8 @@ const boldMatchingText = (text: string, query: string, replaceAll = true) => {
 <template>
   <div
     :id="'suggestion-' + index"
-    class="max-h-[6rem] overflow-x-hidden border-b border-gray-300 px-2 text-sm hover:cursor-pointer hover:bg-gray-200"
-    :class="focusIndex == index ? 'bg-gray-200' : ''"
+    class="m-4 max-h-[6rem] overflow-x-hidden rounded border border-gray-300 bg-gray-100 px-2 text-sm hover:cursor-pointer hover:bg-gray-200"
+    :class="focusIndex == index ? 'outline outline-2 outline-blue-500' : ''"
   >
     <!-- Show the name of the suggestion and truncate if too long -->
     <div :title="suggestion.name" class="flex flex-row justify-between">
