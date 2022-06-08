@@ -128,7 +128,9 @@ const onNodeSelect = (key: string) => {
 </script>
 
 <template>
-  <div class="text-md flex flex-shrink-0 flex-col overflow-y-scroll border-r-2">
+  <div
+    class="text-md mt-[1px] flex flex-shrink-0 flex-col overflow-y-scroll border-r-2"
+  >
     <!-- Show the nodes -->
     <div v-for="node in nodes" :key="node.key">
       <!--  Display only if the node is marked visible -->
