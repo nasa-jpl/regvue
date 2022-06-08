@@ -34,7 +34,7 @@ router.beforeEach(async (to) => {
     try {
       // Load the data file from the query
       if (to.query?.data) {
-        await store.load(to.query.data as string);
+        await store.loadUrl(to.query.data as string);
       } else {
         throw new Error();
       }
@@ -46,28 +46,26 @@ router.beforeEach(async (to) => {
   // Check if the data query has changed and the store needs to be reloaded
   if (to.query?.data && store.path != to.query.data) {
     try {
-      await store.load(to.query.data as string);
+      await store.loadUrl(to.query.data as string);
     } catch {
       return { name: "upload" };
     }
   }
 
   // Go to the first register entry if store is loaded and at root
-  if (to.path == "/" && store.loaded && to.query?.data == store.path) {
-    return {
-      name: "reg",
-      params: { regid: store.getFirstRegister() },
-      query: { data: store.path },
-    };
-  }
-
-  // If the store is loaded but there is no data query add one
-  if (to.path != "/upload" && store.loaded && !to.query.data) {
-    return {
-      name: to.name || "reg",
-      params: to.params,
-      query: { data: store.path, ...to.query },
-    };
+  if (to.path == "/" && store.loaded) {
+    if (store.path) {
+      return {
+        name: "reg",
+        params: { regid: store.getFirstRegister() },
+        query: { data: store.path },
+      };
+    } else {
+      return {
+        name: "reg",
+        params: { regid: store.getFirstRegister() },
+      };
+    }
   }
 });
 
