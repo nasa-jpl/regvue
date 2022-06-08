@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref, computed, watch } from "vue";
+import store from "../store";
 import Search from "./Search.vue";
 import HamburgerMenu from "vue-material-design-icons/Menu.vue";
 
@@ -10,11 +12,49 @@ defineProps<{
     text: string;
   }[];
 }>();
+
 const emit = defineEmits(["toggle-menu"]);
+
+let sharedState = ref(store.sharedState);
+
+const title = computed(
+  () =>
+    (sharedState?.value?.data?.root?.display_name as string) ||
+    "display_name undefined"
+);
+
+const version = computed(() => {
+  if (
+    sharedState?.value?.data?.root?.version ||
+    sharedState?.value?.data?.root?.version == ""
+  ) {
+    return sharedState.value.data.root.version;
+  }
+
+  return "version undefined";
+});
+
+const links = computed(() => {
+  let o = sharedState?.value?.data?.root?.links;
+
+  if (o != null) {
+    return Object.entries(o).map(([k, v]) => {
+      let e = { href: v, text: k };
+      return e;
+    });
+  }
+
+  return [];
+});
+
+watch(
+  () => title.value,
+  () => (document.title = "regvue - " + title.value)
+);
 </script>
 
 <template>
-  <div>
+  <div v-if="sharedState.data">
     <div id="header-bar" class="border-b border-gray-400 bg-gray-300 py-2">
       <ul
         class="flex flex-row justify-between font-medium text-black sm:text-lg md:text-xl"

@@ -13,67 +13,12 @@ const appInfo = {
   version: packageInfo.version,
 };
 
-// Load the data.json file into the store object
-store.load("data.json");
-let sharedState = ref(store.sharedState);
-
-// Control whether or not to show navigation menu
 let showMenu = ref(true);
-
-// Parse the data field of sharedState for display variables
-const title = computed(
-  () =>
-    (sharedState?.value?.data?.root?.display_name as string) ||
-    "display_name undefined"
-);
-
-const version = computed(() => {
-  if (
-    sharedState?.value?.data?.root?.version ||
-    sharedState?.value?.data?.root?.version == ""
-  ) {
-    return sharedState.value.data.root.version;
-  }
-
-  return "version undefined";
-});
-
-const links = computed(() => {
-  let o = sharedState?.value?.data?.root?.links;
-
-  if (o != null) {
-    return Object.entries(o).map(([k, v]) => {
-      let e = { href: v, text: k };
-      return e;
-    });
-  }
-
-  return [];
-});
-
-watch(
-  () => title.value,
-  () => (document.title = "regvue - " + title.value)
-);
 </script>
 
 <template>
   <div class="overflow-hidden text-[#2c3e50]">
-    <Header
-      :title="title"
-      :version="version"
-      :links="links"
-      class="h-11"
-      @toggle-menu="showMenu = !showMenu"
-    />
-
-    <div class="app-body-height flex flex-row">
-      <!-- Show the navigation menu on the left -->
-      <Menu
-        :nodes="sharedState.nodes"
-        class="w-[21rem] bg-white pb-1"
-        :class="!showMenu ? 'hidden' : ''"
-      />
+    <Header class="h-11" @toggle-menu="showMenu = !showMenu" />
 
       <!-- Show the main window -->
       <div class="mt-4 flex-grow overflow-y-scroll">
