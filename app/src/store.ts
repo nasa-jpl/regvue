@@ -1,5 +1,11 @@
 import { reactive } from "vue";
-import { MenuNode, Register, RegisterField, SharedState } from "./types";
+import {
+  DisplayType,
+  MenuNode,
+  Register,
+  RegisterField,
+  SharedState,
+} from "./types";
 import format from "./format";
 
 export default {
@@ -10,6 +16,8 @@ export default {
   } as unknown as SharedState),
 
   loaded: false,
+  useByteSwap: false,
+  selectedDisplayType: "hexadecimal" as DisplayType,
 
   async load(filename: string) {
     const result = await fetch(filename);
@@ -91,5 +99,14 @@ export default {
         return key;
       }
     }
+  },
+
+  setSelectedDisplayType(value: DisplayType) {
+    this.selectedDisplayType = value;
+  },
+
+  setUseByteSwap(value: boolean) {
+    this.useByteSwap = value;
+    console.log("updated useByteSwap");
   },
 };

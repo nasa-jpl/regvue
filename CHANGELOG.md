@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Included GitHub CLI in devcontainer.
 
 ### Fixed
+- Persist the select display type and byte swap option on page reload ([#68](https://github.jpl.nasa.gov/regvue/regvue/pull/68)).
 - Allow back button to navigate out of regvue by changing how to re-route at "/" ([#62](https://github.jpl.nasa.gov/regvue/regvue/pull/62)).
 
 ## [0.4.0] - 2022-06-06
