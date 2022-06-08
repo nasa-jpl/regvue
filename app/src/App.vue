@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
-import store from "./store";
+import { ref } from "vue";
 import packageInfo from "../package.json";
 
 import AppVersion from "./components/AppVersion.vue";
 import Header from "./components/Header.vue";
-import Menu from "./components/Menu.vue";
 
 const appInfo = {
   name: packageInfo.name,
@@ -20,19 +18,16 @@ let showMenu = ref(true);
   <div class="overflow-hidden text-[#2c3e50]">
     <Header class="h-11" @toggle-menu="showMenu = !showMenu" />
 
-      <!-- Show the main window -->
-      <div class="mt-4 flex-grow overflow-y-scroll">
-        <router-view class="pb-10" />
+    <!-- Show the main window -->
+    <router-view class="pb-10" :show-menu="showMenu" />
 
-        <!-- Display a link to the GitHub repo at the bottom right of the page -->
-        <AppVersion
-          :url="appInfo.url"
-          :name="appInfo.name"
-          :version="appInfo.version"
-          class="absolute bottom-4 right-4"
-        />
-      </div>
-    </div>
+    <!-- Display a link to the GitHub repo at the bottom right of the page -->
+    <AppVersion
+      :url="appInfo.url"
+      :name="appInfo.name"
+      :version="appInfo.version"
+      class="absolute bottom-4 right-4"
+    />
   </div>
 </template>
 
@@ -42,10 +37,5 @@ let showMenu = ref(true);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100vh;
-}
-
-.app-body-height {
-  /* Full screen height minus the height of the header */
-  height: calc(100vh - 2.75rem);
 }
 </style>
