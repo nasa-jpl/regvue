@@ -60,6 +60,15 @@ router.beforeEach(async (to) => {
       query: { data: store.path },
     };
   }
+
+  // If the store is loaded but there is no data query add one
+  if (to.path != "/upload" && store.loaded && !to.query.data) {
+    return {
+      name: to.name || "reg",
+      params: to.params,
+      query: { data: store.path, ...to.query },
+    };
+  }
 });
 
 export default router;
