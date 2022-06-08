@@ -12,7 +12,9 @@ const appInfo = {
 <template>
   <div class="overflow-hidden text-[#2c3e50]">
     <!-- Show the main window -->
-    <router-view class="pb-10" />
+    <div class="pb-10">
+      <router-view />
+    </div>
 
     <!-- Display a link to the GitHub repo at the bottom right of the page -->
     <AppVersion

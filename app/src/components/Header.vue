@@ -4,7 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import store from "../store";
 import Search from "./Search.vue";
 
-import FileReplace from "vue-material-design-icons/FileReplace.vue";
+import FileReplaceOutline from "vue-material-design-icons/FileReplaceOutline.vue";
 import HamburgerMenu from "vue-material-design-icons/Menu.vue";
 
 defineProps<{
@@ -79,30 +79,29 @@ watch(
           {{ title }}
           <template v-if="version != ''">({{ version }})</template>
         </div>
-
-        <!-- TODO show a modal instead -->
-        <!-- Show pencil icon to route to /upload -->
-
-        <file-replace
-          class="text-gray-600 hover:cursor-pointer hover:bg-gray-400"
-          title="Upload a new design file"
-          @click="() => router.push({ name: 'upload' })"
-        />
       </div>
 
       <Search />
 
       <div
         id="header-links"
-        class="mr-6 flex flex-row space-x-6 text-gray-600 sm:text-sm lg:text-base"
+        class="mr-6 flex flex-row items-center space-x-6 text-gray-600 sm:text-sm lg:text-base"
       >
         <a
           v-for="link in links"
           :key="link?.text"
           :href="link?.href"
-          class="m-auto h-fit hover:text-gray-500 hover:underline sm:text-sm md:text-base"
+          class="hover:text-gray-500 hover:underline sm:text-sm md:text-base"
           >{{ link?.text }}</a
         >
+
+        <!-- TODO show a modal instead -->
+        <!-- Show icon to route to /upload -->
+        <file-replace-outline
+          class="text-gray-600 hover:cursor-pointer hover:bg-gray-400"
+          title="Upload a new design file"
+          @click="() => router.push({ name: 'upload' })"
+        />
       </div>
     </div>
   </div>

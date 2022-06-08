@@ -11,7 +11,6 @@ import RegLayout from "../components/RegLayout.vue";
 
 const props = defineProps<{
   regid: string;
-  showMenu: boolean;
 }>();
 
 const route = useRoute();
