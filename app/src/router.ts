@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import store from "./store";
 import Default from "./views/Default.vue";
 import RegView from "./views/RegView.vue";
+import UploadView from "./views/UploadView.vue";
 
 const routes = [
   {
@@ -14,6 +15,11 @@ const routes = [
     path: "/reg/:regid",
     component: RegView,
     props: true,
+  },
+  {
+    name: "upload",
+    path: "/upload",
+    component: UploadView,
   },
 ];
 
