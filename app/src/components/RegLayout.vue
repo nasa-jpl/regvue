@@ -3,6 +3,7 @@ import { ref, Ref, nextTick, watch } from "vue";
 import { useRoute } from "vue-router";
 import { RegisterField, type DisplayType } from "../types";
 import parse from "../parse";
+import store from "../store";
 
 import FieldInputBox from "./FieldInputBox.vue";
 import FieldName from "./FieldName.vue";
@@ -21,11 +22,11 @@ const emit = defineEmits([
 let registerValue = ref(0);
 
 // Control whether or not to display LSB or MSB first
-let useByteSwap = ref(false);
+let useByteSwap = ref(store.useByteSwap);
 
 // Control what base the field/register values should be displayed in
-let selectedDisplayType: Ref<DisplayType> = ref("hexadecimal");
-let displayTypes = ["binary", "decimal", "hexadecimal"];
+let selectedDisplayType: Ref<DisplayType> = ref(store.selectedDisplayType);
+let displayTypes: DisplayType[] = ["binary", "decimal", "hexadecimal"];
 
 // Index variables that can be incremeneted to force a reload of the child
 // FieldInputBox components
@@ -51,7 +52,20 @@ const byteSwap = (value: number) => {
 // of register value
 const toggleByteSwap = () => {
   useByteSwap.value = !useByteSwap.value;
+  // Update store value so value persists on rerender
+  store.setUseByteSwap(useByteSwap.value);
+
   updateRegisterValue();
+  registerKeyIndex.value += 1;
+};
+
+const updateDisplayType = (displayType: DisplayType) => {
+  selectedDisplayType.value = displayType;
+  // Update store value so value persists on rerender
+  store.setSelectedDisplayType(displayType);
+
+  // Force a rerender of both field and register display values
+  fieldKeyIndex.value += 1;
   registerKeyIndex.value += 1;
 };
 
@@ -223,7 +237,7 @@ watch(
               i == displayTypes.length - 1 ? 'rounded-r' : '',
             ]"
             :title="`Change display type to ${displayType}`"
-            @click="selectedDisplayType = (displayType as DisplayType); fieldKeyIndex += 1; registerKeyIndex += 1;"
+            @click="updateDisplayType(displayType)"
           >
             <!-- Display first letter capitalized -->
             {{ displayType.substring(0, 1).toUpperCase() }}
