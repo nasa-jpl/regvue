@@ -1,3 +1,5 @@
+import { LocationQueryValue } from "vue-router";
+
 // Interface representing the attributes of the root project description
 export interface DesignRoot {
   display_name: string;
@@ -58,7 +60,7 @@ export interface Suggestion {
       regid: string;
     };
     query?: {
-      field: string;
+      [key: string]: string | LocationQueryValue | LocationQueryValue[];
     };
   };
 }

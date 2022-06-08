@@ -123,6 +123,7 @@ const onNodeSelect = (key: string) => {
   router.push({
     name: "reg",
     params: { regid: key },
+    query: { data: route.query.data },
   });
 };
 </script>

@@ -80,13 +80,12 @@ watch(
 
         <!-- TODO show a modal instead -->
         <!-- Show pencil icon to route to /upload -->
-        <a
+
+        <file-replace
           class="text-gray-600 hover:cursor-pointer hover:bg-gray-400"
           title="Upload a new design file"
-          :href="router.resolve('/upload').href"
-        >
-          <file-replace />
-        </a>
+          @click="() => router.push({ name: 'upload' })"
+        />
       </div>
 
       <Search />

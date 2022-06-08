@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, Ref, computed, onBeforeMount } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import store from "../store";
 import { createSearchIndex } from "../search";
 import { Suggestion } from "../types";
@@ -11,6 +11,8 @@ import Magnify from "vue-material-design-icons/Magnify.vue";
 import SearchResult from "./SearchResult.vue";
 
 const sharedState = ref(store.sharedState);
+
+const route = useRoute();
 const router = useRouter();
 
 // Create the search object
@@ -89,7 +91,7 @@ let suggestions = computed(() => {
       const path = {
         name: "reg",
         params: { regid: regid },
-        query: { field: fieldName },
+        query: { field: fieldName, data: route.query.data },
       };
 
       const suggestion = {
@@ -106,6 +108,7 @@ let suggestions = computed(() => {
       const path = {
         name: "reg",
         params: { regid: id },
+        query: { data: route.query.data },
       };
 
       const suggestion = {

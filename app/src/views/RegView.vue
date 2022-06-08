@@ -38,18 +38,22 @@ let doc = computed(() => {
   }
 });
 
-const selectField = (fieldName: string, newValue: boolean) => {
+const selectField = (fieldName: string) => {
   const regid = route?.params?.regid;
   const fieldParam = route?.query?.field;
 
-  if (fieldParam != fieldName && newValue) {
+  if (fieldParam != fieldName) {
     router.push({
       name: "reg",
       params: { regid: regid },
-      query: { field: fieldName },
+      query: { field: fieldName, data: route.query.data },
     });
   } else {
-    router.push({ name: "reg", params: { regid: regid } });
+    router.push({
+      name: "reg",
+      params: { regid: regid },
+      query: { data: route.query.data },
+    });
   }
 };
 
