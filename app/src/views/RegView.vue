@@ -9,11 +9,15 @@ import RegLayout from "../components/RegLayout.vue";
 
 const props = defineProps<{
   regid: string;
-  fieldName?: string;
 }>();
 
+const route = useRoute();
+const router = useRouter();
+
 let sharedState = store.sharedState as SharedState;
-let selectedField = ref(props.fieldName);
+let selectedField = ref(
+  route.query?.field ? (route.query.field as string) : ""
+);
 
 let reg = computed(() => {
   if (sharedState.data) {
@@ -32,16 +36,15 @@ let doc = computed(() => {
   }
 });
 
-const route = useRoute();
-const router = useRouter();
 const selectField = (fieldName: string, newValue: boolean) => {
   const regid = route?.params?.regid;
-  const fieldParam = route?.params?.fieldName;
+  const fieldParam = route?.query?.field;
 
   if (fieldParam != fieldName && newValue) {
     router.push({
-      name: "field",
-      params: { regid: regid, fieldName: fieldName },
+      name: "reg",
+      params: { regid: regid },
+      query: { field: fieldName },
     });
   } else {
     router.push({ name: "reg", params: { regid: regid } });
@@ -49,20 +52,18 @@ const selectField = (fieldName: string, newValue: boolean) => {
 };
 
 const highlightField = (fieldName: string) => {
-  if (!props.fieldName) {
+  if (!route.query.field) {
     selectedField.value = fieldName;
   }
 };
 
 const stopHighlightField = () => {
-  selectedField.value = props.fieldName;
+  selectedField.value = route.query?.field ? (route.query.field as string) : "";
 };
 
 watch(
-  () => route.params.fieldName,
-  (newValue) => {
-    selectedField.value = newValue as string;
-  }
+  () => route.query.field,
+  (newValue) => (selectedField.value = newValue as string)
 );
 </script>
 

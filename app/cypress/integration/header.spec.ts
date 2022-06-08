@@ -25,6 +25,6 @@ describe("header-component", () => {
       .children()
       .should("have.length", Object.keys(data.root.links).length);
 
-    cy.get("#search-box").should("exist");
+    cy.get("#search-input").should("exist");
   });
 });

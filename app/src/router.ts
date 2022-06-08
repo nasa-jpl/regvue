@@ -15,12 +15,6 @@ const routes = [
     component: RegView,
     props: true,
   },
-  {
-    name: "field",
-    path: "/reg/:regid/field/:fieldName",
-    component: RegView,
-    props: true,
-  },
 ];
 
 const router = createRouter({

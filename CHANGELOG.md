@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Added a variety of new search features ([#64](https://github.jpl.nasa.gov/regvue/regvue/pull/64))
+  - Added ability to search for blocks and fields
+  - Added ability to search by full hierarchical name (e.g. block.reg.field)
+  - Added ability to search by address
+  - Added a keyboard shortcut to open the search box and icon to indicate the new shortcut
+    - Defaults to CMD + K for Mac and Ctrl + K for Windows
+  - Added icons to show available navigation keys that can be used in the search window
+  - Improved the UI by adding outlines, better spaced margins, rounded corners, and a magnifying glass icon
 - Included GitHub CLI in devcontainer.
 
 ### Fixed

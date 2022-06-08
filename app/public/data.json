@@ -168,7 +168,7 @@
       "name": "regA3"
     },
     "blkA.sub_blkA.regA4": {
-      "addr": 12,
+      "addr": 16,
       "doc": "regA4 - An example register.",
       "fields": [
         {
@@ -185,7 +185,7 @@
       "name": "regA4"
     },
     "blkA.sub_blkA.regA5": {
-      "addr": 12,
+      "addr": 20,
       "doc": "regA5 - An example register.",
       "fields": [
         {
@@ -202,7 +202,7 @@
       "name": "regA5"
     },
     "blkB": {
-      "addr": 16,
+      "addr": 24,
       "type": "blk",
       "children": [
         "blkB.regB0"
@@ -211,7 +211,7 @@
       "id": "blkB"
     },
     "blkB.regB0": {
-      "addr": 16,
+      "addr": 24,
       "doc": "regB0 - An example register.",
       "fields": [
         {

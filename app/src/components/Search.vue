@@ -1,11 +1,23 @@
 <script setup lang="ts">
-import { ref, Ref, computed } from "vue";
+import { ref, Ref, computed, onBeforeMount } from "vue";
 import { useRouter } from "vue-router";
-import { Suggestion } from "../types";
 import store from "../store";
+import { createSearchIndex } from "../search";
+import { Suggestion } from "../types";
+import { Index, Query } from "lunr";
+
+import AppleKeyboardCommand from "vue-material-design-icons/AppleKeyboardCommand.vue";
+import Magnify from "vue-material-design-icons/Magnify.vue";
+import SearchResult from "./SearchResult.vue";
 
 const sharedState = ref(store.sharedState);
 const router = useRouter();
+
+// Create the search object
+let searchObject: Index;
+onBeforeMount(async () => {
+  searchObject = await createSearchIndex();
+});
 
 // Search query
 let query = ref("");
@@ -19,65 +31,89 @@ let focusIndex = ref(0);
 // Array used to keep track of recently selected suggestions
 let recentSuggestions: Ref<Suggestion[]> = ref([]);
 
-// Create a list of entires that have register or field names that
-// contain the query text
+// Create a list of entires that match the search query
 let suggestions = computed(() => {
-  const formattedQuery = query.value.trim().toLowerCase();
-
-  let res = {
-    regs: [] as Suggestion[],
-    fields: [] as Suggestion[],
-    all: [] as Suggestion[],
-  };
-
+  let res: Suggestion[] = [];
   if (!sharedState.value.data || !sharedState.value.fields) {
     return res;
   }
 
-  // Registers
-  for (let id in sharedState.value?.data?.elements) {
-    let item = sharedState.value.data.elements[id];
+  // Remove whitespace and make the search query lowercase
+  const term = query.value.trim().toLowerCase();
 
-    if (
-      item.type == "reg" &&
-      item.name.toLowerCase().includes(formattedQuery)
-    ) {
-      let path = {
+  // Search for index entries that match the formatted query
+  const searchResults = searchObject.query((q: Query) => {
+    q.term(term, { boost: 100 }); // exact match
+    q.term(term, {
+      usePipeline: false,
+      wildcard: Query.wildcard.LEADING | Query.wildcard.TRAILING,
+      boost: 50,
+    }); // contains the query, no formatting
+
+    // fuzzy search if the query is longer than 3 characters
+    if (term.length > 3) {
+      q.term(term, {
+        editDistance: 2,
+      });
+      q.term(term, {
+        usePipeline: false,
+        wildcard: Query.wildcard.LEADING | Query.wildcard.TRAILING,
+        editDistance: 2,
+      });
+    }
+  });
+
+  // Limit the amount of search results to return (helps decrease render lag)
+  searchResults.length = Math.min(searchResults.length, 25);
+
+  // Sort elements with same search score alphabetically
+  searchResults.sort((a, b) => {
+    if (a.score > b.score) {
+      return -1;
+    } else if (b.score > a.score) {
+      return 1;
+    } else {
+      return a.ref.localeCompare(b.ref);
+    }
+  });
+
+  // Create a Suggestion object for each query result
+  for (const result of searchResults) {
+    const id = result.ref;
+
+    if (id.includes(":")) {
+      // Fields will have the id "<reg id>:<field name>"
+      const regid = id.split(":")[0];
+      const fieldName = id.split(":")[1];
+
+      const path = {
+        name: "reg",
+        params: { regid: regid },
+        query: { field: fieldName },
+      };
+
+      const suggestion = {
+        type: "field" as Suggestion["type"],
+        name: fieldName,
+        path: path,
+      };
+      res.push(suggestion);
+    } else {
+      // Otherwise it is a register/mem entry
+
+      const item = sharedState.value.data.elements[id];
+
+      const path = {
         name: "reg",
         params: { regid: id },
       };
 
-      let suggestion = {
-        type: "Register",
-        name: id,
-        path: path,
-      };
-
-      res.regs.push(suggestion);
-      res.all.push(suggestion);
-    }
-  }
-
-  // Fields
-  for (let [field_id, element_id] of sharedState.value.fields) {
-    let fieldName = field_id.replace(/.*\./, "");
-    if (fieldName.toLowerCase().includes(formattedQuery)) {
-      const path = {
-        name: "field",
-        params: {
-          regid: element_id,
-          fieldName: fieldName,
-        },
-      };
-
       const suggestion = {
-        type: "Field",
-        name: field_id,
+        type: item.type,
+        name: item.name,
         path: path,
       };
-
-      res.fields.push(suggestion);
-      res.all.push(suggestion);
+      res.push(suggestion);
     }
   }
 
@@ -88,6 +124,29 @@ let suggestions = computed(() => {
 let showSuggestions = computed(() => {
   return focused.value && query.value != "" && suggestions.value;
 });
+
+const isMac = navigator.userAgent.includes("Mac");
+
+const focusOnInput = () => {
+  (document.getElementById("search-input") as HTMLInputElement).focus();
+};
+
+// Update the query value
+let timer: number;
+const updateQuery = () => {
+  clearTimeout(timer);
+  const elem = document.getElementById("search-input") as HTMLInputElement;
+
+  // Add a buffer before updating if query is small to prevent lag from
+  // multiple searches for small queries
+  if (elem.value.length < 3) {
+    timer = setTimeout(() => {
+      query.value = elem.value;
+    }, 250); // delay updating the value by this amount in milliseconds
+  } else {
+    query.value = elem.value;
+  }
+};
 
 // Change the route to go to the selected suggestion
 const go = (suggestion: Suggestion) => {
@@ -111,7 +170,7 @@ const go = (suggestion: Suggestion) => {
   focused.value = false;
 };
 
-const focus = (i: number) => {
+const focus = (i: number, scrollIntoView = true) => {
   // The lowest focusIndex should be -1 for "unfocused"
   if (i < -1) {
     i = -1;
@@ -119,8 +178,8 @@ const focus = (i: number) => {
 
   // Perform checks to ensure the focusIndex doesn't go out of bounds
   if (showSuggestions.value) {
-    if (i > suggestions.value.all.length - 1) {
-      i = suggestions.value.all.length - 1;
+    if (i > suggestions.value.length - 1) {
+      i = suggestions.value.length - 1;
     }
   } else {
     if (i > recentSuggestions.value.length - 1) {
@@ -130,9 +189,10 @@ const focus = (i: number) => {
 
   focusIndex.value = i;
 
-  // Scroll the new focused element into view
-  const elem = document.getElementById(`suggestion-${focusIndex.value}`);
-  elem?.scrollIntoView({ block: "end" });
+  if (scrollIntoView) {
+    const elem = document.getElementById("suggestion-" + i);
+    elem?.scrollIntoView({ block: "nearest" });
+  }
 };
 
 // Removes a suggestion from the recentSuggestions array if present
@@ -147,45 +207,103 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
     recentSuggestions.value.splice(idx, 1);
   }
 };
+
+// Add a keyboard shortcut to open the search box
+onBeforeMount(() => {
+  document.addEventListener("keydown", (event: KeyboardEvent) => {
+    if ((event.ctrlKey || event.metaKey) && event.key == "k") {
+      event.preventDefault();
+
+      if (focused.value) {
+        focused.value = false;
+        focusIndex.value = -1;
+        (document.getElementById("search-input") as HTMLInputElement).blur();
+      } else {
+        (document.getElementById("search-input") as HTMLInputElement).focus();
+      }
+    }
+  });
+});
 </script>
 
 <template>
+  <!-- Show the input box display area -->
   <div
-    class="absolute z-40 mr-4 w-screen rotate-0 text-center text-base"
+    class="z-50 flex h-fit w-56 flex-row justify-between rounded bg-white px-1 lg:absolute lg:left-[50%] lg:top-0 lg:mt-[0.3625rem] lg:translate-x-[-50%]"
+    :class="focused ? 'outline outline-2 outline-blue-500' : ''"
+    @click="focusOnInput"
+  >
+    <!-- Display the magnifying icon and input box on the left -->
+    <div class="flex flex-row">
+      <!-- Show a magnifying glass icon -->
+      <magnify class="mt-[0.0625rem] mr-1 text-gray-400" />
+
+      <!-- Show the input box that is bound to the query string -->
+      <input
+        id="search-input"
+        :value="query"
+        type="search"
+        aria-label="Search"
+        placeholder="Search"
+        class="my-1 text-sm focus:outline-none sm:w-20 md:w-36"
+        autocomplete="off"
+        spellcheck="false"
+        @input="updateQuery"
+        @keyup.enter="
+          ($event) => {
+            if (focusIndex < 0) {
+              focused = false;
+              focusIndex = -1;
+              ($event.target as HTMLInputElement).blur();
+            }
+            else if (showSuggestions) {
+              go(suggestions[focusIndex]);
+            } else {
+              go(recentSuggestions[recentSuggestions.length - 1 - focusIndex]);
+            }
+          }
+        "
+        @keydown.down.prevent="focus(focusIndex + 1)"
+        @keydown.up.prevent="focus(focusIndex - 1)"
+        @keydown.escape="
+          focused = false;
+          focusIndex = -1;
+          ($event.target as HTMLElement).blur();
+        "
+        @focus="
+          focused = true;
+          focusIndex = 0;
+        "
+      />
+    </div>
+
+    <!-- Display the keyboard shortcut to focus the search box on the right -->
+    <div class="my-auto">
+      <!-- Only show the shortcut if the input isn't focused -->
+      <div
+        v-if="!focused"
+        class="flex h-fit flex-row rounded bg-gray-200 px-1 text-base text-gray-500/80"
+      >
+        <!-- Change the displayed icon based on if mac or windows -->
+        <template v-if="isMac">
+          <apple-keyboard-command id="apple-command-key" />
+          <span class="mt-[0.05rem] text-[0.99rem]">K</span>
+        </template>
+        <div v-else id="window-ctrl-key" class="text-[0.8rem]">Ctrl+K</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Show grayed-out the background and suggestions window when the input is focused -->
+  <div
+    class="absolute top-2 z-40 mr-4 w-screen rotate-0 text-center text-base"
     @keydown.escape="
       focused = false;
       focusIndex = -1;
     "
   >
-    <!-- Show the input box that is bound to the query string -->
-    <input
-      id="search-input"
-      v-model="query"
-      type="search"
-      aria-label="Search"
-      placeholder="Search"
-      class="absolute top-2 z-50 translate-x-[-50%] p-1 text-sm"
-      autocomplete="off"
-      spellcheck="false"
-      @keyup.enter="go(suggestions.all[focusIndex])"
-      @keydown.down="focus(focusIndex + 1)"
-      @keydown.up="focus(focusIndex - 1)"
-      @keydown.left.prevent="focus(0)"
-      @keydown.right.prevent="
-        showSuggestions
-          ? focus(suggestions.all.length - 1)
-          : focus(recentSuggestions.length - 1)
-      "
-      @keydown.escape="($event.target as HTMLElement).blur()"
-      @focus="
-        focused = true;
-        focusIndex = 0;
-      "
-    />
-
-    <!-- Display the list of suggestions if showSuggestions is true -->
     <div
-      v-if="showSuggestions"
+      v-if="focused"
       id="search-suggestions-div"
       class="absolute z-40 m-0 h-screen w-screen bg-gray-300/50 p-0 text-left backdrop-blur-lg"
       @click="
@@ -194,129 +312,135 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
       "
     >
       <div
-        class="relative top-9 m-auto mt-2 max-h-[500px] w-[450px] overflow-y-scroll border border-black bg-white left-18"
+        class="relative top-9 z-50 m-auto mt-2 w-[450px] rounded-lg border border-black bg-white"
       >
-        <!-- Display a section for the register suggestions -->
-        <section v-if="suggestions.regs.length > 0">
-          <div class="bg-blue-900 px-2 py-1 text-center text-white">
-            Registers
-          </div>
-          <ul>
-            <!-- Display each individual suggestion -->
-            <li
-              v-for="(s, i) in suggestions.regs"
-              :id="'suggestion-' + i"
-              :key="i"
-              class="border-b border-gray-300 px-2 hover:cursor-pointer hover:bg-gray-200 hover:text-green-700"
-              :class="focusIndex == i ? 'bg-gray-200 text-green-700' : ''"
-              @mousedown="go(s)"
-              @mouseenter="focus(-1)"
+        <!-- Search results header -->
+        <div class="rounded-t-lg bg-blue-900 px-2 py-1 text-center text-white">
+          {{ showSuggestions ? "Results" : "Recent Searches" }}
+        </div>
+
+        <section class="max-h-[500px] overflow-y-scroll">
+          <!-- Display the search results if available and showSuggestions is true -->
+          <template v-if="showSuggestions && suggestions.length > 0">
+            <SearchResult
+              v-for="(suggestion, i) in suggestions"
+              :key="suggestion.name + i"
+              :suggestion="suggestion"
+              :index="i"
+              :focus-index="focusIndex"
+              :query="query"
+              @mousedown="go(suggestion)"
+              @mouseenter="focus(i, false)"
+              @mouseleave="focus(-1, false)"
+            />
+          </template>
+
+          <!-- Display a section if there are no results -->
+          <template v-else-if="showSuggestions && suggestions.length == 0">
+            <div class="my-10 bg-white text-center text-sm text-gray-500">
+              No results
+            </div>
+          </template>
+
+          <!-- Display the recent searches if available and showSuggestions is false -->
+          <div
+            v-else-if="!showSuggestions && recentSuggestions.length"
+            class="mb-4"
+          >
+            <div
+              v-for="(suggestion, i) in recentSuggestions.slice().reverse()"
+              :key="suggestion.name + i"
+              class="flex flex-row justify-between"
+              @mouseenter="focus(i, false)"
+              @mouseleave="focus(-1, false)"
             >
-              <!-- Show the name of the suggestion and truncate if too long -->
-              <a :href="router.resolve(s.path).href" @click.prevent>
-                <div class="truncate" :title="s.name">{{ s.name }}</div>
-              </a>
-            </li>
-          </ul>
-        </section>
-
-        <!-- Display a section for the field suggestions -->
-        <section v-if="suggestions.fields.length > 0">
-          <div class="bg-blue-900 px-2 py-1 text-center text-white">Fields</div>
-          <ul>
-            <!-- Display each individual suggestion -->
-            <li
-              v-for="(s, i) in suggestions.fields"
-              :id="'suggestion-' + (i + suggestions.regs.length)"
-              :key="i + suggestions.regs.length"
-              class="border-b border-gray-300 px-2 hover:cursor-pointer hover:bg-gray-200 hover:text-green-700"
-              :class="
-                focusIndex == i + suggestions.regs.length
-                  ? 'bg-gray-200 text-green-700'
-                  : ''
-              "
-              @mousedown="go(s)"
-              @mouseenter="focus(-1)"
-            >
-              <!-- Show the name of the suggestion and truncate if too long -->
-              <a :href="router.resolve(s.path).href" @click.prevent>
-                <div class="truncate" :title="s.name">{{ s.name }}</div>
-              </a>
-            </li>
-          </ul>
-        </section>
-
-        <!-- Display a section if there are no results -->
-        <section v-if="suggestions.all.length == 0">
-          <div class="bg-blue-900 px-2 py-1 text-center text-white">
-            Results
+              <SearchResult
+                class="mr-0 mb-0 grow"
+                :suggestion="suggestion"
+                :index="i"
+                :focus-index="focusIndex"
+                :query="query"
+                @mousedown="go(suggestion)"
+              />
+              <!-- Show an "x" button on the right side that will remove the recent suggestion -->
+              <button
+                class="z-[60] mt-3 px-3 text-gray-500 hover:cursor-pointer"
+                @click.stop.prevent="removeRecentSuggestion(suggestion)"
+              >
+                x
+              </button>
+            </div>
           </div>
-          <div class="my-10 bg-white text-center text-sm text-gray-500">
-            No results
-          </div>
-        </section>
-      </div>
-    </div>
-
-    <!-- If the query is empty ("") but the search box is focused show a list of recent searches -->
-    <div
-      v-else-if="focused"
-      id="search-recents-div"
-      class="absolute z-40 m-0 h-screen w-screen bg-gray-300/50 p-0 text-left backdrop-blur-lg"
-      @click="
-        focused = false;
-        focusIndex = -1;
-      "
-    >
-      <div
-        class="relative top-9 m-auto mt-2 max-h-[500px] w-[450px] overflow-y-scroll border border-black bg-white left-18"
-      >
-        <section>
-          <!-- Show section title -->
-          <div class="bg-blue-900 px-2 py-1 text-center text-white">
-            Recent Searches
-          </div>
-
-          <ul v-if="recentSuggestions.length" class="min-h-[125px] bg-white">
-            <!-- Display each recent suggestion as a li -->
-            <li
-              v-for="(s, i) in recentSuggestions.slice().reverse()"
-              :id="'suggestion-' + i"
-              :key="i"
-              class="border-b border-gray-300 px-2 hover:cursor-pointer hover:bg-gray-200 hover:text-green-700"
-              :class="focusIndex == i ? 'bg-gray-200 text-green-700' : ''"
-              @mouseenter="focus(-1)"
-            >
-              <div class="flex flex-row justify-between">
-                <!-- Show the name of the suggestion and truncate if too long -->
-                <a
-                  :href="router.resolve(s.path).href"
-                  class="grow"
-                  @click.prevent="go(s)"
-                >
-                  <div class="truncate" :title="s.name">{{ s.name }}</div>
-                </a>
-
-                <!-- Show an "x" button on the right side that will remove the recent suggestion -->
-                <button
-                  class="z-50 pl-3 pr-1 text-gray-500 hover:cursor-pointer"
-                  @click.stop="removeRecentSuggestion(s)"
-                >
-                  x
-                </button>
-              </div>
-            </li>
-          </ul>
 
           <!-- Display a message if there are no recent suggestions to show -->
           <div
-            v-else
-            class="flex min-h-[125px] flex-col justify-center bg-white text-center text-sm text-gray-500"
+            v-else-if="!showSuggestions && !recentSuggestions.length"
+            class="flex min-h-[102px] w-full flex-col justify-center bg-white text-center text-sm text-gray-500"
           >
             <p>No recent searches</p>
           </div>
         </section>
+
+        <!-- Display the navigation options as icons -->
+        <div
+          class="flex flex-row content-center justify-between space-x-2 border-t border-gray-300 p-2 text-gray-400"
+        >
+          <!-- Display the select icon -->
+          <div class="flex flex-row">
+            <div
+              class="mt-[0.125rem] mr-1 h-5 w-5 rounded bg-gray-200 text-gray-800"
+            >
+              <div class="m-auto mt-1 h-fit w-fit text-sm">↩</div>
+            </div>
+            <div>select</div>
+          </div>
+
+          <!-- Display the navigation icons -->
+          <div class="flex flex-row">
+            <!-- <arrow-left-bottom id="select-icon" /> -->
+            <div
+              class="mt-[0.125rem] mr-1 h-5 w-5 rounded bg-gray-200 text-gray-800"
+            >
+              <div class="m-auto h-fit w-fit text-sm">↑</div>
+            </div>
+            <div
+              class="mt-[0.125rem] mr-1 h-5 w-5 rounded bg-gray-200 text-gray-800"
+            >
+              <div class="m-auto h-fit w-fit text-sm">↓</div>
+            </div>
+            <span>navigate</span>
+          </div>
+
+          <!-- Display the exit icon -->
+          <div class="flex flex-row">
+            <div
+              class="mt-[0.125rem] mr-1 flex h-5 w-7 justify-center rounded bg-gray-200 text-gray-800"
+            >
+              <div class="h-fit w-fit text-sm">esc</div>
+            </div>
+            <div>exit</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
+
+<style>
+/* Make apple-keyboard-command icon smaller */
+#apple-command-key > svg {
+  width: 1rem;
+}
+
+#navigation-icon > svg {
+  stroke: white;
+  stroke-width: 0.5px;
+  width: 1.5rem;
+}
+
+#select-icon > svg {
+  width: 1.25rem;
+  stroke: white;
+  stroke-width: 0.5px;
+}
+</style>

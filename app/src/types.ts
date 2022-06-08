@@ -50,12 +50,15 @@ export interface MenuNode {
 // Interfaces that defines the properties on a entry in the list
 // of suggestions used in Search.vue
 export interface Suggestion {
-  type: string;
+  type: "reg" | "blk" | "mem" | "field";
   name: string;
   path: {
     name: string;
     params: {
       regid: string;
+    };
+    query?: {
+      field: string;
     };
   };
 }
