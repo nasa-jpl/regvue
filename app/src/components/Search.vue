@@ -93,7 +93,7 @@ let suggestions = computed(() => {
       };
 
       const suggestion = {
-        type: "field",
+        type: "field" as Suggestion["type"],
         name: fieldName,
         path: path,
       };
