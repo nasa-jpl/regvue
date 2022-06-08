@@ -1,25 +1,18 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import packageInfo from "../package.json";
-
 import AppVersion from "./components/AppVersion.vue";
-import Header from "./components/Header.vue";
 
 const appInfo = {
   name: packageInfo.name,
   url: packageInfo.homepage,
   version: packageInfo.version,
 };
-
-let showMenu = ref(true);
 </script>
 
 <template>
   <div class="overflow-hidden text-[#2c3e50]">
-    <Header class="h-11" @toggle-menu="showMenu = !showMenu" />
-
     <!-- Show the main window -->
-    <router-view class="pb-10" :show-menu="showMenu" />
+    <router-view class="pb-10" />
 
     <!-- Display a link to the GitHub repo at the bottom right of the page -->
     <AppVersion

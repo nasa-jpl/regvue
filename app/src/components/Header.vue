@@ -66,11 +66,13 @@ watch(
       class="flex flex-row justify-between border-b border-gray-400 bg-gray-300 py-2 font-medium text-black sm:text-lg md:text-xl"
     >
       <div class="ml-6 flex flex-row items-center space-x-2">
-        <!-- Show menu to collapse nav bar -->
-        <hamburger-menu
+        <!-- Show menu to collapse nav bar (needs to be wrapped in div for @click to work) -->
+        <div
           class="hover:cursor-pointer hover:bg-gray-400"
           @click="emit('toggle-menu')"
-        />
+        >
+          <hamburger-menu />
+        </div>
 
         <!-- Show design name -->
         <div id="header-title">

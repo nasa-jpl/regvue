@@ -4,6 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import { Register, SharedState } from "../types";
 import store from "../store";
 
+import Header from "../components/Header.vue";
 import Menu from "../components/Menu.vue";
 import RegFields from "../components/RegFields.vue";
 import RegLayout from "../components/RegLayout.vue";
@@ -20,6 +21,9 @@ let sharedState = store.sharedState as SharedState;
 let selectedField = ref(
   route.query?.field ? (route.query.field as string) : ""
 );
+
+// Control whether to show navigation menu on left of screen
+let showMenu = ref(true);
 
 let reg = computed(() => {
   if (sharedState.data) {
@@ -74,6 +78,8 @@ watch(
 </script>
 
 <template>
+  <Header class="h-11" @toggle-menu="showMenu = !showMenu" />
+
   <div class="app-body-height flex flex-row">
     <!-- Show the navigation menu on the left -->
     <Menu
