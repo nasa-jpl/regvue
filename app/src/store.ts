@@ -18,6 +18,7 @@ export default {
   loaded: false,
   useByteSwap: false,
   selectedDisplayType: "hexadecimal" as DisplayType,
+  path: "",
 
   async load(filename: string) {
     const result = await fetch(filename);
@@ -39,6 +40,7 @@ export default {
     this.sharedState.fields = this.getFieldMap(data.elements);
     this.sharedState.nodes = this.getNodes(data.elements, data.root);
     this.loaded = true;
+    this.path = filename;
   },
 
   async untilLoaded() {

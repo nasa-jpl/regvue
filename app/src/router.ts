@@ -29,9 +29,36 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-  if (to.path == "/") {
-    await store.untilLoaded();
-    return { name: "reg", params: { regid: store.getFirstRegister() } };
+  // If the store hasn't been loaded try to load a file or reroute to the upload page
+  if (to.path != "/upload" && !store.loaded) {
+    try {
+      // Load the data file from the query
+      if (to.query?.data) {
+        await store.load(to.query.data as string);
+      } else {
+        throw new Error();
+      }
+    } catch {
+      return { name: "upload" };
+    }
+  }
+
+  // Check if the data query has changed and the store needs to be reloaded
+  if (to.query?.data && store.path != to.query.data) {
+    try {
+      await store.load(to.query.data as string);
+    } catch {
+      return { name: "upload" };
+    }
+  }
+
+  // Go to the first register entry if store is loaded and at root
+  if (to.path == "/" && store.loaded && to.query?.data == store.path) {
+    return {
+      name: "reg",
+      params: { regid: store.getFirstRegister() },
+      query: { data: store.path },
+    };
   }
 });
 
