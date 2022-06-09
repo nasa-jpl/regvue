@@ -241,7 +241,7 @@ onUnmounted(() => {
 <template>
   <!-- Show the input box display area -->
   <div
-    class="z-50 flex h-fit w-56 flex-row justify-between rounded bg-white px-1 lg:absolute lg:left-[50%] lg:top-[0.125rem] lg:mt-[0.3625rem] lg:translate-x-[-50%]"
+    class="z-50 flex h-fit flex-row justify-between rounded bg-white px-1 sm:w-36 md:w-56 lg:absolute lg:left-[50%] lg:top-[0.125rem] lg:mt-[0.3625rem] lg:translate-x-[-50%]"
     :class="focused ? 'outline outline-2 outline-blue-500' : ''"
     @click="focusOnInput"
   >
@@ -257,7 +257,7 @@ onUnmounted(() => {
         type="search"
         aria-label="Search"
         placeholder="Search"
-        class="my-1 text-sm focus:outline-none sm:w-20 md:w-36"
+        class="my-1 text-sm focus:outline-none sm:w-16 md:w-36"
         autocomplete="off"
         spellcheck="false"
         @input="updateQuery"
