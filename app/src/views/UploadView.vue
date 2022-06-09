@@ -73,7 +73,8 @@ const onDataFileUpload = async (event: DragEvent) => {
   >
     <h1 class="mb-4 text-3xl font-bold text-gray-700">Welcome to regvue</h1>
     <div>
-      To get started upload a register documentation file or provide a URL path.
+      To get started, upload a register documentation file or provide a URL
+      path.
     </div>
 
     <!-- Show drag and drop file input to upload local data file -->
