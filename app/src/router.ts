@@ -40,9 +40,15 @@ router.beforeEach(async (to) => {
     try {
       // Load the data file from the query
       if (to.query?.data) {
-        await store.loadUrl(to.query.data as string);
+        const result = await store.loadUrl(to.query.data as string);
+        if (!result) {
+          throw new Error();
+        }
       } else {
-        throw new Error();
+        const result = await store.loadUrl("data.json");
+        if (!result) {
+          throw new Error();
+        }
       }
     } catch {
       return { name: "upload" };
@@ -53,6 +59,11 @@ router.beforeEach(async (to) => {
   if (to.query?.data && store.path != to.query.data) {
     try {
       await store.loadUrl(to.query.data as string);
+      return {
+        name: "reg",
+        params: { regid: store.getFirstRegister() },
+        query: { data: store.path },
+      };
     } catch {
       return { name: "upload" };
     }

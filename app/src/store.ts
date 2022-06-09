@@ -22,15 +22,24 @@ export default {
   path: "",
 
   async loadUrl(url: string) {
-    const result = await fetch(url);
-    const data = await result.json();
-
-    await this.load(data, url);
+    try {
+      const result = await fetch(url);
+      const data = await result.json();
+      await this.load(data, url);
+      return true;
+    } catch {
+      return false;
+    }
   },
 
   async loadFile(file: string) {
-    const data = await JSON.parse(file);
-    await this.load(data);
+    try {
+      const data = await JSON.parse(file);
+      await this.load(data);
+      return true;
+    } catch {
+      return false;
+    }
   },
 
   async load(data: SharedState["data"], path = "") {
