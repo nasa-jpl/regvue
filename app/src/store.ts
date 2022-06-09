@@ -27,7 +27,8 @@ export default {
       const data = await result.json();
       await this.load(data, url);
       return true;
-    } catch {
+    } catch (e) {
+      console.error(e);
       return false;
     }
   },
@@ -37,7 +38,8 @@ export default {
       const data = await JSON.parse(file);
       await this.load(data);
       return true;
-    } catch {
+    } catch (e) {
+      console.error(e);
       return false;
     }
   },
