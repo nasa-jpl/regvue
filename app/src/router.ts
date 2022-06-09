@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import store from "./store";
 import Default from "./views/Default.vue";
+import PageNotFound from "./views/PageNotFound.vue";
 import RegView from "./views/RegView.vue";
 import UploadView from "./views/UploadView.vue";
 
@@ -20,6 +21,11 @@ const routes = [
     name: "upload",
     path: "/upload",
     component: UploadView,
+  },
+  {
+    name: "404",
+    path: "/:catchAll(.*)",
+    component: PageNotFound,
   },
 ];
 

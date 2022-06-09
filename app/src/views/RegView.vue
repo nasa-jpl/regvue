@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, onBeforeMount } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Register, SharedState } from "../types";
 import store from "../store";
@@ -15,6 +15,7 @@ const props = defineProps<{
 
 const route = useRoute();
 const router = useRouter();
+onBeforeMount(() => validateRoute());
 
 let sharedState = store.sharedState as SharedState;
 let selectedField = ref(
@@ -70,9 +71,24 @@ const stopHighlightField = () => {
   selectedField.value = route.query?.field ? (route.query.field as string) : "";
 };
 
+const validateRoute = () => {
+  if (!Object.keys(sharedState.data.elements).includes(props.regid)) {
+    router.push({
+      name: "404",
+      params: { catchAll: "404" },
+      query: { path: route.path },
+    });
+  }
+};
+
 watch(
   () => route.query.field,
   (newValue) => (selectedField.value = newValue as string)
+);
+
+watch(
+  () => props.regid,
+  () => validateRoute()
 );
 </script>
 
