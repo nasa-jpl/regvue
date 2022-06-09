@@ -12,7 +12,7 @@ const appInfo = {
 <template>
   <div class="overflow-hidden text-[#2c3e50]">
     <!-- Show the main window -->
-    <div class="pb-10">
+    <div class="h-screen">
       <router-view />
     </div>
 

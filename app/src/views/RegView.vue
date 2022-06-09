@@ -95,7 +95,7 @@ watch(
 <template>
   <Header class="h-11" @toggle-menu="showMenu = !showMenu" />
 
-  <div class="app-body-height flex flex-row">
+  <div class="flex h-full flex-row">
     <!-- Show the navigation menu on the left -->
     <Menu
       :nodes="sharedState.nodes"
@@ -124,7 +124,7 @@ watch(
             v-if="reg.fields"
             :fields="reg.fields"
             :selected-field="selectedField"
-            class="m-4"
+            class="m-4 mb-28"
             @select-field="selectField"
             @highlight-field="highlightField"
             @stop-highlight-field="stopHighlightField"
@@ -134,10 +134,3 @@ watch(
     </div>
   </div>
 </template>
-
-<style>
-.app-body-height {
-  /* Full screen height minus the height of the header */
-  height: calc(100vh - 2.75rem);
-}
-</style>
