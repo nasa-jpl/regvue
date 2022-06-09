@@ -37,21 +37,17 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   // If the store hasn't been loaded try to load a file or reroute to the upload page
   if (to.path != "/upload" && !store.loaded) {
-    try {
-      // Load the data file from the query
-      if (to.query?.data) {
-        const result = await store.loadUrl(to.query.data as string);
-        if (!result) {
-          throw new Error();
-        }
-      } else {
-        const result = await store.loadUrl("data.json");
-        if (!result) {
-          throw new Error();
-        }
+    // Load the data file from the query
+    if (to.query?.data) {
+      const result = await store.loadUrl(to.query.data as string);
+      if (!result) {
+        return { name: "upload" };
       }
-    } catch {
-      return { name: "upload" };
+    } else {
+      const result = await store.loadUrl("data.json");
+      if (!result) {
+        return { name: "upload" };
+      }
     }
   }
 

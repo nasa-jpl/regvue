@@ -111,6 +111,7 @@ const onDataFileUpload = async (event: DragEvent) => {
         <input
           id="data-file-input"
           type="file"
+          accept=".json"
           class="relative z-50 h-64 w-full opacity-0 hover:cursor-pointer"
           :onchange="onDataFileUpload"
         />
