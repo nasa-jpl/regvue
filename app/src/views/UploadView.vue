@@ -73,8 +73,16 @@ const onDataFileUpload = async (event: DragEvent) => {
   >
     <h1 class="mb-4 text-3xl font-bold text-gray-700">Welcome to regvue</h1>
     <div>
-      To get started, upload a register documentation file or provide a URL
-      path.
+      To get started, upload a
+      <a
+        href="https://github.jpl.nasa.gov/regvue/regvue#generate-the-register-description"
+        target="_blank"
+        rel="noreferrer"
+        class="text-blue-500 underline hover:cursor-pointer hover:text-blue-400"
+      >
+        register documentation file
+      </a>
+      or provide a URL path to one.
     </div>
 
     <!-- Show drag and drop file input to upload local data file -->
@@ -125,7 +133,7 @@ const onDataFileUpload = async (event: DragEvent) => {
           id="data-url-input"
           type="text"
           class="w-[500px] rounded border border-gray-300 px-1"
-          placeholder="https://"
+          placeholder="https://example.com/data.json"
           @keydown.enter="onUrlDataInput()"
         />
         <button
