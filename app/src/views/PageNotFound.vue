@@ -8,8 +8,8 @@ const goToFirstRegister = () => {
   router.push({ name: "default", query: { data: route.query.data } });
 };
 
-const goToUploadPage = () => {
-  router.push({ name: "upload" });
+const goToOpenPage = () => {
+  router.push({ name: "open" });
 };
 </script>
 
@@ -29,8 +29,8 @@ const goToUploadPage = () => {
     <div>
       <span
         class="underline hover:cursor-pointer hover:text-gray-500"
-        @click="goToUploadPage()"
-        >Upload</span
+        @click="goToOpenPage()"
+        >Open</span
       >
       new data file
     </div>

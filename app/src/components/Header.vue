@@ -63,7 +63,7 @@ watch(
 </script>
 
 <template>
-  <div v-if="route.path != '/upload'">
+  <div v-if="route.path != '/open'">
     <div
       id="header-bar"
       class="flex flex-row justify-between border-b border-gray-400 bg-gray-300 py-2 font-medium text-black sm:text-lg md:text-xl"
@@ -99,11 +99,11 @@ watch(
         >
 
         <!-- TODO show a modal instead -->
-        <!-- Show icon to route to /upload -->
+        <!-- Show icon to route to /open -->
         <file-replace-outline
           class="text-gray-600 hover:cursor-pointer hover:bg-gray-400"
-          title="Upload a new design file"
-          @click="() => router.push({ name: 'upload' })"
+          title="Open a new design file"
+          @click="() => router.push({ name: 'open' })"
         />
       </div>
     </div>

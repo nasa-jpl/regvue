@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Added an Upload page at `/upload` that will let users upload a local `data.json` file or link to a file at a URL ([#66](https://github.jpl.nasa.gov/regvue/regvue/pull/66)).
+- Added an Open page at `/open` that will let users open a local `data.json` file or link to a file at a URL ([#66](https://github.jpl.nasa.gov/regvue/regvue/pull/66)).
 - Added a 404 page ([#74](https://github.jpl.nasa.gov/regvue/regvue/pull/74)).
 - Added a variety of new search features ([#64](https://github.jpl.nasa.gov/regvue/regvue/pull/64))
   - Added ability to search for blocks and fields

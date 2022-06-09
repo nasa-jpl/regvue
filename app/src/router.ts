@@ -3,7 +3,7 @@ import store from "./store";
 import Default from "./views/Default.vue";
 import PageNotFound from "./views/PageNotFound.vue";
 import RegView from "./views/RegView.vue";
-import UploadView from "./views/UploadView.vue";
+import OpenView from "./views/OpenView.vue";
 
 const routes = [
   {
@@ -18,9 +18,9 @@ const routes = [
     props: true,
   },
   {
-    name: "upload",
-    path: "/upload",
-    component: UploadView,
+    name: "open",
+    path: "/open",
+    component: OpenView,
   },
   {
     name: "404",
@@ -35,18 +35,18 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-  // If the store hasn't been loaded try to load a file or reroute to the upload page
-  if (to.path != "/upload" && !store.loaded) {
+  // If the store hasn't been loaded try to load a file or reroute to the open page
+  if (to.path != "/open" && !store.loaded) {
     // Load the data file from the query
     if (to.query?.data) {
       const result = await store.loadUrl(to.query.data as string);
       if (!result) {
-        return { name: "upload" };
+        return { name: "open" };
       }
     } else {
       const result = await store.loadUrl("data.json");
       if (!result) {
-        return { name: "upload" };
+        return { name: "open" };
       }
     }
   }
@@ -61,7 +61,7 @@ router.beforeEach(async (to) => {
         query: { data: store.path },
       };
     } catch {
-      return { name: "upload" };
+      return { name: "open" };
     }
   }
 

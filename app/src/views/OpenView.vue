@@ -4,7 +4,7 @@ import { useRouter } from "vue-router";
 import store from "../store";
 
 let fetchError = ref(false);
-let uploadError = ref(false);
+let openError = ref(false);
 
 const router = useRouter();
 
@@ -25,7 +25,7 @@ onBeforeMount(() => {
 
 const onUrlDataInput = async () => {
   fetchError.value = false;
-  uploadError.value = false;
+  openError.value = false;
 
   const elem = document.getElementById("data-url-input") as HTMLInputElement;
   const result = await store.loadUrl(elem.value);
@@ -40,9 +40,9 @@ const onUrlDataInput = async () => {
   }
 };
 
-const onDataFileUpload = async (event: DragEvent) => {
+const onDataFileOpen = async (event: DragEvent) => {
   fetchError.value = false;
-  uploadError.value = false;
+  openError.value = false;
   const elem = document.getElementById("data-url-input") as HTMLInputElement;
   elem.value = "";
 
@@ -59,7 +59,7 @@ const onDataFileUpload = async (event: DragEvent) => {
     if (result) {
       router.push({ name: "default" });
     } else {
-      uploadError.value = true;
+      openError.value = true;
     }
   };
 
@@ -73,7 +73,7 @@ const onDataFileUpload = async (event: DragEvent) => {
   >
     <h1 class="mb-4 text-3xl font-bold text-gray-700">Welcome to regvue</h1>
     <div>
-      To get started, upload a
+      To get started, open a
       <a
         href="https://github.jpl.nasa.gov/regvue/regvue#generate-the-register-description"
         target="_blank"
@@ -82,10 +82,10 @@ const onDataFileUpload = async (event: DragEvent) => {
       >
         register documentation file
       </a>
-      or provide a URL path to one.
+      or provide the URL path to one.
     </div>
 
-    <!-- Show drag and drop file input to upload local data file -->
+    <!-- Show drag and drop file input to open local data file -->
     <div class="flex w-[90%] items-center justify-center">
       <label
         for="data-file-input"
@@ -107,13 +107,13 @@ const onDataFileUpload = async (event: DragEvent) => {
             ></path>
           </svg>
           <p class="mb-2 text-sm text-gray-500">
-            <span class="font-semibold">Click to upload</span> or drag and drop
+            <span class="font-semibold">Click to open</span> or drag and drop
           </p>
           <p
             class="m-auto text-sm text-rose-500"
-            :class="!uploadError ? 'opacity-0' : ''"
+            :class="!openError ? 'opacity-0' : ''"
           >
-            Error parsing uploaded file.
+            Error parsing opened file.
           </p>
         </div>
         <input
@@ -121,7 +121,7 @@ const onDataFileUpload = async (event: DragEvent) => {
           type="file"
           accept=".json"
           class="relative z-50 h-64 w-full opacity-0 hover:cursor-pointer"
-          :onchange="onDataFileUpload"
+          :onchange="onDataFileOpen"
         />
       </label>
     </div>
