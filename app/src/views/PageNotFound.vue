@@ -4,11 +4,11 @@ import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
 const router = useRouter();
 
-const returnToRoot = () => {
+const goToFirstRegister = () => {
   router.push({ name: "default", query: { data: route.query.data } });
 };
 
-const returnToUpload = () => {
+const goToUploadPage = () => {
   router.push({ name: "upload" });
 };
 </script>
@@ -21,15 +21,15 @@ const returnToUpload = () => {
     <div class="mt-10">
       <span
         class="underline hover:cursor-pointer hover:text-gray-500"
-        @click="returnToRoot()"
-        >Return</span
+        @click="goToFirstRegister()"
+        >Go</span
       >
-      to root element
+      to first register
     </div>
     <div>
       <span
         class="underline hover:cursor-pointer hover:text-gray-500"
-        @click="returnToUpload()"
+        @click="goToUploadPage()"
         >Upload</span
       >
       new data file
