@@ -123,7 +123,7 @@ const onDataFileUpload = async (event: DragEvent) => {
         <input
           id="data-url-input"
           type="text"
-          class="w-[500px] border border-gray-300 shadow"
+          class="w-[500px] rounded border border-gray-300 px-1"
           placeholder="https://"
           @keydown.enter="onUrlDataInput()"
         />
