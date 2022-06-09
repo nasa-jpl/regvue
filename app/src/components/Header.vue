@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, onMounted, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import store from "../store";
 import Search from "./Search.vue";
@@ -53,6 +53,9 @@ const links = computed(() => {
   return [];
 });
 
+// Set the document title to match the design name
+onMounted(() => (document.title = "regvue - " + title.value));
+onUnmounted(() => (document.title = "regvue"));
 watch(
   () => title.value,
   () => (document.title = "regvue - " + title.value)
