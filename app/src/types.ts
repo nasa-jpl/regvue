@@ -18,7 +18,7 @@ export interface RegisterField {
   name: string;
   nbits: number;
   reset: number;
-  value: number;
+  value: Bit[];
 }
 
 // Interface representing a register entry
