@@ -78,3 +78,5 @@ export interface SharedState {
 }
 
 export type DisplayType = "hexadecimal" | "binary" | "decimal";
+
+export type Bit = 0 | 1 | "?";
