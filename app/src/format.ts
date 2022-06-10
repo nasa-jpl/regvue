@@ -38,43 +38,56 @@ export default {
     }
   },
 
-  // Assumes a bitArray with length 32
+  // Assumes a bitArray with length % 4 == 0
   bitArrayToString(arr: Bit[], displayType: DisplayType) {
+    // Use slice to prevent calls to .reverse() from affecting the original array
     const bitArray = arr.slice();
 
     if (bitArray.length == 1) {
       return bitArray[0].toString();
     }
 
+    // Hexadecimal case
     if (displayType == "hexadecimal") {
-      // hex case
-      // loop by groups of 4
-      // if any input is "?" then output is "?"
-      // otherwise combine to bit string and convert to hex
       let res = "";
+
+      // Loop by groups of 4 because 1 hex digit is 4 bits
       for (let i = 0; i < bitArray.length; i += 4) {
         const bitString = bitArray
           .slice(i, i + 4)
           .reverse()
           .join("");
+
+        // If any Bit is "?", then output is "?"
         if (bitString.includes("?")) {
           res = "?" + res;
-        } else {
+        }
+
+        // Otherwise convert the bitString to hexadecimal
+        else {
           const ret = parseInt(bitString, 2).toString(16).toUpperCase();
           res = ret + res;
         }
       }
       return "0x" + res;
-    } else if (displayType == "binary") {
-      // bin case
+    }
+
+    // Binary case
+    else if (displayType == "binary") {
       return "0b" + bitArray.reverse().join("");
-    } else if (displayType == "decimal") {
-      // dec case
+    }
+
+    // Decimal case
+    else if (displayType == "decimal") {
+      // If any Bit is "?" then the entire value is "?"
       if (bitArray.includes("?")) {
         return "?";
       }
       return parseInt(bitArray.reverse().join(""), 2).toString();
-    } else {
+    }
+
+    // Unsupported type case
+    else {
       throw new Error(`Invalid display type specified: ${displayType}`);
     }
   },

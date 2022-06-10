@@ -19,7 +19,7 @@ const emit = defineEmits([
   "stop-highlight-field",
 ]);
 
-// Numeric value of the register
+// Store the value of the register as an array of 32 Bits
 let registerValue = ref(Array(32).map(() => 0 as Bit));
 
 // Control whether or not to display LSB or MSB first
@@ -34,10 +34,16 @@ let displayTypes: DisplayType[] = ["binary", "decimal", "hexadecimal"];
 let fieldKeyIndex = ref(0);
 let registerKeyIndex = ref(0);
 
-// Perform a byte swap on a bit array
+// Perform a byte swap on a Bit[]
 const byteSwap = (bitArray: Bit[]) => {
+  if (bitArray.length % 8 != 0) {
+    throw Error("Tried to byte swap a value with not invalid number of bits");
+  }
+
   let res: Bit[] = [];
-  for (let i = 0; i < 32; i += 8) {
+
+  // Add 8 bits at a time to the front of the new Bit[] result
+  for (let i = 0; i < bitArray.length; i += 8) {
     res.unshift(...bitArray.slice(i, i + 8));
   }
   return res;
@@ -64,7 +70,7 @@ const updateDisplayType = (displayType: DisplayType) => {
   registerKeyIndex.value += 1;
 };
 
-// Assigns each field.value to its field.reset
+// Assigns each field.value based on its field.reset
 const resetValues = () => {
   props.fields.forEach(
     (field) =>
@@ -83,28 +89,23 @@ const resetValues = () => {
 const updateRegisterValue = () => {
   let result: Bit[] = [];
 
+  // Loops through the fields and add their values to the front of the result arr
   props.fields.forEach((field) => {
-    result.unshift(...field.value.slice());
+    result.unshift(...field.value);
   });
 
+  // Byte swap the values if enabled
   if (useByteSwap.value) {
     result = byteSwap(result);
   }
 
   registerValue.value = result;
-  console.log(result);
 };
 updateRegisterValue(); // Initial call on setup
 
-// Parse the user input for the new field value and conditionally
-// select the next input element
+// Parse the user input to update the field value
 const onFieldValueChange = (field: RegisterField, value: string) => {
-  console.log(value);
-  let newValue = parse.stringToBitArray(value, field.nbits);
-  console.log(newValue);
-  // TODO renable this
-  // Ensure the new value does not exceed the max field value
-  // newValue = newValue & ((1 << field.nbits) - 1);
+  const newValue = parse.stringToBitArray(value, field.nbits);
   field.value = newValue;
 
   // Update the register value
@@ -127,12 +128,13 @@ const populateFieldValuesFromRegisterValue = (value: Bit[]) => {
     value = byteSwap(value);
   }
 
+  // Assign each field by indexing the register value according to lsb and nbits
   props.fields.forEach((field) => {
     field.value = value.slice(field.lsb, field.lsb + field.nbits);
   });
 };
 
-// Recalculate the register value when leaving the page
+// Force input components to reload when leaving the page
 const route = useRoute();
 watch(
   () => route.params.regid,

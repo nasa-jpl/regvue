@@ -1,5 +1,8 @@
 import { LocationQueryValue } from "vue-router";
 
+// Type representing the different states a single bit value can take
+export type Bit = 0 | 1 | "?";
+
 // Interface representing the attributes of the root project description
 export interface DesignRoot {
   display_name: string;
@@ -10,15 +13,20 @@ export interface DesignRoot {
   children: string[];
 }
 
-// Interface representing the fields on a specific register
-export interface RegisterField {
-  access: string;
-  doc: string;
-  lsb: number;
-  name: string;
-  nbits: number;
-  reset: number;
-  value: Bit[];
+// Type representing the supported ways of displaying bit values
+export type DisplayType = "hexadecimal" | "binary" | "decimal";
+
+// Interface representing the fields necessary for a menu node
+export interface MenuNode {
+  key: string;
+  styleClass: string;
+  children?: MenuNode[];
+  data: {
+    name: string;
+    addr: string;
+  };
+  depth?: number;
+  isVisible?: boolean;
 }
 
 // Interface representing a register entry
@@ -36,17 +44,27 @@ export interface Register {
   links: Map<string, string>;
 }
 
-// Interface representing the fields necessary for a menu node
-export interface MenuNode {
-  key: string;
-  styleClass: string;
-  children?: MenuNode[];
+// Interface representing the fields on a specific register
+export interface RegisterField {
+  access: string;
+  doc: string;
+  lsb: number;
+  name: string;
+  nbits: number;
+  reset: number;
+  value: Bit[];
+}
+
+// Interface representing the overall sharedState object exported from store.ts
+export interface SharedState {
   data: {
-    name: string;
-    addr: string;
+    root: DesignRoot;
+    elements: {
+      [key: string]: Register;
+    };
   };
-  depth?: number;
-  isVisible?: boolean;
+  fields: Map<string, string>;
+  nodes: MenuNode[];
 }
 
 // Interfaces that defines the properties on a entry in the list
@@ -64,19 +82,3 @@ export interface Suggestion {
     };
   };
 }
-
-// Interface representing the overall sharedState object exported from store.ts
-export interface SharedState {
-  data: {
-    root: DesignRoot;
-    elements: {
-      [key: string]: Register;
-    };
-  };
-  fields: Map<string, string>;
-  nodes: MenuNode[];
-}
-
-export type DisplayType = "hexadecimal" | "binary" | "decimal";
-
-export type Bit = 0 | 1 | "?";

@@ -49,6 +49,8 @@ export default {
     for (const name in data.elements) {
       const element = data.elements[name];
       const fields = element.fields;
+
+      // Set the field.value to be a Bit[] that represents the field.reset or 0
       fields?.forEach((field: RegisterField) => {
         if (field.reset) {
           field.value = parse.stringToBitArray(

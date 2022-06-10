@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, nextTick } from "vue";
+import { ref } from "vue";
 import { Bit, DisplayType } from "../types";
 import format from "../format";
 import parse from "../parse";
@@ -35,20 +35,17 @@ let showErrorTooltip = ref(false);
 // displayValue if there is no error
 const deactivate = () => {
   if (!isError.value) {
-    nextTick(() => {
-      displayValue.value = format.bitArrayToString(
-        props.bitArray,
-        props.selectedDisplayType
-        // props.nbits
-      );
-    });
+    displayValue.value = format.bitArrayToString(
+      props.bitArray,
+      props.selectedDisplayType
+    );
   }
 
   emit("select-field", false);
   showErrorTooltip.value = false;
 };
 
-// Determine whether to emit the value change and call deactivate()
+// Determine whether to emit the value change
 const updateValue = () => {
   const elem = document.getElementById(
     "input-box-" + props.name
@@ -128,13 +125,6 @@ const getErrorMessage = (value: string) => {
 
   return "";
 };
-
-watch(
-  () => props.bitArray,
-  (to, from) => {
-    console.log(`bit array changed from ${from} to ${to}`);
-  }
-);
 </script>
 
 <template>

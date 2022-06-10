@@ -43,57 +43,70 @@ export default {
   stringToBitArray(value: string, length = 32) {
     const res: Bit[] = [];
     value = value.replaceAll("_", "");
+
+    // Hexadecimal case
     if (value.substring(0, 2) == "0x") {
-      // hex case
+      // Loop through each hex digit after the prefix
       for (const char of value.substring(2)) {
         // Look at each hex decimal
+
         if (char == "?") {
-          for (let i = 0; i < length / 8; i++) res.push("?");
+          // If the character is ? we append ? 4 times (a hex digit is 4 bits)
+          for (let i = 0; i < 4; i++) res.push("?");
         } else {
+          // Get a number representation of the hex digit
           const value = this.num("0x" + char);
+
+          // Convert the number to a binary string (i.e. 10 => "0b1010")
           const binaryString = format.getStringRepresentation(
             value,
             "binary",
             4
           );
 
+          // Append each binary digit after the prefix to the result array
           for (const digit of binaryString.substring(2)) {
             res.push(parseInt(digit) as Bit);
           }
         }
       }
-      for (let i = res.length; i < length; i++) {
-        res.unshift(0);
-      }
-    } else if (value.substring(0, 2) == "0b") {
-      //binary case
+    }
+
+    // Binary case
+    else if (value.substring(0, 2) == "0b") {
+      // Loop through each binary digit after the prefix
       for (const char of value.substring(2)) {
+        // Push the digit as a Bit type
         if (char == "?") res.push(char);
         else res.push(parseInt(char) as Bit);
       }
+    }
 
-      console.log(`appending ${length - res.length} 0's to top`);
-      for (let i = res.length; i < length; i++) {
-        res.unshift(0);
-      }
-      return res.reverse();
-    } else {
-      //decimal case
+    // Decimal case
+    else {
+      // If any digit in the decimal is "?", then the whole value is "?"
       if (value.includes("?")) {
         for (let i = 0; i < length; i++) res.push("?");
       } else {
+        // Get a number representation
         const num = this.num(value);
+
+        // Convert the number to a binary string
         const binaryString = num.toString(2);
+
+        // Push each binary digit as a Bit type
         for (const char of binaryString) {
           res.push(parseInt(char) as Bit);
         }
       }
-
-      for (let i = res.length; i < length; i++) {
-        res.unshift(0);
-      }
     }
 
+    // Pad the front of the array with 0's to fill up the remaining length
+    for (let i = res.length; i < length; i++) {
+      res.unshift(0);
+    }
+
+    // Return reversed so that the 0 index refers to the lsb
     return res.reverse();
   },
 };
