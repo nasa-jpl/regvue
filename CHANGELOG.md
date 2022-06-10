@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2022-06-10
+
 ### Added
 - Added an Open page at `/open` that will let users open a local `data.json` file or link to a file at a URL ([#66](https://github.jpl.nasa.gov/regvue/regvue/pull/66)).
 - Added a 404 page ([#74](https://github.jpl.nasa.gov/regvue/regvue/pull/74)).
@@ -109,7 +111,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release of regvue prototype.
 
-[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.4.0...HEAD
+[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.5.0...HEAD
+[0.5.0]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.3.2...v0.4.0
 [0.3.2]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.3.0...v0.3.1
