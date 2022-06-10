@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, Ref, computed, onBeforeMount } from "vue";
-import { useRouter } from "vue-router";
+import { ref, Ref, computed, onBeforeMount, onUnmounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import store from "../store";
 import { createSearchIndex } from "../search";
 import { Suggestion } from "../types";
@@ -11,6 +11,8 @@ import Magnify from "vue-material-design-icons/Magnify.vue";
 import SearchResult from "./SearchResult.vue";
 
 const sharedState = ref(store.sharedState);
+
+const route = useRoute();
 const router = useRouter();
 
 // Create the search object
@@ -89,7 +91,7 @@ let suggestions = computed(() => {
       const path = {
         name: "reg",
         params: { regid: regid },
-        query: { field: fieldName },
+        query: { field: fieldName, data: route.query.data },
       };
 
       const suggestion = {
@@ -106,6 +108,7 @@ let suggestions = computed(() => {
       const path = {
         name: "reg",
         params: { regid: id },
+        query: { data: route.query.data },
       };
 
       const suggestion = {
@@ -208,28 +211,37 @@ const removeRecentSuggestion = (suggestion: Suggestion) => {
   }
 };
 
-// Add a keyboard shortcut to open the search box
-onBeforeMount(() => {
-  document.addEventListener("keydown", (event: KeyboardEvent) => {
-    if ((event.ctrlKey || event.metaKey) && event.key == "k") {
-      event.preventDefault();
+// Toggles the focus of the search window based on keyboard event
+const useKeyboardShortcut = (event: KeyboardEvent) => {
+  if ((event.ctrlKey || event.metaKey) && event.key == "k") {
+    event.preventDefault();
 
-      if (focused.value) {
-        focused.value = false;
-        focusIndex.value = -1;
-        (document.getElementById("search-input") as HTMLInputElement).blur();
-      } else {
-        (document.getElementById("search-input") as HTMLInputElement).focus();
-      }
+    if (focused.value) {
+      focused.value = false;
+      focusIndex.value = -1;
+      (document.getElementById("search-input") as HTMLInputElement).blur();
+    } else {
+      (document.getElementById("search-input") as HTMLInputElement).focus();
     }
-  });
+  }
+};
+
+// Add the keyboard shortcut to open the search box
+onBeforeMount(() => {
+  document.addEventListener("keydown", useKeyboardShortcut);
+});
+
+// Remove the keyboard shortcut to avoid collisions the next time
+// the component is mounted
+onUnmounted(() => {
+  document.removeEventListener("keydown", useKeyboardShortcut);
 });
 </script>
 
 <template>
   <!-- Show the input box display area -->
   <div
-    class="z-50 flex h-fit w-56 flex-row justify-between rounded bg-white px-1 lg:absolute lg:left-[50%] lg:top-0 lg:mt-[0.3625rem] lg:translate-x-[-50%]"
+    class="z-50 flex h-fit flex-row justify-between rounded bg-white px-1 sm:w-36 md:w-56 lg:absolute lg:left-[50%] lg:top-[0.125rem] lg:mt-[0.3625rem] lg:translate-x-[-50%]"
     :class="focused ? 'outline outline-2 outline-blue-500' : ''"
     @click="focusOnInput"
   >
@@ -245,7 +257,7 @@ onBeforeMount(() => {
         type="search"
         aria-label="Search"
         placeholder="Search"
-        class="my-1 text-sm focus:outline-none sm:w-20 md:w-36"
+        class="my-1 text-sm focus:outline-none sm:w-16 md:w-36"
         autocomplete="off"
         spellcheck="false"
         @input="updateQuery"

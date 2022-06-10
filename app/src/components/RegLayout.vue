@@ -174,9 +174,7 @@ watch(
             :class="selectedField == field.name ? 'bg-yellow-50' : ''"
             @mouseenter="emit('highlight-field', field.name)"
             @mouseleave="emit('stop-highlight-field')"
-            @click="
-              emit('select-field', field.name, selectedField == field.name)
-            "
+            @click="emit('select-field', field.name)"
           >
             <FieldName :name="field.name" :nbits="field.nbits" />
           </td>
@@ -199,7 +197,7 @@ watch(
               :value="field.value"
               :nbits="field.nbits"
               :selected-display-type="selectedDisplayType"
-              @select-field="emit('select-field', field.name, $event)"
+              @select-field="emit('select-field', field.name)"
               @value-changed="onFieldValueChange(field, $event)"
             />
           </td>

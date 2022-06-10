@@ -1,5 +1,6 @@
 import { reactive } from "vue";
 import {
+  DesignRoot,
   DisplayType,
   MenuNode,
   Register,
@@ -18,11 +19,32 @@ export default {
   loaded: false,
   useByteSwap: false,
   selectedDisplayType: "hexadecimal" as DisplayType,
+  path: "",
 
-  async load(filename: string) {
-    const result = await fetch(filename);
-    const data = await result.json();
+  async loadUrl(url: string) {
+    try {
+      const result = await fetch(url);
+      const data = await result.json();
+      await this.load(data, url);
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+  },
 
+  async loadFile(file: string) {
+    try {
+      const data = await JSON.parse(file);
+      await this.load(data);
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+  },
+
+  async load(data: SharedState["data"], path = "") {
     for (const name in data.elements) {
       const element = data.elements[name];
       const fields = element.fields;
@@ -39,6 +61,7 @@ export default {
     this.sharedState.fields = this.getFieldMap(data.elements);
     this.sharedState.nodes = this.getNodes(data.elements, data.root);
     this.loaded = true;
+    this.path = path;
   },
 
   async untilLoaded() {
@@ -72,7 +95,10 @@ export default {
     return fields;
   },
 
-  getNodes(elements: { [key: string]: Register }, element: Register) {
+  getNodes(
+    elements: { [key: string]: Register },
+    element: Register | DesignRoot
+  ) {
     return element.children.map((child_id) => {
       const child = elements[child_id];
 
