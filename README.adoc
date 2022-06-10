@@ -8,7 +8,7 @@ toc::[]
 
 == Demos
 
-* https://github.jpl.nasa.gov/pages/regvue/regvue/demo[Basic demo]
+* https://github.jpl.nasa.gov/pages/regvue/regvue/v0.5/#?data=https://github.jpl.nasa.gov/pages/regvue/regvue/demo/data.json[Basic demo]
 * https://github.jpl.nasa.gov/regvue/demos[Additional demos]
 
 == Generate the Register Description
