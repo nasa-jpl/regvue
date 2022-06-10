@@ -22,9 +22,9 @@ const goToOpenPage = () => {
       <span
         class="underline hover:cursor-pointer hover:text-gray-500"
         @click="goToFirstRegister()"
-        >Go</span
+        >Return</span
       >
-      to first register
+      home
     </div>
     <div>
       <span

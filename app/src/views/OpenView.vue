@@ -79,10 +79,9 @@ const onDataFileOpen = async (event: DragEvent) => {
         target="_blank"
         rel="noreferrer"
         class="text-blue-500 underline hover:cursor-pointer hover:text-blue-400"
+        >Register Description File</a
       >
-        register documentation file
-      </a>
-      or provide the URL path to one.
+      or provide the URL for one.
     </div>
 
     <!-- Show drag and drop file input to open local data file -->
