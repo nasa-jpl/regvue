@@ -18,10 +18,12 @@ Regvue no longer needs to be installed (deployed) by end users.  End users can n
 Regvue can load register descriptions from the local filesystem via a file open dialog or via drag-and-drop OR load register descriptions from arbitrary URLs.  End users can create a direct link that pairs a Regvue deployment with a register description JSON file.
 
 Drag-and-drop:
-![Drag-and-drop](https://github.jpl.nasa.gov/storage/user/2262/files/58b9a800-e8f0-11ec-90d6-c7f605640a2f)
+
+<img src="https://github.jpl.nasa.gov/storage/user/2262/files/58b9a800-e8f0-11ec-90d6-c7f605640a2f" alt="Drag-and-drop" width="600"/>
 
 Open URL:
-![Open URL](https://github.jpl.nasa.gov/storage/user/2262/files/59ead500-e8f0-11ec-8f12-427b386576cc)
+
+<img src="https://github.jpl.nasa.gov/storage/user/2262/files/59ead500-e8f0-11ec-8f12-427b386576cc" alt="Open URL" width="600"/>
 
 For example, the v0.5 deployment is available at https://github.jpl.nasa.gov/pages/regvue/regvue/v0.5.  The demo register description can be loaded by appending `/#?data=https://github.jpl.nasa.gov/pages/regvue/regvue/demo/data.json`.  The end result is a direct link that loads the demo register description with the v0.5 deployment: https://github.jpl.nasa.gov/pages/regvue/regvue/v0.5/#?data=https://github.jpl.nasa.gov/pages/regvue/regvue/demo/data.json.
 
@@ -39,7 +41,7 @@ Additional search-related keyboard shortcuts have been added.  The available key
 
 Lastly, several improvements were made to the search UI.
 
-![search demo](https://github.jpl.nasa.gov/storage/user/2262/files/d29a3780-e71e-11ec-8cc3-2f6bea82d5bb)
+<img src="https://github.jpl.nasa.gov/storage/user/2262/files/d29a3780-e71e-11ec-8cc3-2f6bea82d5bb" alt="Search demo" width="600"/>
 
 ### Added
 - Added an Open page at `/open` that will let users open a local `data.json` file or link to a file at a URL ([#66](https://github.jpl.nasa.gov/regvue/regvue/pull/66)).
