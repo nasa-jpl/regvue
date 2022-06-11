@@ -38,9 +38,13 @@ Register descriptions can be loaded via the filesystem or via a URL.
 
 === Via the Filesystem
 
+image::https://github.jpl.nasa.gov/storage/user/2262/files/58b9a800-e8f0-11ec-90d6-c7f605640a2f[Drag-and-drop, 600]
+
 Open Regvue and and load a register descriptions by dragging-and-dropping a register description JSON into Regvue or by using the file open dialog.
 
 === Via a URL (Preferred)
+
+image::https://github.jpl.nasa.gov/storage/user/2262/files/59ead500-e8f0-11ec-8f12-427b386576cc[Open URL, 600]
 
 URLs can be created that automatically load a hosted register description into Regvue.
 
