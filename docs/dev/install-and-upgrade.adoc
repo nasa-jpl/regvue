@@ -1,4 +1,4 @@
-= Install Regvue
+= Install and Upgrade Regvue
 :toc:
 
 Regvue is a frontend web application.
@@ -129,3 +129,14 @@ python -m SimpleHTTPServer 8080
 ----
 
 Open http://localhost:8080
+
+== Upgrade Regvue
+
+Existing GitHub Pages deployments of Regvue are easily upgraded with the link:scripts/upgrade[upgrade script].
+To use the upgrade script, you must have the https://cli.github.com/[GitHub CLI] installed and it must be authenticated to your GitHub instance.
+
+[source,sh]
+.Example: Upgrade the https://github.jpl.nasa.gov/pages/regvue/regvue/v0.5[v0.5 deployment]
+----
+scripts/upgrade --deployment-repository git@github.jpl.nasa.gov:regvue/regvue.git --deployment-path v0.5
+----

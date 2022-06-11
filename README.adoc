@@ -51,20 +51,3 @@ For example,
 * and the demo register description: {demo_register_description}
 
 * can be paired as: {deployment_url}/#?data={demo_register_description}
-
-== Upgrade Regvue
-
-Existing GitHub Pages deployments of Regvue are easily upgraded with the link:scripts/upgrade[upgrade script].
-To use the upgrade script, you must have the https://cli.github.com/[GitHub CLI] installed and it must be authenticated to your GitHub instance.
-
-[source,sh]
-.Example: Upgrade the https://github.jpl.nasa.gov/pages/regvue/regvue/demo[Regvue demo]
-----
-scripts/upgrade --deployment-repository git@github.jpl.nasa.gov:regvue/regvue.git --deployment-path demo
-----
-
-[source,sh]
-.Example: Upgrade the https://github.jpl.nasa.gov/pages/regvue/ece[ECE deployment]
-----
-scripts/upgrade --deployment-repository git@github.jpl.nasa.gov:regvue/ece.git --deployment-path ""
-----
