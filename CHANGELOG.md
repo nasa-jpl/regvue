@@ -9,6 +9,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.5.0] - 2022-06-10
 
+### Highlights
+
+#### Simplified Installation, Upgrading, and Hosting
+
+Regvue no longer needs to be installed (deployed) by end users.  End users can now use deployments managed by the Regvue team.  Going forward, end users will only need to manage their register descriptons JSON files.
+
+Regvue can load register descriptions from the local filesystem via a file open dialog or via drag-and-drop OR load register descriptions from arbitrary URLs.  End users can create a direct link that pairs a Regvue deployment with a register description JSON file.
+
+Drag-and-drop:
+![Drag-and-drop](https://github.jpl.nasa.gov/storage/user/2262/files/58b9a800-e8f0-11ec-90d6-c7f605640a2f)
+
+Open URL:
+![Open URL](https://github.jpl.nasa.gov/storage/user/2262/files/59ead500-e8f0-11ec-8f12-427b386576cc)
+
+For example, the v0.5 deployment is available at https://github.jpl.nasa.gov/pages/regvue/regvue/v0.5.  The demo register description can be loaded by appending `/#?data=https://github.jpl.nasa.gov/pages/regvue/regvue/demo/data.json`.  The end result is a direct link that loads the demo register description with the v0.5 deployment: https://github.jpl.nasa.gov/pages/regvue/regvue/v0.5/#?data=https://github.jpl.nasa.gov/pages/regvue/regvue/demo/data.json.
+
+This allows a single deployment to service multiple designs.  This can also be used to provide multiple versions of a register description for a given design (e.g. `v1.1.json`, `v1.2.json`, etc).
+
+The Regvue team will update existing deployments with bug fixes.  All existing links using these deployments will get new features and bug fixes automatically.  Breaking changes will be done by creating a new deployment.  Users can continue to use the older deployments unaffected or choose to opt-in to the newer versions by updating their links.
+
+For example, the future `v1` deployment will be available at `https://github.jpl.nasa.gov/pages/regvue/regvue/v1`.  Users can create URLs that pair the `v1` deployment with their register description JSON file(s).  The `v1` deployment will be updated with new features and bug fixes.  If a breaking change is made, a future `v2` deployment will be made.  Users can then opt-in to the breaking changes by updating their URLs the new version.
+
+#### Search Improvements
+
+Search got a major overhaul.  Regvue now implements fuzzy search using the [Lunr.js](https://lunrjs.com/) search library.  Search now matches against the full hierarchical name (e.g. block.reg.field), address, and the first 50 characters of element descriptions.  Searching the full description will likely be supported in a future release (see [#69](https://github.jpl.nasa.gov/regvue/regvue/issues/69)).  Blocks are now included in the search results as well.
+
+Additional search-related keyboard shortcuts have been added.  The available key board shortcuts are documented in the UI itself.
+
+Lastly, several improvements were made to the search UI.
+
+![search demo](https://github.jpl.nasa.gov/storage/user/2262/files/d29a3780-e71e-11ec-8cc3-2f6bea82d5bb)
+
 ### Added
 - Added an Open page at `/open` that will let users open a local `data.json` file or link to a file at a URL ([#66](https://github.jpl.nasa.gov/regvue/regvue/pull/66)).
 - Added a 404 page ([#74](https://github.jpl.nasa.gov/regvue/regvue/pull/74)).
