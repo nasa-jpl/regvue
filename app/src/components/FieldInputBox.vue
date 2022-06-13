@@ -136,7 +136,6 @@ const getErrorMessage = (value: string) => {
       class="w-full bg-inherit text-center shadow-sm"
       :class="isError ? 'inner-border bg-red-300/50' : ''"
       @focus="($event.target as HTMLInputElement).select(); showErrorTooltip=true;"
-      @click="($event.target as HTMLInputElement).select(); showErrorTooltip=true;"
       @blur="deactivate"
       @keydown.esc="($event.target as HTMLInputElement).blur()"
       @keydown.enter="($event.target as HTMLInputElement).blur()"
