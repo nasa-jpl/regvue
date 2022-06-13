@@ -33,7 +33,7 @@ export const createSearchIndex = async () => {
         {
           id: document.id,
           name: document.name,
-          doc: document.doc?.substring(0, 50), // only include the first 50 characters
+          doc: document.doc,
           addr: format.getStringRepresentation(
             document.addr,
             "hexadecimal",
@@ -47,7 +47,7 @@ export const createSearchIndex = async () => {
         builder.add({
           id: document.id + ":" + field.name,
           name: field.name,
-          doc: field.doc?.substring(0, 50),
+          doc: field.doc,
         });
       });
     }
