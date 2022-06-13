@@ -57,11 +57,11 @@ export default {
       });
     }
 
-    this.sharedState.data = data;
     this.sharedState.fields = this.getFieldMap(data.elements);
     this.sharedState.nodes = this.getNodes(data.elements, data.root);
-    this.loaded = true;
+    this.sharedState.data = data;
     this.path = path;
+    this.loaded = true;
   },
 
   async untilLoaded() {
