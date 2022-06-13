@@ -74,7 +74,7 @@ const saveRecentUrlSearch = (url: string) => {
     arr.unshift(url);
 
     // Limit the amount of recent urls to show
-    arr = arr.slice(Math.min(arr.length, MAX_SAVED_URLS_CNT));
+    arr = arr.slice(0, Math.min(arr.length, MAX_SAVED_URLS_CNT));
 
     // Convert from set back to array to remove duplicates
     arr = [...new Set(arr)];
