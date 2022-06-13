@@ -14,7 +14,8 @@
     "lunr": "^2.3.9",
     "tailwindcss": "^3.0.24",
     "vue": "^3.2.25",
-    "vue-router": "^4.0.15"
+    "vue-router": "^4.0.15",
+    "vue3-cookies": "^1.0.6"
   },
   "devDependencies": {
     "@types/lunr": "^2.3.4",

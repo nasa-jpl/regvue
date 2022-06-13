@@ -6,6 +6,7 @@ import store from "../store";
 
 import Header from "../components/Header.vue";
 import Menu from "../components/Menu.vue";
+import OpenModal from "../components/OpenModal.vue";
 import RegFields from "../components/RegFields.vue";
 import RegLayout from "../components/RegLayout.vue";
 
@@ -24,6 +25,9 @@ let selectedField = ref(
 
 // Control whether to show navigation menu on left of screen
 let showMenu = ref(true);
+
+// Control whether or not to show the open modal
+let showOpenModal = ref(false);
 
 let reg = computed(() => {
   if (sharedState.data) {
@@ -94,7 +98,13 @@ watch(
 
 <template>
   <!-- Show the header at the top of the page -->
-  <Header class="h-11" @toggle-menu="showMenu = !showMenu" />
+  <Header
+    class="h-11"
+    @toggle-menu="showMenu = !showMenu"
+    @show-open-modal="showOpenModal = true"
+  />
+
+  <OpenModal v-if="showOpenModal" @hide-open-modal="showOpenModal = false" />
 
   <div class="flex h-full flex-row">
     <!-- Show the navigation menu on the left -->
