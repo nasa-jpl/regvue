@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added new features related to choosing data files ([#83](https://github.jpl.nasa.gov/regvue/regvue/pull/83)).
+  - Recently opened urls are saved as cookies and shown as options when inputting a new url.
+  - A hint will be shown if a new version of regvue is available.
+  - Clicking the "Open a new design" icon button will display a modal inside the RegView page to select a new design instead of rerouting to `/open`.
 
 ## [0.5.0] - 2022-06-10
 
