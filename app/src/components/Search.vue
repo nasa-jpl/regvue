@@ -236,6 +236,15 @@ onBeforeMount(() => {
 onUnmounted(() => {
   document.removeEventListener("keydown", useKeyboardShortcut);
 });
+
+// Rebuild the search index if the store changes
+watch(
+  () => store.sharedState.data,
+  async () => {
+    await store.untilLoaded();
+    searchObject = await createSearchIndex();
+  }
+);
 </script>
 
 <template>
