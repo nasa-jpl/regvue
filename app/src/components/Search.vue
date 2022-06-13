@@ -239,7 +239,6 @@ onUnmounted(() => {
 watch(
   () => store.sharedState.data,
   async () => {
-    await store.untilLoaded();
     searchObject = await createSearchIndex();
 
     recentSuggestions.value = [];

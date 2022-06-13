@@ -1,7 +1,10 @@
 import { LocationQueryValue } from "vue-router";
 
-// Type representing the different states a single bit value can take
-export type Bit = 0 | 1 | "?";
+// Types representing the different states a single bit value can take
+export type Bit = 0 | 1 | UnknownBit;
+export type UnknownBit = "?" | "u";
+export const isUnknownBit = (x: unknown): x is UnknownBit =>
+  ["?", "u"].includes(x as string);
 
 // Interface representing the attributes of the root project description
 export interface DesignRoot {

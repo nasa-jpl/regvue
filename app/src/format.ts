@@ -1,4 +1,4 @@
-import { Bit, DisplayType, RegisterField } from "./types";
+import { Bit, DisplayType, isUnknownBit, RegisterField } from "./types";
 
 // Provides formatting functions to convert various values to strings
 export default {
@@ -58,13 +58,19 @@ export default {
           .reverse()
           .join("");
 
-        // If any Bit is "?", then output is "?"
-        if (bitString.includes("?")) {
-          res = "?" + res;
+        let unknownBit;
+        for (const char of bitString) {
+          if (isUnknownBit(char)) {
+            unknownBit = char;
+            break;
+          }
         }
 
-        // Otherwise convert the bitString to hexadecimal
-        else {
+        // If any Bit is unknown, then output is unknown
+        if (unknownBit) {
+          res = unknownBit + res;
+        } else {
+          // Otherwise convert the bitString to hexadecimal
           const ret = parseInt(bitString, 2).toString(16).toUpperCase();
           res = ret + res;
         }
@@ -79,9 +85,11 @@ export default {
 
     // Decimal case
     else if (displayType == "decimal") {
-      // If any Bit is "?" then the entire value is "?"
-      if (bitArray.includes("?")) {
-        return "?";
+      // If any Bit is unknown then the entire value is unknown
+      for (const bit of bitArray) {
+        if (isUnknownBit(bit)) {
+          return bit;
+        }
       }
       return parseInt(bitArray.reverse().join(""), 2).toString();
     }

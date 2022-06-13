@@ -1,5 +1,5 @@
 import format from "./format";
-import { Bit } from "./types";
+import { Bit, isUnknownBit } from "./types";
 
 // Provides various string parsing functions
 export default {
@@ -50,9 +50,9 @@ export default {
       for (const char of value.substring(2)) {
         // Look at each hex decimal
 
-        if (char == "?") {
+        if (isUnknownBit(char)) {
           // If the character is ? we append ? 4 times (a hex digit is 4 bits)
-          for (let i = 0; i < 4; i++) res.push("?");
+          for (let i = 0; i < 4; i++) res.push(char);
         } else {
           // Get a number representation of the hex digit
           const value = this.num("0x" + char);
@@ -77,16 +77,25 @@ export default {
       // Loop through each binary digit after the prefix
       for (const char of value.substring(2)) {
         // Push the digit as a Bit type
-        if (char == "?") res.push(char);
+        if (isUnknownBit(char)) res.push(char);
         else res.push(parseInt(char) as Bit);
       }
     }
 
     // Decimal case
     else {
-      // If any digit in the decimal is "?", then the whole value is "?"
-      if (value.includes("?")) {
-        for (let i = 0; i < length; i++) res.push("?");
+      // Look for any UnknownBits
+      let unknownBit;
+      for (const bit of value) {
+        if (isUnknownBit(bit)) {
+          unknownBit = bit as Bit;
+          break;
+        }
+      }
+
+      // If any digit in the decimal is unknown, then the whole value is unknown
+      if (unknownBit) {
+        for (let i = 0; i < length; i++) res.push(unknownBit);
       } else {
         // Get a number representation
         const num = this.num(value);
