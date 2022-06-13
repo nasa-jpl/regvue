@@ -3,7 +3,7 @@
 :toc: macro
 
 :latest_deployment: v0.5
-:deployment_url: https://github.jpl.nasa.gov/pages/regvue/regvue/{latest_deployment}
+:deployment_url: https://github.jpl.nasa.gov/pages/regvue/regvue/{latest_deployment}/#/
 :demo_register_description: https://github.jpl.nasa.gov/pages/regvue/regvue/demo/data.json
 
 A modern web-based viewer for FPGA/ASIC register documentation.
@@ -12,7 +12,7 @@ toc::[]
 
 == Demos
 
-* {deployment_url}/#?data={demo_register_description}[Basic demo]
+* {deployment_url}?data={demo_register_description}[Basic demo]
 * https://github.jpl.nasa.gov/regvue/demos[Additional demos]
 
 == Generate the Register Description
@@ -54,4 +54,4 @@ For example,
 
 * and the demo register description: {demo_register_description}
 
-* can be paired as: {deployment_url}/#?data={demo_register_description}
+* can be paired as: {deployment_url}?data={demo_register_description}
