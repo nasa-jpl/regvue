@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, Ref, computed, onBeforeMount, onUnmounted } from "vue";
+import { computed, ref, Ref, onBeforeMount, onUnmounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import store from "../store";
 import { createSearchIndex } from "../search";
@@ -29,6 +29,8 @@ let focused = ref(false);
 
 // Index of the suggestion currently in focus
 let focusIndex = ref(0);
+
+const isMac = navigator.userAgent.includes("Mac");
 
 // Array used to keep track of recently selected suggestions
 let recentSuggestions: Ref<Suggestion[]> = ref([]);
@@ -128,8 +130,6 @@ let showSuggestions = computed(() => {
   return focused.value && query.value != "" && suggestions.value;
 });
 
-const isMac = navigator.userAgent.includes("Mac");
-
 const focusOnInput = () => {
   (document.getElementById("search-input") as HTMLInputElement).focus();
 };
@@ -138,17 +138,12 @@ const focusOnInput = () => {
 let timer: number;
 const updateQuery = () => {
   clearTimeout(timer);
-  const elem = document.getElementById("search-input") as HTMLInputElement;
 
-  // Add a buffer before updating if query is small to prevent lag from
-  // multiple searches for small queries
-  if (elem.value.length < 3) {
-    timer = setTimeout(() => {
-      query.value = elem.value;
-    }, 250); // delay updating the value by this amount in milliseconds
-  } else {
+  // Add a buffer before updating to prevent lag
+  timer = setTimeout(() => {
+    const elem = document.getElementById("search-input") as HTMLInputElement;
     query.value = elem.value;
-  }
+  }, 150); // delay updating the search query by this amount in milliseconds
 };
 
 // Change the route to go to the selected suggestion
@@ -164,7 +159,10 @@ const go = (suggestion: Suggestion) => {
   router.push(suggestion.path);
 
   // Deselect the search input box
-  const searchElem = document.getElementById("search-input") as HTMLElement;
+  const searchElem = document.getElementById(
+    "search-input"
+  ) as HTMLInputElement;
+  searchElem.value = "";
   searchElem.blur();
 
   // Reset search variables
@@ -243,6 +241,9 @@ watch(
   async () => {
     await store.untilLoaded();
     searchObject = await createSearchIndex();
+
+    recentSuggestions.value = [];
+    query.value = "";
   }
 );
 </script>
@@ -262,7 +263,6 @@ watch(
       <!-- Show the input box that is bound to the query string -->
       <input
         id="search-input"
-        :value="query"
         type="search"
         aria-label="Search"
         placeholder="Search"
@@ -357,11 +357,12 @@ watch(
           </template>
 
           <!-- Display a section if there are no results -->
-          <template v-else-if="showSuggestions && suggestions.length == 0">
-            <div class="my-10 bg-white text-center text-sm text-gray-500">
-              No results
-            </div>
-          </template>
+          <div
+            v-else-if="showSuggestions && suggestions.length == 0"
+            class="flex min-h-[102px] w-full flex-col justify-center bg-white text-center text-sm text-gray-500"
+          >
+            No results
+          </div>
 
           <!-- Display the recent searches if available and showSuggestions is false -->
           <div
