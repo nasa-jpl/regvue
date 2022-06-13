@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import store from "../store";
 import Search from "./Search.vue";
 
@@ -16,10 +16,9 @@ defineProps<{
   }[];
 }>();
 
-const emit = defineEmits(["toggle-menu"]);
+const emit = defineEmits(["toggle-menu", "show-open-modal"]);
 
 const route = useRoute();
-const router = useRouter();
 
 let sharedState = ref(store.sharedState);
 
@@ -98,12 +97,11 @@ watch(
           >{{ link?.text }}</a
         >
 
-        <!-- TODO show a modal instead -->
-        <!-- Show icon to route to /open -->
+        <!-- Show icon to open modal to choose new data file -->
         <file-replace-outline
           class="text-gray-600 hover:cursor-pointer hover:bg-gray-400"
           title="Open a new design file"
-          @click="() => router.push({ name: 'open' })"
+          @click="emit('show-open-modal')"
         />
       </div>
     </div>
