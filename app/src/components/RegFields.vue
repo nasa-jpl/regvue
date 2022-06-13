@@ -25,40 +25,46 @@ const deselectField = () => {
 </script>
 
 <template>
-  <div class="flex flex-col border">
-    <!-- Display headers -->
-    <header class="flex bg-gray-200 py-1 text-left font-bold">
-      <div class="w-20 shrink-0 text-center">Bits</div>
-      <div class="w-40 shrink-0 text-center">Name</div>
-      <div class="w-20 shrink-0 text-center">Access</div>
-      <div class="grow text-center">Description</div>
-    </header>
-
-    <!-- Display row entries -->
-    <div
-      v-for="field in fields"
-      :key="field.name"
-      class="flex border-b text-left hover:cursor-pointer"
-      :class="selectedField == field.name ? 'bg-yellow-50' : ''"
-      @mouseenter="selectField(field.name)"
-      @mouseleave="deselectField"
-      @click="navigateToField(field.name)"
-    >
-      <div class="flex w-20 shrink-0">
-        <span class="m-auto">
+  <table class="border-2">
+    <thead class="bg-gray-200">
+      <th class="min-w-[5rem] py-2">Bits</th>
+      <th class="min-w-[8rem]">Name</th>
+      <th class="min-w-[5rem]">Access</th>
+      <th>Description</th>
+    </thead>
+    <tbody>
+      <tr
+        v-for="field in fields"
+        :key="field.name"
+        class="border-b-2 hover:cursor-pointer"
+        :class="selectedField == field.name ? 'bg-yellow-50' : ''"
+        @mouseenter="selectField(field.name)"
+        @mouseleave="deselectField"
+        @click="navigateToField(field.name)"
+      >
+        <!-- Show the bit range -->
+        <td class="px-2 text-center">
           {{ field.nbits + field.lsb - 1 }}:{{ field.lsb }}
-        </span>
-      </div>
-      <div class="flex w-40 shrink-0 border-l">
-        <span class="m-auto">{{ field.name }}</span>
-      </div>
-      <div class="flex w-20 shrink-0 border-l px-2">
-        <span class="m-auto">{{ field.access }}</span>
-      </div>
-      <div class="m-auto grow border-l px-2">
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <div class="default-styles" v-html="field.doc"></div>
-      </div>
-    </div>
-  </div>
+        </td>
+
+        <!-- Show the field name -->
+        <td class="border-l-2 px-2 text-center">
+          {{ field.name }}
+        </td>
+
+        <!-- Show the access -->
+        <td class="border-l-2 px-2 text-center">
+          <!-- Replace regular hypens with a non-breaking hypen -->
+          <!-- Prevents line wrapping on hypens -->
+          {{ field.access.replaceAll("-", "&#8209;") }}
+        </td>
+
+        <!-- Show the description as html -->
+        <td class="border-l-2 px-2">
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div class="default-styles" v-html="field.doc"></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>

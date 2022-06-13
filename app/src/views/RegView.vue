@@ -140,7 +140,7 @@ watch(
             v-if="reg.fields"
             :fields="reg.fields"
             :selected-field="selectedField"
-            class="m-4 mb-28"
+            class="mx-6 mt-8 mb-28"
             @select-field="selectField"
             @highlight-field="highlightField"
             @stop-highlight-field="stopHighlightField"
