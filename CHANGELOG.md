@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Clicking the "Open a new design" icon button will display a modal inside the RegView page to select a new design instead of rerouting to `/open`.
 
 ### Fixed
+- Allow searching on full doc description and not just first 50 characters ([#69](https://github.jpl.nasa.gov/regvue/regvue/pull/69)).
 - Fixed overflowing names and accesses in the field layout table ([#65](https://github.jpl.nasa.gov/regvue/regvue/pull/65)).
 
 ## [0.5.0] - 2022-06-10
