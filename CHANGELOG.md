@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - A hint will be shown if a new version of regvue is available.
   - Clicking the "Open a new design" icon button will display a modal inside the RegView page to select a new design instead of rerouting to `/open`.
 
+### Fixed
+- Fixed overflowing names and accesses in the field layout table ([#65](https://github.jpl.nasa.gov/regvue/regvue/pull/65)).
+
 ## [0.5.0] - 2022-06-10
 
 ### Highlights
