@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Added support for unknown values in bit encoding/decoding ([#46](https://github.jpl.nasa.gov/regvue/regvue/pull/46)).
 - Added new features related to choosing data files ([#83](https://github.jpl.nasa.gov/regvue/regvue/pull/83)).
   - Recently opened urls are saved as cookies and shown as options when inputting a new url.
   - A hint will be shown if a new version of regvue is available.
@@ -15,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Allow searching on full doc description and not just first 50 characters ([#69](https://github.jpl.nasa.gov/regvue/regvue/pull/69)).
 - Fixed overflowing names and accesses in the field layout table ([#65](https://github.jpl.nasa.gov/regvue/regvue/pull/65)).
+- Allow dropping urls into the drop zone to open new data files ([#78](https://github.jpl.nasa.gov/regvue/regvue/pull/78)).
 
 ## [0.5.0] - 2022-06-10
 

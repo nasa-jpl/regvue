@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, Ref, nextTick, watch } from "vue";
 import { useRoute } from "vue-router";
-import { RegisterField, type DisplayType } from "../types";
+import { Bit, RegisterField, DisplayType } from "../types";
 import parse from "../parse";
 import store from "../store";
 
@@ -12,14 +12,15 @@ const props = defineProps<{
   fields: RegisterField[];
   selectedField?: string;
 }>();
+
 const emit = defineEmits([
   "select-field",
   "highlight-field",
   "stop-highlight-field",
 ]);
 
-// Numeric value of the register
-let registerValue = ref(0);
+// Store the value of the register as an array of 32 Bits
+let registerValue = ref(Array(32).map(() => 0 as Bit));
 
 // Control whether or not to display LSB or MSB first
 let useByteSwap = ref(store.useByteSwap);
@@ -33,19 +34,19 @@ let displayTypes: DisplayType[] = ["binary", "decimal", "hexadecimal"];
 let fieldKeyIndex = ref(0);
 let registerKeyIndex = ref(0);
 
-// Perform a mathematical byte swap on a value
-const byteSwap = (value: number) => {
-  let newValue = 0n;
-
-  for (let byteIdx = 0n; byteIdx < 32 / 8; byteIdx++) {
-    const bitIdx = byteIdx * 8n;
-    const byte = (BigInt(value) >> bitIdx) & 0xffn;
-    const swappedByteIdx = (3n - byteIdx) * 8n;
-    const swappedByte = byte << swappedByteIdx;
-    newValue |= swappedByte;
+// Perform a byte swap on a Bit[]
+const byteSwap = (bitArray: Bit[]) => {
+  if (bitArray.length % 8 != 0) {
+    throw Error("Tried to byte swap a value with not invalid number of bits");
   }
 
-  return Number(newValue);
+  let res: Bit[] = [];
+
+  // Add 8 bits at a time to the front of the new Bit[] result
+  for (let i = 0; i < bitArray.length; i += 8) {
+    res.unshift(...bitArray.slice(i, i + 8));
+  }
+  return res;
 };
 
 // Toggles the useByteSwap variable and forces a reload/recalculate
@@ -69,9 +70,15 @@ const updateDisplayType = (displayType: DisplayType) => {
   registerKeyIndex.value += 1;
 };
 
-// Assigns each field.value to its field.reset
+// Assigns each field.value based on its field.reset
 const resetValues = () => {
-  props.fields.forEach((field) => (field.value = field.reset));
+  props.fields.forEach(
+    (field) =>
+      (field.value = parse.stringToBitArray(
+        field.reset.toString(),
+        field.nbits
+      ))
+  );
   updateRegisterValue();
 
   fieldKeyIndex.value += 1;
@@ -80,12 +87,14 @@ const resetValues = () => {
 
 // Ues the field values to obtain a new value for the register
 const updateRegisterValue = () => {
-  let valuesArr = props.fields.map((field) => {
-    let mask = (1n << BigInt(field.nbits)) - 1n;
-    return (BigInt(field.value) & mask) << BigInt(field.lsb);
+  let result: Bit[] = [];
+
+  // Loops through the fields and add their values to the front of the result arr
+  props.fields.forEach((field) => {
+    result.unshift(...field.value);
   });
 
-  let result = Number(valuesArr.reduce((result, curr) => result | curr));
+  // Byte swap the values if enabled
   if (useByteSwap.value) {
     result = byteSwap(result);
   }
@@ -94,13 +103,9 @@ const updateRegisterValue = () => {
 };
 updateRegisterValue(); // Initial call on setup
 
-// Parse the user input for the new field value and conditionally
-// select the next input element
+// Parse the user input to update the field value
 const onFieldValueChange = (field: RegisterField, value: string) => {
-  let newValue = parse.num(value);
-
-  // Ensure the new value does not exceed the max field value
-  newValue = newValue & ((1 << field.nbits) - 1);
+  const newValue = parse.stringToBitArray(value, field.nbits);
   field.value = newValue;
 
   // Update the register value
@@ -110,7 +115,7 @@ const onFieldValueChange = (field: RegisterField, value: string) => {
 
 // Obtains the input register value and uses it to update the field values
 const onRegisterInput = (input: string) => {
-  const value = parse.num(input);
+  const value = parse.stringToBitArray(input);
   registerValue.value = value;
 
   populateFieldValuesFromRegisterValue(value);
@@ -118,20 +123,18 @@ const onRegisterInput = (input: string) => {
 };
 
 // Assigns all fields a new value based on a new register value
-const populateFieldValuesFromRegisterValue = (value: number) => {
+const populateFieldValuesFromRegisterValue = (value: Bit[]) => {
   if (useByteSwap.value) {
     value = byteSwap(value);
   }
 
-  for (let field of props.fields) {
-    let mask = (1n << BigInt(field.nbits)) - 1n;
-    let fieldValue = BigInt(value >> field.lsb) & mask;
-
-    field.value = Number(fieldValue);
-  }
+  // Assign each field by indexing the register value according to lsb and nbits
+  props.fields.forEach((field) => {
+    field.value = value.slice(field.lsb, field.lsb + field.nbits);
+  });
 };
 
-// Recalculate the register value when leaving the page
+// Force input components to reload when leaving the page
 const route = useRoute();
 watch(
   () => route.params.regid,
@@ -194,7 +197,7 @@ watch(
             <FieldInputBox
               :key="field.name + '-' + fieldKeyIndex"
               :name="field.name"
-              :value="field.value"
+              :bit-array="field.value"
               :nbits="field.nbits"
               :selected-display-type="selectedDisplayType"
               @select-field="emit('select-field', field.name)"
@@ -209,7 +212,7 @@ watch(
             <FieldInputBox
               :key="'register-input-' + registerKeyIndex"
               name="register"
-              :value="registerValue"
+              :bit-array="registerValue"
               :nbits="32"
               :selected-display-type="selectedDisplayType"
               @value-changed="onRegisterInput($event)"

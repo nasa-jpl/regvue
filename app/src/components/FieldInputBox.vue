@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { type DisplayType } from "../types";
+import { Bit, DisplayType, isUnknownBit } from "../types";
 import format from "../format";
 import parse from "../parse";
 
 const props = defineProps<{
   name: string;
-  value: number;
+  bitArray: Bit[];
   nbits: number;
   selectedDisplayType: DisplayType;
 }>();
+
 const emit = defineEmits(["select-field", "value-changed"]);
 
 // Determine whether or not to display an error
@@ -20,10 +21,10 @@ let errorMessage = ref("");
 
 // Value to display when user stops editing
 let displayValue = ref(
-  format.getStringRepresentation(
-    props.value,
-    props.selectedDisplayType,
-    props.nbits
+  format.bitArrayToString(
+    props.bitArray,
+    props.selectedDisplayType
+    // props.nbits
   )
 );
 
@@ -34,23 +35,17 @@ let showErrorTooltip = ref(false);
 // displayValue if there is no error
 const deactivate = () => {
   if (!isError.value) {
-    displayValue.value = format.getStringRepresentation(
-      props.value,
-      props.selectedDisplayType,
-      props.nbits
+    displayValue.value = format.bitArrayToString(
+      props.bitArray,
+      props.selectedDisplayType
     );
   }
 
   emit("select-field", false);
   showErrorTooltip.value = false;
-
-  const elem = document.getElementById(
-    "input-box-" + props.name
-  ) as HTMLInputElement;
-  elem.blur();
 };
 
-// Determine whether to emit the value change and call deactivate()
+// Determine whether to emit the value change
 const updateValue = () => {
   const elem = document.getElementById(
     "input-box-" + props.name
@@ -101,7 +96,7 @@ const getErrorMessage = (value: string) => {
 
     // Characters must be a valid hex character
     for (let char of value) {
-      if (!/[0-9A-Fa-f]/.test(char)) {
+      if (!/[0-9A-Fa-f]|[?]/.test(char) && !isUnknownBit(char)) {
         return `Invalid hex character: '${char}'`;
       }
     }
@@ -115,14 +110,14 @@ const getErrorMessage = (value: string) => {
 
     // Characters must be a valid binary character
     for (let char of value) {
-      if (!/[0-1]/.test(char)) {
+      if (!/[0-1]|[?]/.test(char) && !isUnknownBit(char)) {
         return `Invalid binary character: '${char}'`;
       }
     }
   } else {
     // Characters must be a valid decimal character
     for (let char of value) {
-      if (!/[0-9]/.test(char)) {
+      if (!/[0-9]|[?]/.test(char) && !isUnknownBit(char)) {
         return `Invalid decimal character: '${char}'`;
       }
     }
@@ -141,10 +136,9 @@ const getErrorMessage = (value: string) => {
       class="w-full bg-inherit text-center shadow-sm"
       :class="isError ? 'inner-border bg-red-300/50' : ''"
       @focus="($event.target as HTMLInputElement).select(); showErrorTooltip=true;"
-      @click="($event.target as HTMLInputElement).select(); showErrorTooltip=true;"
       @blur="deactivate"
-      @keydown.esc="deactivate"
-      @keydown.enter="deactivate"
+      @keydown.esc="($event.target as HTMLInputElement).blur()"
+      @keydown.enter="($event.target as HTMLInputElement).blur()"
       @input="updateValue()"
       @keydown.delete="updateValue()"
       @mouseenter="showErrorTooltip = true"

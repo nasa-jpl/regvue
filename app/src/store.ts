@@ -8,6 +8,7 @@ import {
   SharedState,
 } from "./types";
 import format from "./format";
+import parse from "./parse";
 
 export default {
   sharedState: reactive({
@@ -48,11 +49,16 @@ export default {
     for (const name in data.elements) {
       const element = data.elements[name];
       const fields = element.fields;
+
+      // Set the field.value to be a Bit[] that represents the field.reset or 0
       fields?.forEach((field: RegisterField) => {
         if (field.reset) {
-          field.value = field.reset;
+          field.value = parse.stringToBitArray(
+            field.reset.toString(),
+            field.nbits
+          );
         } else {
-          field.value = 0;
+          field.value = parse.stringToBitArray("0", field.nbits);
         }
       });
     }
@@ -133,6 +139,5 @@ export default {
 
   setUseByteSwap(value: boolean) {
     this.useByteSwap = value;
-    console.log("updated useByteSwap");
   },
 };
