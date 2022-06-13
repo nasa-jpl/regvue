@@ -16,9 +16,25 @@ onBeforeMount(() => {
       e.preventDefault();
     }
   });
+
   window.addEventListener("drop", (e) => {
     if ((e.target as HTMLElement)?.tagName != "INPUT") {
       e.preventDefault();
+    }
+
+    // Check if the dropped object has a URL field
+    const url = e.dataTransfer?.getData("URL");
+    if (url && url != "") {
+      e.preventDefault();
+
+      // Set the data-url-input equal to dropped object URL field
+      const elem = document.getElementById(
+        "data-url-input"
+      ) as HTMLInputElement;
+      elem.value = url;
+
+      // Try to load the url of the dropped object
+      onUrlDataInput();
     }
   });
 });
@@ -40,7 +56,7 @@ const onUrlDataInput = async () => {
   }
 };
 
-const onDataFileOpen = async (event: DragEvent) => {
+const onDataFileOpen = async (event: Event) => {
   fetchError.value = false;
   openError.value = false;
   const elem = document.getElementById("data-url-input") as HTMLInputElement;
