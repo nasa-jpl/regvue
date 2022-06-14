@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed overflowing names and accesses in the field layout table ([#65](https://github.jpl.nasa.gov/regvue/regvue/pull/65)).
 - Allow dropping urls into the drop zone to open new data files ([#78](https://github.jpl.nasa.gov/regvue/regvue/pull/78)).
 
+### Changed
+- Upgraded Cypress to 10.1.0 and added new tests for bit encoding/decoding and opening data files ([#89](https://github.jpl.nasa.gov/regvue/regvue/pull/89)).
+
 ## [0.5.0] - 2022-06-10
 
 ### Highlights

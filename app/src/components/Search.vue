@@ -250,6 +250,7 @@ watch(
 <template>
   <!-- Show the input box display area -->
   <div
+    id="search-input-div"
     class="z-50 flex h-fit flex-row justify-between rounded bg-white px-1 sm:w-36 md:w-56 lg:absolute lg:left-[50%] lg:top-[0.125rem] lg:mt-[0.3625rem] lg:translate-x-[-50%]"
     :class="focused ? 'outline outline-2 outline-blue-500' : ''"
     @click="focusOnInput"
@@ -316,6 +317,7 @@ watch(
 
   <!-- Show grayed-out the background and suggestions window when the input is focused -->
   <div
+    v-if="focused"
     class="absolute top-2 z-40 mr-4 w-screen rotate-0 text-center text-base"
     @keydown.escape="
       focused = false;
@@ -323,8 +325,7 @@ watch(
     "
   >
     <div
-      v-if="focused"
-      id="search-suggestions-div"
+      id="search-background-div"
       class="absolute z-40 m-0 h-screen w-screen bg-gray-300/50 p-0 text-left backdrop-blur-lg"
       @click="
         focused = false;
@@ -341,7 +342,10 @@ watch(
 
         <section class="max-h-[500px] overflow-y-scroll">
           <!-- Display the search results if available and showSuggestions is true -->
-          <template v-if="showSuggestions && suggestions.length > 0">
+          <div
+            v-if="showSuggestions && suggestions.length > 0"
+            id="search-results-div"
+          >
             <SearchResult
               v-for="(suggestion, i) in suggestions"
               :key="suggestion.name + i"
@@ -353,11 +357,12 @@ watch(
               @mouseenter="focus(i, false)"
               @mouseleave="focus(-1, false)"
             />
-          </template>
+          </div>
 
           <!-- Display a section if there are no results -->
           <div
             v-else-if="showSuggestions && suggestions.length == 0"
+            id="no-search-results-div"
             class="flex min-h-[102px] w-full flex-col justify-center bg-white text-center text-sm text-gray-500"
           >
             No results
@@ -366,6 +371,7 @@ watch(
           <!-- Display the recent searches if available and showSuggestions is false -->
           <div
             v-else-if="!showSuggestions && recentSuggestions.length"
+            id="recent-searches-div"
             class="mb-4"
           >
             <div
@@ -385,6 +391,7 @@ watch(
               />
               <!-- Show an "x" button on the right side that will remove the recent suggestion -->
               <button
+                :id="'remove-recent-search-btn-' + i"
                 class="z-[60] mt-3 px-3 text-gray-500 hover:cursor-pointer"
                 @click.stop.prevent="removeRecentSuggestion(suggestion)"
               >
@@ -396,6 +403,7 @@ watch(
           <!-- Display a message if there are no recent suggestions to show -->
           <div
             v-else-if="!showSuggestions && !recentSuggestions.length"
+            id="no-recent-searches-div"
             class="flex min-h-[102px] w-full flex-col justify-center bg-white text-center text-sm text-gray-500"
           >
             <p>No recent searches</p>

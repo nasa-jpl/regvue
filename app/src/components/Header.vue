@@ -70,6 +70,7 @@ watch(
       <div class="ml-6 flex flex-row items-center space-x-2">
         <!-- Show menu to collapse nav bar (needs to be wrapped in div for @click to work) -->
         <div
+          id="toggle-menu-button"
           class="hover:cursor-pointer hover:bg-gray-400"
           @click="emit('toggle-menu')"
         >
@@ -99,6 +100,7 @@ watch(
 
         <!-- Show icon to open modal to choose new data file -->
         <file-replace-outline
+          id="show-open-modal-button"
           class="text-gray-600 hover:cursor-pointer hover:bg-gray-400"
           title="Open a new design file"
           @click="emit('show-open-modal')"

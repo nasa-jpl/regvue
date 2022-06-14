@@ -130,6 +130,7 @@ const onNodeSelect = (key: string) => {
 
 <template>
   <div
+    id="navigation-menu"
     class="text-md mt-[1px] flex flex-shrink-0 flex-col overflow-y-scroll border-r-2"
   >
     <!-- Show the nodes -->

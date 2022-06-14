@@ -21,16 +21,19 @@ onBeforeMount(() => {
 
 <template>
   <div
+    id="open-modal-background-div"
     class="absolute top-0 z-50 h-screen w-screen bg-gray-300/50"
     @click="emit('hide-open-modal')"
   >
     <div
+      id="open-modal-div"
       class="m-auto mt-28 w-[650px] rounded-lg border border-gray-300 bg-white text-center shadow"
       @click.stop
     >
       <!-- Add a button to close the modal -->
       <div class="flex w-full justify-end">
         <button
+          id="close-open-modal-button"
           class="right-0 rounded px-4 py-2 hover:cursor-pointer hover:bg-gray-200"
           @click="emit('hide-open-modal')"
         >

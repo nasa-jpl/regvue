@@ -4,7 +4,7 @@ import packageInfo from "../../package.json";
 
 describe("app-version-component", () => {
   beforeEach(() => {
-    cy.visit("localhost:3000");
+    cy.visit("/");
   });
 
   it("shows app version component", () => {

@@ -228,6 +228,7 @@ watch(
         <div>
           <button
             v-for="(displayType, i) in displayTypes"
+            :id="'select-display-type-' + displayType"
             :key="displayType"
             class="border-[0.5px] border-gray-400 px-1 shadow"
             :class="[
@@ -247,6 +248,7 @@ watch(
 
         <!-- Show byte swap button -->
         <button
+          id="toggle-byte-swap-button"
           class="rounded border border-gray-400 px-1 hover:cursor-pointer"
           :class="
             useByteSwap
@@ -262,6 +264,7 @@ watch(
 
       <!-- Show reset values button -->
       <button
+        id="reset-values-button"
         class="rounded border border-gray-400 bg-white px-1 shadow hover:bg-gray-100"
         title="Set all field values to their reset value"
         @click="resetValues"
