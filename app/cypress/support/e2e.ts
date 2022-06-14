@@ -18,3 +18,13 @@ import "./commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+// Ignore errors with the ResizeObserver
+// (because of how Cypress handles opening the window the ResizeObserver
+//  temporarily stops itself from working to prevent infinite loops from
+//  resizing too much too quickly)
+Cypress.on("uncaught:exception", (err) => {
+  return !err.message.includes(
+    "ResizeObserver loop completed with undelivered notifications."
+  );
+});
