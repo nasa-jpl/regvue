@@ -139,6 +139,7 @@ const onDataFileOpen = async (event: Event) => {
     <!-- Show drag and drop file input to open local data file -->
     <div class="flex w-[90%] items-center justify-center">
       <label
+        id="data-file-drop-zone"
         for="data-file-input"
         class="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100"
       >
