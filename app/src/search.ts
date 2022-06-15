@@ -1,10 +1,9 @@
 import format from "src/format";
 import lunr from "lunr";
-import store from "src/store";
+import { Register } from "src/types";
 
 // Creates a lunr.Index object that can be used to search data.elements
-export const createSearchIndex = async () => {
-  await store.untilLoaded();
+export const createSearchIndex = (elements: Map<string, Register>) => {
   return lunr((builder: lunr.Builder) => {
     // Set the tokenizer to only seperate search terms on carriage return (\r)
     // or newline (\n)
@@ -26,12 +25,7 @@ export const createSearchIndex = async () => {
     builder.field("doc");
 
     // Add all reg/blk/mem elements to the search index
-    for (const key of Object.keys(store.sharedState.data.elements)) {
-      const document = store.sharedState.data.elements[key];
-      if (!document) {
-        throw Error(`Could not find element with id ${key}`);
-      }
-
+    for (const document of elements.values()) {
       builder.add(
         {
           id: document.id,
@@ -46,7 +40,7 @@ export const createSearchIndex = async () => {
         { boost: 25 } // prioritize registers over fields
       );
 
-      document.fields?.forEach((field) => {
+      document.fields?.forEach((field: { name: string; doc: any }) => {
         builder.add({
           id: document.id + ":" + field.name,
           name: field.name,

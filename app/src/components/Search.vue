@@ -1,25 +1,21 @@
 <script setup lang="ts">
 import { computed, ref, Ref, onBeforeMount, onUnmounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { Index, Query } from "lunr";
+import { Query } from "lunr";
 import { createSearchIndex } from "src/search";
 import type { Suggestion } from "src/types";
-import store from "src/store";
+import { useStore } from "src/store";
 
 import AppleKeyboardCommand from "vue-material-design-icons/AppleKeyboardCommand.vue";
 import Magnify from "vue-material-design-icons/Magnify.vue";
 import SearchResult from "src/components/SearchResult.vue";
 
-const sharedState = ref(store.sharedState);
-
 const route = useRoute();
 const router = useRouter();
+const store = useStore();
 
 // Create the search object
-let searchObject: Index;
-onBeforeMount(async () => {
-  searchObject = await createSearchIndex();
-});
+let searchObject = createSearchIndex(store.elements);
 
 // Search query
 let query = ref("");
@@ -38,7 +34,7 @@ let recentSuggestions: Ref<Suggestion[]> = ref([]);
 // Create a list of entires that match the search query
 let suggestions = computed(() => {
   let res: Suggestion[] = [];
-  if (!sharedState.value.data || !sharedState.value.fields) {
+  if (!store.elements || store.elements.size == 0) {
     return res;
   }
 
@@ -112,7 +108,7 @@ let suggestions = computed(() => {
     } else {
       // Otherwise it is a register/mem entry
 
-      const item = sharedState.value.data.elements[id];
+      const item = store.elements.get(id);
       if (!item) {
         throw Error(`Could not find ${id} in elements list.`);
       }
@@ -263,9 +259,9 @@ onUnmounted(() => {
 
 // Rebuild the search index if the store changes
 watch(
-  () => store.sharedState.data,
-  async () => {
-    searchObject = await createSearchIndex();
+  () => store.elements,
+  () => {
+    searchObject = createSearchIndex(store.elements);
 
     recentSuggestions.value = [];
     query.value = "";

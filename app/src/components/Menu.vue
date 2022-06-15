@@ -1,22 +1,52 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { reactive, ref, computed, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { MenuNode } from "src/types";
-import store from "src/store";
+import { DesignRoot, MenuNode, Register } from "src/types";
+import { useStore } from "src/store";
+import format from "src/format";
 
 import MenuDown from "vue-material-design-icons/MenuDown.vue";
 import MenuRight from "vue-material-design-icons/MenuRight.vue";
 
-const props = defineProps<{
-  nodes: MenuNode[];
-}>();
-
 const router = useRouter();
 const route = useRoute();
+const store = useStore();
 
-// Given the nested structure of objects representing the nodes in the menu,
-// create a flat list of all nodes and add a "depth" field and determine whether
-// the node should be visible
+// Parses the store to generate an tree of MenuNode objects
+const getNodes = (
+  elements: Map<string, Register>,
+  element: Register | DesignRoot
+) => {
+  return element.children.map((child_id) => {
+    const child = elements.get(child_id);
+    if (!child) {
+      throw Error(`Could not find element with id ${child_id}`);
+    }
+
+    const node = {
+      key: child.id,
+      styleClass: child.id,
+      data: {
+        name: child.name,
+        addr: format.hex(child.addr || 0),
+      },
+    } as MenuNode;
+
+    if (child.children) {
+      node.children = getNodes(elements, child);
+    }
+
+    return node;
+  });
+};
+let menuNodes = reactive(getNodes(store.elements, store.root));
+watch(
+  () => store.elements,
+  () => (menuNodes = getNodes(store.elements, store.root))
+);
+
+// From the tree structure of MenuNodes create a flat list of all nodes and add
+// a "depth" attribute and determine whether the node should be visible
 const nodes = ref(
   computed(() => {
     let result: MenuNode[] = [];
@@ -44,7 +74,7 @@ const nodes = ref(
       }
     };
 
-    props.nodes.forEach((node: MenuNode) => {
+    menuNodes.forEach((node: MenuNode) => {
       addNode(node, 0);
       node.isVisible = true;
     });
@@ -117,7 +147,6 @@ const scrollToElement = (element_id: string) => {
 
 // Perform initial scroll to element on page load
 onMounted(async () => {
-  await store.untilLoaded();
   scrollToElement(route.params.regid as string);
 });
 

@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onBeforeMount } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { Register, SharedState } from "src/types";
-import store from "src/store";
+import { useStore } from "src/store";
 
 import Header from "src/components/Header.vue";
 import Menu from "src/components/Menu.vue";
@@ -16,9 +15,10 @@ const props = defineProps<{
 
 const route = useRoute();
 const router = useRouter();
+const store = useStore();
+
 onBeforeMount(() => validateRoute());
 
-let sharedState = store.sharedState as SharedState;
 let selectedField = ref(
   route.query?.field ? (route.query.field as string) : ""
 );
@@ -29,14 +29,7 @@ let showMenu = ref(true);
 // Control whether or not to show the open modal
 let showOpenModal = ref(false);
 
-let reg = computed(() => {
-  if (sharedState.data) {
-    let element_id = props.regid as string;
-    return sharedState.data.elements[element_id] as Register;
-  } else {
-    return null;
-  }
-});
+let reg = computed(() => store.elements.get(props.regid));
 
 let doc = computed(() => {
   if (reg.value && reg.value.doc) {
@@ -75,9 +68,9 @@ const stopHighlightField = () => {
   selectedField.value = route.query?.field ? (route.query.field as string) : "";
 };
 
-// Go to 404 page if the current props.regid doesn't exist in the sharedState
+// Go to 404 page if the current props.regid doesn't exist in the elements map
 const validateRoute = () => {
-  if (!Object.keys(sharedState.data.elements).includes(props.regid)) {
+  if (!store.elements.get(props.regid)) {
     router.push({
       name: "404",
       params: { catchAll: "404" },
@@ -111,11 +104,7 @@ watch(
 
   <div class="flex h-full flex-row">
     <!-- Show the navigation menu on the left -->
-    <Menu
-      :nodes="sharedState.nodes"
-      class="w-[21rem] bg-white pb-1"
-      :class="!showMenu ? 'hidden' : ''"
-    />
+    <Menu class="w-[21rem] bg-white pb-1" :class="!showMenu ? 'hidden' : ''" />
 
     <!-- Show the main body and fill the remaining screen space -->
     <div class="mt-4 flex-grow overflow-y-scroll">

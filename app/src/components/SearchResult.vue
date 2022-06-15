@@ -4,7 +4,7 @@ import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { Suggestion } from "src/types";
 import format from "src/format";
-import store from "src/store";
+import { useStore } from "src/store";
 
 const props = defineProps<{
   suggestion: Suggestion;
@@ -14,7 +14,7 @@ const props = defineProps<{
 }>();
 
 const router = useRouter();
-const sharedState = ref(store.sharedState);
+const store = useStore();
 
 const regid = ref(props.suggestion.path.params.regid);
 const field = computed(() => {
@@ -33,7 +33,7 @@ const id = computed(() => {
 });
 
 const doc = computed(() => {
-  const reg = sharedState.value.data.elements[regid.value];
+  const reg = store.elements.get(regid.value);
   if (!reg) {
     throw Error(`Register ${regid.value} does not exist in elements array`);
   }
@@ -64,7 +64,7 @@ const type = computed(() => {
 
 // Get the address as a hexadecimal string
 const addr = computed(() => {
-  const reg = sharedState.value.data.elements[regid.value];
+  const reg = store.elements.get(regid.value);
   if (!reg) {
     throw Error(`Register ${regid.value} does not exist in elements array`);
   }
