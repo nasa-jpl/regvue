@@ -2,10 +2,11 @@
 import { ref, onBeforeMount } from "vue";
 import { useCookies } from "vue3-cookies";
 import { useRouter } from "vue-router";
-import store from "src/store";
+import { useStore } from "src/store";
 
 const MAX_SAVED_URLS_CNT = 5;
 
+const store = useStore();
 const emit = defineEmits(["input-changed"]);
 
 let fetchError = ref(false);

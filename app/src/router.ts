@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import store from "src/store";
+import { useStore } from "src/store";
 import Default from "src/views/Default.vue";
 import PageNotFound from "src/views/PageNotFound.vue";
 import RegView from "src/views/RegView.vue";
@@ -35,6 +35,8 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
+  const store = useStore();
+
   // If the store hasn't been loaded try to load a file or reroute to the open page
   if (to.path != "/open" && !store.loaded) {
     let result: boolean;
@@ -52,13 +54,13 @@ router.beforeEach(async (to) => {
   }
 
   // Check if the data query has changed and the store needs to be reloaded
-  if (to.query?.data && store.path != to.query.data) {
+  if (to.query?.data && store.url != to.query.data) {
     try {
       await store.loadUrl(to.query.data as string);
       return {
         name: "reg",
         params: { regid: store.getFirstRegister() },
-        query: { data: store.path },
+        query: { data: store.url },
       };
     } catch {
       return { name: "open" };
@@ -67,11 +69,11 @@ router.beforeEach(async (to) => {
 
   // Go to the first register entry if store is loaded and at root
   if (to.path == "/" && store.loaded) {
-    if (store.path) {
+    if (store.url) {
       return {
         name: "reg",
         params: { regid: store.getFirstRegister() },
-        query: { data: store.path },
+        query: { data: store.url },
       };
     } else {
       return {

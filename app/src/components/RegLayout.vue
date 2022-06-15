@@ -3,7 +3,7 @@ import { ref, Ref, nextTick, watch } from "vue";
 import { useRoute } from "vue-router";
 import { Bit, RegisterField, DisplayType } from "src/types";
 import parse from "src/parse";
-import store from "src/store";
+import { useStore } from "src/store";
 
 import FieldInputBox from "src/components/FieldInputBox.vue";
 import FieldName from "src/components/FieldName.vue";
@@ -18,6 +18,8 @@ const emit = defineEmits([
   "highlight-field",
   "stop-highlight-field",
 ]);
+
+const store = useStore();
 
 // Store the value of the register as an array of 32 Bits
 let registerValue = ref(Array(32).map(() => 0 as Bit));
@@ -54,7 +56,7 @@ const byteSwap = (bitArray: Bit[]) => {
 const toggleByteSwap = () => {
   useByteSwap.value = !useByteSwap.value;
   // Update store value so value persists on rerender
-  store.setUseByteSwap(useByteSwap.value);
+  store.useByteSwap = useByteSwap.value;
 
   updateRegisterValue();
   registerKeyIndex.value += 1;
@@ -63,7 +65,7 @@ const toggleByteSwap = () => {
 const updateDisplayType = (displayType: DisplayType) => {
   selectedDisplayType.value = displayType;
   // Update store value so value persists on rerender
-  store.setSelectedDisplayType(displayType);
+  store.selectedDisplayType = displayType;
 
   // Force a rerender of both field and register display values
   fieldKeyIndex.value += 1;

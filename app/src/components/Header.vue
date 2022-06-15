@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onUnmounted } from "vue";
+import { computed, watch, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
-import store from "src/store";
+import { useStore } from "src/store";
 import Search from "src/components/Search.vue";
 
 import FileReplaceOutline from "vue-material-design-icons/FileReplaceOutline.vue";
@@ -17,30 +17,24 @@ defineProps<{
 }>();
 
 const emit = defineEmits(["toggle-menu", "show-open-modal"]);
+const store = useStore();
 
 const route = useRoute();
 
-let sharedState = ref(store.sharedState);
-
 const title = computed(
-  () =>
-    (sharedState?.value?.data?.root?.display_name as string) ||
-    "display_name undefined"
+  () => (store.root?.display_name as string) || "display_name undefined"
 );
 
 const version = computed(() => {
-  if (
-    sharedState?.value?.data?.root?.version ||
-    sharedState?.value?.data?.root?.version == ""
-  ) {
-    return sharedState.value.data.root.version;
+  if (store.root?.version || store.root?.version == "") {
+    return store.root.version;
   }
 
   return "version undefined";
 });
 
 const links = computed(() => {
-  let o = sharedState?.value?.data?.root?.links;
+  let o = store.root?.links;
 
   if (o != null) {
     return Object.entries(o).map(([k, v]) => {
