@@ -1,5 +1,5 @@
-import format from "./format";
-import { Bit, isUnknownBit } from "./types";
+import format from "src/format";
+import { Bit, isUnknownBit } from "src/types";
 
 // Provides various string parsing functions
 export default {

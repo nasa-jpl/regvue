@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { vResponsiveRotate } from "../directives/ResponsiveRotate";
+import { vResponsiveRotate } from "src/directives/ResponsiveRotate";
 
 defineProps<{
   name: string;
@@ -16,6 +16,7 @@ defineProps<{
 </template>
 
 <style>
+/* The ResponsiveRotate directive will add a "rotate" class to objects that this style will apply to */
 .rotate {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;

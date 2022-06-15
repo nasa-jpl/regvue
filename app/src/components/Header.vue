@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
-import store from "../store";
-import Search from "./Search.vue";
+import store from "src/store";
+import Search from "src/components/Search.vue";
 
 import FileReplaceOutline from "vue-material-design-icons/FileReplaceOutline.vue";
 import HamburgerMenu from "vue-material-design-icons/Menu.vue";

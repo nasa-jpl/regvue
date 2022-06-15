@@ -2,9 +2,9 @@
 /* eslint-disable vue/no-v-html */
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
-import { Suggestion } from "../types";
-import format from "../format";
-import store from "../store";
+import { Suggestion } from "src/types";
+import format from "src/format";
+import store from "src/store";
 
 const props = defineProps<{
   suggestion: Suggestion;
@@ -33,8 +33,13 @@ const id = computed(() => {
 });
 
 const doc = computed(() => {
+  const reg = sharedState.value.data.elements[regid.value];
+  if (!reg) {
+    throw Error(`Register ${regid.value} does not exist in elements array`);
+  }
+
   if (field.value) {
-    const fields = sharedState.value.data.elements[regid.value].fields;
+    const fields = reg.fields;
 
     if (!fields) return "";
 
@@ -45,7 +50,7 @@ const doc = computed(() => {
     }
     return "";
   } else {
-    return sharedState.value.data.elements[regid.value].doc;
+    return reg.doc;
   }
 });
 
@@ -58,13 +63,19 @@ const type = computed(() => {
 });
 
 // Get the address as a hexadecimal string
-const addr = computed(() =>
-  format.getStringRepresentation(
-    sharedState.value.data.elements[regid.value].addr,
-    "hexadecimal",
-    32
-  )
-);
+const addr = computed(() => {
+  const reg = sharedState.value.data.elements[regid.value];
+  if (!reg) {
+    throw Error(`Register ${regid.value} does not exist in elements array`);
+  }
+
+  const addr = reg.addr;
+  if (addr) {
+    return format.getStringRepresentation(addr, "hexadecimal", 32);
+  } else {
+    return "";
+  }
+});
 
 // Returns HTML formatted text that will wrap any text that matches the query in <b> tags
 const boldMatchingText = (text: string, query: string, replaceAll = true) => {

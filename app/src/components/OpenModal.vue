@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeMount } from "vue";
-import DataFileInput from "./DataFileInput.vue";
+import DataFileInput from "src/components/DataFileInput.vue";
 
 const emit = defineEmits(["hide-open-modal"]);
 

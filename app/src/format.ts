@@ -1,4 +1,4 @@
-import { Bit, DisplayType, isUnknownBit, RegisterField } from "./types";
+import { Bit, DisplayType, isUnknownBit, RegisterField } from "src/types";
 
 // Provides formatting functions to convert various values to strings
 export default {
@@ -44,7 +44,7 @@ export default {
     const bitArray = arr.slice();
 
     if (bitArray.length == 1) {
-      return bitArray[0].toString();
+      return bitArray.toString();
     }
 
     // Hexadecimal case

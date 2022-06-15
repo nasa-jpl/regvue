@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { ref, computed, watch, onBeforeMount } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { Register, SharedState } from "../types";
-import store from "../store";
+import { Register, SharedState } from "src/types";
+import store from "src/store";
 
-import Header from "../components/Header.vue";
-import Menu from "../components/Menu.vue";
-import OpenModal from "../components/OpenModal.vue";
-import RegFields from "../components/RegFields.vue";
-import RegLayout from "../components/RegLayout.vue";
+import Header from "src/components/Header.vue";
+import Menu from "src/components/Menu.vue";
+import OpenModal from "src/components/OpenModal.vue";
+import RegFields from "src/components/RegFields.vue";
+import RegLayout from "src/components/RegLayout.vue";
 
 const props = defineProps<{
   regid: string;
@@ -75,6 +75,7 @@ const stopHighlightField = () => {
   selectedField.value = route.query?.field ? (route.query.field as string) : "";
 };
 
+// Go to 404 page if the current props.regid doesn't exist in the sharedState
 const validateRoute = () => {
   if (!Object.keys(sharedState.data.elements).includes(props.regid)) {
     router.push({
@@ -85,11 +86,13 @@ const validateRoute = () => {
   }
 };
 
+// Change the selectedField variable to match the field url query
 watch(
   () => route.query.field,
   (newValue) => (selectedField.value = newValue as string)
 );
 
+// Watch for route changes and go to 404 page if an invalid regid is given
 watch(
   () => props.regid,
   () => validateRoute()

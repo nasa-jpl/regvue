@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { computed, ref, Ref, onBeforeMount, onUnmounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import store from "../store";
-import { createSearchIndex } from "../search";
-import { Suggestion } from "../types";
 import { Index, Query } from "lunr";
+import { createSearchIndex } from "src/search";
+import type { Suggestion } from "src/types";
+import store from "src/store";
 
 import AppleKeyboardCommand from "vue-material-design-icons/AppleKeyboardCommand.vue";
 import Magnify from "vue-material-design-icons/Magnify.vue";
-import SearchResult from "./SearchResult.vue";
+import SearchResult from "src/components/SearchResult.vue";
 
 const sharedState = ref(store.sharedState);
 
@@ -87,13 +87,20 @@ let suggestions = computed(() => {
 
     if (id.includes(":")) {
       // Fields will have the id "<reg id>:<field name>"
-      const regid = id.split(":")[0];
-      const fieldName = id.split(":")[1];
+      if (id.split(":").length != 2) {
+        throw Error(`Invalid field id passed: ${id}.`);
+      }
+      const [regid, fieldName] = id.split(":");
+      if (!regid || !fieldName) {
+        throw Error(`Invalid field id: ${regid}:${fieldName}.`);
+      }
 
       const path = {
         name: "reg",
         params: { regid: regid },
-        query: { field: fieldName, data: route.query.data },
+        query: route.query.data
+          ? { field: fieldName, data: route.query.data }
+          : { field: fieldName },
       };
 
       const suggestion = {
@@ -106,11 +113,14 @@ let suggestions = computed(() => {
       // Otherwise it is a register/mem entry
 
       const item = sharedState.value.data.elements[id];
+      if (!item) {
+        throw Error(`Could not find ${id} in elements list.`);
+      }
 
       const path = {
         name: "reg",
         params: { regid: id },
-        query: { data: route.query.data },
+        query: route.query.data ? { data: route.query.data } : {},
       };
 
       const suggestion = {
@@ -147,7 +157,23 @@ const updateQuery = () => {
 };
 
 // Change the route to go to the selected suggestion
-const go = (suggestion: Suggestion) => {
+const go = (suggestion: Suggestion | number, suggestions?: Suggestion[]) => {
+  // If a number was passed for suggestion get the suggestion at that index from suggestions
+  if (typeof suggestion == "number") {
+    // Ensure an array for suggestions was passed
+    if (suggestions) {
+      // Ensure there is a valid suggestion at the given index
+      if (!suggestions[suggestion]) {
+        throw Error(`Could not find suggestion with index ${suggestion}`);
+      }
+      suggestion = suggestions[suggestion] as Suggestion;
+    } else {
+      throw Error(
+        `Used numeric index to find Suggestion without providing suggestions array.`
+      );
+    }
+  }
+
   // Remove the suggestion if already present to ensure no duplicates
   removeRecentSuggestion(suggestion);
 
@@ -278,9 +304,9 @@ watch(
               ($event.target as HTMLInputElement).blur();
             }
             else if (showSuggestions) {
-              go(suggestions[focusIndex]);
+              go(focusIndex, suggestions);
             } else {
-              go(recentSuggestions[recentSuggestions.length - 1 - focusIndex]);
+              go(recentSuggestions.length - 1 - focusIndex, recentSuggestions);
             }
           }
         "

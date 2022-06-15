@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref, Ref, nextTick, watch } from "vue";
 import { useRoute } from "vue-router";
-import { Bit, RegisterField, DisplayType } from "../types";
-import parse from "../parse";
-import store from "../store";
+import { Bit, RegisterField, DisplayType } from "src/types";
+import parse from "src/parse";
+import store from "src/store";
 
-import FieldInputBox from "./FieldInputBox.vue";
-import FieldName from "./FieldName.vue";
+import FieldInputBox from "src/components/FieldInputBox.vue";
+import FieldName from "src/components/FieldName.vue";
 
 const props = defineProps<{
   fields: RegisterField[];

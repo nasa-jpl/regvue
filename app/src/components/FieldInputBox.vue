@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { Bit, DisplayType, isUnknownBit } from "../types";
-import format from "../format";
-import parse from "../parse";
+import format from "src/format";
+import parse from "src/parse";
 
 const props = defineProps<{
   name: string;
