@@ -34,7 +34,7 @@ const id = computed(() => {
 
 const doc = computed(() => {
   if (field.value) {
-    const fields = sharedState.value.data.elements[regid.value].fields;
+    const fields = sharedState.value.data.elements[regid.value]?.fields;
 
     if (!fields) return "";
 
@@ -45,7 +45,7 @@ const doc = computed(() => {
     }
     return "";
   } else {
-    return sharedState.value.data.elements[regid.value].doc;
+    return sharedState.value.data.elements[regid.value]?.doc;
   }
 });
 
@@ -58,13 +58,14 @@ const type = computed(() => {
 });
 
 // Get the address as a hexadecimal string
-const addr = computed(() =>
-  format.getStringRepresentation(
-    sharedState.value.data.elements[regid.value].addr,
-    "hexadecimal",
-    32
-  )
-);
+const addr = computed(() => {
+  const addr = sharedState.value.data.elements[regid.value]?.addr;
+  if (addr) {
+    return format.getStringRepresentation(addr, "hexadecimal", 32);
+  } else {
+    return "";
+  }
+});
 
 // Returns HTML formatted text that will wrap any text that matches the query in <b> tags
 const boldMatchingText = (text: string, query: string, replaceAll = true) => {

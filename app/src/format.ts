@@ -44,7 +44,7 @@ export default {
     const bitArray = arr.slice();
 
     if (bitArray.length == 1) {
-      return bitArray[0].toString();
+      return bitArray.toString();
     }
 
     // Hexadecimal case

@@ -55,8 +55,7 @@ const nodes = ref(
 const toggleChildrenNodes = (node: MenuNode) => {
   if (node.children == null || node.children == []) return;
 
-  // if (visibleKeys.value.has(node.children[0].key)) {
-  if (node.children[0].isVisible) {
+  if (node.children[0]?.isVisible) {
     closeChildrenNodes(node);
   } else {
     openChildrenNodes(node);
@@ -107,15 +106,18 @@ const scrollToElement = (element_id: string) => {
   const elems = document.getElementsByClassName(element_id);
   if (elems.length) {
     let elem = elems[0];
-    elem.scrollIntoView({ block: "center" });
+    elem?.scrollIntoView({ block: "center" });
   }
 };
 // Perform initial scroll to element on page load
 if (route.params.regid) {
   const reg = route.params.regid as string;
   const regArray = reg.split(".");
+
   const lastReg = regArray[regArray.length - 1];
-  scrollToElement(lastReg);
+  if (lastReg) {
+    scrollToElement(lastReg);
+  }
 }
 
 // Change the route when a node is clicked on
@@ -152,7 +154,7 @@ const onNodeSelect = (key: string) => {
               v-if="
                 node.children &&
                 node.children.length > 0 &&
-                node.children[0].isVisible
+                node.children[0]?.isVisible
               "
             >
               <menu-down class="close-menu-node-btn" />

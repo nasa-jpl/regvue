@@ -87,13 +87,15 @@ let suggestions = computed(() => {
 
     if (id.includes(":")) {
       // Fields will have the id "<reg id>:<field name>"
-      const regid = id.split(":")[0];
-      const fieldName = id.split(":")[1];
+      const regid = id.split(":")[0] as string;
+      const fieldName = id.split(":")[1] as string;
 
       const path = {
         name: "reg",
         params: { regid: regid },
-        query: { field: fieldName, data: route.query.data },
+        query: route.query.data
+          ? { field: fieldName, data: route.query.data }
+          : { field: fieldName },
       };
 
       const suggestion = {
@@ -106,11 +108,12 @@ let suggestions = computed(() => {
       // Otherwise it is a register/mem entry
 
       const item = sharedState.value.data.elements[id];
+      if (item === undefined) continue;
 
       const path = {
         name: "reg",
         params: { regid: id },
-        query: { data: route.query.data },
+        query: route.query.data ? { data: route.query.data } : {},
       };
 
       const suggestion = {
@@ -278,9 +281,11 @@ watch(
               ($event.target as HTMLInputElement).blur();
             }
             else if (showSuggestions) {
-              go(suggestions[focusIndex]);
+              suggestions[focusIndex] ? go(suggestions[focusIndex] as Suggestion) : null;
             } else {
-              go(recentSuggestions[recentSuggestions.length - 1 - focusIndex]);
+              recentSuggestions[recentSuggestions.length - 1 - focusIndex] 
+                ? go(recentSuggestions[recentSuggestions.length - 1 - focusIndex] as Suggestion)
+                : null;
             }
           }
         "

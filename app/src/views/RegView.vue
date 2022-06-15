@@ -75,6 +75,7 @@ const stopHighlightField = () => {
   selectedField.value = route.query?.field ? (route.query.field as string) : "";
 };
 
+// Go to 404 page if the current props.regid doesn't exist in the sharedState
 const validateRoute = () => {
   if (!Object.keys(sharedState.data.elements).includes(props.regid)) {
     router.push({
@@ -85,11 +86,13 @@ const validateRoute = () => {
   }
 };
 
+// Change the selectedField variable to match the field url query
 watch(
   () => route.query.field,
   (newValue) => (selectedField.value = newValue as string)
 );
 
+// Watch for route changes and go to 404 page if an invalid regid is given
 watch(
   () => props.regid,
   () => validateRoute()

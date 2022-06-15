@@ -25,8 +25,12 @@ export const vResponsiveRotate = {
       // is observing only a single element.  Entries will always
       // contain a single entry.
       const entry = entries[0];
-      const elementWidth = entry.contentRect.width;
+      if (!entry) return;
+
       const element = entry.target;
+      const elementWidth = entry.contentRect.width;
+      if (!element) return;
+
       const text = element.textContent as string;
       const font = window.getComputedStyle(element).font;
       const textWidth = getTextWidth(text, font);

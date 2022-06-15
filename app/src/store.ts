@@ -48,7 +48,7 @@ export default {
   async load(data: SharedState["data"], path = "") {
     for (const name in data.elements) {
       const element = data.elements[name];
-      const fields = element.fields;
+      const fields = element?.fields;
 
       // Set the field.value to be a Bit[] that represents the field.reset or 0
       fields?.forEach((field: RegisterField) => {
@@ -87,7 +87,7 @@ export default {
 
     for (const id in elements) {
       const element = elements[id];
-      if (element.fields) {
+      if (element?.fields) {
         for (const field of element.fields) {
           const field_id = id + "." + field.name;
           fields.set(field_id, id);
@@ -109,15 +109,15 @@ export default {
       const child = elements[child_id];
 
       const node = {
-        key: child["id"],
-        styleClass: child["id"],
+        key: child?.id,
+        styleClass: child?.id,
         data: {
-          name: child["name"],
-          addr: format.hex(child["addr"]),
+          name: child?.name,
+          addr: format.hex(child?.addr || 0),
         },
       } as MenuNode;
 
-      if ("children" in child) {
+      if (child?.children) {
         node.children = this.getNodes(elements, child);
       }
 
@@ -127,10 +127,12 @@ export default {
 
   getFirstRegister() {
     for (const key in this.sharedState.data.elements) {
-      if (this.sharedState.data.elements[key].type == "reg") {
+      if (this.sharedState.data.elements[key]?.type == "reg") {
         return key;
       }
     }
+
+    return "";
   },
 
   setSelectedDisplayType(value: DisplayType) {

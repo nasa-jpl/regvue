@@ -118,6 +118,7 @@ const onDataFileOpen = async (event: Event) => {
   const files = (target as HTMLInputElement).files;
   if (!files || files.length == 0) return;
   const file = files[0];
+  if (!file) return;
 
   const reader = new FileReader();
   reader.onload = async (event) => {
