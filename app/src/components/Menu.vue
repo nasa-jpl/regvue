@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { MenuNode } from "src/types";
+import store from "src/store";
 
 import MenuDown from "vue-material-design-icons/MenuDown.vue";
 import MenuRight from "vue-material-design-icons/MenuRight.vue";
@@ -103,22 +104,22 @@ const getIndent = (node: MenuNode) => {
 
 // Scroll to element
 const scrollToElement = (element_id: string) => {
-  const elems = document.getElementsByClassName(element_id);
-  if (elems.length) {
-    let elem = elems[0];
-    elem?.scrollIntoView({ block: "center" });
+  const elem = document.getElementById(element_id);
+  if (!elem) {
+    throw Error(`Could not find element with id ${element_id}`);
+  } else {
+    const parent = elem.parentNode as HTMLElement;
+    if (parent) {
+      parent.scroll(0, elem.offsetTop - 500);
+    }
   }
 };
-// Perform initial scroll to element on page load
-if (route.params.regid) {
-  const reg = route.params.regid as string;
-  const regArray = reg.split(".");
 
-  const lastReg = regArray[regArray.length - 1];
-  if (lastReg) {
-    scrollToElement(lastReg);
-  }
-}
+// Perform initial scroll to element on page load
+onMounted(async () => {
+  await store.untilLoaded();
+  scrollToElement(route.params.regid as string);
+});
 
 // Change the route when a node is clicked on
 const onNodeSelect = (key: string) => {
@@ -133,10 +134,10 @@ const onNodeSelect = (key: string) => {
 <template>
   <div
     id="navigation-menu"
-    class="text-md mt-[1px] flex flex-shrink-0 flex-col overflow-y-scroll border-r-2"
+    class="text-md mt-[1px] flex flex-shrink-0 flex-col overflow-y-scroll border-r-2 pb-12"
   >
     <!-- Show the nodes -->
-    <div v-for="node in nodes" :key="node.key">
+    <div v-for="node in nodes" :key="node.key" :id="node.key">
       <!--  Display only if the node is marked visible -->
       <div
         v-if="node.isVisible"
@@ -167,7 +168,7 @@ const onNodeSelect = (key: string) => {
           </div>
 
           <!-- Display the name of the node and truncate it if it is too long -->
-          <div class="ml-0 w-40 truncate text-left" :class="node.key">
+          <div class="ml-0 w-40 truncate text-left">
             {{ node.data.name }}
           </div>
         </div>

@@ -87,8 +87,13 @@ let suggestions = computed(() => {
 
     if (id.includes(":")) {
       // Fields will have the id "<reg id>:<field name>"
-      const regid = id.split(":")[0] as string;
-      const fieldName = id.split(":")[1] as string;
+      if (id.split(":").length != 2) {
+        throw Error(`Invalid field id passed: ${id}.`);
+      }
+      const [regid, fieldName] = id.split(":");
+      if (!regid || !fieldName) {
+        throw Error(`Invalid field id: ${regid}:${fieldName}.`);
+      }
 
       const path = {
         name: "reg",
@@ -108,7 +113,9 @@ let suggestions = computed(() => {
       // Otherwise it is a register/mem entry
 
       const item = sharedState.value.data.elements[id];
-      if (item === undefined) continue;
+      if (!item) {
+        throw Error(`Could not find ${id} in elements list.`);
+      }
 
       const path = {
         name: "reg",
@@ -150,7 +157,23 @@ const updateQuery = () => {
 };
 
 // Change the route to go to the selected suggestion
-const go = (suggestion: Suggestion) => {
+const go = (suggestion: Suggestion | number, suggestions?: Suggestion[]) => {
+  // If a number was passed for suggestion get the suggestion at that index from suggestions
+  if (typeof suggestion == "number") {
+    // Ensure an array for suggestions was passed
+    if (suggestions) {
+      // Ensure there is a valid suggestion at the given index
+      if (!suggestions[suggestion]) {
+        throw Error(`Could not find suggestion with index ${suggestion}`);
+      }
+      suggestion = suggestions[suggestion] as Suggestion;
+    } else {
+      throw Error(
+        `Used numeric index to find Suggestion without providing suggestions array.`
+      );
+    }
+  }
+
   // Remove the suggestion if already present to ensure no duplicates
   removeRecentSuggestion(suggestion);
 
@@ -281,11 +304,9 @@ watch(
               ($event.target as HTMLInputElement).blur();
             }
             else if (showSuggestions) {
-              suggestions[focusIndex] ? go(suggestions[focusIndex] as Suggestion) : null;
+              go(focusIndex, suggestions);
             } else {
-              recentSuggestions[recentSuggestions.length - 1 - focusIndex] 
-                ? go(recentSuggestions[recentSuggestions.length - 1 - focusIndex] as Suggestion)
-                : null;
+              go(recentSuggestions.length - 1 - focusIndex, recentSuggestions);
             }
           }
         "

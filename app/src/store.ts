@@ -48,7 +48,10 @@ export default {
   async load(data: SharedState["data"], path = "") {
     for (const name in data.elements) {
       const element = data.elements[name];
-      const fields = element?.fields;
+      if (!element) {
+        throw Error(`Could not find element with id ${name}`);
+      }
+      const fields = element.fields;
 
       // Set the field.value to be a Bit[] that represents the field.reset or 0
       fields?.forEach((field: RegisterField) => {
@@ -107,17 +110,20 @@ export default {
   ) {
     return element.children.map((child_id) => {
       const child = elements[child_id];
+      if (!child) {
+        throw Error(`Could not find element with id ${child_id}`);
+      }
 
       const node = {
-        key: child?.id,
-        styleClass: child?.id,
+        key: child.id,
+        styleClass: child.id,
         data: {
-          name: child?.name,
-          addr: format.hex(child?.addr || 0),
+          name: child.name,
+          addr: format.hex(child.addr || 0),
         },
       } as MenuNode;
 
-      if (child?.children) {
+      if (child.children) {
         node.children = this.getNodes(elements, child);
       }
 

@@ -28,7 +28,9 @@ export const createSearchIndex = async () => {
     // Add all reg/blk/mem elements to the search index
     for (const key of Object.keys(store.sharedState.data.elements)) {
       const document = store.sharedState.data.elements[key];
-      if (!document) continue;
+      if (!document) {
+        throw Error(`Could not find element with id ${key}`);
+      }
 
       builder.add(
         {

@@ -33,8 +33,13 @@ const id = computed(() => {
 });
 
 const doc = computed(() => {
+  const reg = sharedState.value.data.elements[regid.value];
+  if (!reg) {
+    throw Error(`Register ${regid.value} does not exist in elements array`);
+  }
+
   if (field.value) {
-    const fields = sharedState.value.data.elements[regid.value]?.fields;
+    const fields = reg.fields;
 
     if (!fields) return "";
 
@@ -45,7 +50,7 @@ const doc = computed(() => {
     }
     return "";
   } else {
-    return sharedState.value.data.elements[regid.value]?.doc;
+    return reg.doc;
   }
 });
 
@@ -59,7 +64,12 @@ const type = computed(() => {
 
 // Get the address as a hexadecimal string
 const addr = computed(() => {
-  const addr = sharedState.value.data.elements[regid.value]?.addr;
+  const reg = sharedState.value.data.elements[regid.value];
+  if (!reg) {
+    throw Error(`Register ${regid.value} does not exist in elements array`);
+  }
+
+  const addr = reg.addr;
   if (addr) {
     return format.getStringRepresentation(addr, "hexadecimal", 32);
   } else {
