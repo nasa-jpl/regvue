@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Any unexpected errors now result in a pop up modal regarding the error ([#92](https://github.jpl.nasa.gov/regvue/regvue/pull/92)).
 - Added support for unknown values in bit encoding/decoding ([#46](https://github.jpl.nasa.gov/regvue/regvue/pull/46)).
 - Added new features related to choosing data files ([#83](https://github.jpl.nasa.gov/regvue/regvue/pull/83)).
   - Recently opened urls are saved as cookies and shown as options when inputting a new url.

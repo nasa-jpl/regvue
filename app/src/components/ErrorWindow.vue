@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onBeforeMount, onBeforeUnmount } from "vue";
+import { ref } from "vue";
 
 let showErrorWindow = ref(false);
 let errorMessage = ref("");
@@ -20,26 +20,6 @@ window.onerror = (event, _source, _lineno, _colno, error) => {
     stackTrace.value = error?.stack || "";
   }
 };
-
-// Keyboard shortcut to close the modal on esc
-const hideModalKeyboardShortcut = (event: KeyboardEvent) => {
-  if (event.key == "Escape") {
-    event.preventDefault();
-    showErrorWindow.value = false;
-  } else if (event.ctrlKey && event.key == "e") {
-    throw new Error("TEST ERROR");
-  }
-};
-
-// Register the close modal keyboard shortcut
-onBeforeMount(() => {
-  document.addEventListener("keydown", hideModalKeyboardShortcut);
-});
-
-// Remove the keyboard shortcut on unrender
-onBeforeUnmount(() => {
-  document.removeEventListener("keydown", hideModalKeyboardShortcut);
-});
 </script>
 
 <template>
@@ -47,7 +27,6 @@ onBeforeUnmount(() => {
     v-if="showErrorWindow"
     id="error-background-div"
     class="absolute top-0 z-50 h-screen w-screen bg-gray-300/50"
-    @click="showErrorWindow = false"
   >
     <div
       id="error-div"
@@ -65,9 +44,9 @@ onBeforeUnmount(() => {
         </button>
       </div>
 
-      <!-- Show the error description -->
+      <!-- Show the error modal description test -->
       <div class="my-4">
-        <h3 class="mb-2 text-lg">regvue has encountered an error</h3>
+        <div class="mb-2 text-lg">regvue has encountered an error.</div>
 
         <div class="text-sm">
           Please help us improve regvue by filing a
