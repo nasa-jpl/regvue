@@ -29,7 +29,7 @@ describe("menu-component", () => {
       cy.get(id)
         .children()
         .last()
-        .should("have.text", format.hex(data.elements[child].addr));
+        .should("have.text", format.hex(data.elements[child].offset));
     });
   });
 
@@ -65,7 +65,7 @@ describe("menu-component", () => {
       cy.get(id)
         .children()
         .last()
-        .should("have.text", format.hex(data.elements[child].addr));
+        .should("have.text", format.hex(data.elements[child].offset));
     });
 
     cy.get(".close-menu-node-btn").first().click();

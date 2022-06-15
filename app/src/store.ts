@@ -89,7 +89,11 @@ export const useStore = defineStore("store", {
 
       this.elements = new Map<string, Register>();
       for (const key of Object.keys(data.elements)) {
-        this.elements.set(key, data.elements[key] as Register);
+        const element = data.elements[key] as Register;
+
+        // Calculate the address from an element's offset and its parents' offsets
+        element.addr = getAddress(key, data.elements);
+        this.elements.set(key, element);
       }
 
       this.root = data.root;
@@ -98,3 +102,20 @@ export const useStore = defineStore("store", {
     },
   },
 });
+
+// Helper function to get an element's address from its and its parents' offsets
+const getAddress = (key: string, elements: { [key: string]: Register }) => {
+  // How many elements are there in hierachy (e.g. blk.sub_blk.reg => 3)
+  const count = key.split(".").length + 1;
+
+  // Add up the offset of every element along the current key's hierarchy
+  let result = 0;
+  for (let i = 1; i < count; i++) {
+    const id = key.split(".").slice(0, i).join(".");
+    const elem = elements[id];
+    if (!elem) throw Error(`Could not find element ${id} (${i})`);
+
+    result += elem.offset as number;
+  }
+  return result;
+};
