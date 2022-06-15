@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import packageInfo from "../package.json";
+
 import AppVersion from "src/components/AppVersion.vue";
+import ErrorWindow from "src/components/ErrorWindow.vue";
 
 const appInfo = {
   name: packageInfo.name,
@@ -15,6 +17,9 @@ const appInfo = {
     <div class="h-screen">
       <router-view />
     </div>
+
+    <!-- Show an error window that will capture and display console errors -->
+    <ErrorWindow />
 
     <!-- Display a link to the GitHub repo at the bottom right of the page -->
     <AppVersion
