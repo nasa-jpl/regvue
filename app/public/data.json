@@ -17,7 +17,7 @@
   },
   "elements": {
     "blkA": {
-      "addr": 0,
+      "offset": 0,
       "type": "blk",
       "children": [
         "blkA.sub_blkA"
@@ -26,7 +26,7 @@
       "id": "blkA"
     },
     "blkA.sub_blkA": {
-      "addr": 0,
+      "offset": 0,
       "type": "blk",
       "children": [
         "blkA.sub_blkA.regA0",
@@ -40,7 +40,7 @@
       "name": "sub_blkA"
     },
     "blkA.sub_blkA.regA0": {
-      "addr": 0,
+      "offset": 0,
       "doc": "regA0 - An example register.",
       "fields": [
         {
@@ -104,13 +104,12 @@
           "doc": "Set a flag value"
         }
       ],
-      "offset": 0,
       "type": "reg",
       "id": "blkA.sub_blkA.regA0",
       "name": "regA0"
     },
     "blkA.sub_blkA.regA1": {
-      "addr": 4,
+      "offset": 4,
       "doc": "regA1 - An example register.",
       "fields": [
         {
@@ -128,13 +127,12 @@
           "name": "command"
         }
       ],
-      "offset": 0,
       "type": "reg",
       "id": "blkA.sub_blkA.regA1",
       "name": "regA1"
     },
     "blkA.sub_blkA.regA2": {
-      "addr": 8,
+      "offset": 8,
       "doc": "regA2 - An example register.",
       "fields": [
         {
@@ -145,13 +143,12 @@
           "name": "f0"
         }
       ],
-      "offset": 0,
       "type": "reg",
       "id": "blkA.sub_blkA.regA2",
       "name": "regA2"
     },
     "blkA.sub_blkA.regA3": {
-      "addr": 12,
+      "offset": 12,
       "doc": "regA3 - An example register.",
       "fields": [
         {
@@ -162,13 +159,12 @@
           "name": "f0"
         }
       ],
-      "offset": 0,
       "type": "reg",
       "id": "blkA.sub_blkA.regA3",
       "name": "regA3"
     },
     "blkA.sub_blkA.regA4": {
-      "addr": 16,
+      "offset": 16,
       "doc": "regA4 - An example register.",
       "fields": [
         {
@@ -179,13 +175,12 @@
           "name": "f0"
         }
       ],
-      "offset": 0,
       "type": "reg",
       "id": "blkA.sub_blkA.regA4",
       "name": "regA4"
     },
     "blkA.sub_blkA.regA5": {
-      "addr": 20,
+      "offset": 20,
       "doc": "regA5 - An example register.",
       "fields": [
         {
@@ -196,13 +191,12 @@
           "name": "f0"
         }
       ],
-      "offset": 0,
       "type": "reg",
       "id": "blkA.sub_blkA.regA5",
       "name": "regA5"
     },
     "blkB": {
-      "addr": 24,
+      "offset": 24,
       "type": "blk",
       "children": [
         "blkB.regB0"
@@ -211,7 +205,7 @@
       "id": "blkB"
     },
     "blkB.regB0": {
-      "addr": 24,
+      "offset": 0,
       "doc": "regB0 - An example register.",
       "fields": [
         {
@@ -222,7 +216,6 @@
           "name": "f0"
         }
       ],
-      "offset": 0,
       "type": "reg",
       "id": "blkB.regB0",
       "name": "regB0"
