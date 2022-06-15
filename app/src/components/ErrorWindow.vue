@@ -12,7 +12,7 @@ const errorsToIgnore = [
 ];
 
 // Capture when an error occurs and populate variables with it
-window.onerror = (event, _source, _lineno, _colno, error) => {
+const catchError = (event: string | Event, error: Error | undefined) => {
   if (!errorsToIgnore.some((error) => event.toString().includes(error))) {
     showErrorWindow.value = true;
     errorMessage.value = event.toString();
@@ -20,6 +20,13 @@ window.onerror = (event, _source, _lineno, _colno, error) => {
     stackTrace.value = error?.stack || "";
   }
 };
+
+// Catch synchronous errors
+window.onerror = (event, _source, _lineno, _number, error) =>
+  catchError(event, error);
+
+// Catch async errors
+window.onunhandledrejection = (event) => catchError(event.reason, event.reason);
 </script>
 
 <template>
@@ -66,7 +73,7 @@ window.onerror = (event, _source, _lineno, _colno, error) => {
         >
           <div>
             <span class="font-semibold">Error: </span>
-            {{ errorMessage.replace("Error: ", "") }}
+            {{ errorMessage }}
           </div>
           <div>
             <span class="font-semibold">URL: </span>
