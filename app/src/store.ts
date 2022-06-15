@@ -1,151 +1,100 @@
-import { reactive } from "vue";
+import { defineStore } from "pinia";
 import {
   DesignRoot,
   DisplayType,
-  MenuNode,
   Register,
+  RegisterDescriptionFile,
   RegisterField,
-  SharedState,
 } from "src/types";
-import format from "src/format";
 import parse from "src/parse";
 
-export default {
-  sharedState: reactive({
-    data: null,
-    fields: {},
-    nodes: [],
-  } as unknown as SharedState),
+export const useStore = defineStore("store", {
+  state: () => {
+    return {
+      // Object representing info about the overall design (e.g. name, version, and root elements)
+      root: {} as DesignRoot,
 
-  loaded: false,
-  useByteSwap: false,
-  selectedDisplayType: "hexadecimal" as DisplayType,
-  path: "",
+      // A map of id : Register for elements (reg/blk/mem) in the design
+      elements: new Map<string, Register>(),
 
-  async loadUrl(url: string) {
-    try {
-      const result = await fetch(url);
-      const data = await result.json();
-      await this.load(data, url);
-      return true;
-    } catch (e) {
-      console.error(e);
-      return false;
-    }
-  },
+      // Whether or not store.load() has been called successfully
+      loaded: false,
 
-  async loadFile(file: string) {
-    try {
-      const data = await JSON.parse(file);
-      await this.load(data);
-      return true;
-    } catch (e) {
-      console.error(e);
-      return false;
-    }
-  },
+      // URL where the Register Description File was loaded from ("" for local files)
+      url: "",
 
-  async load(data: SharedState["data"], path = "") {
-    for (const name in data.elements) {
-      const element = data.elements[name];
-      if (!element) {
-        throw Error(`Could not find element with id ${name}`);
-      }
-      const fields = element.fields;
+      // Whether or not to display the register value as byte swapped in RegLayout
+      useByteSwap: false,
 
-      // Set the field.value to be a Bit[] that represents the field.reset or 0
-      fields?.forEach((field: RegisterField) => {
-        if (field.reset) {
-          field.value = parse.stringToBitArray(
-            field.reset.toString(),
-            field.nbits
-          );
-        } else {
-          field.value = parse.stringToBitArray("0", field.nbits);
-        }
-      });
-    }
-
-    this.sharedState.fields = this.getFieldMap(data.elements);
-    this.sharedState.nodes = this.getNodes(data.elements, data.root);
-    this.sharedState.data = data;
-    this.path = path;
-    this.loaded = true;
-  },
-
-  async untilLoaded() {
-    const pollLoaded = (resolve: (value: boolean) => void) => {
-      if (this.loaded) {
-        resolve(true);
-      } else {
-        setTimeout(() => pollLoaded(resolve), 500);
-      }
+      // Which display type to show field and register values as in RegLayout
+      selectedDisplayType: "hexadecimal" as DisplayType,
     };
-
-    return new Promise(pollLoaded);
   },
-
-  getFieldMap(elements: { [key: string]: Register }) {
-    const fields = new Map<string, string>();
-
-    for (const id in elements) {
-      const element = elements[id];
-      if (element?.fields) {
-        for (const field of element.fields) {
-          const field_id = id + "." + field.name;
-          fields.set(field_id, id);
-        }
-        if (fields.has("reset")) {
-          fields.set("value", fields.get("reset") as string);
+  actions: {
+    // Returns the first element in elements that has type "reg"
+    getFirstRegister() {
+      for (const key of this.elements.keys()) {
+        if (this.elements.get(key)?.type == "reg") {
+          return key;
         }
       }
-    }
 
-    return fields;
-  },
+      return "";
+    },
 
-  getNodes(
-    elements: { [key: string]: Register },
-    element: Register | DesignRoot
-  ) {
-    return element.children.map((child_id) => {
-      const child = elements[child_id];
-      if (!child) {
-        throw Error(`Could not find element with id ${child_id}`);
+    // Try to get data from a url and call load() with that data
+    // Return true on successful load and false if load fails
+    async loadUrl(url: string) {
+      try {
+        const result = await fetch(url);
+        const data = await result.json();
+        await this.load(data, url);
+        return true;
+      } catch (e) {
+        console.error(e);
+        return false;
+      }
+    },
+
+    // Try load the store by parsing the provided JSON string
+    // Return true on successful load and false if load fails
+    async loadFile(jsonString: string) {
+      try {
+        const data = await JSON.parse(jsonString);
+        await this.load(data);
+        return true;
+      } catch (e) {
+        console.error(e);
+        return false;
+      }
+    },
+
+    // Parse JSON data and populate the store variables
+    async load(data: RegisterDescriptionFile, url = "") {
+      for (const element of Object.values(data.elements)) {
+        const fields = element.fields;
+
+        // Set the field.value to be a Bit[] that represents the field.reset or 0
+        fields?.forEach((field: RegisterField) => {
+          if (field.reset) {
+            field.value = parse.stringToBitArray(
+              field.reset.toString(),
+              field.nbits
+            );
+          } else {
+            field.value = parse.stringToBitArray("0", field.nbits);
+          }
+        });
       }
 
-      const node = {
-        key: child.id,
-        styleClass: child.id,
-        data: {
-          name: child.name,
-          addr: format.hex(child.addr || 0),
-        },
-      } as MenuNode;
-
-      if (child.children) {
-        node.children = this.getNodes(elements, child);
+      this.elements = new Map<string, Register>();
+      for (const key of Object.keys(data.elements)) {
+        this.elements.set(key, data.elements[key] as Register);
       }
 
-      return node;
-    });
+      this.root = data.root;
+      this.url = url;
+      this.loaded = true;
+    },
   },
-
-  getFirstRegister() {
-    for (const key in this.sharedState.data.elements) {
-      if (this.sharedState.data.elements[key]?.type == "reg") {
-        return key;
-      }
-    }
-
-    return "";
-  },
-
-  setSelectedDisplayType(value: DisplayType) {
-    this.selectedDisplayType = value;
-  },
-
-  setUseByteSwap(value: boolean) {
-    this.useByteSwap = value;
-  },
-};
+});

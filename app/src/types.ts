@@ -47,6 +47,18 @@ export interface Register {
   links: Map<string, string>;
 }
 
+// Interface representing the Register Description File that will be used to build the store
+export interface RegisterDescriptionFile {
+  schema: {
+    version: string;
+    name: string;
+  };
+  root: DesignRoot;
+  elements: {
+    [key: string]: Register;
+  };
+}
+
 // Interface representing the fields on a specific register
 export interface RegisterField {
   access: string;
@@ -56,18 +68,6 @@ export interface RegisterField {
   nbits: number;
   reset: number;
   value: Bit[];
-}
-
-// Interface representing the overall sharedState object exported from store.ts
-export interface SharedState {
-  data: {
-    root: DesignRoot;
-    elements: {
-      [key: string]: Register;
-    };
-  };
-  fields: Map<string, string>;
-  nodes: MenuNode[];
 }
 
 // Interfaces that defines the properties on a entry in the list
