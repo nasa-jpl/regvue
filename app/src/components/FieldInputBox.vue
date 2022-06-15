@@ -11,7 +11,7 @@ const props = defineProps<{
   selectedDisplayType: DisplayType;
 }>();
 
-const emit = defineEmits(["select-field", "value-changed"]);
+const emit = defineEmits(["value-changed"]);
 
 // Determine whether or not to display an error
 let isError = ref(false);
@@ -41,7 +41,6 @@ const deactivate = () => {
     );
   }
 
-  emit("select-field", false);
   showErrorTooltip.value = false;
 };
 
@@ -128,13 +127,12 @@ const getErrorMessage = (value: string) => {
 </script>
 
 <template>
-  <div class="relative w-full">
+  <div class="relative w-full" :class="isError ? 'bg-red-300/50' : ''">
     <input
       :id="'input-box-' + name"
       type="text"
       :value="displayValue"
       class="w-full bg-inherit text-center shadow-sm"
-      :class="isError ? 'inner-border bg-red-300/50' : ''"
       @focus="($event.target as HTMLInputElement).select(); showErrorTooltip=true;"
       @blur="deactivate"
       @keydown.esc="($event.target as HTMLInputElement).blur()"
@@ -165,11 +163,3 @@ const getErrorMessage = (value: string) => {
     </div>
   </div>
 </template>
-
-<style>
-.inner-border {
-  -webkit-box-shadow: inset 0 0 0 2px red;
-  -moz-box-shadow: inset 0 0 0 2px red;
-  box-shadow: inset 0 0 0 2px red;
-}
-</style>
