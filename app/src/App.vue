@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import packageInfo from "../package.json";
-import AppVersion from "./components/AppVersion.vue";
+import AppVersion from "src/components/AppVersion.vue";
 
 const appInfo = {
   name: packageInfo.name,

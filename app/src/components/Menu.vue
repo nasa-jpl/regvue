@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { MenuNode } from "../types";
+import { MenuNode } from "src/types";
 
 import MenuDown from "vue-material-design-icons/MenuDown.vue";
 import MenuRight from "vue-material-design-icons/MenuRight.vue";

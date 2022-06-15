@@ -2,9 +2,9 @@
 /* eslint-disable vue/no-v-html */
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
-import { Suggestion } from "../types";
-import format from "../format";
-import store from "../store";
+import { Suggestion } from "src/types";
+import format from "src/format";
+import store from "src/store";
 
 const props = defineProps<{
   suggestion: Suggestion;

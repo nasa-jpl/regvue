@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { computed, ref, Ref, onBeforeMount, onUnmounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import store from "../store";
-import { createSearchIndex } from "../search";
-import { Suggestion } from "../types";
 import { Index, Query } from "lunr";
+import { createSearchIndex } from "src/search";
+import type { Suggestion } from "src/types";
+import store from "src/store";
 
 import AppleKeyboardCommand from "vue-material-design-icons/AppleKeyboardCommand.vue";
 import Magnify from "vue-material-design-icons/Magnify.vue";
-import SearchResult from "./SearchResult.vue";
+import SearchResult from "src/components/SearchResult.vue";
 
 const sharedState = ref(store.sharedState);
 

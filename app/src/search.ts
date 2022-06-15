@@ -1,6 +1,6 @@
-import format from "./format";
+import format from "src/format";
 import lunr from "lunr";
-import store from "./store";
+import store from "src/store";
 
 // Creates a lunr.Index object that can be used to search data.elements
 export const createSearchIndex = async () => {

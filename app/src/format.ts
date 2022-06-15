@@ -1,4 +1,4 @@
-import { Bit, DisplayType, isUnknownBit, RegisterField } from "./types";
+import { Bit, DisplayType, isUnknownBit, RegisterField } from "src/types";
 
 // Provides formatting functions to convert various values to strings
 export default {

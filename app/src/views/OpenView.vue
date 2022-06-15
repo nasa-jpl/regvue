@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DataFileInput from "../components/DataFileInput.vue";
+import DataFileInput from "src/components/DataFileInput.vue";
 </script>
 
 <template>

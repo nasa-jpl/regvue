@@ -6,9 +6,9 @@ import {
   Register,
   RegisterField,
   SharedState,
-} from "./types";
-import format from "./format";
-import parse from "./parse";
+} from "src/types";
+import format from "src/format";
+import parse from "src/parse";
 
 export default {
   sharedState: reactive({

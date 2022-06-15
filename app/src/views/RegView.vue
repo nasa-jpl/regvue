@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { ref, computed, watch, onBeforeMount } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { Register, SharedState } from "../types";
-import store from "../store";
+import { Register, SharedState } from "src/types";
+import store from "src/store";
 
-import Header from "../components/Header.vue";
-import Menu from "../components/Menu.vue";
-import OpenModal from "../components/OpenModal.vue";
-import RegFields from "../components/RegFields.vue";
-import RegLayout from "../components/RegLayout.vue";
+import Header from "src/components/Header.vue";
+import Menu from "src/components/Menu.vue";
+import OpenModal from "src/components/OpenModal.vue";
+import RegFields from "src/components/RegFields.vue";
+import RegLayout from "src/components/RegLayout.vue";
 
 const props = defineProps<{
   regid: string;

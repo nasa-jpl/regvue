@@ -1,9 +1,9 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import store from "./store";
-import Default from "./views/Default.vue";
-import PageNotFound from "./views/PageNotFound.vue";
-import RegView from "./views/RegView.vue";
-import OpenView from "./views/OpenView.vue";
+import store from "src/store";
+import Default from "src/views/Default.vue";
+import PageNotFound from "src/views/PageNotFound.vue";
+import RegView from "src/views/RegView.vue";
+import OpenView from "src/views/OpenView.vue";
 
 const routes = [
   {

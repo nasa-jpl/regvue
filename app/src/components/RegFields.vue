@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RegisterField } from "../types";
+import { RegisterField } from "src/types";
 
 const props = defineProps<{
   fields: RegisterField[];
