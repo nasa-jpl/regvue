@@ -16,7 +16,7 @@ const props = defineProps<{
 const router = useRouter();
 const store = useStore();
 
-const elementId = ref(props.suggestion.path.params.elementId);
+const elementId = ref(props.suggestion.path.params.elementId.join("."));
 const field = computed(() => {
   if (props.suggestion.path?.query?.field) {
     return props.suggestion.path.query.field;

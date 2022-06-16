@@ -15,12 +15,11 @@ describe("open-data-file", () => {
 
     // Type in the url input box
     cy.get("#data-url-input").type("data.json").type("{enter}");
-    cy.url().should("include", "/reg/");
+    cy.url().should("include", "?data=data.json");
   });
 
   it("can open and close a modal window in RegView page", () => {
     cy.visit("/");
-    cy.url().should("include", "/reg/");
 
     // Clicking on background closes modal
     cy.get("#show-open-modal-button").click();

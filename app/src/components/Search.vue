@@ -86,14 +86,14 @@ let suggestions = computed(() => {
       if (id.split(":").length != 2) {
         throw Error(`Invalid field id passed: ${id}.`);
       }
-      const [regid, fieldName] = id.split(":");
-      if (!regid || !fieldName) {
-        throw Error(`Invalid field id: ${regid}:${fieldName}.`);
+      const [regId, fieldName] = id.split(":");
+      if (!regId || !fieldName) {
+        throw Error(`Invalid field id: ${regId}:${fieldName}.`);
       }
 
       const path = {
-        name: "reg",
-        params: { elementId: regid },
+        name: "element",
+        params: { elementId: regId.split(".") },
         query: route.query.data
           ? { field: fieldName, data: route.query.data }
           : { field: fieldName },
@@ -114,8 +114,8 @@ let suggestions = computed(() => {
       }
 
       const path = {
-        name: "reg",
-        params: { elementId: id },
+        name: "element",
+        params: { elementId: id.split(".") },
         query: route.query.data ? { data: route.query.data } : {},
       };
 

@@ -10,8 +10,10 @@ import OpenModal from "src/components/OpenModal.vue";
 import RegPage from "src/components/RegPage.vue";
 
 const props = defineProps<{
-  elementId: string;
+  elementId: string[];
 }>();
+
+const elementId = computed(() => props.elementId.join("."));
 
 const route = useRoute();
 const router = useRouter();
@@ -25,7 +27,7 @@ let showMenu = ref(true);
 // Control whether or not to show the open modal
 let showOpenModal = ref(false);
 
-let element = computed(() => store.elements.get(props.elementId));
+let element = computed(() => store.elements.get(elementId.value));
 
 // Keyboard shortcut to open/close the nav menu
 const useKeyboardShortcut = (event: KeyboardEvent) => {
@@ -48,7 +50,8 @@ onUnmounted(() => {
 
 // Go to 404 page if the current props.elementId doesn't exist in the elements map
 const validateRoute = () => {
-  if (!store.elements.get(props.elementId)) {
+  if (!store.elements.get(elementId.value)) {
+    console.log(`NOT FOUND ${elementId}`);
     router.push({
       name: "404",
       params: { catchAll: "404" },
@@ -79,7 +82,7 @@ watch(
     <Menu class="w-[21rem] bg-white pb-1" :class="!showMenu ? 'hidden' : ''" />
 
     <!-- Show the main body and fill the remaining screen space -->
-    <div class="mt-4 flex-grow overflow-y-scroll">
+    <div class="mt-4 flex-grow overflow-y-scroll px-8">
       <BlockPage v-if="element?.type == 'blk'" :block="element" />
       <RegPage v-else-if="element?.type == 'reg'" :reg="element" />
     </div>

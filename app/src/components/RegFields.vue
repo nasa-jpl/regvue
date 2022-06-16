@@ -66,7 +66,9 @@ const deselectField = () => {
           <!-- Show the description as html -->
           <td class="border-l-2 px-2">
             <!-- eslint-disable-next-line vue/no-v-html -->
-            <div class="default-styles" v-html="field.doc"></div>
+            <div class="default-styles" >
+            {{field.doc}}
+            </div>
           </td>
         </tr>
       </tbody>

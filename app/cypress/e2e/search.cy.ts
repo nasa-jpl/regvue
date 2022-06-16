@@ -74,12 +74,12 @@ describe("search-component", () => {
       .should("have.class", "outline-blue-500");
 
     cy.get("#suggestion-0").click();
-    cy.url().should("contain", `/reg/${term}`);
+    cy.url().should("contain", term.split(".").join("/"));
   });
 
   it("Allows keyboard input", () => {
     cy.get("#search-input").click().type("regA0").wait(delay).type("{enter}");
-    cy.url().should("contain", "/reg/").and("contain", "regA0");
+    cy.url().should("contain", "regA0");
 
     // Allows down arrow
     cy.get("#search-input").click().type("r").wait(delay).type("{downArrow}");

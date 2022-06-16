@@ -33,7 +33,9 @@ const collapsed = ref(true);
   >
     <!-- Show register's offset -->
     <td>
-      {{ "0x" + element.offset.toString(16) }}
+      <div v-responsive-rotate class="flex w-full items-center justify-center">
+        {{ "0x" + element.offset.toString(16) }}
+      </div>
     </td>
 
     <!-- Show name of register -->
@@ -73,32 +75,34 @@ const collapsed = ref(true);
     </template>
   </tr>
 
+  <!-- Show an expanded view with register/field descriptions -->
   <tr v-if="!collapsed">
-    <!-- Show button to collapse view -->
-    <td :colspan="1" class="bg-gray-300">
-      <button
-        class="h-10 w-10 rounded hover:cursor-pointer hover:bg-gray-100/50"
-        @click="collapsed = true"
-      >
-        x
-      </button>
-    </td>
-
     <!-- Show a mini view of the field description for the register -->
-    <td :colspan="33" class="bg-gray-300">
-      <div class="m-2 rounded bg-white px-4">
-        <!-- Show the register doc description -->
-        <div v-if="doc" class="py-2 text-left">
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <span class="default-styles" v-html="doc"></span>
-        </div>
+    <td :colspan="34" class="bg-gray-200">
+      <div class="flex flex-row items-center">
+        <!-- Show button to collapse view -->
+        <button
+          class="mx-1 h-10 w-10 rounded hover:cursor-pointer hover:bg-gray-100/50"
+          @click="collapsed = true"
+        >
+          x
+        </button>
 
-        <!-- Show the register field description table -->
-        <RegFields
-          v-if="element.fields"
-          :fields="element.fields"
-          class="m-auto mt-8 w-full bg-white pb-4"
-        />
+        <!-- Show info about the registers/fields -->
+        <div class="m-2 grow rounded bg-white px-6">
+          <!-- Show the register doc description -->
+          <div v-if="doc" class="py-2 text-left">
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <span class="default-styles" v-html="doc"></span>
+          </div>
+
+          <!-- Show the register field description table -->
+          <RegFields
+            v-if="element.fields"
+            :fields="element.fields"
+            class="m-auto mt-8 w-full bg-white pb-4"
+          />
+        </div>
       </div>
     </td>
   </tr>

@@ -28,6 +28,7 @@
     "blkA.sub_blkA": {
       "offset": 0,
       "type": "blk",
+      "doc": "This is a block of related registers.",
       "children": [
         "blkA.sub_blkA.regA0",
         "blkA.sub_blkA.regA1",

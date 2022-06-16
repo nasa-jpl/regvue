@@ -12,6 +12,10 @@ const router = useRouter();
 const route = useRoute();
 const store = useStore();
 
+const currentElement = computed(() =>
+  (route.params.elementId as string[]).join(".")
+);
+
 // Parses the store to generate an tree of MenuNode objects
 const getNodes = (
   elements: Map<string, DesignElement>,
@@ -56,16 +60,14 @@ const nodes = ref(
       result.push(node);
 
       if (node.children) {
-        let routeName = (route.params?.elementId as string) || "";
-
         node.children.forEach((child: MenuNode) => {
           // Only mark a node as visible if it's parent node should be open
-          if (routeName == child.key) {
+          if (currentElement.value == child.key) {
             openChildrenNodes(node);
           } else if (
             // Ensure children further down the tree are not visible
-            routeName.includes(child.key) &&
-            !child.key.includes(routeName)
+            currentElement.value.includes(child.key) &&
+            !child.key.includes(currentElement.value)
           ) {
             openChildrenNodes(node);
           }
@@ -135,26 +137,22 @@ const getIndent = (node: MenuNode) => {
 // Scroll to element
 const scrollToElement = (element_id: string) => {
   const elem = document.getElementById(element_id);
-  if (!elem) {
-    throw Error(`Could not find element with id ${element_id}`);
-  } else {
-    const parent = elem.parentNode as HTMLElement;
-    if (parent) {
-      parent.scroll(0, elem.offsetTop - 500);
-    }
-  }
+
+  const parent = elem?.parentNode as HTMLElement;
+  parent?.scroll(0, (elem?.offsetTop || 0) - 500);
 };
 
 // Perform initial scroll to element on page load
 onMounted(async () => {
-  scrollToElement(route.params.elementId as string);
+  scrollToElement(currentElement.value);
 });
 
 // Change the route when a node is clicked on
 const onNodeSelect = (key: string) => {
+  console.log("PUSHING " + key);
   router.push({
-    name: "reg",
-    params: { elementId: key },
+    name: "element",
+    params: { elementId: key.split(".") },
     query: { data: route.query.data },
   });
 };
@@ -172,7 +170,7 @@ const onNodeSelect = (key: string) => {
         v-if="node.isVisible"
         :id="'menu-node-' + node.key.replaceAll('.', '-')"
         class="flex flex-row justify-between space-x-4 border-y-[0.5px] px-4 hover:cursor-pointer hover:bg-gray-200"
-        :class="node.key == route.params.elementId ? 'bg-blue-200' : ''"
+        :class="node.key == currentElement ? 'bg-blue-200' : ''"
         :style="`padding-left: ${getIndent(node)}px`"
         @click="onNodeSelect(node.key)"
       >

@@ -83,7 +83,7 @@ describe("menu-component", () => {
     const id = "#menu-node-" + name.split(".").join("-");
 
     cy.get(id).click();
-    cy.url().should("include", `/reg/${name}`);
+    cy.url().should("include", `${name}`);
 
     cy.get(id).should("have.class", "bg-blue-200");
   });
@@ -93,7 +93,7 @@ describe("menu-component", () => {
     const firstChild = data.elements[firstParent].children[0];
     const firstGrandChild = data.elements[firstChild].children[0];
 
-    cy.visit(`localhost:3000/#/reg/${firstGrandChild}`);
+    cy.visit(`localhost:3000/#/${firstGrandChild}`);
     cy.get("[id^=menu-node-]").should(
       "have.length",
       data.root.children.length +

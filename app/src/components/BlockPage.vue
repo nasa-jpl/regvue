@@ -29,12 +29,17 @@ defineProps<{
         <table class="w-full table-fixed border-2 border-gray-400">
           <thead class="border-2 border-gray-400 bg-gray-200">
             <tr>
-              <th>Offset</th>
-              <th class="border-l-2 border-gray-400">Register/Block Name</th>
+              <th class="truncate" title="Offset">Offset</th>
+              <th
+                class="truncate border-l-2 border-gray-400"
+                title="Register/Block Name"
+              >
+                Register/Block Name
+              </th>
               <th
                 v-for="bit in 32"
                 :key="bit"
-                class="w-[2rem] border-l-2 border-gray-400 text-sm"
+                class="border-l-2 border-gray-400 text-sm"
               >
                 {{ 32 - bit }}
               </th>
