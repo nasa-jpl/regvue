@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { Register } from "src/types";
+import { DesignElement } from "src/types";
 
 import BlockTableEntry from "src/components/BlockTableEntry.vue";
 
 defineProps<{
-  block: Register;
+  block: DesignElement;
 }>();
 </script>
 

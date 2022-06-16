@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { Register } from "src/types";
+import { DesignElement } from "src/types";
 
 import RegFields from "src/components/RegFields.vue";
 import RegLayout from "src/components/RegLayout.vue";
 
 const props = defineProps<{
-  reg: Register;
+  reg: DesignElement;
 }>();
 
 const route = useRoute();

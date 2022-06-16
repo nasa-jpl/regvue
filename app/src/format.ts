@@ -1,4 +1,4 @@
-import { Bit, DisplayType, isUnknownBit, RegisterField } from "src/types";
+import { Bit, DisplayType, Field, isUnknownBit } from "src/types";
 
 // Provides formatting functions to convert various values to strings
 export default {
@@ -8,7 +8,7 @@ export default {
   },
 
   // Converts a field value to a string
-  getFieldValue(field: RegisterField, value: number) {
+  getFieldValue(field: Field, value: number) {
     if (field.nbits == 1) {
       return value;
     } else {

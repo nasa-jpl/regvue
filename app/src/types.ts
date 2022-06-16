@@ -6,6 +6,21 @@ export type UnknownBit = "?" | "u";
 export const isUnknownBit = (x: unknown): x is UnknownBit =>
   ["?", "u"].includes(x as string);
 
+// Interface representing a design element such as a register, block, or memory segment
+export interface DesignElement {
+  id: string;
+  name: string;
+  addr: number;
+  offset: number;
+  type: "reg" | "blk" | "mem";
+  display_name: string;
+  doc: string;
+  version?: string;
+  fields?: Field[];
+  children: string[];
+  links: Map<string, string>;
+}
+
 // Interface representing the attributes of the root project description
 export interface DesignRoot {
   display_name: string;
@@ -18,6 +33,17 @@ export interface DesignRoot {
 
 // Type representing the supported ways of displaying bit values
 export type DisplayType = "hexadecimal" | "binary" | "decimal";
+
+// Interface representing the fields on a specific register
+export interface Field {
+  access: string;
+  doc: string;
+  lsb: number;
+  name: string;
+  nbits: number;
+  reset: number;
+  value: Bit[];
+}
 
 // Interface representing the fields necessary for a menu node
 export interface MenuNode {
@@ -32,21 +58,6 @@ export interface MenuNode {
   isVisible?: boolean;
 }
 
-// Interface representing a register entry
-export interface Register {
-  id: string;
-  name: string;
-  addr: number;
-  offset: number;
-  type: "reg" | "blk" | "mem";
-  display_name: string;
-  doc: string;
-  version?: string;
-  fields?: RegisterField[];
-  children: string[];
-  links: Map<string, string>;
-}
-
 // Interface representing the Register Description File that will be used to build the store
 export interface RegisterDescriptionFile {
   schema: {
@@ -55,19 +66,8 @@ export interface RegisterDescriptionFile {
   };
   root: DesignRoot;
   elements: {
-    [key: string]: Register;
+    [key: string]: DesignElement;
   };
-}
-
-// Interface representing the fields on a specific register
-export interface RegisterField {
-  access: string;
-  doc: string;
-  lsb: number;
-  name: string;
-  nbits: number;
-  reset: number;
-  value: Bit[];
 }
 
 // Interfaces that defines the properties on a entry in the list

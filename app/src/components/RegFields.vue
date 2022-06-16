@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { RegisterField } from "src/types";
+import { Field } from "src/types";
 
 const props = defineProps<{
-  fields: RegisterField[];
+  fields: Field[];
   selectedField?: string;
 }>();
 const emit = defineEmits([

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useStore } from "src/store";
-import { Register } from "src/types";
+import { DesignElement } from "src/types";
 import { vResponsiveRotate } from "src/directives/ResponsiveRotate";
 
 import RegFields from "src/components/RegFields.vue";
@@ -12,8 +12,16 @@ const props = defineProps<{
 
 const store = useStore();
 
-const reg = computed(() => store.elements.get(props.regid) as Register);
-const doc = computed(() => reg.value.doc);
+const element = computed(() => {
+  const e = store.elements.get(props.regid);
+  if (!e) {
+    throw Error(`Could not find element with id ${props.regid}`);
+  }
+
+  return e as DesignElement;
+});
+
+const doc = computed(() => element.value.doc);
 
 const collapsed = ref(true);
 </script>
@@ -25,20 +33,20 @@ const collapsed = ref(true);
   >
     <!-- Show register's offset -->
     <td>
-      {{ "0x" + reg.offset.toString(16) }}
+      {{ "0x" + element.offset.toString(16) }}
     </td>
 
     <!-- Show name of register -->
     <td class="border-l-2 border-gray-400">
       <div v-responsive-rotate class="flex w-full items-center justify-center">
-        {{ reg.name }}
+        {{ element.name }}
       </div>
     </td>
 
     <!-- Show each field in the register -->
-    <template v-if="reg.type == 'reg'">
+    <template v-if="element.type == 'reg'">
       <td
-        v-for="field in reg.fields"
+        v-for="field in element.fields"
         :key="field.name"
         :colspan="field.nbits"
         class="truncate border-l-2 border-gray-400 px-2"
@@ -53,12 +61,12 @@ const collapsed = ref(true);
         </div>
       </td>
     </template>
-    <template v-else-if="reg.type == 'blk'">
+    <template v-else-if="element.type == 'blk'">
       <td :colspan="32" class="truncate border-l-2 border-gray-400 px-2">
-        {{ reg.doc }}
+        {{ element.doc }}
       </td>
     </template>
-    <template v-else-if="reg.type == 'mem'">
+    <template v-else-if="element.type == 'mem'">
       <td :colspan="32" class="truncate border-l-2 border-gray-400 px-2">
         reserved memory
       </td>
@@ -87,8 +95,8 @@ const collapsed = ref(true);
 
         <!-- Show the register field description table -->
         <RegFields
-          v-if="reg.fields"
-          :fields="reg.fields"
+          v-if="element.fields"
+          :fields="element.fields"
           class="m-auto mt-8 w-full bg-white pb-4"
         />
       </div>

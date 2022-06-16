@@ -1,9 +1,9 @@
 import format from "src/format";
 import lunr from "lunr";
-import { Register } from "src/types";
+import { DesignElement } from "src/types";
 
 // Creates a lunr.Index object that can be used to search data.elements
-export const createSearchIndex = (elements: Map<string, Register>) => {
+export const createSearchIndex = (elements: Map<string, DesignElement>) => {
   return lunr((builder: lunr.Builder) => {
     // Set the tokenizer to only seperate search terms on carriage return (\r)
     // or newline (\n)

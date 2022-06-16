@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref, computed, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { DesignRoot, MenuNode, Register } from "src/types";
+import { DesignElement, DesignRoot, MenuNode } from "src/types";
 import { useStore } from "src/store";
 import format from "src/format";
 
@@ -14,8 +14,8 @@ const store = useStore();
 
 // Parses the store to generate an tree of MenuNode objects
 const getNodes = (
-  elements: Map<string, Register>,
-  element: Register | DesignRoot
+  elements: Map<string, DesignElement>,
+  element: DesignElement | DesignRoot
 ) => {
   return element.children.map((child_id) => {
     const child = elements.get(child_id);
