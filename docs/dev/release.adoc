@@ -31,9 +31,13 @@ Increment the version according to https://semver.org/[Semantic Versioning 2] wh
  git tag $tag
  git push origin $tag
 
-== Create the Release Package
+== Create the Release Package from Fresh Clone
 
+ git clone $repo build
+ cd build
+ git checkout $tag
  cd app
+ npm install
  npm run build
  mv dist regvue-$version
  tar cf regvue-$version.tar.gz regvue-$version
