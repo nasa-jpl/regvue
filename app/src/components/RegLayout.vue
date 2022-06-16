@@ -181,7 +181,7 @@ watch(
             @mouseleave="emit('stop-highlight-field')"
             @click="emit('select-field', field.name)"
           >
-            <FieldName :name="field.name" :nbits="field.nbits" />
+            <FieldName :name="field.name" />
           </td>
         </tr>
 
