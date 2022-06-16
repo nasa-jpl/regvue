@@ -44,7 +44,7 @@
       "doc": "regA0 - An example register.",
       "fields": [
         {
-          "access": "rw",
+          "access": "rsvd",
           "doc": "A reserved field.",
           "nbits": 24,
           "lsb": 8,
@@ -113,7 +113,7 @@
       "doc": "regA1 - An example register.",
       "fields": [
         {
-          "access": "ro",
+          "access": "rsvd",
           "reset": 19088743,
           "nbits": 28,
           "lsb": 4,
