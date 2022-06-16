@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow dropping urls into the drop zone to open new data files ([#78](https://github.jpl.nasa.gov/regvue/regvue/pull/78)).
 
 ### Changed
+- Dynamically calculate address from the offset attribute instead of using a hardcoded address ([#80](https://github.jpl.nasa.gov/regvue/regvue/pull/80)).
 - `store.ts` has been reimplemented with Pinia ([#70](https://github.jpl.nasa.gov/regvue/regvue/pull/70)).
 - Upgraded Cypress to 10.1.0 and added new tests for bit encoding/decoding and opening data files ([#89](https://github.jpl.nasa.gov/regvue/regvue/pull/89)).
 
