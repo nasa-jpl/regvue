@@ -2,7 +2,7 @@
 :imagesdir: images
 :toc: macro
 
-:latest_deployment: v0.5
+:latest_deployment: latest
 :deployment_url: https://github.jpl.nasa.gov/pages/regvue/regvue/{latest_deployment}/#/
 :demo_register_description: https://github.jpl.nasa.gov/pages/regvue/regvue/demo/data.json
 
