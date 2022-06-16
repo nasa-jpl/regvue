@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.5.1] - 2022-06-16
 ### Added
 - Any unexpected errors now result in a pop up modal regarding the error ([#92](https://github.jpl.nasa.gov/regvue/regvue/pull/92)).
 - Added support for unknown values in bit encoding/decoding ([#46](https://github.jpl.nasa.gov/regvue/regvue/pull/46)).
@@ -162,7 +164,8 @@ Lastly, several improvements were made to the search UI.
 
 - Initial release of regvue prototype.
 
-[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.5.0...HEAD
+[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.5.1...HEAD
+[0.5.1]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.3.2...v0.4.0
 [0.3.2]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.3.1...v0.3.2
