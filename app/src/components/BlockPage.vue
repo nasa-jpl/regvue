@@ -42,9 +42,9 @@ defineProps<{
           </thead>
           <tbody>
             <BlockTableEntry
-              v-for="regid in block.children"
-              :key="regid"
-              :regid="regid"
+              v-for="id in block.children"
+              :key="id"
+              :element-id="id"
             />
           </tbody>
         </table>

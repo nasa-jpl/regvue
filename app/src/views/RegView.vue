@@ -10,7 +10,7 @@ import OpenModal from "src/components/OpenModal.vue";
 import RegPage from "src/components/RegPage.vue";
 
 const props = defineProps<{
-  regid: string;
+  elementId: string;
 }>();
 
 const route = useRoute();
@@ -25,7 +25,7 @@ let showMenu = ref(true);
 // Control whether or not to show the open modal
 let showOpenModal = ref(false);
 
-let element = computed(() => store.elements.get(props.regid));
+let element = computed(() => store.elements.get(props.elementId));
 
 // Keyboard shortcut to open/close the nav menu
 const useKeyboardShortcut = (event: KeyboardEvent) => {
@@ -46,9 +46,9 @@ onUnmounted(() => {
   document.removeEventListener("keydown", useKeyboardShortcut);
 });
 
-// Go to 404 page if the current props.regid doesn't exist in the elements map
+// Go to 404 page if the current props.elementId doesn't exist in the elements map
 const validateRoute = () => {
-  if (!store.elements.get(props.regid)) {
+  if (!store.elements.get(props.elementId)) {
     router.push({
       name: "404",
       params: { catchAll: "404" },
@@ -57,9 +57,9 @@ const validateRoute = () => {
   }
 };
 
-// Watch for route changes and go to 404 page if an invalid regid is given
+// Watch for route changes and go to 404 page if an invalid elementId is given
 watch(
-  () => props.regid,
+  () => props.elementId,
   () => validateRoute()
 );
 </script>

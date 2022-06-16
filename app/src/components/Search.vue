@@ -93,7 +93,7 @@ let suggestions = computed(() => {
 
       const path = {
         name: "reg",
-        params: { regid: regid },
+        params: { elementId: regid },
         query: route.query.data
           ? { field: fieldName, data: route.query.data }
           : { field: fieldName },
@@ -115,7 +115,7 @@ let suggestions = computed(() => {
 
       const path = {
         name: "reg",
-        params: { regid: id },
+        params: { elementId: id },
         query: route.query.data ? { data: route.query.data } : {},
       };
 

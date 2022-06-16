@@ -139,7 +139,7 @@ const populateFieldValuesFromRegisterValue = (value: Bit[]) => {
 // Force input components to reload when leaving the page
 const route = useRoute();
 watch(
-  () => route.params.regid,
+  () => route.params.elementId,
   () => {
     nextTick(() => {
       updateRegisterValue();

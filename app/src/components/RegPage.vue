@@ -26,19 +26,19 @@ let selectedField = ref(
 );
 
 const selectField = (fieldName: string) => {
-  const regid = route?.params?.regid;
+  const regid = route?.params?.elementId;
   const fieldParam = route?.query?.field;
 
   if (fieldParam != fieldName) {
     router.push({
       name: "reg",
-      params: { regid: regid },
+      params: { elementId: regid },
       query: { field: fieldName, data: route.query.data },
     });
   } else {
     router.push({
       name: "reg",
-      params: { regid: regid },
+      params: { elementId: regid },
       query: { data: route.query.data },
     });
   }

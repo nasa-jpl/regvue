@@ -56,7 +56,7 @@ const nodes = ref(
       result.push(node);
 
       if (node.children) {
-        let routeName = (route.params?.regid as string) || "";
+        let routeName = (route.params?.elementId as string) || "";
 
         node.children.forEach((child: MenuNode) => {
           // Only mark a node as visible if it's parent node should be open
@@ -147,14 +147,14 @@ const scrollToElement = (element_id: string) => {
 
 // Perform initial scroll to element on page load
 onMounted(async () => {
-  scrollToElement(route.params.regid as string);
+  scrollToElement(route.params.elementId as string);
 });
 
 // Change the route when a node is clicked on
 const onNodeSelect = (key: string) => {
   router.push({
     name: "reg",
-    params: { regid: key },
+    params: { elementId: key },
     query: { data: route.query.data },
   });
 };
@@ -172,7 +172,7 @@ const onNodeSelect = (key: string) => {
         v-if="node.isVisible"
         :id="'menu-node-' + node.key.replaceAll('.', '-')"
         class="flex flex-row justify-between space-x-4 border-y-[0.5px] px-4 hover:cursor-pointer hover:bg-gray-200"
-        :class="node.key == route.params.regid ? 'bg-blue-200' : ''"
+        :class="node.key == route.params.elementId ? 'bg-blue-200' : ''"
         :style="`padding-left: ${getIndent(node)}px`"
         @click="onNodeSelect(node.key)"
       >

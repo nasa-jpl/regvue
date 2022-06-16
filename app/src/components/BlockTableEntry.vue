@@ -7,15 +7,15 @@ import { vResponsiveRotate } from "src/directives/ResponsiveRotate";
 import RegFields from "src/components/RegFields.vue";
 
 const props = defineProps<{
-  regid: string;
+  elementId: string;
 }>();
 
 const store = useStore();
 
 const element = computed(() => {
-  const e = store.elements.get(props.regid);
+  const e = store.elements.get(props.elementId);
   if (!e) {
-    throw Error(`Could not find element with id ${props.regid}`);
+    throw Error(`Could not find element with id ${props.elementId}`);
   }
 
   return e as DesignElement;

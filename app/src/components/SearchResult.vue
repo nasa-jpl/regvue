@@ -16,7 +16,7 @@ const props = defineProps<{
 const router = useRouter();
 const store = useStore();
 
-const regid = ref(props.suggestion.path.params.regid);
+const elementId = ref(props.suggestion.path.params.elementId);
 const field = computed(() => {
   if (props.suggestion.path?.query?.field) {
     return props.suggestion.path.query.field;
@@ -26,20 +26,20 @@ const field = computed(() => {
 
 const id = computed(() => {
   if (field.value) {
-    return regid.value + ":" + field.value;
+    return elementId.value + ":" + field.value;
   } else {
-    return regid.value;
+    return elementId.value;
   }
 });
 
 const doc = computed(() => {
-  const reg = store.elements.get(regid.value);
-  if (!reg) {
-    throw Error(`Register ${regid.value} does not exist in elements array`);
+  const element = store.elements.get(elementId.value);
+  if (!element) {
+    throw Error(`Register ${elementId.value} does not exist in elements array`);
   }
 
   if (field.value) {
-    const fields = reg.fields;
+    const fields = element.fields;
 
     if (!fields) return "";
 
@@ -50,7 +50,7 @@ const doc = computed(() => {
     }
     return "";
   } else {
-    return reg.doc;
+    return element.doc;
   }
 });
 
@@ -64,12 +64,12 @@ const type = computed(() => {
 
 // Get the address as a hexadecimal string
 const addr = computed(() => {
-  const reg = store.elements.get(regid.value);
-  if (!reg) {
-    throw Error(`Register ${regid.value} does not exist in elements array`);
+  const element = store.elements.get(elementId.value);
+  if (!element) {
+    throw Error(`Element ${elementId.value} does not exist in elements array`);
   }
 
-  const addr = reg.addr;
+  const addr = element.addr;
   if (addr) {
     return format.getStringRepresentation(addr, "hexadecimal", 32);
   } else {

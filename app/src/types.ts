@@ -78,7 +78,7 @@ export interface Suggestion {
   path: {
     name: string;
     params: {
-      regid: string;
+      elementId: string;
     };
     query?: {
       [key: string]: string | LocationQueryValue | LocationQueryValue[];

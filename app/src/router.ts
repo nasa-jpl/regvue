@@ -13,7 +13,7 @@ const routes = [
   },
   {
     name: "reg",
-    path: "/reg/:regid",
+    path: "/reg/:elementId",
     component: RegView,
     props: true,
   },
@@ -59,7 +59,7 @@ router.beforeEach(async (to) => {
       await store.loadUrl(to.query.data as string);
       return {
         name: "reg",
-        params: { regid: store.getFirstRegister() },
+        params: { elementId: store.getFirstRegister() },
         query: { data: store.url },
       };
     } catch {
@@ -72,13 +72,13 @@ router.beforeEach(async (to) => {
     if (store.url) {
       return {
         name: "reg",
-        params: { regid: store.getFirstRegister() },
+        params: { elementId: store.getFirstRegister() },
         query: { data: store.url },
       };
     } else {
       return {
         name: "reg",
-        params: { regid: store.getFirstRegister() },
+        params: { elementId: store.getFirstRegister() },
       };
     }
   }
