@@ -37,8 +37,11 @@ const deselectField = () => {
         <tr
           v-for="field in fields"
           :key="field.name"
-          class="border-b-2 hover:cursor-pointer"
-          :class="selectedField == field.name ? 'bg-yellow-50' : ''"
+          class="border-b-2"
+          :class="
+            selectedField == field.name ? 'bg-yellow-50' : '',
+           (selectedField || selectedField == '') ? 'hover:cursor-pointer' : ''
+          "
           @mouseenter="selectField(field.name)"
           @mouseleave="deselectField"
           @click="navigateToField(field.name)"
