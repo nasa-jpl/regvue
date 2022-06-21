@@ -26,7 +26,7 @@ let selectedField = ref(
 );
 
 const selectField = (fieldName: string) => {
-  const regid = route?.params?.elementId as string;
+  const regid = props.reg.id;
   const fieldParam = route?.query?.field;
 
   if (fieldParam != fieldName) {
@@ -63,6 +63,18 @@ watch(
 
 <template>
   <div class="m-auto max-w-[1200px]">
+    <div class="mb-3">
+      <div>
+        <span class="text-xl font-semibold">
+          {{ reg.display_name ? reg.display_name : reg.name }}
+        </span>
+        <template v-if="reg.version"> - ({{ reg.version }}) </template>
+      </div>
+      <div>
+        {{ "0x" + reg.addr.toString(16) }}
+      </div>
+    </div>
+
     <!-- Show the field/register value encode/decode table and associated buttons -->
     <RegLayout
       v-if="reg.fields"
