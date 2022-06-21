@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.5.2] - 2022-06-21
 ### Added
 - The navigation menu can now be made wider/narrower with a resize bar ([#100](https://github.jpl.nasa.gov/regvue/regvue/pull/100)).
 - Blocks now have a custom page that displays an overview of the entire block and all its sub-blocks and registers  ([#99](https://github.jpl.nasa.gov/regvue/regvue/pull/99)).
@@ -171,7 +173,8 @@ Lastly, several improvements were made to the search UI.
 
 - Initial release of regvue prototype.
 
-[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.5.1...HEAD
+[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.5.2...HEAD
+[0.5.2]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.3.2...v0.4.0
