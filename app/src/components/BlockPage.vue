@@ -11,10 +11,21 @@ defineProps<{
 <template>
   <div>
     <div class="m-auto max-w-[1200px]">
-      <!-- Display the name -->
-      <div class="text-xl font-semibold">
-        <template v-if="block.display_name">{{ block.display_name }}</template>
-        <template v-else>{{ block.name }}</template>
+      <div class="mb-3">
+        <div>
+          <!-- Show name -->
+          <span class="text-xl font-semibold">
+            {{ block.display_name ? block.display_name : block.name }}
+          </span>
+          <!-- Show the version -->
+          <template v-if="block.version" class="text-lg">
+            - ({{ block.version }})
+          </template>
+        </div>
+        <!-- Show the starting address of the block -->
+        <div>
+          {{ "0x" + block.addr.toString(16) }}
+        </div>
       </div>
 
       <!-- Display the doc -->
@@ -22,24 +33,21 @@ defineProps<{
         {{ block.doc }}
       </div>
     </div>
+
     <!-- Display the child table -->
     <div class="w-full">
-      <div class="m-auto mt-8 max-w-[1500px] overflow-scroll pb-28 text-center">
+      <div class="m-auto mt-8 max-w-[1750px] pb-28 text-center">
         <div class="ml-1 text-left">Sub-Elements Map</div>
+
         <table class="w-full table-fixed border-2 border-gray-400">
           <thead class="border-2 border-gray-400 bg-gray-200">
             <tr>
-              <th class="truncate" title="Offset">Offset</th>
-              <th
-                class="truncate border-l-2 border-gray-400"
-                title="Register/Block Name"
-              >
-                Register/Block Name
-              </th>
+              <th class="w-[12%] text-sm">Offset</th>
+              <th class="w-[12%] border-l-2 border-gray-400 text-sm">Name</th>
               <th
                 v-for="bit in 32"
                 :key="bit"
-                class="border-l-2 border-gray-400 text-sm"
+                class="w-[3.5%] border-l-2 border-gray-400 text-sm"
               >
                 {{ 32 - bit }}
               </th>
