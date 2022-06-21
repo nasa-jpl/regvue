@@ -12,9 +12,13 @@ const router = useRouter();
 const route = useRoute();
 const store = useStore();
 
-const currentElement = computed(() =>
-  (route.params.elementId as string[]).join(".")
-);
+const currentElement = computed(() => {
+  try {
+    return (route.params.elementId as string[]).join(".");
+  } catch {
+    return "";
+  }
+});
 
 // Parses the store to generate an tree of MenuNode objects
 const getNodes = (
@@ -31,7 +35,7 @@ const getNodes = (
       key: child.id,
       styleClass: child.id,
       data: {
-        name: child.name,
+        name: child.display_name ? child.display_name : child.name,
         addr: format.hex(child.addr || 0),
       },
     } as MenuNode;
@@ -149,7 +153,6 @@ onMounted(async () => {
 
 // Change the route when a node is clicked on
 const onNodeSelect = (key: string) => {
-  console.log("PUSHING " + key);
   router.push({
     name: "element",
     params: { elementId: key.split(".") },
@@ -161,7 +164,7 @@ const onNodeSelect = (key: string) => {
 <template>
   <div
     id="navigation-menu"
-    class="text-md mt-[1px] flex flex-shrink-0 flex-col overflow-y-scroll border-r-2 pb-12"
+    class="text-md mt-[1px] flex flex-shrink-0 flex-col overflow-y-scroll border-r-2 bg-white pb-12"
   >
     <!-- Show the nodes -->
     <div v-for="node in nodes" :key="node.key" :id="node.key">
