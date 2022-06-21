@@ -26,6 +26,17 @@ const currentElement = computed(() => {
   }
 });
 
+// Combine a MenuNode's name and version
+const getDisplayName = (node: MenuNode) => {
+  let result = node.data.name;
+
+  if (node.data.version) {
+    result += " - " + node.data.version;
+  }
+
+  return result;
+};
+
 // Parses the store to generate an tree of MenuNode objects
 const getNodes = (
   elements: Map<string, DesignElement>,
@@ -42,6 +53,7 @@ const getNodes = (
       styleClass: child.id,
       data: {
         name: child.display_name ? child.display_name : child.name,
+        version: child.version,
         addr: format.hex(child.addr || 0),
       },
     } as MenuNode;
@@ -235,7 +247,7 @@ onMounted(() => {
         >
           <div
             class="flex flex-grow flex-row overflow-x-hidden"
-            :title="node.data.name"
+            :title="getDisplayName(node)"
           >
             <!--  Display the name and the open button for a menu node-->
             <div class="z-10" @click.stop="toggleChildrenNodes(node)">
@@ -258,7 +270,7 @@ onMounted(() => {
 
             <!-- Display the name of the node and truncate it if it is too long -->
             <div class="ml-0 truncate text-left">
-              {{ node.data.name }}
+              {{ getDisplayName(node) }}
             </div>
           </div>
           <!-- Display the address of the node -->
