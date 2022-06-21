@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Blocks now have a custom page that displays an overview of the entire block and all its sub-blocks and registers  ([#99](https://github.jpl.nasa.gov/regvue/regvue/pull/99)).
+
+### Changed
+- The URL schema now follows the pattern `/root/block/sub_block/register` instead of the previous `/reg/block.sub_block.register`. The previous URL schema will continue to be supported as backwards compatible at least until v1.0. ([#99](https://github.jpl.nasa.gov/regvue/regvue/pull/99)).
 
 ## [0.5.1] - 2022-06-16
 ### Added
