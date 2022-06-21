@@ -12,7 +12,7 @@ defineProps<{
   menuVisible: boolean;
 }>();
 
-const emit = defineEmits(["menu-collapsed"]);
+const emit = defineEmits(["menu-collapsed", "resize"]);
 
 const router = useRouter();
 const route = useRoute();
@@ -166,25 +166,31 @@ const onNodeSelect = (key: string) => {
   });
 };
 
+// Keep track of when the resize bar is being dragged
 let beingDragged = ref(false);
+
 onMounted(() => {
   const resizer = document.querySelector("#resizer");
   const sidebar = document.querySelector("#sidebar") as HTMLElement;
 
+  // Call resizeSidebar() while the mouse is down
   resizer?.addEventListener("mousedown", () => {
     beingDragged.value = true;
 
     document.body.style.userSelect = "none";
 
-    document.addEventListener("mousemove", resize, false);
+    document.addEventListener("mousemove", resizeSidebar, false);
+
+    // Stop resizing on mouseup
     document.addEventListener(
       "mouseup",
       () => {
-        document.removeEventListener("mousemove", resize, false);
+        document.removeEventListener("mousemove", resizeSidebar, false);
         beingDragged.value = false;
         document.body.style.userSelect = "auto";
 
-        if (sidebar.style.flexBasis == "0") {
+        // Emit "menu-collapsed" if the sidebar has been made the minimum size
+        if (sidebar.style.flexBasis == "0.75rem") {
           emit("menu-collapsed");
         }
       },
@@ -192,14 +198,16 @@ onMounted(() => {
     );
   });
 
-  function resize(e: MouseEvent) {
+  // Resize the sidebar to match the mouse position
+  const resizeSidebar = (e: MouseEvent) => {
+    emit("resize");
     const size = `${e.x - 5}px`;
     if (e.x < 200) {
-      sidebar.style.flexBasis = "0";
+      sidebar.style.flexBasis = "0.75rem";
     } else if (sidebar) {
       sidebar.style.flexBasis = size;
     }
-  }
+  };
 });
 </script>
 
@@ -207,11 +215,11 @@ onMounted(() => {
   <div
     id="sidebar"
     class="flex h-full flex-row overflow-hidden"
-    :class="menuVisible ? 'basis-[21rem]' : 'hidden'"
+    :class="menuVisible ? 'basis-[21rem]' : 'max-w-[0.75rem] basis-3'"
   >
     <div
       id="navigation-menu"
-      class="text-md mt-[1px] flex h-full flex-shrink-0 flex-grow flex-col overflow-y-scroll bg-white pb-12"
+      class="text-md mt-[1px] flex h-full flex-grow flex-col overflow-y-scroll bg-white pb-12"
       :class="menuVisible ? '' : 'hidden'"
     >
       <!-- Show the nodes -->
@@ -261,11 +269,20 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Show a draggable line that will resize the menu width -->
+    <!-- Show a draggable bar that will resize the menu width -->
     <div
       id="resizer"
-      class="relative basis-1 bg-gray-300 hover:cursor-col-resize hover:bg-blue-500"
-      :class="beingDragged ? 'bg-blue-500' : ''"
+      class="relative mt-[1px] flex-shrink-0 basis-3 border bg-gray-100 hover:cursor-col-resize"
     ></div>
   </div>
 </template>
+
+<style>
+/* Give the resize bar a small dot image icon */
+#resizer {
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
+  cursor: col-resize;
+}
+</style>
