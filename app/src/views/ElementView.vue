@@ -27,9 +27,6 @@ const store = useStore();
 
 onBeforeMount(() => validateRoute());
 
-// Control whether to show navigation menu on left of screen
-let showMenu = ref(true);
-
 // Control whether or not to show the open modal
 let showOpenModal = ref(false);
 
@@ -39,7 +36,7 @@ let element = computed(() => store.elements.get(elementId.value));
 const useKeyboardShortcut = (event: KeyboardEvent) => {
   if ((event.ctrlKey || event.metaKey) && event.key == "b") {
     event.preventDefault();
-    showMenu.value = !showMenu.value;
+    toggleMenu();
   }
 };
 
@@ -70,24 +67,64 @@ watch(
   () => props.elementId,
   () => validateRoute()
 );
+
+const WINDOW_BREAKPOINT = 950;
+let windowWidth = ref(window.innerWidth);
+onBeforeMount(() => {
+  window.addEventListener("resize", () => {
+    windowWidth.value = window.innerWidth;
+  });
+});
+
+// Whether or not the nav menu is visible
+let menuVisible = ref(windowWidth.value > WINDOW_BREAKPOINT);
+
+const toggleMenu = () => (menuVisible.value = !menuVisible.value);
+
+// Automatically hide/show the menu if the window width crosses the breakpoint
+watch(
+  () => windowWidth.value,
+  (value, old) => {
+    if (
+      menuVisible.value &&
+      value < WINDOW_BREAKPOINT &&
+      old >= WINDOW_BREAKPOINT
+    ) {
+      menuVisible.value = false;
+    } else if (
+      !menuVisible.value &&
+      value >= WINDOW_BREAKPOINT &&
+      old < WINDOW_BREAKPOINT
+    ) {
+      menuVisible.value = true;
+    }
+  }
+);
 </script>
 
 <template>
   <!-- Show the header at the top of the page -->
   <Header
     class="h-11"
-    @toggle-menu="showMenu = !showMenu"
     @show-open-modal="showOpenModal = true"
+    @toggle-menu="toggleMenu()"
   />
 
   <OpenModal v-if="showOpenModal" @hide-open-modal="showOpenModal = false" />
 
   <div class="flex h-full flex-row">
     <!-- Show the navigation menu on the left -->
-    <Menu class="w-[21rem]" :class="!showMenu ? 'hidden' : ''" />
+    <div
+      v-if="windowWidth < WINDOW_BREAKPOINT"
+      class="absolute z-40 flex h-full w-full"
+      :class="menuVisible ? 'bg-gray-300/50' : 'hidden'"
+    >
+      <Menu @menu-collapsed="toggleMenu()" :menu-visible="menuVisible" />
+    </div>
+    <Menu v-else @menu-collapsed="toggleMenu()" :menu-visible="menuVisible" />
 
     <!-- Show the main body and fill the remaining screen space -->
-    <div class="mt-4 flex-grow overflow-y-scroll px-8">
+    <div class="mt-4 flex-1 flex-grow overflow-y-scroll px-8">
       <BlockPage v-if="element?.type == 'blk'" :block="element" />
       <RegPage v-else-if="element?.type == 'reg'" :reg="element" />
     </div>
