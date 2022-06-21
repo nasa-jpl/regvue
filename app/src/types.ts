@@ -52,6 +52,7 @@ export interface MenuNode {
   children?: MenuNode[];
   data: {
     name: string;
+    version: string;
     addr: string;
   };
   depth?: number;

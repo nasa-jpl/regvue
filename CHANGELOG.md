@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- The navigation menu can now be made wider/narrower with a resize bar ([#100](https://github.jpl.nasa.gov/regvue/regvue/pull/100)).
 - Blocks now have a custom page that displays an overview of the entire block and all its sub-blocks and registers  ([#99](https://github.jpl.nasa.gov/regvue/regvue/pull/99)).
 
 ### Changed
+-  The menu will automatically open/close when the window width changes and the menu display has been changed for smaller screens ([#100](https://github.jpl.nasa.gov/regvue/regvue/pull/100)).
 - The URL schema now follows the pattern `/root/block/sub_block/register` instead of the previous `/reg/block.sub_block.register`. The previous URL schema will continue to be supported as backwards compatible at least until v1.0. ([#99](https://github.jpl.nasa.gov/regvue/regvue/pull/99)).
 
 ## [0.5.1] - 2022-06-16

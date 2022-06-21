@@ -27,9 +27,6 @@ const store = useStore();
 
 onBeforeMount(() => validateRoute());
 
-// Control whether to show navigation menu on left of screen
-let showMenu = ref(true);
-
 // Control whether or not to show the open modal
 let showOpenModal = ref(false);
 
@@ -39,7 +36,7 @@ let element = computed(() => store.elements.get(elementId.value));
 const useKeyboardShortcut = (event: KeyboardEvent) => {
   if ((event.ctrlKey || event.metaKey) && event.key == "b") {
     event.preventDefault();
-    showMenu.value = !showMenu.value;
+    toggleMenu();
   }
 };
 
@@ -68,7 +65,56 @@ const validateRoute = () => {
 // Watch for route changes and go to 404 page if an invalid elementId is given
 watch(
   () => props.elementId,
-  () => validateRoute()
+  () => {
+    validateRoute();
+
+    if (windowWidth.value < WINDOW_BREAKPOINT) {
+      menuVisible.value = false;
+    }
+  }
+);
+
+// Below this value the menu will start to be hidden automatically
+const WINDOW_BREAKPOINT = 950;
+
+let windowWidth = ref(window.innerWidth);
+// Update the windowWidth variable on window resize
+onBeforeMount(() => {
+  window.addEventListener("resize", () => {
+    windowWidth.value = window.innerWidth;
+  });
+});
+
+// Whether or not the nav menu is visible
+let menuVisible = ref(windowWidth.value > WINDOW_BREAKPOINT);
+
+const toggleMenu = () => {
+  menuVisible.value = !menuVisible.value;
+
+  const sidebar = document.querySelector("#sidebar") as HTMLElement;
+  if (sidebar.style.flexBasis == "0.75rem") {
+    sidebar.style.flexBasis = "21rem";
+  }
+};
+
+// Automatically hide/show the menu if the window width crosses the breakpoint
+watch(
+  () => windowWidth.value,
+  (value, old) => {
+    if (
+      menuVisible.value &&
+      value < WINDOW_BREAKPOINT &&
+      old >= WINDOW_BREAKPOINT
+    ) {
+      menuVisible.value = false;
+    } else if (
+      !menuVisible.value &&
+      value >= WINDOW_BREAKPOINT &&
+      old < WINDOW_BREAKPOINT
+    ) {
+      menuVisible.value = true;
+    }
+  }
 );
 </script>
 
@@ -76,18 +122,34 @@ watch(
   <!-- Show the header at the top of the page -->
   <Header
     class="h-11"
-    @toggle-menu="showMenu = !showMenu"
     @show-open-modal="showOpenModal = true"
+    @toggle-menu="toggleMenu()"
   />
 
   <OpenModal v-if="showOpenModal" @hide-open-modal="showOpenModal = false" />
 
   <div class="flex h-full flex-row">
     <!-- Show the navigation menu on the left -->
-    <Menu class="w-[21rem]" :class="!showMenu ? 'hidden' : ''" />
+    <div
+      v-if="windowWidth < WINDOW_BREAKPOINT"
+      class="absolute z-40 flex h-full w-full"
+      :class="menuVisible ? 'bg-gray-300/50' : 'hidden'"
+    >
+      <Menu
+        @menu-collapsed="menuVisible = false"
+        @resize="menuVisible = true"
+        :menu-visible="menuVisible"
+      />
+    </div>
+    <Menu
+      v-else
+      @menu-collapsed="menuVisible = false"
+      @resize="menuVisible = true"
+      :menu-visible="menuVisible"
+    />
 
     <!-- Show the main body and fill the remaining screen space -->
-    <div class="mt-4 flex-grow overflow-y-scroll px-8">
+    <div class="mt-4 flex-1 flex-grow overflow-y-scroll px-8">
       <BlockPage v-if="element?.type == 'blk'" :block="element" />
       <RegPage v-else-if="element?.type == 'reg'" :reg="element" />
     </div>

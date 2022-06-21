@@ -8,6 +8,12 @@ import format from "src/format";
 import MenuDown from "vue-material-design-icons/MenuDown.vue";
 import MenuRight from "vue-material-design-icons/MenuRight.vue";
 
+defineProps<{
+  menuVisible: boolean;
+}>();
+
+const emit = defineEmits(["menu-collapsed", "resize"]);
+
 const router = useRouter();
 const route = useRoute();
 const store = useStore();
@@ -19,6 +25,17 @@ const currentElement = computed(() => {
     return "";
   }
 });
+
+// Combine a MenuNode's name and version
+const getDisplayName = (node: MenuNode) => {
+  let result = node.data.name;
+
+  if (node.data.version) {
+    result += " - " + node.data.version;
+  }
+
+  return result;
+};
 
 // Parses the store to generate an tree of MenuNode objects
 const getNodes = (
@@ -36,6 +53,7 @@ const getNodes = (
       styleClass: child.id,
       data: {
         name: child.display_name ? child.display_name : child.name,
+        version: child.version,
         addr: format.hex(child.addr || 0),
       },
     } as MenuNode;
@@ -159,54 +177,124 @@ const onNodeSelect = (key: string) => {
     query: { data: route.query.data },
   });
 };
+
+// Keep track of when the resize bar is being dragged
+let beingDragged = ref(false);
+
+onMounted(() => {
+  const resizer = document.querySelector("#resizer");
+  const sidebar = document.querySelector("#sidebar") as HTMLElement;
+
+  // Call resizeSidebar() while the mouse is down
+  resizer?.addEventListener("mousedown", () => {
+    beingDragged.value = true;
+
+    document.body.style.userSelect = "none";
+
+    document.addEventListener("mousemove", resizeSidebar, false);
+
+    // Stop resizing on mouseup
+    document.addEventListener(
+      "mouseup",
+      () => {
+        document.removeEventListener("mousemove", resizeSidebar, false);
+        beingDragged.value = false;
+        document.body.style.userSelect = "auto";
+
+        // Emit "menu-collapsed" if the sidebar has been made the minimum size
+        if (sidebar.style.flexBasis == "0.75rem") {
+          emit("menu-collapsed");
+        }
+      },
+      false
+    );
+  });
+
+  // Resize the sidebar to match the mouse position
+  const resizeSidebar = (e: MouseEvent) => {
+    emit("resize");
+    const size = `${e.x - 5}px`;
+    if (e.x < 200) {
+      sidebar.style.flexBasis = "0.75rem";
+    } else if (sidebar) {
+      sidebar.style.flexBasis = size;
+    }
+  };
+});
 </script>
 
 <template>
   <div
-    id="navigation-menu"
-    class="text-md mt-[1px] flex flex-shrink-0 flex-col overflow-y-scroll border-r-2 bg-white pb-12"
+    id="sidebar"
+    class="flex h-full flex-row overflow-hidden"
+    :class="menuVisible ? 'basis-[21rem]' : 'max-w-[0.75rem] basis-3'"
   >
-    <!-- Show the nodes -->
-    <div v-for="node in nodes" :key="node.key" :id="node.key">
-      <!--  Display only if the node is marked visible -->
-      <div
-        v-if="node.isVisible"
-        :id="'menu-node-' + node.key.replaceAll('.', '-')"
-        class="flex flex-row justify-between space-x-4 border-y-[0.5px] px-4 hover:cursor-pointer hover:bg-gray-200"
-        :class="node.key == currentElement ? 'bg-blue-200' : ''"
-        :style="`padding-left: ${getIndent(node)}px`"
-        @click="onNodeSelect(node.key)"
-      >
-        <div class="flex flex-row justify-between" :title="node.data.name">
-          <!--  Display the name and the open button for a menu node-->
-          <div class="z-10" @click.stop="toggleChildrenNodes(node)">
-            <!-- Show a close button if the node has open children-->
-            <span
-              v-if="
-                node.children &&
-                node.children.length > 0 &&
-                node.children[0]?.isVisible
-              "
-            >
-              <menu-down class="close-menu-node-btn" />
-            </span>
+    <div
+      id="navigation-menu"
+      class="text-md mt-[1px] flex h-full flex-grow flex-col overflow-y-scroll bg-white pb-12"
+      :class="menuVisible ? '' : 'hidden'"
+    >
+      <!-- Show the nodes -->
+      <div v-for="node in nodes" :key="node.key" :id="node.key">
+        <!--  Display only if the node is marked visible -->
+        <div
+          v-if="node.isVisible"
+          :id="'menu-node-' + node.key.replaceAll('.', '-')"
+          class="flex flex-row justify-between space-x-4 border-y-[0.5px] px-4 hover:cursor-pointer hover:bg-gray-200"
+          :class="node.key == currentElement ? 'bg-blue-200' : ''"
+          :style="`padding-left: ${getIndent(node)}px`"
+          @click="onNodeSelect(node.key)"
+        >
+          <div
+            class="flex flex-grow flex-row overflow-x-hidden"
+            :title="getDisplayName(node)"
+          >
+            <!--  Display the name and the open button for a menu node-->
+            <div class="z-10" @click.stop="toggleChildrenNodes(node)">
+              <!-- Show a close button if the node has open children-->
+              <span
+                v-if="
+                  node.children &&
+                  node.children.length > 0 &&
+                  node.children[0]?.isVisible
+                "
+              >
+                <menu-down class="close-menu-node-btn" />
+              </span>
 
-            <!-- Show an open button if the node has closed children -->
-            <span v-else-if="node.children">
-              <menu-right class="open-menu-node-btn" />
-            </span>
-          </div>
+              <!-- Show an open button if the node has closed children -->
+              <span v-else-if="node.children">
+                <menu-right class="open-menu-node-btn" />
+              </span>
+            </div>
 
-          <!-- Display the name of the node and truncate it if it is too long -->
-          <div class="ml-0 w-40 truncate text-left">
-            {{ node.data.name }}
+            <!-- Display the name of the node and truncate it if it is too long -->
+            <div class="ml-0 truncate text-left">
+              {{ getDisplayName(node) }}
+            </div>
           </div>
-        </div>
-        <!-- Display the address of the node -->
-        <div>
-          {{ node.data.addr }}
+          <!-- Display the address of the node -->
+          <div>
+            {{ node.data.addr }}
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Show a draggable bar that will resize the menu width -->
+    <div
+      id="resizer"
+      class="relative mt-[1px] flex-shrink-0 basis-3 border bg-gray-100 hover:cursor-col-resize"
+    ></div>
   </div>
 </template>
+
+<style>
+/* Give the resize bar a small dot image icon */
+#resizer {
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
+  cursor: col-resize;
+}
+</style>
