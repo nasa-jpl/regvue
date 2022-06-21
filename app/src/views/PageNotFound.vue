@@ -4,6 +4,9 @@ import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
 const router = useRouter();
 
+const baseUrl = window.location.origin + "/#";
+const location = window.location;
+
 const goToFirstRegister = () => {
   router.push({ name: "default", query: { data: route.query.data } });
 };
@@ -16,7 +19,9 @@ const goToOpenPage = () => {
 <template>
   <div class="flex h-[90vh] w-screen flex-col items-center justify-center">
     <h1 class="mb-2 text-3xl">Page not found</h1>
-    <p class="text-sm text-gray-600">{{ route.query.path }}</p>
+    <p class="text-sm text-gray-600">
+      {{ route.query.path ? baseUrl + route.query.path : location }}
+    </p>
 
     <div class="mt-10">
       <span
