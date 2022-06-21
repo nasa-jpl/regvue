@@ -44,11 +44,22 @@ let suggestions = computed(() => {
   // Search for index entries that match the formatted query
   const searchResults = searchObject.query((q: Query) => {
     q.term(term, { boost: 100 }); // exact match
-    q.term(term, {
-      usePipeline: false,
-      wildcard: Query.wildcard.LEADING | Query.wildcard.TRAILING,
-      boost: 50,
-    }); // contains the query, no formatting
+
+    // Can't check for embedded term if term is only 1 character due to lunr error
+    // https://github.com/olivernn/lunr.js/issues/279
+    if (term.length > 1) {
+      q.term(term, {
+        usePipeline: false,
+        wildcard: Query.wildcard.LEADING | Query.wildcard.TRAILING,
+        boost: 50,
+      }); // contains the query, no formatting
+    } else {
+      q.term(term, {
+        usePipeline: false,
+        wildcard: Query.wildcard.TRAILING,
+        boost: 50,
+      }); // starts with the query, no formatting
+    }
 
     // fuzzy search if the query is longer than 3 characters
     if (term.length > 3) {
