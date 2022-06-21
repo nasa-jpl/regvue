@@ -9,8 +9,8 @@ export const getTextWidth = (text: string, font: string) => {
   if (context) {
     context.font = font;
 
-    // Return the size of the text plus 32 pixels to preserve whitespace around text
-    return context.measureText(text).width + 32;
+    // Return the size of the text plus 48 pixels to preserve whitespace around text
+    return context.measureText(text).width + 48;
   }
 
   return 0;
