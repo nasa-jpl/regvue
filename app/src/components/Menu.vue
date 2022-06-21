@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref, computed, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { DesignRoot, MenuNode, Register } from "src/types";
+import { DesignElement, DesignRoot, MenuNode } from "src/types";
 import { useStore } from "src/store";
 import format from "src/format";
 
@@ -12,10 +12,18 @@ const router = useRouter();
 const route = useRoute();
 const store = useStore();
 
+const currentElement = computed(() => {
+  try {
+    return (route.params.elementId as string[]).join(".");
+  } catch {
+    return "";
+  }
+});
+
 // Parses the store to generate an tree of MenuNode objects
 const getNodes = (
-  elements: Map<string, Register>,
-  element: Register | DesignRoot
+  elements: Map<string, DesignElement>,
+  element: DesignElement | DesignRoot
 ) => {
   return element.children.map((child_id) => {
     const child = elements.get(child_id);
@@ -27,7 +35,7 @@ const getNodes = (
       key: child.id,
       styleClass: child.id,
       data: {
-        name: child.name,
+        name: child.display_name ? child.display_name : child.name,
         addr: format.hex(child.addr || 0),
       },
     } as MenuNode;
@@ -56,16 +64,14 @@ const nodes = ref(
       result.push(node);
 
       if (node.children) {
-        let routeName = (route.params?.regid as string) || "";
-
         node.children.forEach((child: MenuNode) => {
           // Only mark a node as visible if it's parent node should be open
-          if (routeName == child.key) {
+          if (currentElement.value == child.key) {
             openChildrenNodes(node);
           } else if (
             // Ensure children further down the tree are not visible
-            routeName.includes(child.key) &&
-            !child.key.includes(routeName)
+            currentElement.value.includes(child.key) &&
+            !child.key.includes(currentElement.value)
           ) {
             openChildrenNodes(node);
           }
@@ -135,26 +141,21 @@ const getIndent = (node: MenuNode) => {
 // Scroll to element
 const scrollToElement = (element_id: string) => {
   const elem = document.getElementById(element_id);
-  if (!elem) {
-    throw Error(`Could not find element with id ${element_id}`);
-  } else {
-    const parent = elem.parentNode as HTMLElement;
-    if (parent) {
-      parent.scroll(0, elem.offsetTop - 500);
-    }
-  }
+
+  const parent = elem?.parentNode as HTMLElement;
+  parent?.scroll(0, (elem?.offsetTop || 0) - 500);
 };
 
 // Perform initial scroll to element on page load
 onMounted(async () => {
-  scrollToElement(route.params.regid as string);
+  scrollToElement(currentElement.value);
 });
 
 // Change the route when a node is clicked on
 const onNodeSelect = (key: string) => {
   router.push({
-    name: "reg",
-    params: { regid: key },
+    name: "element",
+    params: { elementId: key.split(".") },
     query: { data: route.query.data },
   });
 };
@@ -163,7 +164,7 @@ const onNodeSelect = (key: string) => {
 <template>
   <div
     id="navigation-menu"
-    class="text-md mt-[1px] flex flex-shrink-0 flex-col overflow-y-scroll border-r-2 pb-12"
+    class="text-md mt-[1px] flex flex-shrink-0 flex-col overflow-y-scroll border-r-2 bg-white pb-12"
   >
     <!-- Show the nodes -->
     <div v-for="node in nodes" :key="node.key" :id="node.key">
@@ -172,7 +173,7 @@ const onNodeSelect = (key: string) => {
         v-if="node.isVisible"
         :id="'menu-node-' + node.key.replaceAll('.', '-')"
         class="flex flex-row justify-between space-x-4 border-y-[0.5px] px-4 hover:cursor-pointer hover:bg-gray-200"
-        :class="node.key == route.params.regid ? 'bg-blue-200' : ''"
+        :class="node.key == currentElement ? 'bg-blue-200' : ''"
         :style="`padding-left: ${getIndent(node)}px`"
         @click="onNodeSelect(node.key)"
       >

@@ -3,15 +3,12 @@ import { vResponsiveRotate } from "src/directives/ResponsiveRotate";
 
 defineProps<{
   name: string;
-  nbits: number;
 }>();
 </script>
 
 <template>
-  <div v-responsive-rotate class="flex w-full justify-center">
-    <span class="m-auto">
-      {{ name }}
-    </span>
+  <div v-responsive-rotate class="flex w-full items-center justify-center">
+    {{ name }}
   </div>
 </template>
 

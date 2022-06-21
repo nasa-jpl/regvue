@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
 import {
+  DesignElement,
   DesignRoot,
   DisplayType,
-  Register,
+  Field,
   RegisterDescriptionFile,
-  RegisterField,
 } from "src/types";
 import parse from "src/parse";
 
@@ -14,8 +14,8 @@ export const useStore = defineStore("store", {
       // Object representing info about the overall design (e.g. name, version, and root elements)
       root: {} as DesignRoot,
 
-      // A map of id : Register for elements (reg/blk/mem) in the design
-      elements: new Map<string, Register>(),
+      // A map of id : DesignElement for elements (reg/blk/mem) in the design
+      elements: new Map<string, DesignElement>(),
 
       // Whether or not store.load() has been called successfully
       loaded: false,
@@ -75,7 +75,7 @@ export const useStore = defineStore("store", {
         const fields = element.fields;
 
         // Set the field.value to be a Bit[] that represents the field.reset or 0
-        fields?.forEach((field: RegisterField) => {
+        fields?.forEach((field: Field) => {
           if (field.reset) {
             field.value = parse.stringToBitArray(
               field.reset.toString(),
@@ -87,9 +87,9 @@ export const useStore = defineStore("store", {
         });
       }
 
-      this.elements = new Map<string, Register>();
+      this.elements = new Map<string, DesignElement>();
       for (const key of Object.keys(data.elements)) {
-        const element = data.elements[key] as Register;
+        const element = data.elements[key] as DesignElement;
 
         // Calculate the address from an element's offset and its parents' offsets
         element.addr = getAddress(key, data.elements);
@@ -104,7 +104,10 @@ export const useStore = defineStore("store", {
 });
 
 // Helper function to get an element's address from its and its parents' offsets
-const getAddress = (key: string, elements: { [key: string]: Register }) => {
+const getAddress = (
+  key: string,
+  elements: { [key: string]: DesignElement }
+) => {
   // How many elements are there in hierachy (e.g. blk.sub_blk.reg => 3)
   const count = key.split(".").length + 1;
 

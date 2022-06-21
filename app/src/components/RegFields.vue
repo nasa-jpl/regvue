@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { RegisterField } from "src/types";
+import { Field } from "src/types";
 
 const props = defineProps<{
-  fields: RegisterField[];
+  fields: Field[];
   selectedField?: string;
 }>();
 const emit = defineEmits([
@@ -37,8 +37,11 @@ const deselectField = () => {
         <tr
           v-for="field in fields"
           :key="field.name"
-          class="border-b-2 hover:cursor-pointer"
-          :class="selectedField == field.name ? 'bg-yellow-50' : ''"
+          class="border-b-2"
+          :class="
+            selectedField == field.name ? 'bg-yellow-50' : '',
+           (selectedField || selectedField == '') ? 'hover:cursor-pointer' : ''
+          "
           @mouseenter="selectField(field.name)"
           @mouseleave="deselectField"
           @click="navigateToField(field.name)"
@@ -63,7 +66,9 @@ const deselectField = () => {
           <!-- Show the description as html -->
           <td class="border-l-2 px-2">
             <!-- eslint-disable-next-line vue/no-v-html -->
-            <div class="default-styles" v-html="field.doc"></div>
+            <div class="default-styles" >
+            {{field.doc}}
+            </div>
           </td>
         </tr>
       </tbody>

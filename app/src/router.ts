@@ -1,8 +1,8 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import { useStore } from "src/store";
 import Default from "src/views/Default.vue";
+import ElementView from "src/views/ElementView.vue";
 import PageNotFound from "src/views/PageNotFound.vue";
-import RegView from "src/views/RegView.vue";
 import OpenView from "src/views/OpenView.vue";
 
 const routes = [
@@ -12,15 +12,16 @@ const routes = [
     component: Default,
   },
   {
-    name: "reg",
-    path: "/reg/:regid",
-    component: RegView,
-    props: true,
-  },
-  {
     name: "open",
     path: "/open",
     component: OpenView,
+  },
+  {
+    name: "element",
+    path: "/root/:elementId*",
+    alias: "/reg/:elementId*",
+    component: ElementView,
+    props: true,
   },
   {
     name: "404",
@@ -58,8 +59,8 @@ router.beforeEach(async (to) => {
     try {
       await store.loadUrl(to.query.data as string);
       return {
-        name: "reg",
-        params: { regid: store.getFirstRegister() },
+        name: "element",
+        params: { elementId: store.getFirstRegister().split(".") },
         query: { data: store.url },
       };
     } catch {
@@ -71,14 +72,14 @@ router.beforeEach(async (to) => {
   if (to.path == "/" && store.loaded) {
     if (store.url) {
       return {
-        name: "reg",
-        params: { regid: store.getFirstRegister() },
+        name: "element",
+        params: { elementId: store.getFirstRegister().split(".") },
         query: { data: store.url },
       };
     } else {
       return {
-        name: "reg",
-        params: { regid: store.getFirstRegister() },
+        name: "element",
+        params: { elementId: store.getFirstRegister().split(".") },
       };
     }
   }

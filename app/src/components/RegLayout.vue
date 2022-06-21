@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, Ref, nextTick, watch } from "vue";
 import { useRoute } from "vue-router";
-import { Bit, RegisterField, DisplayType } from "src/types";
+import { Bit, DisplayType, Field } from "src/types";
 import parse from "src/parse";
 import { useStore } from "src/store";
 
@@ -9,7 +9,7 @@ import FieldInputBox from "src/components/FieldInputBox.vue";
 import FieldName from "src/components/FieldName.vue";
 
 const props = defineProps<{
-  fields: RegisterField[];
+  fields: Field[];
   selectedField?: string;
 }>();
 
@@ -106,7 +106,7 @@ const updateRegisterValue = () => {
 updateRegisterValue(); // Initial call on setup
 
 // Parse the user input to update the field value
-const onFieldValueChange = (field: RegisterField, value: string) => {
+const onFieldValueChange = (field: Field, value: string) => {
   const newValue = parse.stringToBitArray(value, field.nbits);
   field.value = newValue;
 
@@ -139,7 +139,7 @@ const populateFieldValuesFromRegisterValue = (value: Bit[]) => {
 // Force input components to reload when leaving the page
 const route = useRoute();
 watch(
-  () => route.params.regid,
+  () => route.params.elementId,
   () => {
     nextTick(() => {
       updateRegisterValue();
@@ -181,7 +181,7 @@ watch(
             @mouseleave="emit('stop-highlight-field')"
             @click="emit('select-field', field.name)"
           >
-            <FieldName :name="field.name" :nbits="field.nbits" />
+            <FieldName :name="field.name" />
           </td>
         </tr>
 
