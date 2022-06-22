@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 import format from "../../src/format";
-import data from "../../public/data.json";
+import data from "../../public/example.json";
 
 describe("menu-component", () => {
   beforeEach(() => {
