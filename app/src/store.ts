@@ -4,6 +4,7 @@ import {
   DesignRoot,
   DisplayType,
   Field,
+  IncludeElement,
   RegisterDescriptionFile,
 } from "src/types";
 import parse from "src/parse";
@@ -71,16 +72,21 @@ export const useStore = defineStore("store", {
 
     // Parse JSON data and populate the store variables
     async load(data: RegisterDescriptionFile, url = "") {
-      const [elements, root] = await formatData(
+      const [elements, root] = (await formatData(
         Object.values(data.elements),
         data.root
-      );
+      )) as [Map<string, DesignElement>, DesignRoot];
 
       if (!elements) throw Error("Error formating data");
       if (!root) throw Error("Error updating DesignRoot");
 
-      this.elements = elements as Map<string, DesignElement>;
-      this.root = root as DesignRoot;
+      for (const [_, element] of elements.entries()) {
+        // Calculate the address from an element's offset and its parents' offsets
+        element.addr = getAddress(element.id, elements);
+      }
+
+      this.elements = elements;
+      this.root = root;
       this.url = url;
       this.loaded = true;
     },
@@ -88,7 +94,7 @@ export const useStore = defineStore("store", {
 });
 
 const formatData = async (
-  elements: (DesignElement | { type: "include"; id: string; url: string })[],
+  elements: (DesignElement | IncludeElement)[],
   root: DesignRoot
 ) => {
   let formattedElements = new Map<string, DesignElement>();
@@ -98,26 +104,62 @@ const formatData = async (
       const response = await fetch(element.url);
       const json = (await response.json()) as RegisterDescriptionFile;
 
-      // Replace any reference to the include in the root to
-      // instead point to the IncludeElement's root
-      const idx = root.children.indexOf(element.id);
-      if (idx >= 0) {
-        root.children = [
-          ...root.children.slice(0, idx),
-          ...json.root.children,
-          ...root.children.slice(idx + 1),
-        ];
-      }
+      const data = {} as { [key: string]: DesignElement };
 
-      const [newData, _newRoot] = await formatData(
-        Object.values(json.elements),
+      // Append the current id to the id names of the fetched JSON elements
+      const reassignChildren = (parent: DesignElement | IncludeElement) => {
+        if (parent.type != "include") {
+          parent.id = [element.id, parent.id].join(".");
+
+          // Make a recursive call to rename all the children elements
+          parent.children?.forEach((child) => {
+            const childElement = json.elements[child];
+            if (!childElement)
+              throw Error(`Could not find element in JSON ${child}`);
+
+            reassignChildren(childElement);
+          });
+
+          // Reassign the keys in the children array
+          parent.children = parent.children?.map((child) =>
+            [element.id, child].join(".")
+          );
+          data[parent.id] = parent;
+        }
+      };
+      // Call the reassign function on every root element
+      json.root.children.forEach((child) => {
+        const elem = json.elements[child];
+        if (!elem) throw Error(`Could not find element in JSON ${child}`);
+        reassignChildren(elem);
+      });
+
+      // Create a new DesignElement that is the parent of the fetched JSON elements
+      const includeElement = {
+        id: element.id,
+        name: element.name,
+        display_name: element.display_name,
+        offset: element.offset,
+        doc: element.doc,
+        version: element.version,
+        links: element.links,
+        children: json.root.children.map((child) =>
+          [element.id, child].join(".")
+        ),
+        type: "blk",
+      } as DesignElement;
+      formattedElements.set(includeElement.id, includeElement);
+
+      // From the fetched JSON data create a map of string keys to DesignElements
+      const [newData, _newRoot] = (await formatData(
+        Object.values(Object.values(data)),
         root
-      );
+      )) as [Map<string, DesignElement>, unknown];
 
-      formattedElements = new Map([
-        ...formattedElements,
-        ...(newData as Map<string, DesignElement>),
-      ]);
+      // Merge together the new DesignElements with the previously collected elements
+      for (const [key, value] of newData.entries()) {
+        formattedElements.set(key, value);
+      }
     } else {
       const fields = element.fields;
 
@@ -134,11 +176,6 @@ const formatData = async (
       });
       formattedElements.set(element.id, element);
     }
-  }
-
-  for (const [_, element] of formattedElements.entries()) {
-    // Calculate the address from an element's offset and its parents' offsets
-    element.addr = getAddress(element.id, formattedElements);
   }
   return [formattedElements, root];
 };
@@ -158,7 +195,9 @@ const getAddress = (
     const elem = elements.get(id);
     if (!elem) throw Error(`Could not find element ${id} (${i})`);
 
-    result += elem.offset as number;
+    if (elem.offset) {
+      result += parseInt(elem.offset.toString());
+    }
   }
   return result;
 };

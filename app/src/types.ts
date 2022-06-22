@@ -47,7 +47,12 @@ export interface Field {
 
 export interface IncludeElement {
   id: string;
+  name: string;
+  display_name?: string;
   offset: string | number;
+  doc?: string;
+  version?: string;
+  links?: Map<string, string>;
   type: "include";
   url: string;
 }
