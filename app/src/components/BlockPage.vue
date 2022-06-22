@@ -10,7 +10,7 @@ defineProps<{
 
 <template>
   <div>
-    <div class="m-auto max-w-[1200px]">
+    <div class="mx-auto max-w-[1200px]">
       <div class="mb-3">
         <div>
           <!-- Show name -->

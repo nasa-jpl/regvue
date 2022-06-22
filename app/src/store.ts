@@ -29,6 +29,9 @@ export const useStore = defineStore("store", {
 
       // Which display type to show field and register values as in RegLayout
       selectedDisplayType: "hexadecimal" as DisplayType,
+
+      // Any text to show in the footer
+      footerText: "",
     };
   },
   actions: {
@@ -89,6 +92,16 @@ export const useStore = defineStore("store", {
       this.root = root;
       this.url = url;
       this.loaded = true;
+
+      // Get the footer text from app.config.json
+      try {
+        const configInfo = await fetch("app.config.json").then((response) =>
+          response.json()
+        );
+        this.footerText = configInfo.footer;
+      } catch {
+        this.footerText = "";
+      }
     },
   },
 });
