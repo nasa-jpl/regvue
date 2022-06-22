@@ -6,7 +6,7 @@ describe("search-component", () => {
   const delay = 300;
 
   beforeEach(() => {
-    cy.visit("/");
+    cy.visit("/#/?data=example.json");
   });
 
   it("starts unfocused", () => {

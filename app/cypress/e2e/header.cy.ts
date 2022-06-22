@@ -4,7 +4,7 @@ import data from "../../public/example.json";
 
 describe("header-component", () => {
   beforeEach(() => {
-    cy.visit("/");
+    cy.visit("/#/?data=example.json");
   });
 
   it("shows header component", () => {

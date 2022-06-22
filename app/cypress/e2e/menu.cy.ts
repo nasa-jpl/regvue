@@ -5,7 +5,7 @@ import data from "../../public/example.json";
 
 describe("menu-component", () => {
   beforeEach(() => {
-    cy.visit("/");
+    cy.visit("/#/?data=example.json");
   });
 
   it("shows the unselected root nodes", () => {
