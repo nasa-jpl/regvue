@@ -104,51 +104,51 @@ const formatData = async (
       const response = await fetch(element.url);
       const json = (await response.json()) as RegisterDescriptionFile;
 
-      const data = {} as { [key: string]: DesignElement };
+      const data = {} as { [key: string]: DesignElement | IncludeElement };
 
-      // Append the current id to the id names of the fetched JSON elements
-      const reassignChildren = (parent: DesignElement | IncludeElement) => {
-        if (parent.type != "include") {
-          parent.id = [element.id, parent.id].join(".");
+      // Get the id of the parent of the current IncludeElement
+      const idArr = element.id.split(".");
+      let parentId: string;
+      if (idArr.length == 1) {
+        parentId = "";
+      } else {
+        parentId = idArr.slice(0, idArr.length - 1).join(".");
+      }
 
-          // Make a recursive call to rename all the children elements
-          parent.children?.forEach((child) => {
-            const childElement = json.elements[child];
-            if (!childElement)
-              throw Error(`Could not find element in JSON ${child}`);
+      // Replace any references to the include block with the json data it references for the root
+      const idx = root.children.indexOf(element.id);
+      if (idx >= 0) {
+        root.children = [
+          ...root.children.slice(0, idx),
+          ...json.root.children.map((childId) => [parentId, childId].join(".")),
+          ...root.children.slice(idx + 1),
+        ];
+      }
 
-            reassignChildren(childElement);
-          });
-
-          // Reassign the keys in the children array
-          parent.children = parent.children?.map((child) =>
-            [element.id, child].join(".")
-          );
-          data[parent.id] = parent;
+      // Replace any reference to the include block with the json data it references for previous
+      // formattedElement values
+      for (const [_, formattedElement] of formattedElements.entries()) {
+        const idx = formattedElement.children?.indexOf(element.id);
+        if (idx >= 0) {
+          formattedElement.children = [
+            ...formattedElement.children.slice(0, idx),
+            ...json.root.children.map((childId) =>
+              [parentId, childId].join(".")
+            ),
+            ...formattedElement.children.slice(idx + 1),
+          ];
         }
-      };
-      // Call the reassign function on every root element
-      json.root.children.forEach((child) => {
-        const elem = json.elements[child];
-        if (!elem) throw Error(`Could not find element in JSON ${child}`);
-        reassignChildren(elem);
-      });
+      }
 
-      // Create a new DesignElement that is the parent of the fetched JSON elements
-      const includeElement = {
-        id: element.id,
-        name: element.name,
-        display_name: element.display_name,
-        offset: element.offset,
-        doc: element.doc,
-        version: element.version,
-        links: element.links,
-        children: json.root.children.map((child) =>
-          [element.id, child].join(".")
-        ),
-        type: "blk",
-      } as DesignElement;
-      formattedElements.set(includeElement.id, includeElement);
+      // Append the parentId to the fetched JSON data ids
+      for (const child of Object.values(json.elements)) {
+        child.id = [parentId, child.id].join(".");
+        if (child.type != "include" && child.children) {
+          child.children = child.children.map((id) => [parentId, id].join("."));
+        }
+
+        data[child.id] = child;
+      }
 
       // From the fetched JSON data create a map of string keys to DesignElements
       const [newData, _newRoot] = (await formatData(
@@ -177,6 +177,7 @@ const formatData = async (
       formattedElements.set(element.id, element);
     }
   }
+
   return [formattedElements, root];
 };
 
