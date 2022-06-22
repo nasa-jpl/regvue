@@ -121,7 +121,9 @@ const formatData = async (
       if (idx >= 0) {
         root.children = [
           ...root.children.slice(0, idx),
-          ...json.root.children.map((childId) => [parentId, childId].join(".")),
+          ...json.root.children.map((childId) =>
+            parentId ? [parentId, childId].join(".") : childId
+          ),
           ...root.children.slice(idx + 1),
         ];
       }
@@ -130,7 +132,7 @@ const formatData = async (
       // formattedElement values
       for (const [_, formattedElement] of formattedElements.entries()) {
         const idx = formattedElement.children?.indexOf(element.id);
-        if (idx >= 0) {
+        if (idx >= 0 && parentId) {
           formattedElement.children = [
             ...formattedElement.children.slice(0, idx),
             ...json.root.children.map((childId) =>
@@ -143,10 +145,12 @@ const formatData = async (
 
       for (const child of Object.values(json.elements)) {
         // Append the parentId to the id of the fetched json element
-        child.id = [parentId, child.id].join(".");
+        if (parentId) {
+          child.id = [parentId, child.id].join(".");
+        }
 
         // Append the parentId to each child of the fetched JSON element
-        if (child.type != "include" && child.children) {
+        if (child.type != "include" && child.children && parentId) {
           child.children = child.children.map((id) => [parentId, id].join("."));
         }
 
