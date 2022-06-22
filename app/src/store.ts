@@ -100,6 +100,7 @@ const formatData = async (
   let formattedElements = new Map<string, DesignElement>();
 
   for (const element of Object.values(elements)) {
+    // If the element is an IncludeElement fetch and format from its url
     if (element.type == "include") {
       const response = await fetch(element.url);
       const json = (await response.json()) as RegisterDescriptionFile;
@@ -140,12 +141,20 @@ const formatData = async (
         }
       }
 
-      // Append the parentId to the fetched JSON data ids
       for (const child of Object.values(json.elements)) {
+        // Append the parentId to the id of the fetched json element
         child.id = [parentId, child.id].join(".");
+
+        // Append the parentId to each child of the fetched JSON element
         if (child.type != "include" && child.children) {
           child.children = child.children.map((id) => [parentId, id].join("."));
         }
+
+        // Increase the offset of the fetched JSON element by the offset of the IncludeElement
+        child.offset =
+          parseInt(element.offset?.toString()) ||
+          0 + parseInt(child.offset?.toString()) ||
+          0;
 
         data[child.id] = child;
       }
@@ -160,7 +169,10 @@ const formatData = async (
       for (const [key, value] of newData.entries()) {
         formattedElements.set(key, value);
       }
-    } else {
+    }
+
+    // If the element is not an IncludeElement, format its fields and add to formattedElements map
+    else {
       const fields = element.fields;
 
       // Set the field.value to be a Bit[] that represents the field.reset or 0
