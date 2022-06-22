@@ -71,42 +71,82 @@ export const useStore = defineStore("store", {
 
     // Parse JSON data and populate the store variables
     async load(data: RegisterDescriptionFile, url = "") {
-      for (const element of Object.values(data.elements)) {
-        const fields = element.fields;
+      const [elements, root] = await formatData(
+        Object.values(data.elements),
+        data.root
+      );
 
-        // Set the field.value to be a Bit[] that represents the field.reset or 0
-        fields?.forEach((field: Field) => {
-          if (field.reset) {
-            field.value = parse.stringToBitArray(
-              field.reset.toString(),
-              field.nbits
-            );
-          } else {
-            field.value = parse.stringToBitArray("0", field.nbits);
-          }
-        });
-      }
+      if (!elements) throw Error("Error formating data");
+      if (!root) throw Error("Error updating DesignRoot");
 
-      this.elements = new Map<string, DesignElement>();
-      for (const key of Object.keys(data.elements)) {
-        const element = data.elements[key] as DesignElement;
-
-        // Calculate the address from an element's offset and its parents' offsets
-        element.addr = getAddress(key, data.elements);
-        this.elements.set(key, element);
-      }
-
-      this.root = data.root;
+      this.elements = elements as Map<string, DesignElement>;
+      this.root = root as DesignRoot;
       this.url = url;
       this.loaded = true;
     },
   },
 });
 
+const formatData = async (
+  elements: (DesignElement | { type: "include"; id: string; url: string })[],
+  root: DesignRoot
+) => {
+  let formattedElements = new Map<string, DesignElement>();
+
+  for (const element of Object.values(elements)) {
+    if (element.type == "include") {
+      const response = await fetch(element.url);
+      const json = (await response.json()) as RegisterDescriptionFile;
+
+      // Replace any reference to the include in the root to
+      // instead point to the IncludeElement's root
+      const idx = root.children.indexOf(element.id);
+      if (idx >= 0) {
+        root.children = [
+          ...root.children.slice(0, idx),
+          ...json.root.children,
+          ...root.children.slice(idx + 1),
+        ];
+      }
+
+      const [newData, _newRoot] = await formatData(
+        Object.values(json.elements),
+        root
+      );
+
+      formattedElements = new Map([
+        ...formattedElements,
+        ...(newData as Map<string, DesignElement>),
+      ]);
+    } else {
+      const fields = element.fields;
+
+      // Set the field.value to be a Bit[] that represents the field.reset or 0
+      fields?.forEach((field: Field) => {
+        if (field.reset) {
+          field.value = parse.stringToBitArray(
+            field.reset.toString(),
+            field.nbits
+          );
+        } else {
+          field.value = parse.stringToBitArray("0", field.nbits);
+        }
+      });
+      formattedElements.set(element.id, element);
+    }
+  }
+
+  for (const [_, element] of formattedElements.entries()) {
+    // Calculate the address from an element's offset and its parents' offsets
+    element.addr = getAddress(element.id, formattedElements);
+  }
+  return [formattedElements, root];
+};
+
 // Helper function to get an element's address from its and its parents' offsets
 const getAddress = (
   key: string,
-  elements: { [key: string]: DesignElement }
+  elements: Map<string, { offset: number | string }>
 ) => {
   // How many elements are there in hierachy (e.g. blk.sub_blk.reg => 3)
   const count = key.split(".").length + 1;
@@ -115,7 +155,7 @@ const getAddress = (
   let result = 0;
   for (let i = 1; i < count; i++) {
     const id = key.split(".").slice(0, i).join(".");
-    const elem = elements[id];
+    const elem = elements.get(id);
     if (!elem) throw Error(`Could not find element ${id} (${i})`);
 
     result += elem.offset as number;
