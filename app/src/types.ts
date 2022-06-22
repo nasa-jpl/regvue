@@ -45,6 +45,18 @@ export interface Field {
   value: Bit[];
 }
 
+export interface IncludeElement {
+  id: string;
+  name: string;
+  display_name?: string;
+  offset: string | number;
+  doc?: string;
+  version?: string;
+  links?: Map<string, string>;
+  type: "include";
+  url: string;
+}
+
 // Interface representing the fields necessary for a menu node
 export interface MenuNode {
   key: string;
@@ -67,7 +79,7 @@ export interface RegisterDescriptionFile {
   };
   root: DesignRoot;
   elements: {
-    [key: string]: DesignElement;
+    [key: string]: DesignElement | IncludeElement;
   };
 }
 

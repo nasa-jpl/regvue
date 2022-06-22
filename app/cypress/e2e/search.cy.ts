@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import data from "../../public/data.json";
+import data from "../../public/example.json";
 
 describe("search-component", () => {
   const delay = 300;
