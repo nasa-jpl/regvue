@@ -62,7 +62,7 @@ watch(
 </script>
 
 <template>
-  <div class="m-auto max-w-[1200px]">
+  <div class="mx-auto max-w-[1200px]">
     <div class="mb-3">
       <div>
         <span class="text-xl font-semibold">

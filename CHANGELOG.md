@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Added option for footer text to be set in `app.config.json` file ([#102](https://github.jpl.nasa.gov/regvue/regvue/pull/102)).
 - Added support for nested inclusion of register descriptions ([#101](https://github.jpl.nasa.gov/regvue/regvue/pull/101)).
 
 ## [0.5.2] - 2022-06-21
