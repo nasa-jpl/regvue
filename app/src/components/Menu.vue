@@ -12,7 +12,7 @@ defineProps<{
   menuVisible: boolean;
 }>();
 
-const emit = defineEmits(["menu-collapsed", "resize"]);
+const emit = defineEmits(["menu-collapsed", "resize", "toggle-menu"]);
 
 const router = useRouter();
 const route = useRoute();
@@ -289,6 +289,7 @@ onMounted(() => {
     <div
       id="resizer"
       class="relative mt-[1px] flex-shrink-0 basis-3 border bg-gray-100 hover:cursor-col-resize"
+      @dblclick="emit('toggle-menu')"
     ></div>
   </div>
 </template>

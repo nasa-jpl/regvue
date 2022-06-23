@@ -145,6 +145,7 @@ watch(
       v-else
       @menu-collapsed="menuVisible = false"
       @resize="menuVisible = true"
+      @toggle-menu="toggleMenu()"
       :menu-visible="menuVisible"
     />
 
