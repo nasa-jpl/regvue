@@ -216,7 +216,9 @@ onMounted(() => {
   const resizeSidebar = (e: MouseEvent) => {
     emit("resize");
     const size = `${e.x - 5}px`;
-    if (e.x < 200) {
+    if (e.x > 150 && e.x < 230) {
+      sidebar.style.flexBasis = "230px";
+    } else if (e.x <= 150) {
       sidebar.style.flexBasis = "0.75rem";
     } else if (sidebar) {
       sidebar.style.flexBasis = size;

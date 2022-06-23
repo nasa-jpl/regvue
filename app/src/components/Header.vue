@@ -59,7 +59,7 @@ watch(
   <div v-if="route.path != '/open'">
     <div
       id="header-bar"
-      class="flex flex-row justify-between border-b border-gray-400 bg-gray-300 py-2 font-medium text-black sm:text-lg md:text-xl"
+      class="flex flex-row justify-between border-b border-gray-400 bg-gray-300 py-2 text-lg font-medium text-black md:text-xl"
     >
       <div class="ml-6 flex flex-row items-center space-x-2">
         <!-- Show menu to collapse nav bar (needs to be wrapped in div for @click to work) -->
@@ -82,13 +82,13 @@ watch(
 
       <div
         id="header-links"
-        class="mr-6 flex flex-row items-center space-x-6 text-gray-600 sm:text-sm lg:text-base"
+        class="mr-6 flex flex-row items-center space-x-6 text-sm text-gray-600 lg:text-base"
       >
         <a
           v-for="link in links"
           :key="link?.text"
           :href="link?.href"
-          class="hover:text-gray-500 hover:underline sm:text-sm md:text-base"
+          class="text-sm hover:text-gray-500 hover:underline md:text-base"
           >{{ link?.text }}</a
         >
 
