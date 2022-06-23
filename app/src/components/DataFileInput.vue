@@ -9,8 +9,8 @@ const MAX_SAVED_URLS_CNT = 5;
 const store = useStore();
 const emit = defineEmits(["input-changed"]);
 
-let fetchError = ref(false);
-let openError = ref(false);
+let fetchError = ref("");
+let openError = ref("");
 
 const { cookies } = useCookies();
 const router = useRouter();
@@ -88,13 +88,13 @@ const saveRecentUrlSearch = (url: string) => {
 };
 
 const onUrlDataInput = async () => {
-  fetchError.value = false;
-  openError.value = false;
+  fetchError.value = "";
+  openError.value = "";
 
   const elem = document.getElementById("data-url-input") as HTMLInputElement;
   const result = await store.loadUrl(elem.value);
 
-  if (result) {
+  if (result == "") {
     router.push({
       name: "default",
       query: { data: elem.value },
@@ -103,13 +103,13 @@ const onUrlDataInput = async () => {
     saveRecentUrlSearch(elem.value);
     emit("input-changed");
   } else {
-    fetchError.value = true;
+    fetchError.value = result;
   }
 };
 
 const onDataFileOpen = async (event: Event) => {
-  fetchError.value = false;
-  openError.value = false;
+  fetchError.value = "";
+  openError.value = "";
   const elem = document.getElementById("data-url-input") as HTMLInputElement;
   elem.value = "";
 
@@ -126,11 +126,11 @@ const onDataFileOpen = async (event: Event) => {
   const reader = new FileReader();
   reader.onload = async (event) => {
     const result = await store.loadFile(event.target?.result as string);
-    if (result) {
+    if (result == "") {
       router.push({ name: "default" });
       emit("input-changed");
     } else {
-      openError.value = true;
+      openError.value = result;
     }
   };
 
@@ -169,7 +169,7 @@ const onDataFileOpen = async (event: Event) => {
             class="m-auto text-sm text-rose-500"
             :class="!openError ? 'opacity-0' : ''"
           >
-            Error parsing opened file.
+            {{ openError }}
           </p>
         </div>
         <input
@@ -212,7 +212,7 @@ const onDataFileOpen = async (event: Event) => {
         class="m-auto mt-3 text-sm text-rose-500"
         :class="!fetchError ? 'opacity-0' : ''"
       >
-        Could not fetch from given URL.
+        {{ fetchError }}
       </div>
     </div>
   </div>
