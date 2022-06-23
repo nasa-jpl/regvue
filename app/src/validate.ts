@@ -74,11 +74,11 @@ export const validate = (data: any): string => {
 
         for (const childId of element.children) {
           if (typeof childId != "string")
-            return `Child ${childId} of element ${key} must be of type string.`;
+            return `Child ${childId} of element "${key}" must be of type string.`;
 
           // Check that each root child is in the data
           if (data.elements[childId] == undefined)
-            return `Cannot find child "${childId}" of element ${key} in data.elements.`;
+            return `Cannot find child "${childId}" of element "${key}" in data.elements.`;
         }
       }
     }
@@ -92,10 +92,23 @@ export const validate = (data: any): string => {
       if (element.fields.constructor != Array)
         return `The \`fields\` of "${element.id}" must be an array.`;
 
+      // Track the names of fields to prevent duplicates
+      const names = new Set<string>();
+
+      // Track how many bits are allocated between all the fields
       let sumOfNbits = 0;
+
+      // Track which fields take up which bit indices
+      const bitIndices = new Map<number, string>();
+
       for (const field of element.fields) {
+        // Check that name is present and not a duplicate
         if (!field.name)
           return `A field of element "${element.id}" is missing required field \`name\`.`;
+
+        if (names.has(field.name))
+          return `Element "${element.id}" has more than one field named "${field.name}".`;
+        names.add(field.name);
 
         if (!field.access)
           return `Field "${field.name}" of "${element.id}" is missing required field \`access\`.`;
@@ -126,11 +139,19 @@ export const validate = (data: any): string => {
         if (field.nbits < 1 || field.nbits > 32)
           return `The value for \`nbits\` of field "${field.name}" of "${element.id}" is out of bounds. Valid \`nbits\` values must be in the range [1, 32].`;
 
+        for (let i = field.lsb; i < field.lsb + field.nbits; i++) {
+          if (bitIndices.get(i))
+            return `Field ${bitIndices.get(i)} and ${field.name} of ${
+              element.id
+            } overlap bit indices.`;
+          bitIndices.set(i, field.name);
+        }
+
         sumOfNbits += field.nbits;
       }
 
       if (sumOfNbits != 32)
-        return `The sum of each \`field.nbits\` field for ${element.id} does not equal 32.`;
+        return `The sum of \`field.nbits\` for every field of ${element.id} does not equal 32.`;
     }
   }
 
