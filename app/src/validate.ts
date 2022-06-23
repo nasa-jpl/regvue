@@ -32,28 +32,57 @@ export const validate = (data: any): string => {
 
   // Check that the root.children field is a non-empty array
   if (data.root.children.constructor !== Array)
-    return "Field `root.children` must be of type Array";
+    return "Field `root.children` must be of type Array.";
   if (data.root.children.length == 0)
     return "Field `root.children` must have at least 1 root element.";
 
-  // Check that each element has the required fields
   if (!data.elements) return "Missing required field `elements`.";
+
+  for (const childId of data.root.children) {
+    if (typeof childId != "string")
+      return `Root child ${childId} must be a string.`;
+
+    // Check that each root child is in the data
+    if (data.elements[childId] == undefined)
+      return `Cannot find root child "${childId}" in data.elements.`;
+  }
+
+  // Check that each element has the required fields
   for (const [key, element] of Object.entries(data.elements) as [string, any]) {
     if (!element) return `Element with key ${key} is unknown`;
 
     if (!element.id)
-      return `Element with key "${key}" is missing required field \`id\``;
+      return `Element with key "${key}" is missing required field \`id\`.`;
 
-    if (!element.name)
-      return `Element with key "${key}" is missing required field \`name\``;
+    if (!element.type)
+      return `Element with key "${key}" is missing required field \`type\`.`;
 
     if (element.offset == undefined)
-      return `Element with key "${key}" is missing required field \`offset\``;
+      return `Element with key "${key}" is missing required field \`offset\`.`;
     if (typeof element.offset != "number")
       return `Element with key "${key}" must have type "number" for required field \`offset\`.`;
 
-    if (!element.type)
-      return `Element with key "${key}" is missing required field \`type\``;
+    if (element.type == "include") {
+      if (!element.url)
+        return `IncludeElement with key "${key}" is missing required field \`url\`.`;
+    } else {
+      if (!element.name)
+        return `Element with key "${key}" is missing required field \`name\`.`;
+
+      if (element.children) {
+        if (element.children.constructor !== Array)
+          return `Element with key "${key}" must have type "Array" for field \`children\`.`;
+
+        for (const childId of element.children) {
+          if (typeof childId != "string")
+            return `Child ${childId} of element ${key} must be of type string.`;
+
+          // Check that each root child is in the data
+          if (data.elements[childId] == undefined)
+            return `Cannot find child "${childId}" of element ${key} in data.elements.`;
+        }
+      }
+    }
 
     // Validate the fields
     if (element.fields) {
