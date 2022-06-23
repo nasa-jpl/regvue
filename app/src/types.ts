@@ -13,18 +13,18 @@ export interface DesignElement {
   addr: number;
   offset: number;
   type: "reg" | "blk" | "mem";
-  display_name: string;
-  doc: string;
+  display_name?: string;
+  doc?: string;
   version?: string;
   fields?: Field[];
-  children: string[];
-  links: Map<string, string>;
+  children?: string[];
+  links?: Map<string, string>;
 }
 
 // Interface representing the attributes of the root project description
 export interface DesignRoot {
   display_name: string;
-  links: {
+  links?: {
     [key: string]: string;
   };
   version: string;
@@ -37,11 +37,11 @@ export type DisplayType = "hexadecimal" | "binary" | "decimal";
 // Interface representing the fields on a specific register
 export interface Field {
   access: string;
-  doc: string;
   lsb: number;
   name: string;
   nbits: number;
-  reset: number;
+  reset: number | string;
+  doc?: string;
   value: Bit[];
 }
 

@@ -42,6 +42,8 @@ const getNodes = (
   elements: Map<string, DesignElement>,
   element: DesignElement | DesignRoot
 ) => {
+  if (!element.children) return [];
+
   return element.children.map((child_id) => {
     const child = elements.get(child_id);
     if (!child) {
