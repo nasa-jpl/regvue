@@ -8,6 +8,7 @@ import {
   RegisterDescriptionFile,
 } from "src/types";
 import parse from "src/parse";
+import { validate, validateResponse } from "src/validate";
 
 export const useStore = defineStore("store", {
   state: () => {
@@ -50,13 +51,22 @@ export const useStore = defineStore("store", {
     // Return true on successful load and false if load fails
     async loadUrl(url: string) {
       try {
+        // Fetch and validate the response
         const result = await fetch(url);
+        let validateMsg = validateResponse(result);
+        if (validateMsg) return validateMsg;
+
+        // Validate the JSON data
         const data = await result.json();
+        validateMsg = validate(data);
+        if (validateMsg) return validateMsg;
+
+        // If the data is valid load the data
         await this.load(data, url);
-        return true;
+        return "";
       } catch (e) {
         console.error(e);
-        return false;
+        return e as string;
       }
     },
 
@@ -65,11 +75,15 @@ export const useStore = defineStore("store", {
     async loadFile(jsonString: string) {
       try {
         const data = await JSON.parse(jsonString);
+
+        const validateMsg = validate(data);
+        if (validateMsg) return validateMsg;
+
         await this.load(data);
-        return true;
+        return "";
       } catch (e) {
         console.error(e);
-        return false;
+        return e as string;
       }
     },
 
@@ -144,8 +158,8 @@ const formatData = async (
       // Replace any reference to the include block with the json data it references for previous
       // formattedElement values
       for (const [_, formattedElement] of formattedElements.entries()) {
-        const idx = formattedElement.children?.indexOf(element.id);
-        if (idx >= 0 && parentId) {
+        const idx = formattedElement.children?.indexOf(element.id) || -1;
+        if (idx >= 0 && parentId && formattedElement.children) {
           formattedElement.children = [
             ...formattedElement.children.slice(0, idx),
             ...json.root.children.map((childId) =>

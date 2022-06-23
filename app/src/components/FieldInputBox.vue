@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { Bit, DisplayType, isUnknownBit } from "../types";
+import { Bit, DisplayType, isUnknownBit } from "src/types";
 import format from "src/format";
 import parse from "src/parse";
 
@@ -94,8 +94,8 @@ const getErrorMessage = (value: string) => {
     }
 
     // Characters must be a valid hex character
-    for (let char of value) {
-      if (!/[0-9A-Fa-f]|[?]/.test(char) && !isUnknownBit(char)) {
+    for (const char of value) {
+      if (!/[0-9A-Fa-f]/.test(char) && !isUnknownBit(char)) {
         return `Invalid hex character: '${char}'`;
       }
     }
@@ -108,15 +108,15 @@ const getErrorMessage = (value: string) => {
     }
 
     // Characters must be a valid binary character
-    for (let char of value) {
-      if (!/[0-1]|[?]/.test(char) && !isUnknownBit(char)) {
+    for (const char of value) {
+      if (!/[0-1]/.test(char) && !isUnknownBit(char)) {
         return `Invalid binary character: '${char}'`;
       }
     }
   } else {
     // Characters must be a valid decimal character
-    for (let char of value) {
-      if (!/[0-9]|[?]/.test(char) && !isUnknownBit(char)) {
+    for (const char of value) {
+      if (!/[0-9]/.test(char) && !isUnknownBit(char)) {
         return `Invalid decimal character: '${char}'`;
       }
     }

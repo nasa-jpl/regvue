@@ -40,7 +40,7 @@ router.beforeEach(async (to) => {
 
   // If the store hasn't been loaded try to load a file or reroute to the open page
   if (to.path != "/open" && !store.loaded) {
-    let result: boolean;
+    let result: string;
     if (to.query?.data) {
       // Load the data file from the query
       result = await store.loadUrl(to.query.data as string);
@@ -49,7 +49,7 @@ router.beforeEach(async (to) => {
       result = await store.loadUrl("data.json");
     }
 
-    if (!result) {
+    if (result != "") {
       return { name: "open" };
     }
   }
