@@ -1,10 +1,7 @@
-// Given a collection of JSON data assert:
-// 1. All required fields are present
-// 2. All fields have the required data type
+import { isUnknownBit } from "src/types";
 
-// On failure return an error message
-// On success return ""
-
+// Ensures that a response has returned JSON content with non-zero length
+// Returns an error message if invalid and "" for a valid response
 export const validateResponse = (response: Response): string => {
   const contentType = response.headers.get("content-type");
   if (contentType != "application/json")
@@ -17,6 +14,8 @@ export const validateResponse = (response: Response): string => {
   return "";
 };
 
+// Checks that JSON data conforms to the expected schema
+// Returns an error message for invalid data and "" for valid data
 export const validate = (data: any): string => {
   // Check that the schema field has the required fields
   if (!data.schema) return "Missing required field `schema`.";
@@ -84,11 +83,16 @@ export const validate = (data: any): string => {
       }
     }
 
-    // Validate the fields
-    if (element.fields) {
-      if (element.fields.constructor != Array)
-        return `The \`fields\` field of ${element.id} must be an array.`;
+    // Validate register specific arguments
+    if (element.type == "reg") {
+      // Validate the fields for register elements
+      if (!element.fields)
+        return `Register element "${element.id}" is missing required field \`fields\`.`;
 
+      if (element.fields.constructor != Array)
+        return `The \`fields\` of "${element.id}" must be an array.`;
+
+      let sumOfNbits = 0;
       for (const field of element.fields) {
         if (!field.name)
           return `A field of element "${element.id}" is missing required field \`name\`.`;
@@ -98,6 +102,9 @@ export const validate = (data: any): string => {
 
         if (field.reset == undefined)
           return `Field "${field.name}" of "${element.id}" is missing required field \`reset\`.`;
+
+        if (!isValidResetValue(field.reset))
+          return `Field "${field.name}" of "${element.id}" has an invalid reset value "${field.reset}".`;
 
         // Check that lsb is a number in range
         if (field.lsb == undefined)
@@ -116,11 +123,55 @@ export const validate = (data: any): string => {
         if (typeof field.lsb != "number")
           return `Field "${field.name}" of "${element.id}" must have type "number" for required field \`nbits\`.`;
 
-        if (field.lsb < 0 || field.lsb > 31)
-          return `The value for \`nbits\` of field "${field.name}" of "${element.id}" is out of bounds. Valid \`nbits\` values must be in the range [0, 31].`;
+        if (field.nbits < 1 || field.nbits > 32)
+          return `The value for \`nbits\` of field "${field.name}" of "${element.id}" is out of bounds. Valid \`nbits\` values must be in the range [1, 32].`;
+
+        sumOfNbits += field.nbits;
       }
+
+      if (sumOfNbits != 32)
+        return `The sum of each \`field.nbits\` field for ${element.id} does not equal 32.`;
     }
   }
 
   return "";
+};
+
+// Given a reset value return true if it is a valid value or false if it is invalid
+const isValidResetValue = (value: string | number): boolean => {
+  value = value.toString();
+
+  if (value.toLowerCase().startsWith("0x")) {
+    // Return false if the value is too large
+    if (value.substring(2).length > 8) {
+      return false;
+    }
+
+    // Return false if any character is not a hex character or valid UnknownBit
+    for (const char of value.substring(2)) {
+      if (!/[0-9A-Fa-f]/.test(char) && !isUnknownBit(char)) {
+        return false;
+      }
+    }
+  } else if (value.toLowerCase().startsWith("0b")) {
+    // Return false if the value is too large
+    if (value.substring(2).length > 32) {
+      return false;
+    }
+
+    for (const char of value.substring(2)) {
+      if (!/[0-1]/.test(char) && !isUnknownBit(char)) {
+        return false;
+      }
+    }
+  } else {
+    // Characters must be a valid decimal character
+    for (const char of value) {
+      if (!/[0-9]/.test(char) && !isUnknownBit(char)) {
+        return false;
+      }
+    }
+  }
+
+  return true;
 };

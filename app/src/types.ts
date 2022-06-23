@@ -16,7 +16,7 @@ export interface DesignElement {
   display_name?: string;
   doc?: string;
   version?: string;
-  fields: Field[];
+  fields?: Field[];
   children?: string[];
   links?: Map<string, string>;
 }
