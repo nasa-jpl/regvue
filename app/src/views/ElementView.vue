@@ -75,7 +75,7 @@ watch(
 );
 
 // Below this value the menu will start to be hidden automatically
-const WINDOW_BREAKPOINT = 950;
+const WINDOW_BREAKPOINT = 1200;
 
 let windowWidth = ref(window.innerWidth);
 // Update the windowWidth variable on window resize
