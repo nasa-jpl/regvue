@@ -28,6 +28,14 @@ let displayValue = ref(
     // props.nbits
   )
 );
+onBeforeMount(() => {
+  for (const e of props.enums) {
+    if (e.value == parse.num(displayValue.value)) {
+      displayValue.value = `${displayValue.value} (${e.name})`;
+      return;
+    }
+  }
+});
 
 // Keep track of the last value that the user fully selected
 let cachedValue: Bit[];
