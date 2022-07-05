@@ -183,7 +183,7 @@ const onDataFileOpen = async (event: Event) => {
     </div>
 
     <div>
-      <div class="flex flex-row space-x-1">
+      <div class="flex flex-row justify-center space-x-1">
         <!-- Show text input to get data from url -->
         <input
           id="data-url-input"
