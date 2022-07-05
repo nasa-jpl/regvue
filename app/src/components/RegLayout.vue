@@ -217,6 +217,7 @@ watch(
               name="register"
               :bit-array="registerValue"
               :nbits="32"
+              :enums="[]"
               :selected-display-type="selectedDisplayType"
               @value-changed="onRegisterInput($event)"
             />
