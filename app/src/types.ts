@@ -43,6 +43,7 @@ export interface Field {
   reset: number | string;
   doc?: string;
   value: Bit[];
+  enum?: { name: string; value: string | number; doc: string }[];
 }
 
 export interface IncludeElement {

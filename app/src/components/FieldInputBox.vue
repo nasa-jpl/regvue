@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onBeforeMount, ref, nextTick } from "vue";
 import { Bit, DisplayType, isUnknownBit } from "src/types";
 import format from "src/format";
 import parse from "src/parse";
@@ -8,6 +8,7 @@ const props = defineProps<{
   name: string;
   bitArray: Bit[];
   nbits: number;
+  enums: { name: string; value: string | number; doc: string }[];
   selectedDisplayType: DisplayType;
 }>();
 
@@ -27,6 +28,23 @@ let displayValue = ref(
     // props.nbits
   )
 );
+onBeforeMount(() => {
+  for (const e of props.enums) {
+    if (e.value == parse.num(displayValue.value)) {
+      displayValue.value = `${displayValue.value} (${e.name})`;
+      return;
+    }
+  }
+});
+
+// Keep track of the last value that the user fully selected
+let cachedValue: Bit[];
+onBeforeMount(() => {
+  cachedValue = props.bitArray;
+});
+
+// Determine whether or not to show dropdown list of possible enum values
+let showEnum = ref(false);
 
 // Determine whether or not to show the error tooltip below the input
 let showErrorTooltip = ref(false);
@@ -34,18 +52,26 @@ let showErrorTooltip = ref(false);
 // Remove the highlight, deselect the input, and reformat the
 // displayValue if there is no error
 const deactivate = () => {
+  showEnum.value = false;
+  showErrorTooltip.value = false;
+
   if (!isError.value) {
     displayValue.value = format.bitArrayToString(
       props.bitArray,
       props.selectedDisplayType
     );
-  }
 
-  showErrorTooltip.value = false;
+    for (const e of props.enums) {
+      if (e.value == parse.num(displayValue.value)) {
+        displayValue.value = `${displayValue.value} (${e.name})`;
+        return;
+      }
+    }
+  }
 };
 
 // Determine whether to emit the value change
-const updateValue = () => {
+const updateValue = (addEnumName = false) => {
   const elem = document.getElementById(
     "input-box-" + props.name
   ) as HTMLInputElement;
@@ -62,7 +88,43 @@ const updateValue = () => {
     isError.value = true;
     errorMessage.value = message;
   }
+  // Loop through enum values
+  if (addEnumName) {
+    for (const e of props.enums) {
+      if (e.value == parse.num(value)) {
+        displayValue.value = `${value} (${e.name})`;
+        return;
+      }
+    }
+  }
+
   displayValue.value = value;
+};
+
+// Update the input value to be the enum value
+const selectEnumValue = (value: string | number, preview = false) => {
+  // Get the enum value as a Bit[]
+  const bitArr = parse.stringToBitArray(value.toString(), props.nbits);
+
+  // Set the input value to be equal to the enum value
+  const elem = document.getElementById(
+    "input-box-" + props.name
+  ) as HTMLInputElement;
+  elem.value = format.bitArrayToString(bitArr, props.selectedDisplayType);
+
+  // If not previewing the change, save the selected enum val as the cachedValue
+  if (preview) {
+    updateValue(true);
+  } else {
+    updateValue();
+    cachedValue = bitArr;
+  }
+};
+
+// Restores the last user input value
+const restoreCachedValue = () => {
+  const value = format.bitArrayToString(cachedValue, props.selectedDisplayType);
+  selectEnumValue(value, true);
 };
 
 // Returns an error message for the input value. No error returns as ""
@@ -128,20 +190,30 @@ const getErrorMessage = (value: string) => {
 
 <template>
   <div class="relative w-full" :class="isError ? 'bg-red-300/50' : ''">
-    <input
-      :id="'input-box-' + name"
-      type="text"
-      :value="displayValue"
-      class="w-full bg-inherit text-center shadow-sm"
-      @focus="($event.target as HTMLInputElement).select(); showErrorTooltip=true;"
-      @blur="deactivate"
-      @keydown.esc="($event.target as HTMLInputElement).blur()"
-      @keydown.enter="($event.target as HTMLInputElement).blur()"
-      @input="updateValue()"
-      @keydown.delete="updateValue()"
-      @mouseenter="showErrorTooltip = true"
-      @mouseleave="showErrorTooltip = false"
-    />
+    <div class="grid">
+      <input
+        :id="'input-box-' + name"
+        type="text"
+        :value="displayValue"
+        class="z-10 col-start-1 row-start-1 w-full justify-self-center truncate bg-inherit px-1 text-center shadow-sm"
+        :title="displayValue"
+        @focus="
+          ($event.target as HTMLInputElement).select();
+          showErrorTooltip=true;
+          showEnum=true;
+        "
+        @blur="nextTick(() => deactivate())"
+        @keydown.esc="($event.target as HTMLInputElement).blur()"
+        @keydown.enter="($event.target as HTMLInputElement).blur()"
+        @input="
+          updateValue();
+          showEnum = false;
+        "
+        @keydown.delete="updateValue()"
+        @mouseenter="showErrorTooltip = true"
+        @mouseleave="showErrorTooltip = false"
+      />
+    </div>
 
     <!-- Show that the field value has an error -->
     <div
@@ -158,6 +230,43 @@ const getErrorMessage = (value: string) => {
           class="rounded border-2 border-t-4 border-gray-300 border-t-red-500 bg-gray-200 px-2 text-gray-800"
         >
           {{ errorMessage }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Show the enum value dropdown options -->
+    <div
+      v-else-if="showEnum && enums.length"
+      class="absolute top-[1.1rem] left-[50%] z-50 mt-1 w-fit translate-x-[-50%]"
+    >
+      <!-- Display small triangle pointing up -->
+      <div
+        class="m-auto h-0 w-0 border-[6px] border-transparent border-b-gray-400"
+      ></div>
+
+      <div
+        class="rounded border border-b-0 border-t-4 border-gray-400 border-t-gray-400 bg-gray-200"
+      >
+        <div
+          v-for="e in enums"
+          class="border-b border-gray-400 px-1 hover:cursor-pointer hover:bg-gray-300"
+        >
+          <!-- Show individual enum value by as "(value) name" -->
+          <button
+            class="w-full truncate text-left"
+            @mouseenter="selectEnumValue(e.value, true)"
+            @mouseleave="restoreCachedValue()"
+            @click="selectEnumValue(e.value, false)"
+          >
+            {{
+              format.getStringRepresentation(
+                parse.num(e.value.toString()),
+                selectedDisplayType,
+                nbits
+              )
+            }}
+            ({{ e.name }})
+          </button>
         </div>
       </div>
     </div>

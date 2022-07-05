@@ -113,6 +113,9 @@ const onFieldValueChange = (field: Field, value: string) => {
   // Update the register value
   updateRegisterValue();
   registerKeyIndex.value += 1;
+
+  // Stop highlighting the field
+  emit("stop-highlight-field");
 };
 
 // Obtains the input register value and uses it to update the field values
@@ -153,7 +156,7 @@ watch(
 <template>
   <div>
     <table
-      class="w-full min-w-[525px] table-fixed overflow-x-scroll xs:text-xs sm:text-sm md:text-base"
+      class="z-10 w-full min-w-[525px] table-fixed overflow-x-scroll xs:text-xs sm:text-sm md:text-base"
     >
       <thead>
         <!-- Display the bit number boxes -->
@@ -201,8 +204,8 @@ watch(
               :name="field.name"
               :bit-array="field.value"
               :nbits="field.nbits"
+              :enums="field.enum || []"
               :selected-display-type="selectedDisplayType"
-              @select-field="emit('select-field', field.name)"
               @value-changed="onFieldValueChange(field, $event)"
             />
           </td>
@@ -216,6 +219,7 @@ watch(
               name="register"
               :bit-array="registerValue"
               :nbits="32"
+              :enums="[]"
               :selected-display-type="selectedDisplayType"
               @value-changed="onRegisterInput($event)"
             />

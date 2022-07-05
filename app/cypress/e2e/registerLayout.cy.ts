@@ -112,7 +112,7 @@ describe("register-layout", () => {
     // Typing the in register with byte swap enabled should update fields differently
     cy.get("#input-box-register").type("0xABCDEF90");
     cy.get("#input-box-rsvd").should("have.value", "0x90EFCD");
-    cy.get("#input-box-long_command").should("have.value", "0xA");
+    cy.get("#input-box-long_command").should("have.value", "0xA (STOP)");
     cy.get("#input-box-flag3").should("have.value", "1");
     cy.get("#input-box-flag2").should("have.value", "0");
     cy.get("#input-box-flag1").should("have.value", "1");
