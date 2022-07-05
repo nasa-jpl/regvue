@@ -230,7 +230,7 @@ onMounted(() => {
 <template>
   <div
     id="sidebar"
-    class="flex h-full flex-row overflow-hidden"
+    class="flex h-full shrink-0 flex-row overflow-hidden"
     :class="menuVisible ? 'basis-[21rem]' : 'max-w-[0.75rem] basis-3'"
   >
     <div

@@ -1,15 +1,47 @@
 <script setup lang="ts">
+import { ref, computed } from "vue";
+import { useCookies } from "vue3-cookies";
 import { Field } from "src/types";
+
+import SwapVertical from "vue-material-design-icons/SwapVertical.vue";
 
 const props = defineProps<{
   fields: Field[];
   selectedField?: string;
 }>();
+
 const emit = defineEmits([
   "select-field",
   "highlight-field",
   "stop-highlight-field",
 ]);
+
+const { cookies } = useCookies();
+
+const fields = computed(() => {
+  if (displayOrder.value == DisplayOrder.msb) {
+    return props.fields;
+  } else {
+    return [...props.fields].reverse();
+  }
+})
+
+enum DisplayOrder { msb, lsb }
+const displayOrder = ref(parseInt(cookies.get("displayOrder")) || 0);
+
+// Swap the display order of the fields table
+const toggleDisplayOrder = () => {
+  if (displayOrder.value == DisplayOrder.msb) {
+    displayOrder.value = DisplayOrder.lsb;
+
+    // Store the decision to display lsb first as a cookie
+    const nextYear = new Date(new Date().getFullYear() + 2, 0, 0);
+    cookies.set("displayOrder", DisplayOrder.lsb.toString(), nextYear);
+  } else {
+    displayOrder.value = DisplayOrder.msb;
+    cookies.remove("displayOrder");
+  }
+}
 
 const navigateToField = (fieldName: string) => {
   emit("select-field", fieldName, props.selectedField == fieldName);
@@ -28,7 +60,19 @@ const deselectField = () => {
   <div>
     <table class="w-full border-2">
       <thead class="bg-gray-200">
-        <th class="min-w-[5rem] py-2">Bits</th>
+        <th class="min-w-[5rem] py-2">
+          <div class="flex flex-row w-fit m-auto pl-5">
+            Bits
+
+            <!-- Include button to swap the display order of msb/lsb first -->
+            <button 
+              class="ml-1 hover:cursor-pointer hover:text-gray-400"
+              @click="toggleDisplayOrder()"
+            >
+              <swap-vertical id="swap-vertical-button" />
+            </button>
+          </div>
+        </th>
         <th class="min-w-[8rem]">Name</th>
         <th class="min-w-[5rem]">Access</th>
         <th>Description</th>
@@ -75,3 +119,10 @@ const deselectField = () => {
     </table>
   </div>
 </template>
+
+<style>
+#swap-vertical-button > svg {
+  height: 1rem;
+  width: 1rem;
+}
+</style>

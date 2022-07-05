@@ -5,6 +5,7 @@ import data from "../../public/example.json";
 
 describe("menu-component", () => {
   beforeEach(() => {
+    cy.viewport(1280, 800);
     cy.visit("/#/?data=example.json");
   });
 
