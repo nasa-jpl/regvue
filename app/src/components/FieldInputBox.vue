@@ -29,6 +29,7 @@ let displayValue = ref(
   )
 );
 
+// Keep track of the last value that the user fully selected
 let cachedValue: Bit[];
 onBeforeMount(() => {
   cachedValue = props.bitArray;
@@ -92,6 +93,32 @@ const updateValue = (addEnumName = false) => {
   displayValue.value = value;
 };
 
+// Update the input value to be the enum value
+const selectEnumValue = (value: string | number, preview = false) => {
+  // Get the enum value as a Bit[]
+  const bitArr = parse.stringToBitArray(value.toString(), props.nbits);
+
+  // Set the input value to be equal to the enum value
+  const elem = document.getElementById(
+    "input-box-" + props.name
+  ) as HTMLInputElement;
+  elem.value = format.bitArrayToString(bitArr, props.selectedDisplayType);
+
+  // If not previewing the change, save the selected enum val as the cachedValue
+  if (preview) {
+    updateValue(true);
+  } else {
+    updateValue();
+    cachedValue = bitArr;
+  }
+};
+
+// Restores the last user input value
+const restoreCachedValue = () => {
+  const value = format.bitArrayToString(cachedValue, props.selectedDisplayType);
+  selectEnumValue(value, true);
+};
+
 // Returns an error message for the input value. No error returns as ""
 const getErrorMessage = (value: string) => {
   if (value == "") {
@@ -151,31 +178,6 @@ const getErrorMessage = (value: string) => {
 
   return "";
 };
-
-// Update the input value to be the enum value
-const selectEnumValue = (value: string | number, preview = false) => {
-  // Get the enum value as a Bit[]
-  const bitArr = parse.stringToBitArray(value.toString(), props.nbits);
-
-  // Set the input value to be equal to the enum value
-  const elem = document.getElementById(
-    "input-box-" + props.name
-  ) as HTMLInputElement;
-  elem.value = format.bitArrayToString(bitArr, props.selectedDisplayType);
-
-  // If not previewing the change, save the selected enum val as the cachedValue
-  if (preview) {
-    updateValue(true);
-  } else {
-    updateValue();
-    cachedValue = bitArr;
-  }
-};
-
-const restoreCachedValue = () => {
-  const value = format.bitArrayToString(cachedValue, props.selectedDisplayType);
-  selectEnumValue(value, true);
-};
 </script>
 
 <template>
@@ -226,29 +228,38 @@ const restoreCachedValue = () => {
 
     <!-- Show the enum value dropdown options -->
     <div
-      v-else-if="showEnum && enums"
-      class="absolute top-6 left-[50%] z-50 mt-1 w-fit translate-x-[-50%] rounded border border-b-0 border-gray-400 bg-gray-200"
+      v-else-if="showEnum && enums.length"
+      class="absolute top-[1.1rem] left-[50%] z-50 mt-1 w-fit translate-x-[-50%]"
     >
+      <!-- Display small triangle pointing up -->
       <div
-        v-for="e in enums"
-        class="border-b border-gray-400 px-1 hover:cursor-pointer hover:bg-gray-300"
+        class="m-auto h-0 w-0 border-[6px] border-transparent border-b-gray-400"
+      ></div>
+
+      <div
+        class="rounded border border-b-0 border-t-4 border-gray-400 border-t-gray-400 bg-gray-200"
       >
-        <!-- Show individual enum value by name -->
-        <button
-          class="w-full truncate text-left"
-          @mouseenter="selectEnumValue(e.value, true)"
-          @mouseleave="restoreCachedValue()"
-          @click="selectEnumValue(e.value, false)"
+        <div
+          v-for="e in enums"
+          class="border-b border-gray-400 px-1 hover:cursor-pointer hover:bg-gray-300"
         >
-          {{
-            format.getStringRepresentation(
-              parse.num(e.value.toString()),
-              selectedDisplayType,
-              nbits
-            )
-          }}
-          ({{ e.name }})
-        </button>
+          <!-- Show individual enum value by as "(value) name" -->
+          <button
+            class="w-full truncate text-left"
+            @mouseenter="selectEnumValue(e.value, true)"
+            @mouseleave="restoreCachedValue()"
+            @click="selectEnumValue(e.value, false)"
+          >
+            {{
+              format.getStringRepresentation(
+                parse.num(e.value.toString()),
+                selectedDisplayType,
+                nbits
+              )
+            }}
+            ({{ e.name }})
+          </button>
+        </div>
       </div>
     </div>
   </div>
