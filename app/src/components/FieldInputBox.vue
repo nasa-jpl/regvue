@@ -1,17 +1,21 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { Bit, DisplayType, isUnknownBit } from "src/types";
 import format from "src/format";
 import parse from "src/parse";
+
+import ChevronDown from "vue-material-design-icons/ChevronDown.vue";
+import ChevronUp from "vue-material-design-icons/ChevronUp.vue";
 
 const props = defineProps<{
   name: string;
   bitArray: Bit[];
   nbits: number;
+  enums?: { name: string; value: string | number; doc: string }[];
   selectedDisplayType: DisplayType;
 }>();
 
-const emit = defineEmits(["value-changed"]);
+const emit = defineEmits(["value-changed", "enum-selected"]);
 
 // Determine whether or not to display an error
 let isError = ref(false);
@@ -27,6 +31,14 @@ let displayValue = ref(
     // props.nbits
   )
 );
+
+let cachedValue: Bit[];
+onBeforeMount(() => {
+  cachedValue = props.bitArray;
+});
+
+// Determine whether or not to show dropdown list of possible enum values
+let showEnum = ref(false);
 
 // Determine whether or not to show the error tooltip below the input
 let showErrorTooltip = ref(false);
@@ -124,15 +136,74 @@ const getErrorMessage = (value: string) => {
 
   return "";
 };
+
+// Update the input value to be the enum value
+const selectEnumValue = (value: string | number, preview = false) => {
+  // Get the enum value as a Bit[]
+  const ba = parse.stringToBitArray(value.toString(), props.nbits);
+
+  // Set the input value to be equal to the enum value
+  const elem = document.getElementById(
+    "input-box-" + props.name
+  ) as HTMLInputElement;
+  elem.value = format.bitArrayToString(ba, props.selectedDisplayType);
+
+  updateValue();
+
+  // If not previewing the change, save the selected enum val as the cachedValue
+  if (!preview) {
+    cachedValue = ba;
+    emit("enum-selected");
+  }
+};
+
+const restoreCachedValue = () => {
+  const value = format.bitArrayToString(cachedValue, props.selectedDisplayType);
+  selectEnumValue(value, true);
+};
 </script>
 
 <template>
   <div class="relative w-full" :class="isError ? 'bg-red-300/50' : ''">
+    <!-- Show dropdown buttons to select enum values -->
+    <button
+      v-if="enums"
+      class="fixed z-50 ml-[1px] rounded hover:cursor-pointer hover:bg-gray-200 hover:outline hover:outline-1 hover:outline-gray-300"
+      :class="showEnum ? 'bg-gray-200 outline outline-1 outline-gray-300' : ''"
+      @click.stop="showEnum = !showEnum"
+    >
+      <chevron-down v-if="!showEnum" />
+      <chevron-up v-else />
+    </button>
+
+    <!-- Show the enum value dropdown options -->
+    <div
+      v-if="showEnum && enums"
+      class="absolute top-6 z-50 mt-1 rounded border border-b-0 border-gray-400 bg-gray-200"
+    >
+      <div
+        v-for="e in enums"
+        class="border-b border-gray-400 px-1 hover:cursor-pointer hover:bg-gray-300"
+      >
+        <!-- Show individual enum value by name -->
+        <button
+          @mouseenter="selectEnumValue(e.value, true)"
+          @mouseleave="restoreCachedValue()"
+          @click="
+            selectEnumValue(e.value);
+            showEnum = false;
+          "
+        >
+          {{ e.name }}
+        </button>
+      </div>
+    </div>
+
     <input
       :id="'input-box-' + name"
       type="text"
       :value="displayValue"
-      class="w-full bg-inherit text-center shadow-sm"
+      class="z-10 w-full bg-inherit text-center shadow-sm"
       @focus="($event.target as HTMLInputElement).select(); showErrorTooltip=true;"
       @blur="deactivate"
       @keydown.esc="($event.target as HTMLInputElement).blur()"

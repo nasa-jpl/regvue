@@ -153,7 +153,7 @@ watch(
 <template>
   <div>
     <table
-      class="w-full min-w-[525px] table-fixed overflow-x-scroll xs:text-xs sm:text-sm md:text-base"
+      class="z-10 w-full min-w-[525px] table-fixed overflow-x-scroll xs:text-xs sm:text-sm md:text-base"
     >
       <thead>
         <!-- Display the bit number boxes -->
@@ -201,9 +201,10 @@ watch(
               :name="field.name"
               :bit-array="field.value"
               :nbits="field.nbits"
+              :enums="field.enum || []"
               :selected-display-type="selectedDisplayType"
-              @select-field="emit('select-field', field.name)"
               @value-changed="onFieldValueChange(field, $event)"
+              @enum-selected="emit('stop-highlight-field')"
             />
           </td>
         </tr>
