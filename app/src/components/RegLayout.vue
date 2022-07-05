@@ -113,6 +113,9 @@ const onFieldValueChange = (field: Field, value: string) => {
   // Update the register value
   updateRegisterValue();
   registerKeyIndex.value += 1;
+
+  // Stop highlighting the field
+  emit("stop-highlight-field");
 };
 
 // Obtains the input register value and uses it to update the field values
@@ -204,7 +207,6 @@ watch(
               :enums="field.enum || []"
               :selected-display-type="selectedDisplayType"
               @value-changed="onFieldValueChange(field, $event)"
-              @enum-selected="emit('stop-highlight-field')"
             />
           </td>
         </tr>
