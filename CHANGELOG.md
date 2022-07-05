@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Added support for enumerated field values [#107](https://github.jpl.nasa.gov/regvue/regvue/pull/107)).
 - Added the option to display the field table starting with LSB ([#106](https://github.jpl.nasa.gov/regvue/regvue/pull/106)).
 - Added schema and semantic validation that checks uploaded/fetched data ([#103](https://github.jpl.nasa.gov/regvue/regvue/pull/103)).
 - Added option for footer text to be set in `app.config.json` file ([#102](https://github.jpl.nasa.gov/regvue/regvue/pull/102)).
