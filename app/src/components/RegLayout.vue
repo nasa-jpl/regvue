@@ -20,12 +20,10 @@ const emit = defineEmits([
   "select-field",
   "highlight-field",
   "stop-highlight-field",
+  "select-reset-state",
 ]);
 
 const store = useStore();
-
-let selectedResetState = ref(props.resetState);
-watch(() => props.resetState, (value) => selectedResetState.value = value)
 
 // Control whether or not to show dropdown menu of possible reset states
 let showResets = ref(false);
@@ -37,14 +35,9 @@ const resets = computed(() => {
     field.reset?.resets.forEach((reset) => res.add(reset));
   }
 
-    let arr = [...res];
-
-  if (selectedResetState.value == "") {
-    selectedResetState.value = arr[0] as string;
-  } else {
-    arr = arr.filter(e => e != selectedResetState.value);
-    arr.unshift(selectedResetState.value);
-  }
+  let arr = [...res];
+  arr = arr.filter(e => e != props.resetState);
+  arr.unshift(props.resetState);
 
   return arr;
 });
@@ -108,7 +101,7 @@ const updateDisplayType = (displayType: DisplayType) => {
 // Assigns each field.value based on its field.reset
 const resetValues = () => {
   props.fields.forEach((field) => {
-    if (field.reset.resets.includes(selectedResetState.value)) {
+    if (field.reset.resets.includes(props.resetState)) {
       field.value = parse.stringToBitArray(
         field.reset.value.toString(),
         field.nbits
@@ -122,6 +115,14 @@ const resetValues = () => {
   fieldKeyIndex.value += 1;
   registerKeyIndex.value += 1;
 };
+
+// Emit an event when the user selects a new reset state
+const selectResetState = (resetState: string) => {
+  emit("select-reset-state", resetState);
+  
+  showResets.value = false;
+  nextTick(() => resetValues());
+}
 
 // Ues the field values to obtain a new value for the register
 const updateRegisterValue = () => {
@@ -310,7 +311,7 @@ watch(
           <!-- Button to reset values to the last selected reset state -->
           <button
             id="reset-values-button"
-            class="rounded-tl border border-r-0 border-gray-400 bg-white px-1 shadow hover:bg-gray-100 w-24 text-left truncate"
+            class="rounded-tl border border-r-0 border-gray-400 bg-white px-1 shadow hover:bg-gray-100 w-24 truncate"
             :class="showResets ? '' : 'rounded-bl'"
             title="Set all field values to their reset value"
             @click="resetValues()"
@@ -329,7 +330,7 @@ watch(
             "
             @click="showResets = !showResets"
             :disabled="resets.length <= 1"
-            @blur="nextTick(() => showResets = false)"
+            @blur="showResets = false"
           >
             <chevron-down />
           </button>
@@ -337,18 +338,14 @@ watch(
 
         <!-- Menu with buttons to reset to other reset states -->
         <div
+          v-if="showResets"
           class="fixed mr-8 divide-y rounded-b border border-t-0 border-gray-400 w-[calc(7.5rem+2px)]"
-          :class="showResets ? '' : 'opacity-0'"
         >
           <button
             v-for="reset in resets.slice(1)"
             class="w-full px-1 shadow hover:bg-gray-100 text-left truncate"
             :title="reset + ' Reset'"
-            @click="
-              selectedResetState = reset as string;
-              showResets = false;
-              resetValues()
-            "
+            @mousedown="selectResetState(reset as string)"
           >
             {{ reset }} Reset
           </button>

@@ -84,6 +84,7 @@ watch(
       @select-field="selectField"
       @highlight-field="highlightField"
       @stop-highlight-field="stopHighlightField"
+      @select-reset-state="reg.default_reset = $event"
     />
 
     <!-- Show the register doc description -->
