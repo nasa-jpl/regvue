@@ -37,6 +37,7 @@ const resets = computed(() => {
 
   let arr = [...res];
   arr = arr.filter(e => e != props.resetState);
+  arr.sort();
   arr.unshift(props.resetState);
 
   return arr;
@@ -311,8 +312,11 @@ watch(
           <!-- Button to reset values to the last selected reset state -->
           <button
             id="reset-values-button"
-            class="rounded-tl border border-r-0 border-gray-400 bg-white px-1 shadow hover:bg-gray-100 w-24 truncate"
-            :class="showResets ? '' : 'rounded-bl'"
+            class="rounded-tl border border-gray-400 bg-white px-1 shadow hover:bg-gray-100 w-24 truncate"
+            :class="
+              showResets ? '' : 'rounded-bl',
+              resets.length > 1 ? 'border-r-0': 'rounded-r'
+            "
             title="Set all field values to their reset value"
             @click="resetValues()"
           >
@@ -321,15 +325,10 @@ watch(
 
           <!-- Button to open dropdown menu with other states -->
           <button
-            class="rounded-tr border border-gray-400 bg-white shadow"
-            :class="
-              resets.length > 1
-                ? 'hover:cursor-pointer hover:bg-gray-100'
-                : 'text-gray-400 hover:cursor-default',
-              showResets ? '' : 'rounded-br'
-            "
+            v-if="resets.length > 1"
+            class="rounded-tr border border-gray-400 bg-white shadow hover:cursor-pointer hover:bg-gray-100"
+            :class="showResets ? '' : 'rounded-br'"
             @click="showResets = !showResets"
-            :disabled="resets.length <= 1"
             @blur="showResets = false"
           >
             <chevron-down />
