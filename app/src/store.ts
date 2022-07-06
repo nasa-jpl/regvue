@@ -112,6 +112,9 @@ export const useStore = defineStore("store", {
               field.reset.resets = [element.default_reset as string];
             }
           });
+
+          // Sort the fields so that the field with the highest LSB is first in the array
+          element.fields?.sort((a, b) => b.lsb - a.lsb);
         }
       }
 
