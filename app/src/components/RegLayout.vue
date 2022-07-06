@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, Ref, nextTick, watch } from "vue";
+import { ref, Ref, computed, nextTick, onBeforeMount, watch } from "vue";
 import { useRoute } from "vue-router";
 import { Bit, DisplayType, Field } from "src/types";
 import parse from "src/parse";
@@ -20,6 +20,19 @@ const emit = defineEmits([
 ]);
 
 const store = useStore();
+
+const resetState = ref("");
+
+// Get a list of all available reset states
+const resets = computed(() => {
+  let res = new Set();
+  for (const field of props.fields) {
+    field.reset?.resets.forEach((reset) => res.add(reset));
+  }
+
+  return [...res];
+});
+onBeforeMount(() => (resetState.value = resets.value[0] as string));
 
 // Store the value of the register as an array of 32 Bits
 let registerValue = ref(Array(32).map(() => 0 as Bit));
@@ -73,14 +86,17 @@ const updateDisplayType = (displayType: DisplayType) => {
 };
 
 // Assigns each field.value based on its field.reset
-const resetValues = () => {
-  props.fields.forEach(
-    (field) =>
-      (field.value = parse.stringToBitArray(
-        field.reset.toString(),
+const resetValues = (resetState: string) => {
+  props.fields.forEach((field) => {
+    if (field.reset.resets.includes(resetState)) {
+      field.value = parse.stringToBitArray(
+        field.reset.value.toString(),
         field.nbits
-      ))
-  );
+      );
+    } else {
+      field.value = parse.stringToBitArray("?", field.nbits);
+    }
+  });
   updateRegisterValue();
 
   fieldKeyIndex.value += 1;
@@ -269,14 +285,20 @@ watch(
       </div>
 
       <!-- Show reset values button -->
-      <button
-        id="reset-values-button"
-        class="rounded border border-gray-400 bg-white px-1 shadow hover:bg-gray-100"
-        title="Set all field values to their reset value"
-        @click="resetValues"
-      >
-        Reset Values
-      </button>
+      <div>
+        <select v-model="resetState">
+          <option v-for="r in resets" :value="r">{{ r }}</option>
+        </select>
+
+        <button
+          id="reset-values-button"
+          class="rounded border border-gray-400 bg-white px-1 shadow hover:bg-gray-100"
+          title="Set all field values to their reset value"
+          @click="resetValues(resetState)"
+        >
+          x
+        </button>
+      </div>
     </div>
   </div>
 </template>

@@ -7,6 +7,7 @@ import {
   IncludeElement,
   RegisterDescriptionFile,
 } from "src/types";
+import format from "src/format";
 import parse from "src/parse";
 import { validate, validateResponse } from "src/validate";
 
@@ -208,13 +209,23 @@ const formatData = async (
 
       // Set the field.value to be a Bit[] that represents the field.reset or 0
       fields?.forEach((field: Field) => {
-        if (field.reset) {
+        if (typeof field.reset == "string" || typeof field.reset == "number") {
+          field.reset = { value: field.reset, resets: [] };
           field.value = parse.stringToBitArray(
-            field.reset.toString(),
+            field.reset.value.toString(),
+            field.nbits
+          );
+        } else if (field.reset && field.reset.value) {
+          field.value = parse.stringToBitArray(
+            field.reset.value.toString(),
             field.nbits
           );
         } else {
-          field.value = parse.stringToBitArray("0", field.nbits);
+          field.value = parse.stringToBitArray("?", field.nbits);
+          field.reset = {
+            value: format.bitArrayToString(field.value, "hexadecimal"),
+            resets: [],
+          };
         }
       });
       formattedElements.set(element.id, element);

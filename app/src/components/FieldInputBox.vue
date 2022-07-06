@@ -22,11 +22,7 @@ let errorMessage = ref("");
 
 // Value to display when user stops editing
 let displayValue = ref(
-  format.bitArrayToString(
-    props.bitArray,
-    props.selectedDisplayType
-    // props.nbits
-  )
+  format.bitArrayToString(props.bitArray, props.selectedDisplayType)
 );
 onBeforeMount(() => {
   for (const e of props.enums) {

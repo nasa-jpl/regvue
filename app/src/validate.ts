@@ -113,9 +113,6 @@ export const validate = (data: any): string => {
         if (!field.access)
           return `Field "${field.name}" of "${element.id}" is missing required field \`access\`.`;
 
-        if (field.reset == undefined)
-          return `Field "${field.name}" of "${element.id}" is missing required field \`reset\`.`;
-
         if (!isValidResetValue(field.reset))
           return `Field "${field.name}" of "${element.id}" has an invalid reset value "${field.reset}".`;
 
@@ -159,8 +156,18 @@ export const validate = (data: any): string => {
 };
 
 // Given a reset value return true if it is a valid value or false if it is invalid
-const isValidResetValue = (value: string | number): boolean => {
-  value = value.toString();
+const isValidResetValue = (
+  reset: string | number | { value: string; resets: string[] }
+): boolean => {
+  let value: string;
+
+  if (reset == undefined) {
+    return true;
+  } else if (typeof reset == "string" || typeof reset == "number") {
+    value = reset.toString();
+  } else {
+    value = reset.value.toString();
+  }
 
   if (value.toLowerCase().startsWith("0x")) {
     // Return false if the value is too large
