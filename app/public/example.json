@@ -13,7 +13,8 @@
     "children": [
       "blkA",
       "blkB"
-    ]
+    ],
+    "default_reset": "RS1"
   },
   "elements": {
     "blkA": {
@@ -137,11 +138,43 @@
       "doc": "regA2 - An example register.",
       "fields": [
         {
-          "access": "ro",
-          "reset": 305419896,
-          "nbits": 32,
+          "name": "f0",
           "lsb": 0,
-          "name": "f0"
+          "nbits": 8,
+          "access": "rw",
+          "reset": {
+            "value": 0,
+            "resets": [
+              "RS1",
+              "RS2"
+            ]
+          }
+        },
+        {
+          "name": "f1",
+          "lsb": 8,
+          "nbits": 8,
+          "access": "rw",
+          "reset": {
+            "value": "0x1",
+            "resets": [
+              "RS3",
+              "RS1"
+            ]
+          }
+        },
+        {
+          "name": "f2",
+          "lsb": 16,
+          "nbits": 8,
+          "access": "rw",
+          "reset": "0x2"
+        },
+        {
+          "name": "f3",
+          "lsb": 24,
+          "nbits": 8,
+          "access": "rw"
         }
       ],
       "type": "reg",
