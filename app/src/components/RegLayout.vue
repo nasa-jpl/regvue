@@ -312,12 +312,12 @@ watch(
           <!-- Button to reset values to the last selected reset state -->
           <button
             id="reset-values-button"
-            class="rounded-tl border border-gray-400 bg-white px-1 shadow hover:bg-gray-100 w-24 truncate"
+            class="rounded-tl border border-gray-400 bg-white px-1 shadow hover:bg-gray-100 w-32 truncate"
             :class="
               showResets ? '' : 'rounded-bl',
               resets.length > 1 ? 'border-r-0': 'rounded-r'
             "
-            title="Set all field values to their reset value"
+            :title="'Reset field values to ' + resets[0] + ' Reset'"
             @click="resetValues()"
           >
             {{ resets[0] }} Reset
@@ -338,12 +338,12 @@ watch(
         <!-- Menu with buttons to reset to other reset states -->
         <div
           v-if="showResets"
-          class="fixed mr-8 divide-y rounded-b border border-t-0 border-gray-400 w-[calc(7.5rem+2px)]"
+          class="fixed mr-8 divide-y rounded-b border border-t-0 border-gray-400 w-[calc(9.5rem+2px)]"
         >
           <button
             v-for="reset in resets.slice(1)"
             class="w-full px-1 shadow hover:bg-gray-100 text-left truncate"
-            :title="reset + ' Reset'"
+            :title="'Reset field values to ' + reset + ' Reset'"
             @mousedown="selectResetState(reset as string)"
           >
             {{ reset }} Reset
