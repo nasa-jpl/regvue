@@ -33,6 +33,14 @@ export interface DesignRoot {
   default_reset?: string;
   data_width: 16 | 32;
 }
+export const isValidDataWidth = (x: unknown): x is DesignRoot["data_width"] => {
+  try {
+    const n = parseInt(x as string);
+    return [16, 32].includes(n);
+  } catch {
+    return false;
+  }
+};
 
 // Type representing the supported ways of displaying bit values
 export type DisplayType = "hexadecimal" | "binary" | "decimal";

@@ -1,4 +1,4 @@
-import { isUnknownBit } from "src/types";
+import { isValidDataWidth, isUnknownBit } from "src/types";
 
 // Ensures that a response has returned JSON content with non-zero length
 // Returns an error message if invalid and "" for a valid response
@@ -32,10 +32,14 @@ export const validate = (data: any): string => {
   }
   if (!data.root.children) return "Missing required field `root.children`.";
 
-  // TODO check that data width is a supported value
+  // Check that the data width is a supported value
   let dataWidth: number;
   if (data.root.data_width) {
-    dataWidth = data.root.data_width;
+    if (isValidDataWidth(data.root.data_width)) {
+      dataWidth = data.root.data_width;
+    } else {
+      return `Field \`root.data_width\` has invalid value \`${data.root.data_width}\`.`;
+    }
   } else {
     dataWidth = 32;
   }
