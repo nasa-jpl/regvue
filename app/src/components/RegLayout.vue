@@ -25,6 +25,8 @@ const emit = defineEmits([
 
 const store = useStore();
 
+const dataWidth = store.root.data_width;
+
 // Control whether or not to show dropdown menu of possible reset states
 let showResets = ref(false);
 
@@ -48,8 +50,8 @@ onBeforeMount(() => {
   resetValues();
 });
 
-// Store the value of the register as an array of 32 Bits
-let registerValue = ref(Array(32).map(() => 0 as Bit));
+// Store the value of the register as an array of Bits
+let registerValue = ref(Array(dataWidth).map(() => 0 as Bit));
 
 // Control whether or not to display LSB or MSB first
 let useByteSwap = ref(store.useByteSwap);
@@ -199,14 +201,14 @@ watch(
       <thead>
         <!-- Display the bit number boxes -->
         <th
-          v-for="bit in 32"
+          v-for="bit in dataWidth"
           :key="bit"
           class="border border-black font-medium"
           :class="
             Math.floor((bit - 1) / 4) % 2 == 0 ? 'bg-gray-100' : 'bg-gray-300'
           "
         >
-          {{ 32 - bit }}
+          {{ dataWidth - bit }}
         </th>
       </thead>
       <tbody>
@@ -251,12 +253,12 @@ watch(
 
         <!-- Display the overall register input box -->
         <tr>
-          <td colspan="32" class="border border-black">
+          <td :colspan="dataWidth" class="border border-black">
             <FieldInputBox
               :key="'register-input-' + registerKeyIndex"
               name="register"
               :bit-array="registerValue"
-              :nbits="32"
+              :nbits="dataWidth"
               :enums="[]"
               :selected-display-type="selectedDisplayType"
               @value-changed="onRegisterInput($event)"

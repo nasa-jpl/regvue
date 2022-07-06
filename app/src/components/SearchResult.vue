@@ -14,6 +14,8 @@ const props = defineProps<{
 
 const store = useStore();
 
+const dataWidth = store.root.data_width;
+
 const elementId = ref(props.suggestion.path.params.elementId.join("."));
 const field = computed(() => {
   if (props.suggestion.path?.query?.field) {
@@ -69,7 +71,7 @@ const addr = computed(() => {
 
   const addr = element.addr;
   if (addr) {
-    return format.getStringRepresentation(addr, "hexadecimal", 32);
+    return format.getStringRepresentation(addr, "hexadecimal", dataWidth);
   } else {
     return "";
   }

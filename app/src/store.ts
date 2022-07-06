@@ -98,7 +98,12 @@ export const useStore = defineStore("store", {
       if (!elements) throw Error("Error formating data");
       if (!root) throw Error("Error updating DesignRoot");
 
-      for (const [_, element] of elements.entries()) {
+      // If the data_width is undefined default to 32 bits
+      if (!root.data_width) {
+        root.data_width = 32;
+      }
+
+      for (const [, element] of elements.entries()) {
         // Calculate the address from an element's offset and its parents' offsets
         element.addr = getAddress(element.id, elements);
 
@@ -140,7 +145,7 @@ const formatData = async (
   elements: { [key: string]: DesignElement | IncludeElement },
   root: DesignRoot
 ) => {
-  let formattedElements = new Map<string, DesignElement>();
+  const formattedElements = new Map<string, DesignElement>();
 
   for (const element of Object.values(elements)) {
     // If the element is an IncludeElement fetch and format from its url

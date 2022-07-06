@@ -3,7 +3,10 @@ import lunr from "lunr";
 import { DesignElement } from "src/types";
 
 // Creates a lunr.Index object that can be used to search data.elements
-export const createSearchIndex = (elements: Map<string, DesignElement>) => {
+export const createSearchIndex = (
+  elements: Map<string, DesignElement>,
+  dataWidth: number
+) => {
   return lunr((builder: lunr.Builder) => {
     // Set the tokenizer to only seperate search terms on carriage return (\r)
     // or newline (\n)
@@ -34,13 +37,13 @@ export const createSearchIndex = (elements: Map<string, DesignElement>) => {
           addr: format.getStringRepresentation(
             document.addr,
             "hexadecimal",
-            32
+            dataWidth
           ),
         },
         { boost: 25 } // prioritize registers over fields
       );
 
-      document.fields?.forEach((field: { name: string; doc?: any }) => {
+      document.fields?.forEach((field: { name: string; doc?: string }) => {
         builder.add({
           id: document.id + ":" + field.name,
           name: field.name,

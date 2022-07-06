@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { DesignElement } from "src/types";
+import { useStore } from "src/store";
 
 import BlockTableEntry from "src/components/BlockTableEntry.vue";
 import ElementTitle from "src/components/ElementTitle.vue";
@@ -7,6 +8,9 @@ import ElementTitle from "src/components/ElementTitle.vue";
 defineProps<{
   block: DesignElement;
 }>();
+
+const store = useStore();
+const dataWidth = store.root.data_width;
 </script>
 
 <template>
@@ -31,11 +35,11 @@ defineProps<{
               <th class="w-[12%] text-sm">Offset</th>
               <th class="w-[12%] border-l-2 border-gray-400 text-sm">Name</th>
               <th
-                v-for="bit in 32"
+                v-for="bit in dataWidth"
                 :key="bit"
                 class="w-[3.5%] border-l-2 border-gray-400 text-sm"
               >
-                {{ 32 - bit }}
+                {{ dataWidth - bit }}
               </th>
             </tr>
           </thead>

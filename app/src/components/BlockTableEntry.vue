@@ -15,6 +15,8 @@ const route = useRoute();
 const router = useRouter();
 const store = useStore();
 
+const dataWidth = store.root.data_width;
+
 const element = computed(() => {
   const e = store.elements.get(props.elementId);
   if (!e) {
@@ -78,12 +80,12 @@ const href = computed(
       </td>
     </template>
     <template v-else-if="element.type == 'blk'">
-      <td :colspan="32" class="truncate border-l-2 border-gray-400 px-2">
+      <td :colspan="dataWidth" class="truncate border-l-2 border-gray-400 px-2">
         {{ element.doc }}
       </td>
     </template>
     <template v-else-if="element.type == 'mem'">
-      <td :colspan="32" class="truncate border-l-2 border-gray-400 px-2">
+      <td :colspan="dataWidth" class="truncate border-l-2 border-gray-400 px-2">
         reserved memory
       </td>
     </template>

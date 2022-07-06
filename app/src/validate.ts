@@ -14,6 +14,7 @@ export const validateResponse = (response: Response): string => {
 
 // Checks that JSON data conforms to the expected schema
 // Returns an error message for invalid data and "" for valid data
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const validate = (data: any): string => {
   // Check that the schema field has the required fields
   if (!data.schema) return "Missing required field `schema`.";
@@ -30,6 +31,14 @@ export const validate = (data: any): string => {
     }
   }
   if (!data.root.children) return "Missing required field `root.children`.";
+
+  // TODO check that data width is a supported value
+  let dataWidth: number;
+  if (data.root.data_width) {
+    dataWidth = data.root.data_width;
+  } else {
+    dataWidth = 32;
+  }
 
   // Check that the root.children field is a non-empty array
   if (data.root.children.constructor !== Array)
@@ -49,6 +58,7 @@ export const validate = (data: any): string => {
   }
 
   // Check that each element has the required fields
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   for (const [key, element] of Object.entries(data.elements) as [string, any]) {
     if (!element) return `Element with key ${key} is unknown`;
 
@@ -115,7 +125,7 @@ export const validate = (data: any): string => {
         if (!field.access)
           return `Field "${field.name}" of "${element.id}" is missing required field \`access\`.`;
 
-        const resetValueErr = isValidResetValue(field.reset);
+        const resetValueErr = isValidResetValue(field.reset, dataWidth);
         if (resetValueErr != "") {
           return `Field "${field.name}" of "${element.id}" has an invalid reset value. ${resetValueErr}`;
         }
@@ -127,8 +137,12 @@ export const validate = (data: any): string => {
         if (typeof field.lsb != "number")
           return `Field "${field.name}" of "${element.id}" must have type "number" for required field \`lsb\`.`;
 
-        if (field.lsb < 0 || field.lsb > 31)
-          return `The value for \`lsb\` of field "${field.name}" of "${element.id}" is out of bounds. Valid \`lsb\` values must be in the range [0, 31].`;
+        if (field.lsb < 0 || field.lsb > dataWidth - 1)
+          return `The value for \`lsb\` of field "${field.name}" of "${
+            element.id
+          }" is out of bounds. Valid \`lsb\` values must be in the range [0, ${
+            dataWidth - 1
+          }].`;
 
         // Check that nbits is a number within range
         if (field.nbits == undefined)
@@ -137,8 +151,8 @@ export const validate = (data: any): string => {
         if (typeof field.lsb != "number")
           return `Field "${field.name}" of "${element.id}" must have type "number" for required field \`nbits\`.`;
 
-        if (field.nbits < 1 || field.nbits > 32)
-          return `The value for \`nbits\` of field "${field.name}" of "${element.id}" is out of bounds. Valid \`nbits\` values must be in the range [1, 32].`;
+        if (field.nbits < 1 || field.nbits > dataWidth)
+          return `The value for \`nbits\` of field "${field.name}" of "${element.id}" is out of bounds. Valid \`nbits\` values must be in the range [1, ${dataWidth}].`;
 
         for (let i = field.lsb; i < field.lsb + field.nbits; i++) {
           if (bitIndices.get(i))
@@ -179,8 +193,8 @@ export const validate = (data: any): string => {
         }
       }
 
-      if (sumOfNbits != 32)
-        return `The sum of \`field.nbits\` for every field of ${element.id} does not equal 32.`;
+      if (sumOfNbits != dataWidth)
+        return `The sum of \`field.nbits\` for every field of ${element.id} does not equal ${dataWidth}.`;
     }
   }
 
@@ -189,7 +203,8 @@ export const validate = (data: any): string => {
 
 // Given a reset value return an error message if it is invalid or "" otherwise
 const isValidResetValue = (
-  reset: string | number | { value: string; resets: string[] }
+  reset: string | number | { value: string; resets: string[] },
+  dataWidth: number
 ): string => {
   let value: string;
 
@@ -220,7 +235,7 @@ const isValidResetValue = (
 
   if (value.toLowerCase().startsWith("0x")) {
     // Return false if the value is too large
-    if (value.substring(2).length > 8) {
+    if (value.substring(2).length > dataWidth / 4) {
       return `Value \`${value}\` is too large.`;
     }
 
@@ -232,7 +247,7 @@ const isValidResetValue = (
     }
   } else if (value.toLowerCase().startsWith("0b")) {
     // Return false if the value is too large
-    if (value.substring(2).length > 32) {
+    if (value.substring(2).length > dataWidth) {
       return `Value \`${value}\` is too large.`;
     }
 
