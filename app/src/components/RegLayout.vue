@@ -11,6 +11,7 @@ import FieldName from "src/components/FieldName.vue";
 const props = defineProps<{
   fields: Field[];
   selectedField?: string;
+  resetState: string;
 }>();
 
 const emit = defineEmits([
@@ -21,8 +22,6 @@ const emit = defineEmits([
 
 const store = useStore();
 
-const resetState = ref("");
-
 // Get a list of all available reset states
 const resets = computed(() => {
   let res = new Set();
@@ -32,7 +31,11 @@ const resets = computed(() => {
 
   return [...res];
 });
-onBeforeMount(() => (resetState.value = resets.value[0] as string));
+
+// Reset field values to the default reset state
+onBeforeMount(() => {
+  resetValues(props.resetState);
+});
 
 // Store the value of the register as an array of 32 Bits
 let registerValue = ref(Array(32).map(() => 0 as Bit));

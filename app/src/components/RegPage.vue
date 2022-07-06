@@ -79,6 +79,7 @@ watch(
     <RegLayout
       v-if="reg.fields"
       :fields="reg.fields"
+      :reset-state="reg.default_reset || ''"
       :selected-field="selectedField"
       @select-field="selectField"
       @highlight-field="highlightField"
