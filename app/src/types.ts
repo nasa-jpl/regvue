@@ -19,6 +19,7 @@ export interface DesignElement {
   fields?: Field[];
   children?: string[];
   links?: Map<string, string>;
+  default_reset?: string;
 }
 
 // Interface representing the attributes of the root project description
@@ -29,6 +30,7 @@ export interface DesignRoot {
   };
   version: string;
   children: string[];
+  default_reset?: string;
 }
 
 // Type representing the supported ways of displaying bit values
@@ -40,10 +42,17 @@ export interface Field {
   lsb: number;
   name: string;
   nbits: number;
-  reset: number | string;
+  reset: {
+    value: number | string;
+    resets: string[];
+  };
   doc?: string;
   value: Bit[];
-  enum?: { name: string; value: string | number; doc: string }[];
+  enum?: {
+    name: string;
+    value: string | number;
+    doc: string;
+  }[];
 }
 
 export interface IncludeElement {

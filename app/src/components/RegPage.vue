@@ -79,10 +79,12 @@ watch(
     <RegLayout
       v-if="reg.fields"
       :fields="reg.fields"
+      :reset-state="reg.default_reset || ''"
       :selected-field="selectedField"
       @select-field="selectField"
       @highlight-field="highlightField"
       @stop-highlight-field="stopHighlightField"
+      @select-reset-state="reg.default_reset = $event"
     />
 
     <!-- Show the register doc description -->
@@ -96,7 +98,7 @@ watch(
       v-if="reg.fields"
       :fields="reg.fields"
       :selected-field="selectedField"
-      class="mt-8 mb-28 w-full px-2"
+      class="my-8 w-full px-2"
       @select-field="selectField"
       @highlight-field="highlightField"
       @stop-highlight-field="stopHighlightField"

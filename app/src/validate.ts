@@ -113,11 +113,10 @@ export const validate = (data: any): string => {
         if (!field.access)
           return `Field "${field.name}" of "${element.id}" is missing required field \`access\`.`;
 
-        if (field.reset == undefined)
-          return `Field "${field.name}" of "${element.id}" is missing required field \`reset\`.`;
-
-        if (!isValidResetValue(field.reset))
-          return `Field "${field.name}" of "${element.id}" has an invalid reset value "${field.reset}".`;
+        const resetValueErr = isValidResetValue(field.reset);
+        if (resetValueErr != "") {
+          return `Field "${field.name}" of "${element.id}" has an invalid reset value. ${resetValueErr}`;
+        }
 
         // Check that lsb is a number in range
         if (field.lsb == undefined)
@@ -158,41 +157,68 @@ export const validate = (data: any): string => {
   return "";
 };
 
-// Given a reset value return true if it is a valid value or false if it is invalid
-const isValidResetValue = (value: string | number): boolean => {
-  value = value.toString();
+// Given a reset value return an error message if it is invalid or "" otherwise
+const isValidResetValue = (
+  reset: string | number | { value: string; resets: string[] }
+): string => {
+  let value: string;
+
+  // An undefined reset value is set to be "?" in store.ts, so it's okay
+  if (reset == undefined) {
+    return "";
+  }
+
+  // Case with single unnamed reset
+  else if (typeof reset == "string" || typeof reset == "number") {
+    value = reset.toString();
+  }
+
+  // Case with named reset states
+  else {
+    value = reset.value.toString();
+
+    if (reset.resets.constructor != Array) {
+      return "`reset.resets` must be an array.";
+    }
+
+    for (const value of reset.resets) {
+      if (typeof value != "string") {
+        return `Value \`${JSON.stringify(value)}\` must be a string.`;
+      }
+    }
+  }
 
   if (value.toLowerCase().startsWith("0x")) {
     // Return false if the value is too large
     if (value.substring(2).length > 8) {
-      return false;
+      return `Value \`${value}\` is too large.`;
     }
 
     // Return false if any character is not a hex character or valid UnknownBit
     for (const char of value.substring(2)) {
       if (!/[0-9A-Fa-f]/.test(char) && !isUnknownBit(char)) {
-        return false;
+        return `Value \`${value}\` contains an invalid hex char "${char}".`;
       }
     }
   } else if (value.toLowerCase().startsWith("0b")) {
     // Return false if the value is too large
     if (value.substring(2).length > 32) {
-      return false;
+      return `Value \`${value}\` is too large.`;
     }
 
     for (const char of value.substring(2)) {
       if (!/[0-1]/.test(char) && !isUnknownBit(char)) {
-        return false;
+        return `Value \`${value}\` contains an invalid binary char "${char}".`;
       }
     }
   } else {
     // Characters must be a valid decimal character
     for (const char of value) {
       if (!/[0-9]/.test(char) && !isUnknownBit(char)) {
-        return false;
+        return `Value \`${value}\` contains an invalid decimal char "${char}".`;
       }
     }
   }
 
-  return true;
+  return "";
 };

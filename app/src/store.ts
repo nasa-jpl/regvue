@@ -7,6 +7,7 @@ import {
   IncludeElement,
   RegisterDescriptionFile,
 } from "src/types";
+import format from "src/format";
 import parse from "src/parse";
 import { validate, validateResponse } from "src/validate";
 
@@ -89,10 +90,10 @@ export const useStore = defineStore("store", {
 
     // Parse JSON data and populate the store variables
     async load(data: RegisterDescriptionFile, url = "") {
-      const [elements, root] = (await formatData(
-        Object.values(data.elements),
-        data.root
-      )) as [Map<string, DesignElement>, DesignRoot];
+      const [elements, root] = (await formatData(data.elements, data.root)) as [
+        Map<string, DesignElement>,
+        DesignRoot
+      ];
 
       if (!elements) throw Error("Error formating data");
       if (!root) throw Error("Error updating DesignRoot");
@@ -100,6 +101,21 @@ export const useStore = defineStore("store", {
       for (const [_, element] of elements.entries()) {
         // Calculate the address from an element's offset and its parents' offsets
         element.addr = getAddress(element.id, elements);
+
+        // Set the default reset state
+        if (element.type == "reg") {
+          element.default_reset = getDefaultResetState(element, elements, root);
+
+          // If a field reset value has no associated reset states, add the default state
+          element.fields?.forEach((field) => {
+            if (field.reset.resets.length == 0) {
+              field.reset.resets = [element.default_reset as string];
+            }
+          });
+
+          // Sort the fields so that the field with the highest LSB is first in the array
+          element.fields?.sort((a, b) => b.lsb - a.lsb);
+        }
       }
 
       this.elements = elements;
@@ -121,7 +137,7 @@ export const useStore = defineStore("store", {
 });
 
 const formatData = async (
-  elements: (DesignElement | IncludeElement)[],
+  elements: { [key: string]: DesignElement | IncludeElement },
   root: DesignRoot
 ) => {
   let formattedElements = new Map<string, DesignElement>();
@@ -191,10 +207,10 @@ const formatData = async (
       }
 
       // From the fetched JSON data create a map of string keys to DesignElements
-      const [newData, _newRoot] = (await formatData(
-        Object.values(Object.values(data)),
-        root
-      )) as [Map<string, DesignElement>, unknown];
+      const [newData, _newRoot] = (await formatData(data, root)) as [
+        Map<string, DesignElement>,
+        unknown
+      ];
 
       // Merge together the new DesignElements with the previously collected elements
       for (const [key, value] of newData.entries()) {
@@ -208,13 +224,23 @@ const formatData = async (
 
       // Set the field.value to be a Bit[] that represents the field.reset or 0
       fields?.forEach((field: Field) => {
-        if (field.reset) {
+        if (typeof field.reset == "string" || typeof field.reset == "number") {
+          field.reset = { value: field.reset, resets: [] };
           field.value = parse.stringToBitArray(
-            field.reset.toString(),
+            field.reset.value.toString(),
+            field.nbits
+          );
+        } else if (field.reset && field.reset.value != undefined) {
+          field.value = parse.stringToBitArray(
+            field.reset.value.toString(),
             field.nbits
           );
         } else {
-          field.value = parse.stringToBitArray("0", field.nbits);
+          field.value = parse.stringToBitArray("?", field.nbits);
+          field.reset = {
+            value: format.bitArrayToString(field.value, "hexadecimal"),
+            resets: [],
+          };
         }
       });
       formattedElements.set(element.id, element);
@@ -222,6 +248,40 @@ const formatData = async (
   }
 
   return [formattedElements, root];
+};
+
+// Return the parent element of a given element
+const getParent = (elementId: string, elements: Map<string, DesignElement>) => {
+  const arr = elementId.split(".");
+  const parentId = arr.slice(0, arr.length - 1).join(".");
+
+  const parentElement = elements.get(parentId);
+  if (!parentElement) return null;
+  return parentElement;
+};
+
+// Return an element's default reset state
+// If not found on element, return the default reset state of nearest ancestor
+const getDefaultResetState = (
+  element: DesignElement,
+  elements: Map<string, DesignElement>,
+  root: DesignRoot
+): string => {
+  if (!element.default_reset) {
+    const parentElem = getParent(element.id, elements);
+    if (!parentElem) {
+      if (root.default_reset) {
+        return root.default_reset;
+      } else {
+        return "Default";
+      }
+    }
+
+    const parentDefaultReset = getDefaultResetState(parentElem, elements, root);
+    return parentDefaultReset;
+  }
+
+  return element.default_reset;
 };
 
 // Helper function to get an element's address from its and its parents' offsets
