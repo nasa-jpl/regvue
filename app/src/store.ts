@@ -227,7 +227,7 @@ const formatData = async (
             field.reset.value.toString(),
             field.nbits
           );
-        } else if (field.reset && field.reset.value) {
+        } else if (field.reset && field.reset.value != undefined) {
           field.value = parse.stringToBitArray(
             field.reset.value.toString(),
             field.nbits
@@ -270,7 +270,7 @@ const getDefaultResetState = (
       if (root.default_reset) {
         return root.default_reset;
       } else {
-        throw Error(`No default reset value could be found for ${element.id}`);
+        return "Default";
       }
     }
 
