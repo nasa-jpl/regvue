@@ -151,13 +151,13 @@ watch(
 
     <!-- Show the main body and fill the remaining screen space -->
     <div
-      class="mt-4 flex h-[90%] flex-grow flex-col justify-between overflow-y-scroll px-8"
+      class="mt-4 flex h-full flex-grow flex-col justify-between overflow-y-scroll px-8 pb-32"
     >
       <BlockPage v-if="element?.type == 'blk'" :block="element" />
       <RegPage v-else-if="element?.type == 'reg'" :reg="element" />
 
       <!-- Display footer text if available -->
-      <div v-if="store.footerText" class="mx-auto mb-16 max-w-[800px] text-xs">
+      <div v-if="store.footerText" class="mx-auto max-w-[800px] text-xs">
         {{ store.footerText }}
       </div>
     </div>
