@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useStore } from "src/store";
 import { DesignElement } from "src/types";
 
 import ElementTitle from "src/components/ElementTitle.vue";
@@ -13,6 +14,7 @@ const props = defineProps<{
 
 const route = useRoute();
 const router = useRouter();
+const store = useStore();
 
 let doc = computed(() => {
   if (props.reg && props.reg.doc) {
@@ -60,6 +62,13 @@ watch(
   () => route.query.field,
   (newValue) => (selectedField.value = (newValue as string) || "")
 );
+
+const selectDefaultReset = (resetState: string) => {
+  const elem = store.elements.get(props.reg.id);
+  if (!elem) throw Error(`Could not find element with id ${props.reg.id}`);
+
+  elem.default_reset = resetState;
+};
 </script>
 
 <template>
@@ -76,7 +85,7 @@ watch(
       @select-field="selectField"
       @highlight-field="highlightField"
       @stop-highlight-field="stopHighlightField"
-      @select-reset-state="reg.default_reset = $event"
+      @select-reset-state="selectDefaultReset($event)"
     />
 
     <!-- Show the register doc description -->
