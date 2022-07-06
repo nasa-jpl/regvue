@@ -8,6 +8,8 @@ import { useStore } from "src/store";
 import FieldInputBox from "src/components/FieldInputBox.vue";
 import FieldName from "src/components/FieldName.vue";
 
+import ChevronDown from "vue-material-design-icons/ChevronDown.vue";
+
 const props = defineProps<{
   fields: Field[];
   selectedField?: string;
@@ -22,6 +24,12 @@ const emit = defineEmits([
 
 const store = useStore();
 
+let selectedResetState = ref(props.resetState);
+watch(() => props.resetState, (value) => selectedResetState.value = value)
+
+// Control whether or not to show dropdown menu of possible reset states
+let showResets = ref(false);
+
 // Get a list of all available reset states
 const resets = computed(() => {
   let res = new Set();
@@ -29,12 +37,21 @@ const resets = computed(() => {
     field.reset?.resets.forEach((reset) => res.add(reset));
   }
 
-  return [...res];
+    let arr = [...res];
+
+  if (selectedResetState.value == "") {
+    selectedResetState.value = arr[0] as string;
+  } else {
+    arr = arr.filter(e => e != selectedResetState.value);
+    arr.unshift(selectedResetState.value);
+  }
+
+  return arr;
 });
 
 // Reset field values to the default reset state
 onBeforeMount(() => {
-  resetValues(props.resetState);
+  resetValues();
 });
 
 // Store the value of the register as an array of 32 Bits
@@ -89,9 +106,9 @@ const updateDisplayType = (displayType: DisplayType) => {
 };
 
 // Assigns each field.value based on its field.reset
-const resetValues = (resetState: string) => {
+const resetValues = () => {
   props.fields.forEach((field) => {
-    if (field.reset.resets.includes(resetState)) {
+    if (field.reset.resets.includes(selectedResetState.value)) {
       field.value = parse.stringToBitArray(
         field.reset.value.toString(),
         field.nbits
@@ -289,18 +306,53 @@ watch(
 
       <!-- Show reset values button -->
       <div>
-        <select v-model="resetState">
-          <option v-for="r in resets" :value="r">{{ r }}</option>
-        </select>
+        <div class="flex flex-row">
+          <!-- Button to reset values to the last selected reset state -->
+          <button
+            id="reset-values-button"
+            class="rounded-tl border border-r-0 border-gray-400 bg-white px-1 shadow hover:bg-gray-100 w-24 text-left truncate"
+            :class="showResets ? '' : 'rounded-bl'"
+            title="Set all field values to their reset value"
+            @click="resetValues()"
+          >
+            {{ resets[0] }} Reset
+          </button>
 
-        <button
-          id="reset-values-button"
-          class="rounded border border-gray-400 bg-white px-1 shadow hover:bg-gray-100"
-          title="Set all field values to their reset value"
-          @click="resetValues(resetState)"
+          <!-- Button to open dropdown menu with other states -->
+          <button
+            class="rounded-tr border border-gray-400 bg-white shadow"
+            :class="
+              resets.length > 1
+                ? 'hover:cursor-pointer hover:bg-gray-100'
+                : 'text-gray-400 hover:cursor-default',
+              showResets ? '' : 'rounded-br'
+            "
+            @click="showResets = !showResets"
+            :disabled="resets.length <= 1"
+            @blur="nextTick(() => showResets = false)"
+          >
+            <chevron-down />
+          </button>
+        </div>
+
+        <!-- Menu with buttons to reset to other reset states -->
+        <div
+          class="fixed mr-8 divide-y rounded-b border border-t-0 border-gray-400 w-[calc(7.5rem+2px)]"
+          :class="showResets ? '' : 'opacity-0'"
         >
-          x
-        </button>
+          <button
+            v-for="reset in resets.slice(1)"
+            class="w-full px-1 shadow hover:bg-gray-100 text-left truncate"
+            :title="reset + ' Reset'"
+            @click="
+              selectedResetState = reset as string;
+              showResets = false;
+              resetValues()
+            "
+          >
+            {{ reset }} Reset
+          </button>
+        </div>
       </div>
     </div>
   </div>
