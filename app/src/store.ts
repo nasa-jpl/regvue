@@ -103,7 +103,16 @@ export const useStore = defineStore("store", {
         element.addr = getAddress(element.id, elements);
 
         // Set the default reset state
-        element.default_reset = getDefaultResetState(element, elements, root);
+        if (element.type == "reg") {
+          element.default_reset = getDefaultResetState(element, elements, root);
+
+          // If a field reset value has no associated reset states, add the default state
+          element.fields?.forEach((field) => {
+            if (field.reset.resets.length == 0) {
+              field.reset.resets = [element.default_reset as string];
+            }
+          });
+        }
       }
 
       this.elements = elements;
