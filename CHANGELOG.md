@@ -7,12 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Added breadcrumb links to element pages ([#112](https://github.jpl.nasa.gov/regvue/regvue/pull/112))
 - Added support for multiple reset values [#108](https://github.jpl.nasa.gov/regvue/regvue/pull/108)).
 - Added support for enumerated field values [#107](https://github.jpl.nasa.gov/regvue/regvue/pull/107)).
 - Added the option to display the field table starting with LSB ([#106](https://github.jpl.nasa.gov/regvue/regvue/pull/106)).
 - Added schema and semantic validation that checks uploaded/fetched data ([#103](https://github.jpl.nasa.gov/regvue/regvue/pull/103)).
 - Added option for footer text to be set in `app.config.json` file ([#102](https://github.jpl.nasa.gov/regvue/regvue/pull/102)).
 - Added support for nested inclusion of register descriptions ([#101](https://github.jpl.nasa.gov/regvue/regvue/pull/101)).
+
+### Fixed
+- Menu now closes when clicking grayed-out background in small screen display mode ([#111](https://github.jpl.nasa.gov/regvue/regvue/pull/111)).
 
 ## [0.5.2] - 2022-06-21
 ### Added
