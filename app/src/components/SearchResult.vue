@@ -1,7 +1,6 @@
 <script setup lang="ts">
 /* eslint-disable vue/no-v-html */
 import { ref, computed } from "vue";
-import { useRouter } from "vue-router";
 import { Suggestion } from "src/types";
 import format from "src/format";
 import { useStore } from "src/store";
@@ -13,7 +12,6 @@ const props = defineProps<{
   query: string;
 }>();
 
-const router = useRouter();
 const store = useStore();
 
 const elementId = ref(props.suggestion.path.params.elementId.join("."));
@@ -98,12 +96,10 @@ const boldMatchingText = (text: string, query: string, replaceAll = true) => {
   >
     <!-- Show the name of the suggestion and truncate if too long -->
     <div :title="suggestion.name" class="flex flex-row justify-between">
-      <a :href="router.resolve(suggestion.path).href" @click.prevent>
-        <div
-          class="text-lg"
-          v-html="boldMatchingText(suggestion.name, query)"
-        ></div>
-      </a>
+      <div
+        class="text-lg"
+        v-html="boldMatchingText(suggestion.name, query)"
+      ></div>
       <div class="mt-1">{{ type }}</div>
     </div>
 

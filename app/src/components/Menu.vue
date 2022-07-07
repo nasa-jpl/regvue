@@ -172,12 +172,12 @@ onMounted(async () => {
 });
 
 // Change the route when a node is clicked on
-const onNodeSelect = (key: string) => {
-  router.push({
+const getNodeHref = (key: string) => {
+  return router.resolve({
     name: "element",
     params: { elementId: key.split(".") },
     query: { data: route.query.data },
-  });
+  }).href;
 };
 
 // Keep track of when the resize bar is being dragged
@@ -239,24 +239,24 @@ onMounted(() => {
       :class="menuVisible ? '' : 'hidden'"
     >
       <!-- Show the nodes -->
-      <div v-for="node in nodes" :key="node.key" :id="node.key">
+      <div v-for="node in nodes" :id="node.key" :key="node.key">
         <!--  Display only if the node is marked visible -->
-        <div
+        <a
           v-if="node.isVisible"
           :id="'menu-node-' + node.key.replaceAll('.', '-')"
           class="flex flex-row justify-between space-x-4 border-y-[0.5px] px-4 hover:cursor-pointer hover:bg-gray-200"
           :class="node.key == currentElement ? 'bg-blue-200' : ''"
           :style="`padding-left: ${getIndent(node)}px`"
-          @click="onNodeSelect(node.key)"
+          :href="getNodeHref(node.key)"
         >
           <div
             class="flex flex-grow flex-row overflow-x-hidden"
             :title="getDisplayName(node)"
           >
             <!--  Display the name and the open button for a menu node-->
-            <div class="z-10" @click.stop="toggleChildrenNodes(node)">
+            <button class="z-10" @click.stop="toggleChildrenNodes(node)">
               <!-- Show a close button if the node has open children-->
-              <span
+              <template
                 v-if="
                   node.children &&
                   node.children.length > 0 &&
@@ -264,13 +264,13 @@ onMounted(() => {
                 "
               >
                 <menu-down class="close-menu-node-btn" />
-              </span>
+              </template>
 
               <!-- Show an open button if the node has closed children -->
-              <span v-else-if="node.children">
+              <template v-else-if="node.children">
                 <menu-right class="open-menu-node-btn" />
-              </span>
-            </div>
+              </template>
+            </button>
 
             <!-- Display the name of the node and truncate it if it is too long -->
             <div class="ml-0 truncate text-left">
@@ -281,7 +281,7 @@ onMounted(() => {
           <div>
             {{ node.data.addr }}
           </div>
-        </div>
+        </a>
       </div>
     </div>
 
