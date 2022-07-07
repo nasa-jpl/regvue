@@ -63,13 +63,13 @@ watch(
     >
       <div class="ml-6 flex flex-row items-center space-x-2">
         <!-- Show menu to collapse nav bar (needs to be wrapped in div for @click to work) -->
-        <div
+        <button
           id="toggle-menu-button"
           class="hover:cursor-pointer hover:bg-gray-400"
           @click="emit('toggle-menu')"
         >
           <hamburger-menu />
-        </div>
+        </button>
 
         <!-- Show design name -->
         <div id="header-title">
@@ -93,12 +93,16 @@ watch(
         >
 
         <!-- Show icon to open modal to choose new data file -->
-        <file-replace-outline
-          id="show-open-modal-button"
-          class="text-gray-600 hover:cursor-pointer hover:bg-gray-400"
-          title="Open a new design file"
+        <button
+          class="hover:cursor-pointer hover:bg-gray-400"
           @click="emit('show-open-modal')"
-        />
+        >
+          <file-replace-outline
+            id="show-open-modal-button"
+            class="text-gray-600"
+            title="Open a new design file"
+          />
+        </button>
       </div>
     </div>
   </div>

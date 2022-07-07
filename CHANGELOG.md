@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added support for nested inclusion of register descriptions ([#101](https://github.jpl.nasa.gov/regvue/regvue/pull/101)).
 
 ### Fixed
+- Fixed bug when entering special characters in the search box ([#114](https://github.jpl.nasa.gov/regvue/regvue/pull/114)).
 - Menu now closes when clicking grayed-out background in small screen display mode ([#111](https://github.jpl.nasa.gov/regvue/regvue/pull/111)).
 
 ## [0.5.2] - 2022-06-21

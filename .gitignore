@@ -30,3 +30,7 @@ lerna-debug.log*
 
 # Cypress test result video
 *.mp4
+
+# Test data files
+app/public/*.json
+!app/public/example.json
