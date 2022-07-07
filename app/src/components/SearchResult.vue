@@ -100,7 +100,7 @@ const boldMatchingText = (text: string, query: string, replaceAll = true) => {
     <!-- Show the name of the suggestion and truncate if too long -->
     <div :title="suggestion.name" class="flex flex-row justify-between">
       <div
-        class="text-lg"
+        class="search-result-name text-lg"
         v-html="boldMatchingText(suggestion.name, query)"
       ></div>
       <div class="mt-1">{{ type }}</div>
