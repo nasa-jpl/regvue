@@ -245,6 +245,7 @@ const getErrorMessage = (value: string) => {
       >
         <div
           v-for="e in enums"
+          :key="e.name"
           class="border-b border-gray-400 px-1 hover:cursor-pointer hover:bg-gray-300"
         >
           <!-- Show individual enum value by as "(value) name" -->

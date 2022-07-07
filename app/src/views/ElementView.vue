@@ -130,6 +130,8 @@ watch(
 
   <div class="flex h-full flex-row">
     <!-- Show the navigation menu on the left -->
+
+    <!-- If on a smaller window show a grayed-out background -->
     <div
       v-if="windowWidth < WINDOW_BREAKPOINT"
       class="absolute z-40 flex h-full w-full"
@@ -143,6 +145,7 @@ watch(
         @click.stop
       />
     </div>
+
     <Menu
       v-else
       :menu-visible="menuVisible"

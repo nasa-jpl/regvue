@@ -36,7 +36,7 @@ const resets = computed(() => {
   }
 
   let arr = [...res];
-  arr = arr.filter(e => e != props.resetState);
+  arr = arr.filter((e) => e != props.resetState);
   arr.sort();
   arr.unshift(props.resetState);
 
@@ -120,10 +120,10 @@ const resetValues = () => {
 // Emit an event when the user selects a new reset state
 const selectResetState = (resetState: string) => {
   emit("select-reset-state", resetState);
-  
+
   showResets.value = false;
   nextTick(() => resetValues());
-}
+};
 
 // Ues the field values to obtain a new value for the register
 const updateRegisterValue = () => {
@@ -312,11 +312,11 @@ watch(
           <!-- Button to reset values to the last selected reset state -->
           <button
             id="reset-values-button"
-            class="rounded-tl border border-gray-400 bg-white px-1 shadow hover:bg-gray-100 w-32 truncate"
-            :class="
+            class="w-32 truncate rounded-tl border border-gray-400 bg-white px-1 shadow hover:bg-gray-100"
+            :class="[
               showResets ? '' : 'rounded-bl',
-              resets.length > 1 ? 'border-r-0': 'rounded-r'
-            "
+              resets.length > 1 ? 'border-r-0' : 'rounded-r',
+            ]"
             :title="'Reset field values to ' + resets[0] + ' Reset'"
             @click="resetValues()"
           >
@@ -338,11 +338,12 @@ watch(
         <!-- Menu with buttons to reset to other reset states -->
         <div
           v-if="showResets"
-          class="fixed mr-8 divide-y rounded-b border border-t-0 border-gray-400 w-[calc(9.5rem+2px)]"
+          class="fixed mr-8 w-[calc(9.5rem+2px)] divide-y rounded-b border border-t-0 border-gray-400"
         >
           <button
             v-for="reset in resets.slice(1)"
-            class="w-full px-1 shadow hover:bg-gray-100 text-left truncate"
+            :key="reset as string"
+            class="w-full truncate px-1 text-left shadow hover:bg-gray-100"
             :title="'Reset field values to ' + reset + ' Reset'"
             @mousedown="selectResetState(reset as string)"
           >
