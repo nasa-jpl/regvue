@@ -2,6 +2,7 @@
 import { DesignElement } from "src/types";
 
 import BlockTableEntry from "src/components/BlockTableEntry.vue";
+import ElementTitle from "src/components/ElementTitle.vue";
 
 defineProps<{
   block: DesignElement;
@@ -11,22 +12,7 @@ defineProps<{
 <template>
   <div>
     <div class="mx-auto max-w-[1200px]">
-      <div class="mb-3">
-        <div>
-          <!-- Show name -->
-          <span class="text-xl font-semibold">
-            {{ block.display_name ? block.display_name : block.name }}
-          </span>
-          <!-- Show the version -->
-          <template v-if="block.version" class="text-lg">
-            - ({{ block.version }})
-          </template>
-        </div>
-        <!-- Show the starting address of the block -->
-        <div>
-          {{ "0x" + block.addr.toString(16) }}
-        </div>
-      </div>
+      <ElementTitle :element="block" />
 
       <!-- Display the doc -->
       <div>

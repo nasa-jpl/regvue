@@ -3,6 +3,7 @@ import { ref, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { DesignElement } from "src/types";
 
+import ElementTitle from "src/components/ElementTitle.vue";
 import RegFields from "src/components/RegFields.vue";
 import RegLayout from "src/components/RegLayout.vue";
 
@@ -63,17 +64,8 @@ watch(
 
 <template>
   <div class="mx-auto max-w-[1200px]">
-    <div class="mb-3">
-      <div>
-        <span class="text-xl font-semibold">
-          {{ reg.display_name ? reg.display_name : reg.name }}
-        </span>
-        <template v-if="reg.version"> - ({{ reg.version }}) </template>
-      </div>
-      <div>
-        {{ "0x" + reg.addr.toString(16) }}
-      </div>
-    </div>
+    <!-- Show the name/id/addr -->
+    <ElementTitle :element="reg" />
 
     <!-- Show the field/register value encode/decode table and associated buttons -->
     <RegLayout
