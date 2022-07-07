@@ -3,7 +3,7 @@ import { computed, ref, Ref, onBeforeMount, onUnmounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Query } from "lunr";
 import { createSearchIndex } from "src/search";
-import type { Suggestion } from "src/types";
+import { Suggestion } from "src/types";
 import { useStore } from "src/store";
 
 import AppleKeyboardCommand from "vue-material-design-icons/AppleKeyboardCommand.vue";
@@ -204,6 +204,11 @@ const go = (suggestion: Suggestion | number, suggestions?: Suggestion[]) => {
   focused.value = false;
 };
 
+// Returns the href attribute that a suggestion maps to
+const getSuggestionLink = (suggestion: Suggestion) => {
+  return router.resolve(suggestion.path).href;
+};
+
 const focus = (i: number, scrollIntoView = true) => {
   // The lowest focusIndex should be -1 for "unfocused"
   if (i < -1) {
@@ -379,17 +384,22 @@ watch(
             v-if="showSuggestions && suggestions.length > 0"
             id="search-results-div"
           >
-            <SearchResult
+            <a
               v-for="(suggestion, i) in suggestions"
-              :key="suggestion.name + i"
-              :suggestion="suggestion"
-              :index="i"
-              :focus-index="focusIndex"
-              :query="query"
-              @mousedown="go(suggestion)"
-              @mouseenter="focus(i, false)"
-              @mouseleave="focus(-1, false)"
-            />
+              :key="i"
+              :href="getSuggestionLink(suggestion)"
+            >
+              <SearchResult
+                :key="suggestion.name + i"
+                :suggestion="suggestion"
+                :index="i"
+                :focus-index="focusIndex"
+                :query="query"
+                @mousedown="go(suggestion)"
+                @mouseenter="focus(i, false)"
+                @mouseleave="focus(-1, false)"
+              />
+            </a>
           </div>
 
           <!-- Display a section if there are no results -->
@@ -414,14 +424,17 @@ watch(
               @mouseenter="focus(i, false)"
               @mouseleave="focus(-1, false)"
             >
-              <SearchResult
-                class="mr-0 mb-0 grow"
-                :suggestion="suggestion"
-                :index="i"
-                :focus-index="focusIndex"
-                :query="query"
-                @mousedown="go(suggestion)"
-              />
+              <a class="grow" :href="getSuggestionLink(suggestion)">
+                <SearchResult
+                  class="mr-0 mb-0"
+                  :suggestion="suggestion"
+                  :index="i"
+                  :focus-index="focusIndex"
+                  :query="query"
+                  @mousedown="go(suggestion)"
+                />
+              </a>
+
               <!-- Show an "x" button on the right side that will remove the recent suggestion -->
               <button
                 :id="'remove-recent-search-btn-' + i"
