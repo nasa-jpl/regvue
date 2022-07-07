@@ -326,6 +326,7 @@ watch(
           <!-- Button to open dropdown menu with other states -->
           <button
             v-if="resets.length > 1"
+            id="reset-states-dropdown-button"
             class="rounded-tr border border-gray-400 bg-white shadow hover:cursor-pointer hover:bg-gray-100"
             :class="showResets ? '' : 'rounded-br'"
             @click="showResets = !showResets"
@@ -338,10 +339,12 @@ watch(
         <!-- Menu with buttons to reset to other reset states -->
         <div
           v-if="showResets"
-          class="fixed mr-8 w-[calc(9.5rem+2px)] divide-y rounded-b border border-t-0 border-gray-400"
+          id="reset-states-div"
+          class="fixed z-50 mr-8 w-[calc(9.5rem+2px)] divide-y rounded-b border border-t-0 border-gray-400 bg-white"
         >
           <button
-            v-for="reset in resets.slice(1)"
+            v-for="(reset, i) in resets.slice(1)"
+            :id="'select-reset-state-' + i"
             :key="reset as string"
             class="w-full truncate px-1 text-left shadow hover:bg-gray-100"
             :title="'Reset field values to ' + reset + ' Reset'"

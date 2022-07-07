@@ -153,4 +153,29 @@ describe("register-layout", () => {
     cy.get("#input-box-rsvd").should("have.value", "0xF0F0F?");
     cy.get("#input-box-register").should("have.value", "0xF0F0F?1?");
   });
+
+  it("swaps between reset states", () => {
+    // Navigate to regA2 which has mutliple resets
+    cy.get("#search-input").type("regA2");
+    cy.get("#suggestion-0").click();
+    cy.get("#element-name").should("have.text", "regA2");
+
+    // Ensure that the reset states button starts off with the defaults
+    cy.get("#reset-values-button").should("include.text", "RS1 Reset");
+    cy.get("#reset-states-dropdown-button").click();
+    cy.get("#reset-states-div").should("be.visible");
+
+    // Choose the next reset state
+    cy.get("#select-reset-state-0").click();
+    cy.get("#reset-values-button").should("include.text", "RS2 Reset").click();
+    cy.get("#reset-states-div").should("not.exist");
+
+    // Ensure that the register value resets to RS2
+    cy.get("#input-box-register").should("have.value", "0x??????00");
+
+    // Ensure it can swap back
+    cy.get("#reset-states-dropdown-button").click();
+    cy.get("#select-reset-state-0").click();
+    cy.get("#input-box-register").should("have.value", "0x??020100");
+  });
 });

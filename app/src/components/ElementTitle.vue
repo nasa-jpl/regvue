@@ -28,7 +28,7 @@ const getLink = (index: number) => {
   <div class="mb-3">
     <div>
       <!-- Show the display name -->
-      <span class="text-xl font-semibold">
+      <span id="element-name" class="text-xl font-semibold">
         {{ element.display_name ? element.display_name : element.name }}
       </span>
 
