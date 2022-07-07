@@ -43,15 +43,15 @@ const toggleDisplayOrder = () => {
   }
 }
 
-const navigateToField = (fieldName: string) => {
+const selectField = (fieldName: string) => {
   emit("select-field", fieldName, props.selectedField == fieldName);
 };
 
-const selectField = (fieldName: string) => {
+const highlightField = (fieldName: string) => {
   emit("highlight-field", fieldName);
 };
 
-const deselectField = () => {
+const stopHighlightField = () => {
   emit("stop-highlight-field");
 };
 </script>
@@ -86,9 +86,9 @@ const deselectField = () => {
             selectedField == field.name ? 'bg-yellow-50' : '',
            (selectedField || selectedField == '') ? 'hover:cursor-pointer' : ''
           "
-          @mouseenter="selectField(field.name)"
-          @mouseleave="deselectField"
-          @click="navigateToField(field.name)"
+          @mouseenter="highlightField(field.name)"
+          @mouseleave="stopHighlightField"
+          @click="selectField(field.name)"
         >
           <!-- Show the bit range -->
           <td class="px-2 text-center">
