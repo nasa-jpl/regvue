@@ -7,12 +7,13 @@ const router = useRouter();
 const baseUrl = window.location.origin + "/#";
 const location = window.location;
 
-const goToFirstRegister = () => {
-  router.push({ name: "default", query: { data: route.query.data } });
+const getFirstRegisterHref = () => {
+  return router.resolve({ name: "default", query: { data: route.query.data } })
+    .href;
 };
 
-const goToOpenPage = () => {
-  router.push({ name: "open" });
+const getOpenPageHref = () => {
+  return router.resolve({ name: "open" }).href;
 };
 </script>
 
@@ -24,18 +25,18 @@ const goToOpenPage = () => {
     </p>
 
     <div class="mt-10">
-      <span
+      <a
         class="underline hover:cursor-pointer hover:text-gray-500"
-        @click="goToFirstRegister()"
-        >Return</span
+        :href="getFirstRegisterHref()"
+        >Return</a
       >
       home
     </div>
     <div>
-      <span
+      <a
         class="underline hover:cursor-pointer hover:text-gray-500"
-        @click="goToOpenPage()"
-        >Open</span
+        :href="getOpenPageHref()"
+        >Open</a
       >
       new data file
     </div>
