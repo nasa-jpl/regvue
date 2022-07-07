@@ -166,4 +166,9 @@ describe("search-component", () => {
       .should("be.visible")
       .and("not.have.class", "outline-blue-500");
   });
+
+  it("allow special regex characters", () => {
+    cy.get("#search-input-div").type("*)(+][");
+    cy.get("#no-search-results-div").should("exist");
+  });
 });
