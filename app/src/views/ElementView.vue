@@ -134,19 +134,21 @@ watch(
       v-if="windowWidth < WINDOW_BREAKPOINT"
       class="absolute z-40 flex h-full w-full"
       :class="menuVisible ? 'bg-gray-300/50' : 'hidden'"
+      @click="menuVisible = false"
     >
       <Menu
+        :menu-visible="menuVisible"
         @menu-collapsed="menuVisible = false"
         @resize="menuVisible = true"
-        :menu-visible="menuVisible"
+        @click.stop
       />
     </div>
     <Menu
       v-else
+      :menu-visible="menuVisible"
       @menu-collapsed="menuVisible = false"
       @resize="menuVisible = true"
       @toggle-menu="toggleMenu()"
-      :menu-visible="menuVisible"
     />
 
     <!-- Show the main body and fill the remaining screen space -->
