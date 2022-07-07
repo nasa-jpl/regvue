@@ -77,6 +77,9 @@ const addr = computed(() => {
 
 // Returns HTML formatted text that will wrap any text that matches the query in <b> tags
 const boldMatchingText = (text: string, query: string, replaceAll = true) => {
+  // Escape any regex characters in the query string
+  query = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
   if (replaceAll) {
     return text.replaceAll(
       new RegExp(query, "ig"),
