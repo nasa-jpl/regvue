@@ -23,13 +23,16 @@ const emit = defineEmits([
 const store = useStore();
 
 // Incrementing this key will force the BitTable to rerender
-let resetTableKey = ref(0);
+const resetTableKey = ref(0);
+
+// Control whether to highlight differing fields
+const showDiff = ref(false);
 
 // Control whether or not to display LSB or MSB first
-let useByteSwap = ref(store.useByteSwap);
+const useByteSwap = ref(store.useByteSwap);
 
 // Control what base the field/register values should be displayed in
-let selectedDisplayType: Ref<DisplayType> = ref(store.selectedDisplayType);
+const selectedDisplayType: Ref<DisplayType> = ref(store.selectedDisplayType);
 
 // Toggles the useByteSwap variable
 const toggleByteSwap = () => {
@@ -37,6 +40,11 @@ const toggleByteSwap = () => {
   store.useByteSwap = useByteSwap.value;
   useByteSwap.value = !useByteSwap.value;
 
+  resetTableKey.value += 1;
+};
+
+const toggleShowDiff = () => {
+  showDiff.value = !showDiff.value;
   resetTableKey.value += 1;
 };
 
@@ -98,6 +106,7 @@ watch(
     :fields="fields"
     :selected-display-type="selectedDisplayType"
     :selected-field="(selectedField as string)"
+    :show-diff="showDiff"
     :use-byte-swap="useByteSwap"
     @highlight-field="emit('highlight-field', $event)"
     @stop-highlight-field="emit('stop-highlight-field')"
@@ -109,8 +118,10 @@ watch(
     :regId="regId"
     :fields="fields"
     :selected-display-type="selectedDisplayType"
+    :show-diff="showDiff"
     :use-byte-swap="useByteSwap"
     @toggle-byte-swap="toggleByteSwap()"
+    @toggle-show-diff="toggleShowDiff()"
     @update-display-type="updateDisplayType($event)"
     @reset-values="resetValues($event)"
     @add-values-row="addValuesRow()"

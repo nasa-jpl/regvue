@@ -10,6 +10,7 @@ const props = defineProps<{
   fields: Field[];
   selectedDisplayType: DisplayType;
   selectedField?: string;
+  showDiff: boolean;
   useByteSwap: boolean;
 }>();
 
@@ -109,6 +110,20 @@ watch(
     }
   }
 );
+
+const highlightDiff = (value: Bit[][]) => {
+  if (!props.showDiff || value.length <= 1) return false;
+
+  for (let i = 0; i < (value[0] || []).length; i++) {
+    const val0 = value.at(0)?.at(i);
+    const val1 = value.at(1)?.at(i);
+
+    if (val0 != val1) {
+      return true;
+    }
+  }
+  return false;
+};
 </script>
 
 <template>
@@ -136,7 +151,10 @@ watch(
           :key="field.name"
           :colspan="field.nbits"
           class="border border-black text-center hover:cursor-pointer"
-          :class="selectedField == field.name ? 'bg-yellow-50' : ''"
+          :class="[
+            selectedField == field.name ? 'bg-yellow-50' : '',
+            highlightDiff(field.value) ? 'bg-purple-200/50' : '',
+          ]"
           @mouseenter="emit('highlight-field', field.name)"
           @mouseleave="emit('stop-highlight-field')"
           @click="emit('select-field', field.name)"
@@ -152,7 +170,10 @@ watch(
             v-for="field in fields"
             :key="field.name"
             class="border border-black"
-            :class="selectedField == field.name ? 'bg-yellow-50' : ''"
+            :class="[
+              selectedField == field.name ? 'bg-yellow-50' : '',
+              highlightDiff(field.value) ? 'bg-purple-200/50' : '',
+            ]"
             :colspan="field.nbits"
             @mouseenter="emit('highlight-field', field.name)"
             @mouseleave="emit('stop-highlight-field')"

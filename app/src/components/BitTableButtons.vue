@@ -11,12 +11,14 @@ const props = defineProps<{
   regId: string;
   fields: Field[];
   selectedDisplayType: DisplayType;
+  showDiff: boolean;
   useByteSwap: boolean;
 }>();
 
 const emit = defineEmits([
   "update-display-type",
   "toggle-byte-swap",
+  "toggle-show-diff",
   "reset-values",
   "add-values-row",
   "remove-values-row",
@@ -99,6 +101,20 @@ const selectResetState = (state: string) => {
           @click="emit('toggle-byte-swap')"
         >
           Byte Swap
+        </button>
+
+        <!-- Show button to highlight diff between fields -->
+        <button
+          v-if="(fields[0]?.value || []).length > 1"
+          class="rounded border border-gray-400 px-1 hover:cursor-pointer"
+          :class="
+            showDiff
+              ? 'bg-gray-200 font-semibold text-green-700'
+              : 'hover:bg-gray-100'
+          "
+          @click="emit('toggle-show-diff')"
+        >
+          Show Diff
         </button>
       </div>
 

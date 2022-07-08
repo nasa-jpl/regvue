@@ -69,8 +69,6 @@ const deactivate = () => {
 
 // Determine whether to emit the value change
 const updateValue = (addEnumName = false) => {
-  console.log("updating");
-
   const elem = document.getElementById(
     "input-box-" + props.name + "-" + props.index
   ) as HTMLInputElement;
