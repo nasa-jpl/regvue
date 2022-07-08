@@ -178,4 +178,18 @@ describe("register-layout", () => {
     cy.get("#select-reset-state-0").click();
     cy.get("#input-box-register").should("have.value", "0x??020100");
   });
+
+  it("shows enumerated field values", () => {
+    cy.get("#input-box-long_command")
+      .type("0x5{enter}")
+      .should("have.value", "0x5 (START)");
+    cy.get("#select-display-type-binary").click();
+    cy.get("#input-box-long_command").should("have.value", "0b0101 (START)");
+
+    cy.get("#input-box-long_command")
+      .type("0b1010{enter}")
+      .should("have.value", "0b1010 (STOP)");
+    cy.get("#select-display-type-hexadecimal").click();
+    cy.get("#input-box-long_command").should("have.value", "0xA (STOP)");
+  });
 });
