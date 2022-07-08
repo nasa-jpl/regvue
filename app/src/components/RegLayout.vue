@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, Ref, nextTick, watch } from "vue";
 import { useRoute } from "vue-router";
-import { DisplayType, Field } from "src/types";
+import { Bit, DisplayType, Field } from "src/types";
 import parse from "src/parse";
 import { useStore } from "src/store";
 
@@ -50,15 +50,27 @@ const updateDisplayType = (displayType: DisplayType) => {
 
 // Reset each field value to a named reset state
 const resetValues = (resetState: string) => {
+  console.log("calling reset with " + resetState);
+
   props.fields.forEach((field) => {
     if (field.reset.resets.includes(resetState)) {
-      field.value = parse.stringToBitArray(
-        field.reset.value.toString(),
-        field.nbits
+      field.value = field.value.map(() =>
+        parse.stringToBitArray(field.reset.value.toString(), field.nbits)
       );
     } else {
-      field.value = parse.stringToBitArray("?", field.nbits);
+      field.value = field.value.map(() =>
+        parse.stringToBitArray("?", field.nbits)
+      );
     }
+  });
+
+  resetTableKey.value += 1;
+};
+
+const addValuesRow = () => {
+  // Add an entry to field.value
+  props.fields.forEach((field) => {
+    field.value.push(Array(field.nbits).fill(0 as Bit));
   });
 
   resetTableKey.value += 1;
@@ -94,5 +106,6 @@ watch(
     @toggle-byte-swap="toggleByteSwap()"
     @update-display-type="updateDisplayType($event)"
     @reset-values="resetValues($event)"
+    @add-values-row="addValuesRow()"
   />
 </template>

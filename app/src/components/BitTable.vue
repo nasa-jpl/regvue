@@ -20,7 +20,9 @@ const emit = defineEmits([
 ]);
 
 // Store the value of the register as an array of 32 Bits
-let registerValue = ref(Array(32).map(() => 0 as Bit));
+let registerValue = ref(
+  props.fields[0]?.value.map(() => Array(32).map(() => 0 as Bit)) || []
+);
 
 // Index variables that can be incremeneted to force a reload of the child
 // FieldInputBox components
@@ -43,12 +45,14 @@ const byteSwap = (bitArray: Bit[]) => {
 };
 
 // Parse the user input to update the field value
-const onFieldValueChange = (field: Field, value: string) => {
+const onFieldValueChange = (field: Field, value: string, index: number) => {
+  console.log(`field value changed (value: ${value}, index: ${index})`);
+
   const newValue = parse.stringToBitArray(value, field.nbits);
-  field.value = newValue;
+  field.value[index] = newValue;
 
   // Update the register value
-  updateRegisterValue();
+  updateRegisterValue(index);
   registerKeyIndex.value += 1;
 
   // Stop highlighting the field
@@ -56,21 +60,21 @@ const onFieldValueChange = (field: Field, value: string) => {
 };
 
 // Obtains the input register value and uses it to update the field values
-const onRegisterInput = (input: string) => {
+const onRegisterInput = (input: string, index: number) => {
   const value = parse.stringToBitArray(input);
-  registerValue.value = value;
+  registerValue.value[index] = value;
 
-  populateFieldValuesFromRegisterValue(value);
+  populateFieldValuesFromRegisterValue(value, index);
   fieldKeyIndex.value += 1;
 };
 
 // Ues the field values to obtain a new value for the register
-const updateRegisterValue = () => {
+const updateRegisterValue = (index: number) => {
   let result: Bit[] = [];
 
   // Loops through the fields and add their values to the front of the result arr
   props.fields.forEach((field) => {
-    result.unshift(...field.value);
+    result.unshift(...(field.value[index] || []));
   });
 
   // Byte swap the values if enabled
@@ -78,19 +82,21 @@ const updateRegisterValue = () => {
     result = byteSwap(result);
   }
 
-  registerValue.value = result;
+  registerValue.value[index] = result;
 };
-updateRegisterValue(); // Initial call on setup
+for (let i = 0; i < (props.fields[0]?.value || []).length; i++) {
+  updateRegisterValue(i); // Initial call on setup
+}
 
 // Assigns all fields a new value based on a new register value
-const populateFieldValuesFromRegisterValue = (value: Bit[]) => {
+const populateFieldValuesFromRegisterValue = (value: Bit[], index: number) => {
   if (props.useByteSwap) {
     value = byteSwap(value);
   }
 
   // Assign each field by indexing the register value according to lsb and nbits
   props.fields.forEach((field) => {
-    field.value = value.slice(field.lsb, field.lsb + field.nbits);
+    field.value[index] = value.slice(field.lsb, field.lsb + field.nbits);
   });
 };
 
@@ -98,7 +104,9 @@ const populateFieldValuesFromRegisterValue = (value: Bit[]) => {
 watch(
   () => props.useByteSwap,
   () => {
-    updateRegisterValue();
+    for (let i = 0; i < (props.fields[0]?.value || []).length; i++) {
+      updateRegisterValue(i);
+    }
   }
 );
 </script>
@@ -137,43 +145,47 @@ watch(
         </td>
       </tr>
 
-      <!-- Display the individual field input boxes -->
-      <tr>
-        <td
-          v-for="field in fields"
-          :key="field.name"
-          class="border border-black"
-          :class="selectedField == field.name ? 'bg-yellow-50' : ''"
-          :colspan="field.nbits"
-          @mouseenter="emit('highlight-field', field.name)"
-          @mouseleave="emit('stop-highlight-field')"
-        >
-          <FieldInputBox
-            :key="field.name + '-' + fieldKeyIndex"
-            :name="field.name"
-            :bit-array="field.value"
-            :nbits="field.nbits"
-            :enums="field.enum || []"
-            :selected-display-type="selectedDisplayType"
-            @value-changed="onFieldValueChange(field, $event)"
-          />
-        </td>
-      </tr>
+      <template v-for="(_, i) in fields[0]?.value" :key="i">
+        <!-- Display the individual field input boxes -->
+        <tr>
+          <td
+            v-for="field in fields"
+            :key="field.name"
+            class="border border-black"
+            :class="selectedField == field.name ? 'bg-yellow-50' : ''"
+            :colspan="field.nbits"
+            @mouseenter="emit('highlight-field', field.name)"
+            @mouseleave="emit('stop-highlight-field')"
+          >
+            <FieldInputBox
+              :key="i + '-' + fieldKeyIndex"
+              :index="i"
+              :name="field.name"
+              :bit-array="field.value[i] || []"
+              :nbits="field.nbits"
+              :enums="field.enum || []"
+              :selected-display-type="selectedDisplayType"
+              @value-changed="onFieldValueChange(field, $event, i)"
+            />
+          </td>
+        </tr>
 
-      <!-- Display the overall register input box -->
-      <tr>
-        <td colspan="32" class="border border-black">
-          <FieldInputBox
-            :key="'register-input-' + registerKeyIndex"
-            name="register"
-            :bit-array="registerValue"
-            :nbits="32"
-            :enums="[]"
-            :selected-display-type="selectedDisplayType"
-            @value-changed="onRegisterInput($event)"
-          />
-        </td>
-      </tr>
+        <!-- Display the overall register input box -->
+        <tr>
+          <td colspan="32" class="border border-black">
+            <FieldInputBox
+              :key="i + registerKeyIndex"
+              :index="i"
+              name="register"
+              :bit-array="registerValue[i] || []"
+              :nbits="32"
+              :enums="[]"
+              :selected-display-type="selectedDisplayType"
+              @value-changed="onRegisterInput($event, i)"
+            />
+          </td>
+        </tr>
+      </template>
     </tbody>
   </table>
 </template>

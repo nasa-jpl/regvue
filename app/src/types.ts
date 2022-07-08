@@ -47,7 +47,7 @@ export interface Field {
     resets: string[];
   };
   doc?: string;
-  value: Bit[];
+  value: Bit[][];
   enum?: {
     name: string;
     value: string | number;

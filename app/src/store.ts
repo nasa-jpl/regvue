@@ -225,20 +225,23 @@ const formatData = async (
       // Set the field.value to be a Bit[] that represents the field.reset or 0
       fields?.forEach((field: Field) => {
         if (typeof field.reset == "string" || typeof field.reset == "number") {
+          // If the reset value is a string or number, reassign it to be an object
           field.reset = { value: field.reset, resets: [] };
-          field.value = parse.stringToBitArray(
-            field.reset.value.toString(),
-            field.nbits
-          );
+
+          // Get a Bit[] from the reset value
+          field.value = [
+            parse.stringToBitArray(field.reset.value.toString(), field.nbits),
+          ];
         } else if (field.reset && field.reset.value != undefined) {
-          field.value = parse.stringToBitArray(
-            field.reset.value.toString(),
-            field.nbits
-          );
+          // Get a Bit[] from the reset value
+          field.value = [
+            parse.stringToBitArray(field.reset.value.toString(), field.nbits),
+          ];
         } else {
-          field.value = parse.stringToBitArray("?", field.nbits);
+          // Assign the value to be a Bit[] with all "?" elements
+          field.value = [parse.stringToBitArray("?", field.nbits)];
           field.reset = {
-            value: format.bitArrayToString(field.value, "hexadecimal"),
+            value: format.bitArrayToString(field.value[0] || [], "hexadecimal"),
             resets: [],
           };
         }

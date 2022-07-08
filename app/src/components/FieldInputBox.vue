@@ -5,6 +5,7 @@ import format from "src/format";
 import parse from "src/parse";
 
 const props = defineProps<{
+  index: number;
   name: string;
   bitArray: Bit[];
   nbits: number;
@@ -68,8 +69,10 @@ const deactivate = () => {
 
 // Determine whether to emit the value change
 const updateValue = (addEnumName = false) => {
+  console.log("updating");
+
   const elem = document.getElementById(
-    "input-box-" + props.name
+    "input-box-" + props.name + "-" + props.index
   ) as HTMLInputElement;
   const value = elem.value;
 
@@ -104,7 +107,7 @@ const selectEnumValue = (value: string | number, preview = false) => {
 
   // Set the input value to be equal to the enum value
   const elem = document.getElementById(
-    "input-box-" + props.name
+    "input-box-" + props.name + "-" + props.index
   ) as HTMLInputElement;
   elem.value = format.bitArrayToString(bitArr, props.selectedDisplayType);
 
@@ -188,7 +191,7 @@ const getErrorMessage = (value: string) => {
   <div class="relative w-full" :class="isError ? 'bg-red-300/50' : ''">
     <div class="grid">
       <input
-        :id="'input-box-' + name"
+        :id="'input-box-' + name + '-' + index"
         type="text"
         :value="displayValue"
         class="z-10 col-start-1 row-start-1 w-full justify-self-center truncate bg-inherit px-1 text-center shadow-sm"

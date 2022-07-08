@@ -16,6 +16,7 @@ const emit = defineEmits([
   "update-display-type",
   "toggle-byte-swap",
   "reset-values",
+  "add-values-row",
 ]);
 
 const store = useStore();
@@ -58,8 +59,9 @@ const selectResetState = (state: string) => {
 <template>
   <div>
     <div class="mt-2 flex flex-row justify-between">
-      <!-- Show buttons to change display type -->
+      <!-- Left side buttons -->
       <div class="flex flex-row space-x-2">
+        <!-- Show buttons to change display type -->
         <div>
           <button
             v-for="(displayType, i) in displayTypes"
@@ -97,8 +99,17 @@ const selectResetState = (state: string) => {
         </button>
       </div>
 
-      <!-- Show reset values button -->
-      <div>
+      <!-- Right side buttons -->
+      <div class="flex flex-row space-x-2">
+        <!-- Show button to add additional input fields -->
+        <button
+          class="rounded border border-gray-400 px-1 hover:cursor-pointer hover:bg-gray-100"
+          @click="emit('add-values-row')"
+        >
+          +
+        </button>
+
+        <!-- Show reset values button -->
         <div class="flex flex-row">
           <!-- Button to reset values to the last selected reset state -->
           <button
@@ -125,24 +136,24 @@ const selectResetState = (state: string) => {
           >
             <chevron-down />
           </button>
-        </div>
 
-        <!-- Menu with buttons to reset to other reset states -->
-        <div
-          v-if="showResets"
-          id="reset-states-div"
-          class="fixed z-50 mr-8 w-[calc(9.5rem+2px)] divide-y rounded-b border border-t-0 border-gray-400 bg-white"
-        >
-          <button
-            v-for="(reset, i) in resets.slice(1)"
-            :id="'select-reset-state-' + i"
-            :key="reset as string"
-            class="w-full truncate px-1 text-left shadow hover:bg-gray-100"
-            :title="'Reset field values to ' + reset + ' Reset'"
-            @mousedown="selectResetState(reset as string)"
+          <!-- Menu with buttons to reset to other reset states -->
+          <div
+            v-if="showResets"
+            id="reset-states-div"
+            class="fixed z-50 mr-8 mt-[calc(1.5rem+2px)] w-[calc(9.5rem+2px)] divide-y rounded-b border border-t-0 border-gray-400 bg-white"
           >
-            {{ reset }} Reset
-          </button>
+            <button
+              v-for="(reset, i) in resets.slice(1)"
+              :id="'select-reset-state-' + i"
+              :key="reset as string"
+              class="w-full truncate px-1 text-left shadow hover:bg-gray-100"
+              :title="'Reset field values to ' + reset + ' Reset'"
+              @mousedown="selectResetState(reset as string)"
+            >
+              {{ reset }} Reset
+            </button>
+          </div>
         </div>
       </div>
     </div>
