@@ -4,6 +4,8 @@ import { useStore } from "src/store";
 import { DisplayType, Field } from "src/types";
 
 import ChevronDown from "vue-material-design-icons/ChevronDown.vue";
+import DeleteOutline from "vue-material-design-icons/DeleteOutline.vue";
+import Plus from "vue-material-design-icons/Plus.vue";
 
 const props = defineProps<{
   regId: string;
@@ -101,23 +103,31 @@ const selectResetState = (state: string) => {
       </div>
 
       <!-- Right side buttons -->
-      <div class="flex flex-row space-x-2">
-        <div>
-          <!-- Show button to add additional input fields -->
-          <button
-            class="w-6 rounded-l border border-r-0 border-gray-400 px-1 hover:cursor-pointer hover:bg-gray-100"
-            @click="emit('add-values-row')"
-          >
-            +
-          </button>
-          <!-- Show button to remove additional input fields -->
-          <button
-            class="w-6 rounded-r border border-gray-400 px-1 hover:cursor-pointer hover:bg-gray-100"
-            @click="emit('remove-values-row')"
-          >
-            -
-          </button>
-        </div>
+      <div class="flex flex-row items-center space-x-2">
+        <!-- Show button to add additional input fields -->
+        <button
+          v-if="(fields[0]?.value || []).length <= 1"
+          class="rounded border border-gray-400 text-gray-600/80 shadow hover:cursor-pointer hover:bg-gray-100"
+          title="Add a second row of field values"
+          @click="emit('add-values-row')"
+        >
+          <plus />
+        </button>
+        <!-- Show button to remove additional input fields -->
+        <button
+          v-else
+          class="rounded border border-gray-400 text-gray-600/80 shadow"
+          :class="
+            (fields[0]?.value || []).length <= 1
+              ? 'text-gray-400'
+              : 'hover:cursor-pointer hover:bg-gray-100'
+          "
+          title="Remove the second row of field values"
+          @click="emit('remove-values-row')"
+          :disabled="(fields[0]?.value || []).length <= 1"
+        >
+          <delete-outline />
+        </button>
 
         <!-- Show reset values button -->
         <div class="flex flex-row">

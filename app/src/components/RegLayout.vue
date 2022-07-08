@@ -50,8 +50,6 @@ const updateDisplayType = (displayType: DisplayType) => {
 
 // Reset each field value to a named reset state
 const resetValues = (resetState: string) => {
-  console.log("calling reset with " + resetState);
-
   props.fields.forEach((field) => {
     if (field.reset.resets.includes(resetState)) {
       field.value = field.value.map(() =>
@@ -79,7 +77,9 @@ const addValuesRow = () => {
 // Remove the last added field value index
 const removeValuesRow = () => {
   props.fields.forEach((field) => {
-    field.value.pop();
+    if (field.value.length > 1) {
+      field.value.pop();
+    }
   });
 };
 
