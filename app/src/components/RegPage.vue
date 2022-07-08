@@ -14,7 +14,7 @@ const props = defineProps<{
 const route = useRoute();
 const router = useRouter();
 
-let doc = computed(() => {
+const doc = computed(() => {
   if (props.reg && props.reg.doc) {
     return props.reg.doc.replaceAll("\n", "<br />");
   } else {
@@ -22,7 +22,7 @@ let doc = computed(() => {
   }
 });
 
-let selectedField = ref(
+const selectedField = ref(
   route.query?.field ? (route.query.field as string) : ""
 );
 
@@ -70,13 +70,12 @@ watch(
     <!-- Show the field/register value encode/decode table and associated buttons -->
     <RegLayout
       v-if="reg.fields"
+      :regId="reg.id"
       :fields="reg.fields"
-      :reset-state="reg.default_reset || ''"
       :selected-field="selectedField"
       @select-field="selectField"
       @highlight-field="highlightField"
       @stop-highlight-field="stopHighlightField"
-      @select-reset-state="reg.default_reset = $event"
     />
 
     <!-- Show the register doc description -->
