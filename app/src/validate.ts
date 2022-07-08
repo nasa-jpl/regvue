@@ -147,6 +147,34 @@ export const validate = (data: any): string => {
         }
 
         sumOfNbits += field.nbits;
+
+        if (field.enum) {
+          if (field.enum.constructor != Array) {
+            return `Field "${field.name}" of "${element.id}" must have type "Array" for field \`enum\`.`;
+          }
+
+          for (const e of field.enum) {
+            if (!e.name) {
+              return `Field "${field.name}" of "${element.id}" has an \`enum\` value that is missing required field \`name\`.`;
+            }
+
+            if (typeof e.name != "string") {
+              return `Enum \'${e.name}\' of field "${field.name}" of "${element.id}" must be of type string.`;
+            }
+
+            if (e.value == undefined) {
+              return `Enum "${e.name}" of field "${field.name}" of "${element.id}" is missing required field \`value\`.`;
+            }
+
+            if (typeof e.value != "string" && typeof e.value != "number") {
+              return `Enum "${e.name}" of field "${field.name}" of "${element.id}" must have type "string" or "number" for field \`value\`.`;
+            }
+
+            if (e.doc && typeof e.doc != "string") {
+              return `Enum "${e.name}" of field "${field.name}" of "${element.id}" must have type "string" or "number" for field \`doc\`.`;
+            }
+          }
+        }
       }
 
       if (sumOfNbits != 32)
