@@ -19,15 +19,17 @@ const emit = defineEmits([
   "select-field",
 ]);
 
+const registerHover = ref(false);
+
 // Store the value of the register as an array of 32 Bits
-let registerValue = ref(
+const registerValue = ref(
   props.fields[0]?.value.map(() => Array(32).map(() => 0 as Bit)) || []
 );
 
 // Index variables that can be incremeneted to force a reload of the child
 // FieldInputBox components
-let fieldKeyIndex = ref(0);
-let registerKeyIndex = ref(0);
+const fieldKeyIndex = ref(0);
+const registerKeyIndex = ref(0);
 
 // Perform a byte swap on a Bit[]
 const byteSwap = (bitArray: Bit[]) => {
@@ -35,7 +37,7 @@ const byteSwap = (bitArray: Bit[]) => {
     throw Error("Tried to byte swap a value with not invalid number of bits");
   }
 
-  let res: Bit[] = [];
+  const res: Bit[] = [];
 
   // Add 8 bits at a time to the front of the new Bit[] result
   for (let i = 0; i < bitArray.length; i += 8) {
@@ -46,8 +48,6 @@ const byteSwap = (bitArray: Bit[]) => {
 
 // Parse the user input to update the field value
 const onFieldValueChange = (field: Field, value: string, index: number) => {
-  console.log(`field value changed (value: ${value}, index: ${index})`);
-
   const newValue = parse.stringToBitArray(value, field.nbits);
   field.value[index] = newValue;
 
@@ -176,12 +176,19 @@ watch(
             <FieldInputBox
               :key="i + registerKeyIndex"
               :index="i"
+              :class="
+                registerHover && (fields[0]?.value || []).length > 1
+                  ? 'bg-yellow-50'
+                  : ''
+              "
               name="register"
               :bit-array="registerValue[i] || []"
               :nbits="32"
               :enums="[]"
               :selected-display-type="selectedDisplayType"
               @value-changed="onRegisterInput($event, i)"
+              @mouseenter="registerHover = true"
+              @mouseleave="registerHover = false"
             />
           </td>
         </tr>
