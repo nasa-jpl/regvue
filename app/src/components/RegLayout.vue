@@ -67,13 +67,20 @@ const resetValues = (resetState: string) => {
   resetTableKey.value += 1;
 };
 
+// Add an index to field.value
 const addValuesRow = () => {
-  // Add an entry to field.value
   props.fields.forEach((field) => {
     field.value.push(Array(field.nbits).fill(0 as Bit));
   });
 
   resetTableKey.value += 1;
+};
+
+// Remove the last added field value index
+const removeValuesRow = () => {
+  props.fields.forEach((field) => {
+    field.value.pop();
+  });
 };
 
 // Force BitTable to reload when leaving the page
@@ -107,5 +114,6 @@ watch(
     @update-display-type="updateDisplayType($event)"
     @reset-values="resetValues($event)"
     @add-values-row="addValuesRow()"
+    @remove-values-row="removeValuesRow()"
   />
 </template>

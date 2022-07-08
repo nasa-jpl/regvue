@@ -17,6 +17,7 @@ const emit = defineEmits([
   "toggle-byte-swap",
   "reset-values",
   "add-values-row",
+  "remove-values-row",
 ]);
 
 const store = useStore();
@@ -101,13 +102,22 @@ const selectResetState = (state: string) => {
 
       <!-- Right side buttons -->
       <div class="flex flex-row space-x-2">
-        <!-- Show button to add additional input fields -->
-        <button
-          class="rounded border border-gray-400 px-1 hover:cursor-pointer hover:bg-gray-100"
-          @click="emit('add-values-row')"
-        >
-          +
-        </button>
+        <div>
+          <!-- Show button to add additional input fields -->
+          <button
+            class="w-6 rounded-l border border-r-0 border-gray-400 px-1 hover:cursor-pointer hover:bg-gray-100"
+            @click="emit('add-values-row')"
+          >
+            +
+          </button>
+          <!-- Show button to remove additional input fields -->
+          <button
+            class="w-6 rounded-r border border-gray-400 px-1 hover:cursor-pointer hover:bg-gray-100"
+            @click="emit('remove-values-row')"
+          >
+            -
+          </button>
+        </div>
 
         <!-- Show reset values button -->
         <div class="flex flex-row">
