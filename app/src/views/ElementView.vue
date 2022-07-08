@@ -134,6 +134,7 @@ watch(
     <!-- If on a smaller window show a grayed-out background -->
     <div
       v-if="windowWidth < WINDOW_BREAKPOINT"
+      id="menu-background-div"
       class="absolute z-40 flex h-full w-full"
       :class="menuVisible ? 'bg-gray-300/50' : 'hidden'"
       @click="menuVisible = false"

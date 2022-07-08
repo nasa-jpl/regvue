@@ -5,6 +5,7 @@ import data from "../../public/example.json";
 
 describe("menu-component", () => {
   beforeEach(() => {
+    // Make viewport large
     cy.viewport(1280, 800);
     cy.visit("/#/?data=example.json");
   });
@@ -107,5 +108,22 @@ describe("menu-component", () => {
     cy.get("#navigation-menu").should("be.visible");
     cy.get("#toggle-menu-button").click();
     cy.get("#navigation-menu").should("not.be.visible");
+  });
+
+  it("close on background click", () => {
+    //  Make viewport small
+    cy.viewport(1000, 800);
+
+    cy.get("#navigation-menu").then((element) => {
+      if (element.hasClass("hidden")) {
+        cy.get("#toggle-menu-button").click();
+      }
+    });
+
+    cy.get("#navigation-menu").should("not.have.class", "hidden");
+    cy.get("#menu-background-div").should("not.have.class", "hidden");
+
+    cy.get("#menu-background-div").click();
+    cy.get("#navigation-menu").should("have.class", "hidden");
   });
 });

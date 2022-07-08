@@ -3,8 +3,6 @@
 import data from "../../public/example.json";
 
 describe("search-component", () => {
-  const delay = 300;
-
   beforeEach(() => {
     cy.visit("/#/?data=example.json");
   });
@@ -78,21 +76,31 @@ describe("search-component", () => {
   });
 
   it("Allows keyboard input", () => {
-    cy.get("#search-input").click().type("regA0").wait(delay).type("{enter}");
+    cy.get("#search-input").click().type("regA0");
+    cy.get("#suggestion-0").should("have.class", "outline-blue-500");
+    cy.get("#search-input").type("{enter}");
     cy.url().should("contain", "regA0");
 
     // Allows down arrow
-    cy.get("#search-input").click().type("r").wait(delay).type("{downArrow}");
+    cy.get("#search-input").click().type("r");
+    cy.get("#suggestion-0").should("have.class", "outline-blue-500");
+    cy.get("#suggestion-1").should("not.have.class", "outline-blue-500");
+
+    cy.get("#search-input").type("{downArrow}");
+    cy.get("#suggestion-0").should("not.have.class", "outline-blue-500");
     cy.get("#suggestion-1").should("have.class", "outline-blue-500");
+
     cy.get("#search-input").type("{enter}");
     cy.url().should("contain", "regA1");
 
     // Allows up arrow key
-    cy.get("#search-input")
-      .click()
-      .type("r")
-      .wait(delay)
-      .type("{downArrow}{upArrow}");
+    cy.get("#search-input").click().type("r");
+    cy.get("#suggestion-0").should("have.class", "outline-blue-500");
+
+    cy.get("#search-input").type("{downArrow}");
+    cy.get("#suggestion-1").should("have.class", "outline-blue-500");
+
+    cy.get("#search-input").type("{upArrow}");
     cy.get("#suggestion-0").should("have.class", "outline-blue-500");
     cy.get("#search-input").type("{enter}");
     cy.url().should("contain", "regA0");
@@ -113,23 +121,24 @@ describe("search-component", () => {
     let i = 0;
     registers.forEach((register) => {
       const name = register.split(".").pop();
-      cy.get("#search-input").click().type(name).wait(delay).type("{enter}");
+      cy.get("#search-input").click().type(name);
+      cy.get("#suggestion-0").should("include.text", name);
+      cy.get("#search-input").type("{enter}");
+
       i += 1;
       i = Math.min(i, MAX_RECENT_SEARCHES_LENGTH);
 
       cy.get("#search-input").click();
-      cy.get("#suggestion-0 > div > a > div").should(
-        "have.text",
-        register.split(".").at(-1)
-      );
+      cy.get(".search-result-name")
+        .first()
+        .should("have.text", register.split(".").at(-1));
       cy.get("[id^=suggestion-]").should("have.length", i);
     });
 
     cy.get("#remove-recent-search-btn-0").click();
-    cy.get("#suggestion-0 > div > a > div").should(
-      "have.text",
-      registers.at(-2).split(".").at(-1)
-    );
+    cy.get(".search-result-name")
+      .first()
+      .should("have.text", registers.at(-2).split(".").at(-1));
 
     cy.get("[id^=suggestion-]").should(
       "have.length",
@@ -137,7 +146,7 @@ describe("search-component", () => {
     );
   });
 
-  it("open with keyboard shortcut", () => {
+  it("opens with keyboard shortcut", () => {
     // Wait until the search has rendered
     cy.get("#search-input-div");
 
@@ -156,5 +165,10 @@ describe("search-component", () => {
     cy.get("#search-input-div")
       .should("be.visible")
       .and("not.have.class", "outline-blue-500");
+  });
+
+  it("allow special regex characters", () => {
+    cy.get("#search-input-div").type("*)(+][");
+    cy.get("#no-search-results-div").should("exist");
   });
 });
