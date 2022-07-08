@@ -11,10 +11,7 @@ const router = useRouter();
 
 // Return the link to an ancestor element
 const getLink = (index: number) => {
-  const id = props.element.id
-    .split(".")
-    .slice(0, index + 1)
-    .join(".");
+  const id = props.element.id.split(".").slice(0, index + 1);
 
   return router.resolve({
     name: "element",
@@ -33,11 +30,12 @@ const getLink = (index: number) => {
       </span>
 
       <!-- Show the full element id -->
-      <span>
+      <span id="breadcrumb-links">
         -
         <template v-for="(elem, i) in element.id.split('.')" :key="i">
-          <!-- Show link to navigate to an ancestor element -->
+          <!-- Show a breadcrumb link to navigate to an ancestor element -->
           <a
+            :id="'breadcrumb-link-' + elem"
             :href="getLink(i)"
             class="text-sm hover:cursor-pointer hover:text-gray-500"
             >{{ elem }}</a
