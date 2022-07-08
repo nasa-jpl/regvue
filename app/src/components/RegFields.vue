@@ -24,9 +24,12 @@ const fields = computed(() => {
   } else {
     return [...props.fields].reverse();
   }
-})
+});
 
-enum DisplayOrder { msb, lsb }
+enum DisplayOrder {
+  msb,
+  lsb,
+}
 const displayOrder = ref(parseInt(cookies.get("displayOrder")) || 0);
 
 // Swap the display order of the fields table
@@ -41,7 +44,7 @@ const toggleDisplayOrder = () => {
     displayOrder.value = DisplayOrder.msb;
     cookies.remove("displayOrder");
   }
-}
+};
 
 const selectField = (fieldName: string) => {
   emit("select-field", fieldName, props.selectedField == fieldName);
@@ -61,11 +64,12 @@ const stopHighlightField = () => {
     <table class="w-full border-2">
       <thead class="bg-gray-200">
         <th class="min-w-[5rem] py-2">
-          <div class="flex flex-row w-fit m-auto pl-5">
+          <div class="m-auto flex w-fit flex-row pl-5">
             Bits
 
             <!-- Include button to swap the display order of msb/lsb first -->
-            <button 
+            <button
+              id="toggle-field-display-order-button"
               class="ml-1 hover:cursor-pointer hover:text-gray-400"
               @click="toggleDisplayOrder()"
             >
@@ -79,19 +83,19 @@ const stopHighlightField = () => {
       </thead>
       <tbody>
         <tr
-          v-for="field in fields"
+          v-for="(field, i) in fields"
           :key="field.name"
           class="border-b-2"
-          :class="
+          :class="[
             selectedField == field.name ? 'bg-yellow-50' : '',
-           (selectedField || selectedField == '') ? 'hover:cursor-pointer' : ''
-          "
+            selectedField || selectedField == '' ? 'hover:cursor-pointer' : '',
+          ]"
           @mouseenter="highlightField(field.name)"
           @mouseleave="stopHighlightField"
           @click="selectField(field.name)"
         >
           <!-- Show the bit range -->
-          <td class="px-2 text-center">
+          <td :id="'bit-range-' + i" class="px-2 text-center">
             {{ field.nbits + field.lsb - 1 }}:{{ field.lsb }}
           </td>
 
@@ -110,8 +114,8 @@ const stopHighlightField = () => {
           <!-- Show the description as html -->
           <td class="border-l-2 px-2">
             <!-- eslint-disable-next-line vue/no-v-html -->
-            <div class="default-styles" >
-            {{field.doc}}
+            <div class="default-styles">
+              {{ field.doc }}
             </div>
           </td>
         </tr>
