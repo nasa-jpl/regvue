@@ -117,16 +117,23 @@
         {
           "access": "rsvd",
           "reset": 19088743,
-          "nbits": 28,
-          "lsb": 4,
+          "nbits": 26,
+          "lsb": 6,
           "name": "rsvd"
         },
         {
           "access": "ro",
           "reset": 0,
-          "nbits": 4,
+          "nbits": 3,
+          "lsb": 3,
+          "name": "command_1"
+        },
+        {
+          "access": "ro",
+          "reset": 0,
+          "nbits": 3,
           "lsb": 0,
-          "name": "command"
+          "name": "command_0"
         }
       ],
       "type": "reg",
