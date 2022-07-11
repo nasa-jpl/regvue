@@ -215,7 +215,7 @@ onMounted(() => {
   // Resize the sidebar to match the mouse position
   const resizeSidebar = (e: MouseEvent) => {
     emit("resize");
-    const size = `${e.x - 5}px`;
+    const size = `${e.x + 5}px`;
     if (e.x > 150 && e.x < 230) {
       sidebar.style.flexBasis = "230px";
     } else if (e.x <= 150) {
@@ -254,7 +254,10 @@ onMounted(() => {
             :title="getDisplayName(node)"
           >
             <!--  Display the name and the open button for a menu node-->
-            <button class="z-10" @click.stop="toggleChildrenNodes(node)">
+            <button
+              class="z-10"
+              @click.stop.prevent="toggleChildrenNodes(node)"
+            >
               <!-- Show a close button if the node has open children-->
               <template
                 v-if="
