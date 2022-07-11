@@ -116,6 +116,6 @@ export default {
     }
 
     // Return reversed so that the 0 index refers to the lsb
-    return res.reverse();
+    return res.reverse().slice(0, length);
   },
 };
