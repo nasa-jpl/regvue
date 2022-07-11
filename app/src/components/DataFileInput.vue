@@ -21,7 +21,7 @@ const showRecents = ref(false);
 onBeforeMount(() => {
   let arr: string[];
 
-  const jsonString = cookies.get("urls");
+  const jsonString = cookies.get("regvue-recent-urls");
   if (jsonString) {
     arr = JSON.parse(jsonString);
   } else {
@@ -66,7 +66,7 @@ const saveRecentUrlSearch = (url: string) => {
   let arr: string[];
 
   // If there is already a cookie value
-  const jsonString = cookies.get("urls");
+  const jsonString = cookies.get("regvue-recent-urls");
   if (jsonString) {
     // Decode the other recent urls in a string[]
     arr = JSON.parse(jsonString);
@@ -84,7 +84,7 @@ const saveRecentUrlSearch = (url: string) => {
   }
 
   // Store the array as a string cookie
-  cookies.set("urls", JSON.stringify(arr));
+  cookies.set("regvue-recent-urls", JSON.stringify(arr));
 };
 
 const onUrlDataInput = async () => {
