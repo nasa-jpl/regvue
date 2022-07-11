@@ -19,7 +19,7 @@ export const validateResponse = (response: Response): string => {
 export const validate = (data: any): string => {
   // Check that the schema field has the required fields
   if (!data.schema) return "Missing required field `schema`.";
-  if (data.schema.version) return "Missing required field `schema.version`.";
+  if (!data.schema.version) return "Missing required field `schema.version`.";
   if (!data.schema.name) return "Missing required field `schema.name`.";
 
   // Check that the root field has the required fields
