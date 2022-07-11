@@ -35,18 +35,18 @@ onBeforeMount(() => {
 // in the browser
 onBeforeMount(() => {
   window.addEventListener("dragover", (e) => {
-    if ((e.target as HTMLElement)?.tagName != "INPUT") {
-      e.preventDefault();
-    }
+    e.preventDefault();
   });
 
   window.addEventListener("drop", (e) => {
+    // Disable default behavior of opening file in the browser window
     if ((e.target as HTMLElement)?.tagName != "INPUT") {
       e.preventDefault();
     }
 
     // Check if the dropped object has a URL field
-    const url = e.dataTransfer?.getData("URL");
+    const url =
+      e.dataTransfer?.getData("URL") || e.dataTransfer?.getData("text");
     if (url && url != "") {
       e.preventDefault();
 
