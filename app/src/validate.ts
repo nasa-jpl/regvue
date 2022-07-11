@@ -4,8 +4,6 @@ import { isUnknownBit } from "src/types";
 // Returns an error message if invalid and "" for a valid response
 export const validateResponse = (response: Response): string => {
   const contentType = response.headers.get("content-type");
-  if (contentType != "application/json")
-    return `URL returned ${contentType}, not application/json.`;
 
   const contentLength = response.headers.get("content-length");
   if (contentLength == "0")
