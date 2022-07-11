@@ -40,7 +40,7 @@ export const createSearchIndex = (elements: Map<string, DesignElement>) => {
         { boost: 25 } // prioritize registers over fields
       );
 
-      document.fields?.forEach((field: { name: string; doc: any }) => {
+      document.fields?.forEach((field: { name: string; doc?: any }) => {
         builder.add({
           id: document.id + ":" + field.name,
           name: field.name,
