@@ -4,7 +4,7 @@
 
 :latest_deployment: latest
 :deployment_url: https://github.jpl.nasa.gov/pages/regvue/regvue/{latest_deployment}/#/
-:demo_register_description: https://github.jpl.nasa.gov/pages/regvue/regvue/demo/data.json
+:demo_register_description: https://github.jpl.nasa.gov/pages/regvue/regvue/demo/example.json
 
 A modern web-based viewer for FPGA/ASIC register documentation.
 
