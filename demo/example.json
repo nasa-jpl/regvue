@@ -13,11 +13,12 @@
     "children": [
       "blkA",
       "blkB"
-    ]
+    ],
+    "default_reset": "RS1"
   },
   "elements": {
     "blkA": {
-      "addr": 0,
+      "offset": 0,
       "type": "blk",
       "children": [
         "blkA.sub_blkA"
@@ -26,8 +27,9 @@
       "id": "blkA"
     },
     "blkA.sub_blkA": {
-      "addr": 0,
+      "offset": 0,
       "type": "blk",
+      "doc": "This is a block of related registers.",
       "children": [
         "blkA.sub_blkA.regA0",
         "blkA.sub_blkA.regA1",
@@ -40,22 +42,22 @@
       "name": "sub_blkA"
     },
     "blkA.sub_blkA.regA0": {
-      "addr": 0,
+      "offset": 0,
       "doc": "regA0 - An example register.",
       "fields": [
         {
-          "access": "rw",
+          "access": "rsvd",
           "doc": "A reserved field.",
-          "nbits": 28,
-          "lsb": 4,
+          "nbits": 24,
+          "lsb": 8,
           "reset": 0,
           "name": "rsvd"
         },
         {
           "access": "rw",
           "nbits": 4,
-          "lsb": 0,
-          "name": "command",
+          "lsb": 4,
+          "name": "long_command",
           "reset": 0,
           "doc": "The command to execute.",
           "enum": [
@@ -70,49 +72,117 @@
               "value": 10
             }
           ]
+        },
+        {
+          "access": "rw",
+          "nbits": 1,
+          "lsb": 3,
+          "name": "flag3",
+          "reset": 0,
+          "doc": "Set a flag value"
+        },
+        {
+          "access": "rw",
+          "nbits": 1,
+          "lsb": 2,
+          "name": "flag2",
+          "reset": 0,
+          "doc": "Set a flag value"
+        },
+        {
+          "access": "rw",
+          "nbits": 1,
+          "lsb": 1,
+          "name": "flag1",
+          "reset": 0,
+          "doc": "Set a flag value"
+        },
+        {
+          "access": "rw",
+          "nbits": 1,
+          "lsb": 0,
+          "name": "flag0",
+          "reset": 0,
+          "doc": "Set a flag value"
         }
       ],
-      "offset": 0,
       "type": "reg",
       "id": "blkA.sub_blkA.regA0",
       "name": "regA0"
     },
     "blkA.sub_blkA.regA1": {
-      "addr": 4,
+      "offset": 4,
       "doc": "regA1 - An example register.",
       "fields": [
         {
+          "access": "rsvd",
+          "reset": 19088743,
+          "nbits": 28,
+          "lsb": 4,
+          "name": "rsvd"
+        },
+        {
           "access": "ro",
-          "reset": 4294967295,
-          "nbits": 32,
+          "reset": 0,
+          "nbits": 4,
           "lsb": 0,
-          "name": "f0"
+          "name": "command"
         }
       ],
-      "offset": 0,
       "type": "reg",
       "id": "blkA.sub_blkA.regA1",
       "name": "regA1"
     },
     "blkA.sub_blkA.regA2": {
-      "addr": 8,
+      "offset": 8,
       "doc": "regA2 - An example register.",
       "fields": [
         {
-          "access": "ro",
-          "reset": 305419896,
-          "nbits": 32,
+          "name": "f0",
           "lsb": 0,
-          "name": "f0"
+          "nbits": 8,
+          "access": "rw",
+          "reset": {
+            "value": 0,
+            "resets": [
+              "RS1",
+              "RS2"
+            ]
+          }
+        },
+        {
+          "name": "f1",
+          "lsb": 8,
+          "nbits": 8,
+          "access": "rw",
+          "reset": {
+            "value": "0x1",
+            "resets": [
+              "RS3",
+              "RS1"
+            ]
+          }
+        },
+        {
+          "name": "f2",
+          "lsb": 16,
+          "nbits": 8,
+          "access": "rw",
+          "reset": "0x2"
+        },
+        {
+          "name": "f3",
+          "lsb": 24,
+          "nbits": 8,
+          "access": "rw"
         }
       ],
-      "offset": 0,
       "type": "reg",
       "id": "blkA.sub_blkA.regA2",
       "name": "regA2"
     },
     "blkA.sub_blkA.regA3": {
-      "addr": 12,
+      "offset": 12,
       "doc": "regA3 - An example register.",
       "fields": [
         {
@@ -123,13 +193,12 @@
           "name": "f0"
         }
       ],
-      "offset": 0,
       "type": "reg",
       "id": "blkA.sub_blkA.regA3",
       "name": "regA3"
     },
     "blkA.sub_blkA.regA4": {
-      "addr": 12,
+      "offset": 16,
       "doc": "regA4 - An example register.",
       "fields": [
         {
@@ -140,13 +209,12 @@
           "name": "f0"
         }
       ],
-      "offset": 0,
       "type": "reg",
       "id": "blkA.sub_blkA.regA4",
       "name": "regA4"
     },
     "blkA.sub_blkA.regA5": {
-      "addr": 12,
+      "offset": 20,
       "doc": "regA5 - An example register.",
       "fields": [
         {
@@ -157,13 +225,12 @@
           "name": "f0"
         }
       ],
-      "offset": 0,
       "type": "reg",
       "id": "blkA.sub_blkA.regA5",
       "name": "regA5"
     },
     "blkB": {
-      "addr": 16,
+      "offset": 24,
       "type": "blk",
       "children": [
         "blkB.regB0"
@@ -172,7 +239,7 @@
       "id": "blkB"
     },
     "blkB.regB0": {
-      "addr": 16,
+      "offset": 0,
       "doc": "regB0 - An example register.",
       "fields": [
         {
@@ -183,7 +250,6 @@
           "name": "f0"
         }
       ],
-      "offset": 0,
       "type": "reg",
       "id": "blkB.regB0",
       "name": "regB0"
