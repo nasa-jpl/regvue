@@ -21,7 +21,7 @@ const showRecents = ref(false);
 onBeforeMount(() => {
   let arr: string[];
 
-  const jsonString = cookies.get("urls");
+  const jsonString = cookies.get("regvue-recent-urls");
   if (jsonString) {
     arr = JSON.parse(jsonString);
   } else {
@@ -35,18 +35,18 @@ onBeforeMount(() => {
 // in the browser
 onBeforeMount(() => {
   window.addEventListener("dragover", (e) => {
-    if ((e.target as HTMLElement)?.tagName != "INPUT") {
-      e.preventDefault();
-    }
+    e.preventDefault();
   });
 
   window.addEventListener("drop", (e) => {
+    // Disable default behavior of opening file in the browser window
     if ((e.target as HTMLElement)?.tagName != "INPUT") {
       e.preventDefault();
     }
 
     // Check if the dropped object has a URL field
-    const url = e.dataTransfer?.getData("URL");
+    const url =
+      e.dataTransfer?.getData("URL") || e.dataTransfer?.getData("text");
     if (url && url != "") {
       e.preventDefault();
 
@@ -66,7 +66,7 @@ const saveRecentUrlSearch = (url: string) => {
   let arr: string[];
 
   // If there is already a cookie value
-  const jsonString = cookies.get("urls");
+  const jsonString = cookies.get("regvue-recent-urls");
   if (jsonString) {
     // Decode the other recent urls in a string[]
     arr = JSON.parse(jsonString);
@@ -84,7 +84,7 @@ const saveRecentUrlSearch = (url: string) => {
   }
 
   // Store the array as a string cookie
-  cookies.set("urls", JSON.stringify(arr));
+  cookies.set("regvue-recent-urls", JSON.stringify(arr));
 };
 
 const onUrlDataInput = async () => {

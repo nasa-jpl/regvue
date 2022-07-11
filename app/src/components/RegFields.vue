@@ -30,7 +30,9 @@ enum DisplayOrder {
   msb,
   lsb,
 }
-const displayOrder = ref(parseInt(cookies.get("displayOrder")) || 0);
+const displayOrder = ref(
+  parseInt(cookies.get("regvue-fields-display-order")) || 0
+);
 
 // Swap the display order of the fields table
 const toggleDisplayOrder = () => {
@@ -39,10 +41,14 @@ const toggleDisplayOrder = () => {
 
     // Store the decision to display lsb first as a cookie
     const nextYear = new Date(new Date().getFullYear() + 2, 0, 0);
-    cookies.set("displayOrder", DisplayOrder.lsb.toString(), nextYear);
+    cookies.set(
+      "regvue-fields-display-order",
+      DisplayOrder.lsb.toString(),
+      nextYear
+    );
   } else {
     displayOrder.value = DisplayOrder.msb;
-    cookies.remove("displayOrder");
+    cookies.remove("regvue-fields-display-order");
   }
 };
 

@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Numerous bug fixes affecting drap & drop, menu navigation, swapping display types, and loading include blocks ([#119](https://github.jpl.nasa.gov/regvue/regvue/pull/119)).
+
 ## [0.6.1] - 2022-07-11
 
 ### Fixed
@@ -13,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.6.0] - 2022-07-11
 ### Added
-- Added breadcrumb links to element pages ([#112](https://github.jpl.nasa.gov/regvue/regvue/pull/112))
+- Added breadcrumb links to element pages ([#112](https://github.jpl.nasa.gov/regvue/regvue/pull/112)).
 - Added support for multiple reset values ([#108](https://github.jpl.nasa.gov/regvue/regvue/pull/108)).
 - Added support for enumerated field values ([#107](https://github.jpl.nasa.gov/regvue/regvue/pull/107)).
 - Added the option to display the field table starting with LSB ([#106](https://github.jpl.nasa.gov/regvue/regvue/pull/106)).
