@@ -82,6 +82,7 @@ const selectDefaultReset = (resetState: string) => {
       :fields="reg.fields"
       :reset-state="reg.default_reset || ''"
       :selected-field="selectedField"
+      :data-width="reg.data_width"
       @select-field="selectField"
       @highlight-field="highlightField"
       @stop-highlight-field="stopHighlightField"

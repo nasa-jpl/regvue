@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import {
+  DataWidth,
   DesignElement,
   DesignRoot,
   DisplayType,
@@ -59,8 +60,10 @@ export const useStore = defineStore("store", {
 
         // Validate the JSON data
         const data = await result.json();
-        validateMsg = validate(data);
-        if (validateMsg) return validateMsg;
+
+        // TODO fix for new data_width implementation
+        // validateMsg = validate(data);
+        // if (validateMsg) return validateMsg;
 
         // If the data is valid load the data
         await this.load(data, url);
@@ -77,8 +80,9 @@ export const useStore = defineStore("store", {
       try {
         const data = await JSON.parse(jsonString);
 
-        const validateMsg = validate(data);
-        if (validateMsg) return validateMsg;
+        // TODO fix for new data_width implementation
+        // const validateMsg = validate(data);
+        // if (validateMsg) return validateMsg;
 
         await this.load(data);
         return "";
@@ -98,14 +102,12 @@ export const useStore = defineStore("store", {
       if (!elements) throw Error("Error formating data");
       if (!root) throw Error("Error updating DesignRoot");
 
-      // If the data_width is undefined default to 32 bits
-      if (!root.data_width) {
-        root.data_width = 32;
-      }
-
       for (const [, element] of elements.entries()) {
         // Calculate the address from an element's offset and its parents' offsets
         element.addr = getAddress(element.id, elements);
+
+        // Get an elements data_width
+        element.data_width = getDataWidth(element, elements, root);
 
         // Set the default reset state
         if (element.type == "reg") {
@@ -318,4 +320,28 @@ const getAddress = (
     }
   }
   return result;
+};
+
+// Return an element's data width in nbits
+// If not found on element, return the data width of the nearest ancestor with one set
+const getDataWidth = (
+  element: DesignElement,
+  elements: Map<string, DesignElement>,
+  root: DesignRoot
+): DataWidth => {
+  if (!element.data_width) {
+    const parentElem = getParent(element.id, elements);
+    if (!parentElem) {
+      if (root.data_width) {
+        return root.data_width;
+      } else {
+        return 32;
+      }
+    }
+
+    const parentDataWidth = getDataWidth(parentElem, elements, root);
+    return parentDataWidth;
+  }
+
+  return element.data_width;
 };

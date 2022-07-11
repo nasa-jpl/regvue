@@ -2,20 +2,19 @@
 import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "src/store";
-import { DesignElement } from "src/types";
+import { DataWidth, DesignElement } from "src/types";
 import { vResponsiveRotate } from "src/directives/ResponsiveRotate";
 
 import RegFields from "src/components/RegFields.vue";
 
 const props = defineProps<{
   elementId: string;
+  dataWidth: DataWidth;
 }>();
 
 const route = useRoute();
 const router = useRouter();
 const store = useStore();
-
-const dataWidth = store.root.data_width;
 
 const element = computed(() => {
   const e = store.elements.get(props.elementId);

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, Ref, computed, nextTick, onBeforeMount, watch } from "vue";
 import { useRoute } from "vue-router";
-import { Bit, DisplayType, Field } from "src/types";
+import { Bit, DataWidth, DisplayType, Field } from "src/types";
 import parse from "src/parse";
 import { useStore } from "src/store";
 
@@ -14,6 +14,7 @@ const props = defineProps<{
   fields: Field[];
   selectedField?: string;
   resetState: string;
+  dataWidth: DataWidth;
 }>();
 
 const emit = defineEmits([
@@ -24,8 +25,6 @@ const emit = defineEmits([
 ]);
 
 const store = useStore();
-
-const dataWidth = store.root.data_width;
 
 // Control whether or not to show dropdown menu of possible reset states
 let showResets = ref(false);
@@ -51,7 +50,7 @@ onBeforeMount(() => {
 });
 
 // Store the value of the register as an array of Bits
-let registerValue = ref(Array(dataWidth).map(() => 0 as Bit));
+let registerValue = ref(Array(props.dataWidth).map(() => 0 as Bit));
 
 // Control whether or not to display LSB or MSB first
 let useByteSwap = ref(store.useByteSwap);

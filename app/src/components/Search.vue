@@ -14,10 +14,8 @@ const route = useRoute();
 const router = useRouter();
 const store = useStore();
 
-const dataWidth = store.root.data_width;
-
 // Create the search object
-let searchObject = createSearchIndex(store.elements, dataWidth);
+let searchObject = createSearchIndex(store.elements);
 
 // Search query
 let query = ref("");
@@ -279,7 +277,7 @@ onUnmounted(() => {
 watch(
   () => store.elements,
   () => {
-    searchObject = createSearchIndex(store.elements, dataWidth);
+    searchObject = createSearchIndex(store.elements);
 
     recentSuggestions.value = [];
     query.value = "";
