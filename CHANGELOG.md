@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.6.0] - 2022-07-11
 ### Added
 - Added breadcrumb links to element pages ([#112](https://github.jpl.nasa.gov/regvue/regvue/pull/112))
 - Added support for multiple reset values ([#108](https://github.jpl.nasa.gov/regvue/regvue/pull/108)).
@@ -185,7 +187,8 @@ Lastly, several improvements were made to the search UI.
 
 - Initial release of regvue prototype.
 
-[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.5.2...HEAD
+[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.6.0...HEAD
+[0.6.0]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.5.2...v0.6.0
 [0.5.2]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.4.0...v0.5.0
