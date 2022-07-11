@@ -19,14 +19,18 @@ export const validateResponse = (response: Response): string => {
 export const validate = (data: any): string => {
   // Check that the schema field has the required fields
   if (!data.schema) return "Missing required field `schema`.";
-  if (!data.schema.version) return "Missing required field `schema.version`.";
+  if (data.schema.version) return "Missing required field `schema.version`.";
   if (!data.schema.name) return "Missing required field `schema.name`.";
 
   // Check that the root field has the required fields
   if (!data.root) return "Missing required field `root`.";
   if (!data.root.display_name)
     return "Missing required field `root.display_name`.";
-  if (!data.root.version) return "Missing required field `root.version`.";
+  if (data.root.version) {
+    if (typeof data.root.version != "string") {
+      return 'Optional field `root.version` must be of type "string".';
+    }
+  }
   if (!data.root.children) return "Missing required field `root.children`.";
 
   // Check that the root.children field is a non-empty array
