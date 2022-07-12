@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Numerous bug fixes affecting drap & drop, menu navigation, swapping display types, and loading include blocks ([#119](https://github.jpl.nasa.gov/regvue/regvue/pull/119)).
 
 ### Changed
+- Removed the toggle menu button from the header. This button now shows on smaller screens on the bottom left of the screen ([#124](https://github.jpl.nasa.gov/regvue/regvue/pull/124)).
 - Reimplemented schema validation using [JSON Schema](https://json-schema.org/) and [Ajv](https://ajv.js.org/) ([#110](https://github.jpl.nasa.gov/regvue/regvue/pull/110)).
 
 ## [0.6.1] - 2022-07-11
