@@ -9,6 +9,9 @@ import Menu from "src/components/Menu.vue";
 import OpenModal from "src/components/OpenModal.vue";
 import RegPage from "src/components/RegPage.vue";
 
+import Close from "vue-material-design-icons/Close.vue";
+import HamburgerMenu from "vue-material-design-icons/Menu.vue";
+
 const props = defineProps<{
   elementId: string[];
 }>();
@@ -146,8 +149,8 @@ watch(
         :elements="elements"
         :root="root"
         :menu-visible="menuVisible"
-        @menu-collapsed="menuVisible = false"
         @resize="menuVisible = true"
+        @click.stop
       />
     </div>
 
@@ -158,6 +161,20 @@ watch(
       :menu-visible="menuVisible"
       @toggle-menu="toggleMenu()"
     />
+
+    <button
+      v-if="windowWidth < WINDOW_BREAKPOINT"
+      class="absolute bottom-4 left-4 z-50 rounded-full border bg-gray-300 p-3 shadow hover:cursor-pointer hover:shadow-2xl"
+      @click="toggleMenu()"
+    >
+      <template v-if="menuVisible">
+        <close />
+      </template>
+      <template v-else>
+        <hamburger-menu />
+      </template>
+    </button>
+
     <!-- Show the main body and fill the remaining screen space -->
     <div
       class="mt-4 flex h-full flex-grow flex-col justify-between overflow-y-scroll px-8 pb-32"
