@@ -27,6 +27,9 @@ const store = useStore();
 
 onBeforeMount(() => validateRoute());
 
+const elements = computed(() => store.elements);
+const root = computed(() => store.root);
+
 // Control whether or not to show the open modal
 let showOpenModal = ref(false);
 
@@ -140,21 +143,21 @@ watch(
       @click="menuVisible = false"
     >
       <Menu
+        :elements="elements"
+        :root="root"
         :menu-visible="menuVisible"
         @menu-collapsed="menuVisible = false"
         @resize="menuVisible = true"
-        @click.stop
       />
     </div>
 
     <Menu
       v-else
+      :elements="elements"
+      :root="root"
       :menu-visible="menuVisible"
-      @menu-collapsed="menuVisible = false"
-      @resize="menuVisible = true"
       @toggle-menu="toggleMenu()"
     />
-
     <!-- Show the main body and fill the remaining screen space -->
     <div
       class="mt-4 flex h-full flex-grow flex-col justify-between overflow-y-scroll px-8 pb-32"

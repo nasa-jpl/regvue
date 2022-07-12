@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { reactive, ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted, onBeforeMount, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { DesignElement, DesignRoot, MenuNode } from "src/types";
-import { useStore } from "src/store";
 import format from "src/format";
 
 import MenuDown from "vue-material-design-icons/MenuDown.vue";
 import MenuRight from "vue-material-design-icons/MenuRight.vue";
 
-defineProps<{
+const props = defineProps<{
+  elements: Map<string, DesignElement>;
+  root: DesignRoot;
   menuVisible: boolean;
 }>();
 
@@ -16,7 +17,6 @@ const emit = defineEmits(["menu-collapsed", "resize", "toggle-menu"]);
 
 const router = useRouter();
 const route = useRoute();
-const store = useStore();
 
 const currentElement = computed(() => {
   try {
@@ -67,45 +67,48 @@ const getNodes = (
     return node;
   });
 };
-let menuNodes = reactive(getNodes(store.elements, store.root));
-watch(
-  () => store.elements,
-  () => (menuNodes = getNodes(store.elements, store.root))
-);
+let menuNodes = computed(() => {
+  return getNodes(props.elements, props.root);
+});
 
 // From the tree structure of MenuNodes create a flat list of all nodes and add
 // a "depth" attribute and determine whether the node should be visible
-const nodes = ref(
-  computed(() => {
-    let result: MenuNode[] = [];
+const generateNodes = () => {
+  let result = [] as MenuNode[];
 
-    const addNode = (node: MenuNode, depth = 0) => {
-      node.depth = depth;
-      result.push(node);
+  const addNode = (node: MenuNode, depth = 0) => {
+    node.depth = depth;
+    result.push(node);
 
-      if (node.children) {
-        node.children.forEach((child: MenuNode) => {
-          // Only mark a node as visible if it's parent node should be open
-          if (currentElement.value == child.key) {
-            openChildrenNodes(node);
-          } else if (
-            // Ensure children further down the tree are not visible
-            currentElement.value.includes(child.key) &&
-            !child.key.includes(currentElement.value)
-          ) {
-            openChildrenNodes(node);
-          }
-          addNode(child, depth + 1);
-        });
-      }
-    };
+    if (node.children) {
+      node.children.forEach((child: MenuNode) => {
+        // Only mark a node as visible if it's parent node should be open
+        if (currentElement.value == child.key) {
+          openChildrenNodes(node);
+        } else if (
+          // Ensure children further down the tree are not visible
+          currentElement.value.includes(child.key) &&
+          !child.key.includes(currentElement.value)
+        ) {
+          openChildrenNodes(node);
+        }
+        addNode(child, depth + 1);
+      });
+    }
+  };
 
-    menuNodes.forEach((node: MenuNode) => {
-      addNode(node, 0);
-      node.isVisible = true;
-    });
-    return result;
-  })
+  menuNodes.value.forEach((node: MenuNode) => {
+    addNode(node, 0);
+    node.isVisible = true;
+  });
+
+  return result;
+};
+let nodes = ref([] as MenuNode[]);
+onBeforeMount(() => (nodes.value = generateNodes()));
+watch(
+  () => [props.root, route.query.data],
+  () => (nodes.value = generateNodes())
 );
 
 // Determine whether to add or remove all children of a node from visibleKeys
@@ -134,7 +137,6 @@ const closeChildrenNodes = (node: MenuNode) => {
 
   if (node.children) {
     node.children.forEach((child: MenuNode) => {
-      // visibleKeys.value.delete(child.key);
       child.isVisible = false;
       closeChildrenNodes(child);
     });

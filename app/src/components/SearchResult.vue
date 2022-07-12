@@ -69,7 +69,11 @@ const addr = computed(() => {
 
   const addr = element.addr;
   if (addr) {
-    return format.getStringRepresentation(addr, "hexadecimal", 32);
+    return format.getStringRepresentation(
+      addr,
+      "hexadecimal",
+      element.data_width
+    );
   } else {
     return "";
   }

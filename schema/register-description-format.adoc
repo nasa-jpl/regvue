@@ -65,12 +65,13 @@ elements:
     type: reg
     id: blk0.reg1
     name: reg1
+    data_width: 16
     addr: 0x4
     offset: 0x4
     fields:
       - name: f0
         lsb: 0
-        nbits: 32
+        nbits: 16
         access: ro
         reset: 0x0
 ----
@@ -120,6 +121,9 @@ See also <<block-elements>>.
 The `root` property supports the following additional keys:
 
 * `display_name` -- The design name intended for human consumption.
+* `data_width` -- The size of register elements in number of bits.
+Applies to all children unless overwritten by a child element.
+If absent defaults to 32.
 
 [source,yaml]
 .`root` snippet
@@ -170,6 +174,9 @@ Required.
 Required.
 * `doc` -- Documentation for the element.
 Supports HTML.
+Optional.
+* `data_width` -- Specifies the size of register elements in number of bits.
+Applies to all children unless overwritten by a child element.
 Optional.
 
 [#block-elements]

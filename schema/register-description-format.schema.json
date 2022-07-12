@@ -1,12 +1,10 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.com/register.schema.json",
+  "$id": "https://json-schema.org/draft/2020-12/schema",
   "title": "Registers",
   "description": "A register description.",
   "type": "object",
   "required": [
     "schema",
-    "design",
     "root",
     "elements"
   ],
@@ -24,12 +22,12 @@
         }
       }
     },
-    "design": {
+    "root": {
       "description": "Contains design information",
       "type": "object",
       "required": [
         "name",
-        "version"
+        "children"
       ],
       "properties": {
         "name": {
@@ -46,20 +44,14 @@
           "patternProperties": {
             ".*": {
               "description": "A URI",
-              "type": "string",
-              "format": "uri-reference"
+              "type": "string"
             }
           }
-        }
-      }
-    },
-    "root": {
-      "description": "Contains design information",
-      "type": "object",
-      "required": [
-        "children"
-      ],
-      "properties": {
+        },
+        "data_width": {
+          "description": "Size of registers in number of bits",
+          "type": "number"
+        },
         "children": {
           "description": "An array of top level element IDs",
           "type": "array",
@@ -82,7 +74,6 @@
             "id",
             "name",
             "type",
-            "addr",
             "offset"
           ],
           "properties": {
@@ -96,16 +87,23 @@
             },
             "type": {
               "description": "The element type",
-              "enum": ["blk", "reg", "mem"]
+              "enum": [
+                "blk",
+                "reg",
+                "mem",
+                "include"
+              ]
             },
-            "addr": {
-              "description": "The address of the element within the design",
-              "type": "string",
-              "pattern": "^0x[0-9a-fA-F]+$"
+            "data_width": {
+              "description": "Size of registers in number of bits",
+              "type": "number"
             },
             "offset": {
               "description": "The offset of the element relative to its parent",
-              "type": "string",
+              "type": [
+                "string",
+                "number"
+              ],
               "pattern": "^0x[0-9a-fA-F]+$"
             },
             "doc": {
@@ -113,73 +111,155 @@
               "type": "string"
             }
           },
-          "if": {
-            "properties": { "type": { "const": "reg" } }
-          },
-          "then": {
-            "required": [
-              "fields"
-            ],
-            "properties": {
-              "fields": {
-                "description": "An array of child element IDs",
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "required": [
-                    "nbits",
-                    "lsb",
-                    "name",
-                    "access",
-                    "reset"
-                  ],
-                  "properties": {
-                    "nbits": {
-                      "description": "Number of bits",
-                      "type": "integer",
-                      "minimum": 1
-                    },
-                    "lsb": {
-                      "description": "Position of the least significant bit",
-                      "type": "integer",
-                      "minimum": 0
-                    },
-                    "name": {
-                      "description": "The name of the register field",
-                      "type": "string"
-                    },
-                    "access": {
-                      "description": "The software access type of the field",
-                      "type": "string"
-                    },
-                    "reset": {
-                      "description": "The reset value of the field",
-                      "type": "string",
-                      "pattern": "^0x[0-9a-fA-F]+$"
-                    },
-                    "doc": {
-                      "description": "Field documentation",
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "const": "reg"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "fields"
+                ],
+                "properties": {
+                  "fields": {
+                    "description": "An array of child element IDs",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "nbits",
+                        "lsb",
+                        "name",
+                        "access"
+                      ],
+                      "properties": {
+                        "nbits": {
+                          "description": "Number of bits",
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "lsb": {
+                          "description": "Position of the least significant bit",
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "name": {
+                          "description": "The name of the register field",
+                          "type": "string"
+                        },
+                        "access": {
+                          "description": "The software access type of the field",
+                          "type": "string"
+                        },
+                        "reset": {
+                          "description": "The reset value of the field",
+                          "type": [
+                            "string",
+                            "number",
+                            "object"
+                          ],
+                          "pattern": "^(0x|0b)[0-9a-fA-F|?]+$",
+                          "properties": {
+                            "value": {
+                              "description": "the value of the reset",
+                              "type": [
+                                "string",
+                                "number"
+                              ],
+                              "pattern": "^(0x|0b)[0-9a-fA-F|?]+$"
+                            },
+                            "resets": {
+                              "description": "named reset states to associate with the given reset value",
+                              "type": "array"
+                            }
+                          }
+                        },
+                        "doc": {
+                          "description": "Field documentation",
+                          "type": "string"
+                        },
+                        "enum": {
+                          "description": "Enumerated field values associated with a label",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "name",
+                              "value"
+                            ],
+                            "properties": {
+                              "name": {
+                                "description": "The name of the enumerated field value",
+                                "type": "string"
+                              },
+                              "value": {
+                                "description": "The field value to associate with the name",
+                                "type": [
+                                  "string",
+                                  "number"
+                                ]
+                              },
+                              "doc": {
+                                "description": "The description of the enumerated field value",
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "const": "include"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "url"
+                ],
+                "properties": {
+                  "url": {
+                    "description": "URL to fetch data from in nested inclusion block",
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "const": "blk"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "children"
+                ],
+                "properties": {
+                  "children": {
+                    "description": "An array of child element IDs",
+                    "type": "array",
+                    "items": {
                       "type": "string"
                     }
                   }
                 }
               }
             }
-          },
-          "else": {
-            "required": [
-              "children"
-            ],
-            "properties": {
-              "children": {
-                "description": "An array of child element IDs",
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            }
-          }
+          ]
         }
       }
     }

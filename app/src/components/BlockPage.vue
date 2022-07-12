@@ -31,11 +31,11 @@ defineProps<{
               <th class="w-[12%] text-sm">Offset</th>
               <th class="w-[12%] border-l-2 border-gray-400 text-sm">Name</th>
               <th
-                v-for="bit in 32"
+                v-for="bit in block.data_width"
                 :key="bit"
                 class="w-[3.5%] border-l-2 border-gray-400 text-sm"
               >
-                {{ 32 - bit }}
+                {{ block.data_width - bit }}
               </th>
             </tr>
           </thead>
@@ -44,6 +44,7 @@ defineProps<{
               v-for="id in block.children"
               :key="id"
               :element-id="id"
+              :data-width="block.data_width"
             />
           </tbody>
         </table>

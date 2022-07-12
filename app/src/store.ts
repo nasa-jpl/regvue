@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import {
+  DataWidth,
   DesignElement,
   DesignRoot,
   DisplayType,
@@ -9,7 +10,11 @@ import {
 } from "src/types";
 import format from "src/format";
 import parse from "src/parse";
-import { validate, validateResponse } from "src/validate";
+import {
+  validateSchema,
+  validateSemantics,
+  validateResponse,
+} from "src/validate";
 
 export const useStore = defineStore("store", {
   state: () => {
@@ -57,9 +62,9 @@ export const useStore = defineStore("store", {
         let validateMsg = validateResponse(result);
         if (validateMsg) return validateMsg;
 
-        // Validate the JSON data
+        // Validate the JSON data's schema
         const data = await result.json();
-        validateMsg = validate(data);
+        validateMsg = validateSchema(data);
         if (validateMsg) return validateMsg;
 
         // If the data is valid load the data
@@ -77,7 +82,8 @@ export const useStore = defineStore("store", {
       try {
         const data = await JSON.parse(jsonString);
 
-        const validateMsg = validate(data);
+        // Validate the JSON data's schema
+        const validateMsg = validateSchema(data);
         if (validateMsg) return validateMsg;
 
         await this.load(data);
@@ -98,9 +104,12 @@ export const useStore = defineStore("store", {
       if (!elements) throw Error("Error formating data");
       if (!root) throw Error("Error updating DesignRoot");
 
-      for (const [_, element] of elements.entries()) {
+      for (const [, element] of elements.entries()) {
         // Calculate the address from an element's offset and its parents' offsets
         element.addr = getAddress(element.id, elements);
+
+        // Get an elements data_width
+        element.data_width = getDataWidth(element, elements, root);
 
         // Set the default reset state
         if (element.type == "reg") {
@@ -117,6 +126,10 @@ export const useStore = defineStore("store", {
           element.fields?.sort((a, b) => b.lsb - a.lsb);
         }
       }
+
+      // Check the semantic details of the parsed data
+      const errorMessage = validateSemantics(root, elements);
+      if (errorMessage) throw Error(errorMessage);
 
       this.elements = elements;
       this.root = root;
@@ -140,7 +153,7 @@ const formatData = async (
   elements: { [key: string]: DesignElement | IncludeElement },
   root: DesignRoot
 ) => {
-  let formattedElements = new Map<string, DesignElement>();
+  const formattedElements = new Map<string, DesignElement>();
 
   for (const element of Object.values(elements)) {
     // If the element is an IncludeElement fetch and format from its url
@@ -174,7 +187,7 @@ const formatData = async (
 
         // Replace any reference to the include block with the json data it references for previous
         // formattedElement values
-        for (const [_, formattedElement] of formattedElements.entries()) {
+        for (const [, formattedElement] of formattedElements.entries()) {
           const idx = formattedElement.children?.indexOf(element.id) || -1;
           if (idx >= 0 && parentId && formattedElement.children) {
             formattedElement.children = [
@@ -210,7 +223,7 @@ const formatData = async (
         }
 
         // From the fetched JSON data create a map of string keys to DesignElements
-        const [newData, _newRoot] = (await formatData(data, root)) as [
+        const [newData] = (await formatData(data, root)) as [
           Map<string, DesignElement>,
           unknown
         ];
@@ -313,4 +326,28 @@ const getAddress = (
     }
   }
   return result;
+};
+
+// Return an element's data width in nbits
+// If not found on element, return the data width of the nearest ancestor with one set
+const getDataWidth = (
+  element: DesignElement,
+  elements: Map<string, DesignElement>,
+  root: DesignRoot
+): DataWidth => {
+  if (!element.data_width) {
+    const parentElem = getParent(element.id, elements);
+    if (!parentElem) {
+      if (root.data_width) {
+        return root.data_width;
+      } else {
+        return 32;
+      }
+    }
+
+    const parentDataWidth = getDataWidth(parentElem, elements, root);
+    return parentDataWidth;
+  }
+
+  return element.data_width;
 };

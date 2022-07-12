@@ -2,13 +2,14 @@
 import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "src/store";
-import { DesignElement } from "src/types";
+import { DataWidth, DesignElement } from "src/types";
 import { vResponsiveRotate } from "src/directives/ResponsiveRotate";
 
 import RegFields from "src/components/RegFields.vue";
 
 const props = defineProps<{
   elementId: string;
+  dataWidth: DataWidth;
 }>();
 
 const route = useRoute();
@@ -78,12 +79,12 @@ const href = computed(
       </td>
     </template>
     <template v-else-if="element.type == 'blk'">
-      <td :colspan="32" class="truncate border-l-2 border-gray-400 px-2">
+      <td :colspan="dataWidth" class="truncate border-l-2 border-gray-400 px-2">
         {{ element.doc }}
       </td>
     </template>
     <template v-else-if="element.type == 'mem'">
-      <td :colspan="32" class="truncate border-l-2 border-gray-400 px-2">
+      <td :colspan="dataWidth" class="truncate border-l-2 border-gray-400 px-2">
         reserved memory
       </td>
     </template>
