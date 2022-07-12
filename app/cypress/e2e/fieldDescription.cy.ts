@@ -7,17 +7,17 @@ describe("register-fields-table", () => {
 
   it("toggles field display order", () => {
     // Starts with displaying MSB field first
-    cy.get("#bit-range-0").should("include.text", "31:");
-    cy.get("[id^=bit-range-]").last().should("include.text", ":0");
+    cy.get("#bit-range-0").should("have.text", "31:8");
+    cy.get("[id^=bit-range-]").last().should("have.text", "0");
 
     // Can toggle to show LSB field first
     cy.get("#toggle-field-display-order-button").click();
-    cy.get("#bit-range-0").should("include.text", ":0");
-    cy.get("[id^=bit-range-]").last().should("include.text", "31:");
+    cy.get("#bit-range-0").should("have.text", "0");
+    cy.get("[id^=bit-range-]").last().should("have.text", "31:8");
 
     // Preserves decision on reload
     cy.reload();
-    cy.get("#bit-range-0").should("include.text", ":0");
-    cy.get("[id^=bit-range-]").last().should("include.text", "31:");
+    cy.get("#bit-range-0").should("have.text", "0");
+    cy.get("[id^=bit-range-]").last().should("have.text", "31:8");
   });
 });
