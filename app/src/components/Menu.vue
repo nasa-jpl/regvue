@@ -237,7 +237,7 @@ onMounted(() => {
   >
     <div
       id="navigation-menu"
-      class="text-md mt-[1px] flex h-full flex-grow flex-col overflow-y-scroll bg-white pb-12"
+      class="text-md mt-[1px] flex h-full flex-grow flex-col overflow-y-scroll bg-white pb-32"
       :class="menuVisible ? '' : 'hidden'"
     >
       <!-- Show the nodes -->

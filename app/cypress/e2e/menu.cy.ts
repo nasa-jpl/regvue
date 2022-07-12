@@ -105,6 +105,11 @@ describe("menu-component", () => {
   });
 
   it("can be closed and reopened", () => {
+    // Make viewport small
+    cy.viewport(1000, 800);
+
+    cy.get("#navigation-menu").should("not.be.visible");
+    cy.get("#toggle-menu-button").click();
     cy.get("#navigation-menu").should("be.visible");
     cy.get("#toggle-menu-button").click();
     cy.get("#navigation-menu").should("not.be.visible");

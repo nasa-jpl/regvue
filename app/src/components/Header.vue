@@ -2,10 +2,10 @@
 import { computed, watch, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "src/store";
+
 import Search from "src/components/Search.vue";
 
 import FileReplaceOutline from "vue-material-design-icons/FileReplaceOutline.vue";
-import HamburgerMenu from "vue-material-design-icons/Menu.vue";
 
 defineProps<{
   title?: string;
@@ -61,21 +61,10 @@ watch(
       id="header-bar"
       class="flex flex-row justify-between border-b border-gray-400 bg-gray-300 py-2 text-lg font-medium text-black md:text-xl"
     >
-      <div class="ml-6 flex flex-row items-center space-x-2">
-        <!-- Show menu to collapse nav bar (needs to be wrapped in div for @click to work) -->
-        <button
-          id="toggle-menu-button"
-          class="hover:cursor-pointer hover:bg-gray-400"
-          @click="emit('toggle-menu')"
-        >
-          <hamburger-menu />
-        </button>
-
-        <!-- Show design name -->
-        <div id="header-title">
-          {{ title }}
-          <template v-if="version != ''">({{ version }})</template>
-        </div>
+      <!-- Show design name -->
+      <div id="header-title" class="ml-6">
+        {{ title }}
+        <template v-if="version != ''">({{ version }})</template>
       </div>
 
       <Search />
