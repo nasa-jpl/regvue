@@ -5,7 +5,6 @@ import format from "src/format";
 import parse from "src/parse";
 
 import ChevronDown from "vue-material-design-icons/ChevronDown.vue";
-import ChevronUp from "vue-material-design-icons/ChevronUp.vue";
 
 const props = defineProps<{
   name: string;
@@ -221,14 +220,9 @@ const getErrorMessage = (value: string) => {
       />
 
       <chevron-down
-        v-if="enums.length && !showEnum"
+        v-if="enums.length"
         class="z-20 col-start-1 row-start-1 justify-self-end hover:cursor-pointer"
         @click="focusOnInput()"
-      />
-      <chevron-up
-        v-else-if="enums.length && showEnum"
-        class="z-20 col-start-1 row-start-1 justify-self-end hover:cursor-pointer"
-        @blur="showEnum = false"
       />
     </div>
 

@@ -34,8 +34,6 @@ const displayOrder = ref(
   parseInt(cookies.get("regvue-fields-display-order")) || 0
 );
 
-const showEnumValues = ref(false);
-
 // Swap the display order of the fields table
 const toggleDisplayOrder = () => {
   if (displayOrder.value == DisplayOrder.msb) {
@@ -90,101 +88,74 @@ const stopHighlightField = () => {
         <th>Description</th>
       </thead>
       <tbody>
-        <template v-for="(field, i) in fields" :key="field.name">
-          <tr
-            class="border-b-2"
-            :class="[
-              selectedField == field.name ? 'bg-yellow-50' : '',
-              selectedField || selectedField == ''
-                ? 'hover:cursor-pointer'
-                : '',
-            ]"
-            @mouseenter="highlightField(field.name)"
-            @mouseleave="stopHighlightField"
-            @click="selectField(field.name)"
+        <tr
+          v-for="(field, i) in fields"
+          :key="field.name"
+          class="border-b-2"
+          :class="[
+            selectedField == field.name ? 'bg-yellow-50' : '',
+            selectedField || selectedField == '' ? 'hover:cursor-pointer' : '',
+          ]"
+          @mouseenter="highlightField(field.name)"
+          @mouseleave="stopHighlightField"
+          @click="selectField(field.name)"
+        >
+          <!-- Show the bit range -->
+          <td
+            v-if="field.nbits > 1"
+            :id="'bit-range-' + i"
+            class="px-2 text-center"
           >
-            <!-- Show the bit range -->
-            <td
-              v-if="field.nbits > 1"
-              :id="'bit-range-' + i"
-              class="px-2 text-center"
-            >
-              {{ field.nbits + field.lsb - 1 }}:{{ field.lsb }}
-            </td>
-            <td v-else :id="'bit-range-' + i" class="px-2 text-center">
-              {{ field.lsb }}
-            </td>
+            {{ field.nbits + field.lsb - 1 }}:{{ field.lsb }}
+          </td>
+          <td v-else :id="'bit-range-' + i" class="px-2 text-center">
+            {{ field.lsb }}
+          </td>
 
-            <!-- Show the field name -->
-            <td class="border-l-2 px-2 text-center">
-              {{ field.name }}
-            </td>
+          <!-- Show the field name -->
+          <td class="border-l-2 px-2 text-center">
+            {{ field.name }}
+          </td>
 
-            <!-- Show the access -->
-            <td class="border-l-2 px-2 text-center">
-              <!-- Replace regular hypens with a non-breaking hypen -->
-              <!-- Prevents line wrapping on hypens -->
-              {{ field.access.replaceAll("-", "&#8209;") }}
-            </td>
+          <!-- Show the access -->
+          <td class="border-l-2 px-2 text-center">
+            <!-- Replace regular hypens with a non-breaking hypen -->
+            <!-- Prevents line wrapping on hypens -->
+            {{ field.access.replaceAll("-", "&#8209;") }}
+          </td>
 
-            <!-- Show the description as html -->
-            <td class="border-l-2 px-2">
-              <!-- eslint-disable-next-line vue/no-v-html -->
-              <div class="default-styles">
-                {{ field.doc }}
-              </div>
+          <!-- Show the description as html -->
+          <td class="border-l-2 px-2">
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <div class="default-styles">
+              {{ field.doc }}
+            </div>
 
-              <button
-                v-if="field.enum"
-                class="z-30 text-sm text-blue-500 underline"
-                @click.stop="showEnumValues = !showEnumValues"
-              >
-                <template v-if="showEnumValues">
-                  Hide enumerated field values
-                </template>
-                <template v-else> Show enumerated field values </template>
-              </button>
-            </td>
-          </tr>
+            <div v-if="field.enum" class="my-4 mx-0 w-fit text-left">
+              <div>Enumerated values:</div>
 
-          <!-- Add row to show enumerated field values as Name | Value | Description table -->
-          <tr
-            v-if="showEnumValues && field.enum"
-            class="border-b-2"
-            :class="[
-              selectedField == field.name ? 'bg-yellow-50' : '',
-              selectedField || selectedField == ''
-                ? 'hover:cursor-pointer'
-                : '',
-            ]"
-            @mouseenter="highlightField(field.name)"
-            @mouseleave="stopHighlightField"
-            @click="selectField(field.name)"
-          >
-            <td :colspan="4" class="bg-gray-200">
-              <div class="m-2">
-                <table class="m-auto w-fit min-w-[50%] rounded bg-white">
-                  <thead class="border border-gray-200 bg-gray-100">
-                    <th class="px-2">Name</th>
-                    <th class="border-l-2 px-2">Value</th>
-                    <th class="border-l-2 px-2">Description</th>
-                  </thead>
-                  <tbody>
-                    <tr v-for="e in field.enum" :key="e.name" class="border-b">
-                      <td class="border-l-2 px-2">
-                        {{ e.name }}
-                      </td>
-                      <td class="border-l-2 px-2">
-                        {{ e.value }}
-                      </td>
-                      <td class="border-l-2 px-2">{{ e.doc }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </td>
-          </tr>
-        </template>
+              <!-- Add a table to show enumerated field values as Name | Value | Description table -->
+              <table class="w-fit min-w-[50%] rounded bg-white">
+                <thead class="border-2 border-gray-200 bg-gray-100">
+                  <th class="px-2">Name</th>
+                  <th class="border-l-2 px-2">Value</th>
+                  <th class="border-l-2 px-2">Description</th>
+                </thead>
+                <tbody>
+                  <tr v-for="e in field.enum" :key="e.name" class="border-b">
+                    <td class="border-l-2 px-2">
+                      {{ e.name }}
+                    </td>
+                    <td class="border-l-2 px-2">
+                      {{ e.value }}
+                    </td>
+                    <td class="border-x-2 px-2">{{ e.doc }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
