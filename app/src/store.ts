@@ -10,7 +10,11 @@ import {
 } from "src/types";
 import format from "src/format";
 import parse from "src/parse";
-import { validate, validateResponse } from "src/validate";
+import {
+  validateSchema,
+  validateSemantics,
+  validateResponse,
+} from "src/validate";
 
 export const useStore = defineStore("store", {
   state: () => {
@@ -58,12 +62,10 @@ export const useStore = defineStore("store", {
         let validateMsg = validateResponse(result);
         if (validateMsg) return validateMsg;
 
-        // Validate the JSON data
+        // Validate the JSON data's schema
         const data = await result.json();
-
-        // TODO fix for new data_width implementation
-        // validateMsg = validate(data);
-        // if (validateMsg) return validateMsg;
+        validateMsg = validateSchema(data);
+        if (validateMsg) return validateMsg;
 
         // If the data is valid load the data
         await this.load(data, url);
@@ -80,9 +82,9 @@ export const useStore = defineStore("store", {
       try {
         const data = await JSON.parse(jsonString);
 
-        // TODO fix for new data_width implementation
-        // const validateMsg = validate(data);
-        // if (validateMsg) return validateMsg;
+        // Validate the JSON data's schema
+        const validateMsg = validateSchema(data);
+        if (validateMsg) return validateMsg;
 
         await this.load(data);
         return "";
@@ -124,6 +126,10 @@ export const useStore = defineStore("store", {
           element.fields?.sort((a, b) => b.lsb - a.lsb);
         }
       }
+
+      // Check the semantic details of the parsed data
+      const errorMessage = validateSemantics(root, elements);
+      if (errorMessage) throw Error(errorMessage);
 
       this.elements = elements;
       this.root = root;
@@ -181,7 +187,7 @@ const formatData = async (
 
         // Replace any reference to the include block with the json data it references for previous
         // formattedElement values
-        for (const [_, formattedElement] of formattedElements.entries()) {
+        for (const [, formattedElement] of formattedElements.entries()) {
           const idx = formattedElement.children?.indexOf(element.id) || -1;
           if (idx >= 0 && parentId && formattedElement.children) {
             formattedElement.children = [
@@ -217,7 +223,7 @@ const formatData = async (
         }
 
         // From the fetched JSON data create a map of string keys to DesignElements
-        const [newData, _newRoot] = (await formatData(data, root)) as [
+        const [newData] = (await formatData(data, root)) as [
           Map<string, DesignElement>,
           unknown
         ];

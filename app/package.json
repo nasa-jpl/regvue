@@ -11,6 +11,7 @@
     "format": "npx prettier --write ."
   },
   "dependencies": {
+    "ajv": "^8.11.0",
     "lunr": "^2.3.9",
     "pinia": "^2.0.14",
     "tailwindcss": "^3.0.24",
