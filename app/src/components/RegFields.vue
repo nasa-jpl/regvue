@@ -130,6 +130,30 @@ const stopHighlightField = () => {
             <div class="default-styles">
               {{ field.doc }}
             </div>
+
+            <div v-if="field.enum" class="my-4 mx-0 w-fit text-left">
+              <div>Enumerated values:</div>
+
+              <!-- Add a table to show enumerated field values as Name | Value | Description table -->
+              <table class="w-fit min-w-[50%] rounded bg-white">
+                <thead class="border-2 border-gray-200 bg-gray-100">
+                  <th class="px-2">Name</th>
+                  <th class="border-l-2 px-2">Value</th>
+                  <th class="border-l-2 px-2">Description</th>
+                </thead>
+                <tbody>
+                  <tr v-for="e in field.enum" :key="e.name" class="border-b">
+                    <td class="border-l-2 px-2">
+                      {{ e.name }}
+                    </td>
+                    <td class="border-l-2 px-2">
+                      {{ e.value }}
+                    </td>
+                    <td class="border-x-2 px-2">{{ e.doc }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </td>
         </tr>
       </tbody>

@@ -4,6 +4,8 @@ import { Bit, DisplayType, isUnknownBit } from "src/types";
 import format from "src/format";
 import parse from "src/parse";
 
+import ChevronDown from "vue-material-design-icons/ChevronDown.vue";
+
 const props = defineProps<{
   name: string;
   bitArray: Bit[];
@@ -27,7 +29,7 @@ let displayValue = ref(
 onBeforeMount(() => {
   for (const e of props.enums) {
     if (e.value == parse.num(displayValue.value)) {
-      displayValue.value = `${displayValue.value} (${e.name})`;
+      displayValue.value = `${e.name} (${displayValue.value})`;
       return;
     }
   }
@@ -45,6 +47,13 @@ let showEnum = ref(false);
 // Determine whether or not to show the error tooltip below the input
 let showErrorTooltip = ref(false);
 
+// Focuses on the input box
+const focusOnInput = () => {
+  (
+    document.querySelector(`#input-box-${props.name}`) as HTMLInputElement
+  ).focus();
+};
+
 // Remove the highlight, deselect the input, and reformat the
 // displayValue if there is no error
 const deactivate = () => {
@@ -59,7 +68,7 @@ const deactivate = () => {
 
     for (const e of props.enums) {
       if (e.value == parse.num(displayValue.value)) {
-        displayValue.value = `${displayValue.value} (${e.name})`;
+        displayValue.value = `${e.name} (${displayValue.value})`;
         return;
       }
     }
@@ -88,7 +97,7 @@ const updateValue = (addEnumName = false) => {
   if (addEnumName) {
     for (const e of props.enums) {
       if (e.value == parse.num(value)) {
-        displayValue.value = `${value} (${e.name})`;
+        displayValue.value = `${e.name} (${value})`;
         return;
       }
     }
@@ -209,6 +218,12 @@ const getErrorMessage = (value: string) => {
         @mouseenter="showErrorTooltip = true"
         @mouseleave="showErrorTooltip = false"
       />
+
+      <chevron-down
+        v-if="enums.length"
+        class="z-20 col-start-1 row-start-1 justify-self-end hover:cursor-pointer"
+        @click="focusOnInput()"
+      />
     </div>
 
     <!-- Show that the field value has an error -->
@@ -233,36 +248,31 @@ const getErrorMessage = (value: string) => {
     <!-- Show the enum value dropdown options -->
     <div
       v-else-if="showEnum && enums.length"
-      class="absolute top-[1.1rem] left-[50%] z-50 mt-1 w-fit translate-x-[-50%]"
+      class="absolute top-[calc(1.25rem+1px)] left-[50%] z-50 mt-1 w-fit translate-x-[-50%]"
     >
-      <!-- Display small triangle pointing up -->
       <div
-        class="m-auto h-0 w-0 border-[6px] border-transparent border-b-gray-400"
-      ></div>
-
-      <div
-        class="rounded border border-b-0 border-t-4 border-gray-400 border-t-gray-400 bg-gray-200"
+        class="rounded border border-b-0 border-gray-400 border-t-gray-400 bg-white"
       >
         <div
           v-for="e in enums"
           :key="e.name"
           class="border-b border-gray-400 px-1 hover:cursor-pointer hover:bg-gray-300"
         >
-          <!-- Show individual enum value by as "(value) name" -->
+          <!-- Show individual enum value by as "name (value)" -->
           <button
             class="w-full truncate text-left"
             @mouseenter="selectEnumValue(e.value, true)"
             @mouseleave="restoreCachedValue()"
             @click="selectEnumValue(e.value, false)"
           >
-            {{
+            {{ e.name }}
+            ({{
               format.getStringRepresentation(
                 parse.num(e.value.toString()),
                 selectedDisplayType,
                 nbits
               )
-            }}
-            ({{ e.name }})
+            }})
           </button>
         </div>
       </div>
