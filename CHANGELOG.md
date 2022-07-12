@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added support for 16 bit registers ([#110](https://github.jpl.nasa.gov/regvue/regvue/pull/110)).
 ### Fixed
+- Only display a single bit for the bit range of single bit fields ([#120](https://github.jpl.nasa.gov/regvue/regvue/pull/120)).
 - Numerous bug fixes affecting drap & drop, menu navigation, swapping display types, and loading include blocks ([#119](https://github.jpl.nasa.gov/regvue/regvue/pull/119)).
 
 ### Changed
