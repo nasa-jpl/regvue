@@ -101,8 +101,15 @@ const stopHighlightField = () => {
           @click="selectField(field.name)"
         >
           <!-- Show the bit range -->
-          <td :id="'bit-range-' + i" class="px-2 text-center">
+          <td
+            v-if="field.nbits > 1"
+            :id="'bit-range-' + i"
+            class="px-2 text-center"
+          >
             {{ field.nbits + field.lsb - 1 }}:{{ field.lsb }}
+          </td>
+          <td v-else :id="'bit-range-' + i" class="px-2 text-center">
+            {{ field.lsb }}
           </td>
 
           <!-- Show the field name -->
