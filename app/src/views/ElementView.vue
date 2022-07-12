@@ -164,7 +164,8 @@ watch(
 
     <button
       v-if="windowWidth < WINDOW_BREAKPOINT"
-      class="absolute bottom-4 left-4 z-50 rounded-full border bg-gray-300 p-3 shadow hover:cursor-pointer hover:shadow-2xl"
+      id="toggle-menu-button"
+      class="absolute bottom-3 left-3 z-50 rounded-full border bg-gray-300 p-2 shadow hover:cursor-pointer hover:shadow-2xl"
       @click="toggleMenu()"
     >
       <template v-if="menuVisible">
