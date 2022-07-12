@@ -27,7 +27,7 @@ let displayValue = ref(
 onBeforeMount(() => {
   for (const e of props.enums) {
     if (e.value == parse.num(displayValue.value)) {
-      displayValue.value = `${displayValue.value} (${e.name})`;
+      displayValue.value = `${e.name} (${displayValue.value})`;
       return;
     }
   }
@@ -59,7 +59,7 @@ const deactivate = () => {
 
     for (const e of props.enums) {
       if (e.value == parse.num(displayValue.value)) {
-        displayValue.value = `${displayValue.value} (${e.name})`;
+        displayValue.value = `${e.name} (${displayValue.value})`;
         return;
       }
     }
@@ -88,7 +88,7 @@ const updateValue = (addEnumName = false) => {
   if (addEnumName) {
     for (const e of props.enums) {
       if (e.value == parse.num(value)) {
-        displayValue.value = `${value} (${e.name})`;
+        displayValue.value = `${e.name} (${value})`;
         return;
       }
     }
@@ -248,21 +248,21 @@ const getErrorMessage = (value: string) => {
           :key="e.name"
           class="border-b border-gray-400 px-1 hover:cursor-pointer hover:bg-gray-300"
         >
-          <!-- Show individual enum value by as "(value) name" -->
+          <!-- Show individual enum value by as "name (value)" -->
           <button
             class="w-full truncate text-left"
             @mouseenter="selectEnumValue(e.value, true)"
             @mouseleave="restoreCachedValue()"
             @click="selectEnumValue(e.value, false)"
           >
-            {{
+            {{ e.name }}
+            ({{
               format.getStringRepresentation(
                 parse.num(e.value.toString()),
                 selectedDisplayType,
                 nbits
               )
-            }}
-            ({{ e.name }})
+            }})
           </button>
         </div>
       </div>
