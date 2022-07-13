@@ -26,16 +26,24 @@ export const createSearchIndex = (elements: Map<string, DesignElement>) => {
 
     // Add all reg/blk/mem elements to the search index
     for (const document of elements.values()) {
+      let addr;
+      try {
+        addr = format.getStringRepresentation(
+          document.addr,
+          "hexadecimal",
+          document.data_width
+        );
+      } catch (e) {
+        console.warn(e);
+        addr = "";
+      }
+
       builder.add(
         {
           id: document.id,
           name: document.name,
           doc: document.doc,
-          addr: format.getStringRepresentation(
-            document.addr,
-            "hexadecimal",
-            document.data_width
-          ),
+          addr: addr,
         },
         { boost: 25 } // prioritize registers over fields
       );
