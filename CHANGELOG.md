@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Remove schema requirement for `root.name` ([#131](https://github.jpl.nasa.gov/regvue/regvue/pull/131)).
 
+### Changed
+- Include elements are no longer replaced with the children of the fetched root, but instead merged with the fetched root and turned into a `blk` element ([#132](https://github.jpl.nasa.gov/regvue/regvue/pull/132)).
+
 ## [0.6.2] - 2022-07-13
 ### Added
 - Added table to field description cell to show enumerated values ([#123](https://github.jpl.nasa.gov/regvue/regvue/pull/123)).

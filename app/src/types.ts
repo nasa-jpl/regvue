@@ -78,6 +78,7 @@ export interface IncludeElement {
   links?: Map<string, string>;
   type: "include";
   url: string;
+  data_width?: number;
 }
 
 // Interface representing the fields necessary for a menu node

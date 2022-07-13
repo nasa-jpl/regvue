@@ -173,56 +173,34 @@ const formatData = async (
           parentId = idArr.slice(0, idArr.length - 1).join(".");
         }
 
-        // Replace any references to the include block with the json data it references for the root
-        const idx = root.children.indexOf(element.id);
-        if (idx >= 0) {
-          root.children = [
-            ...root.children.slice(0, idx),
-            ...json.root.children.map((childId) =>
-              parentId ? [parentId, childId].join(".") : childId
-            ),
-            ...root.children.slice(idx + 1),
-          ];
-        }
+        const elem = {
+          id: element.id,
+          name: element.name,
+          display_name: element.display_name,
+          addr: 0,
+          offset: element.offset,
+          type: "blk",
+          doc: element.doc,
+          version: element.version,
+          children: [],
+          data_width: json.root.data_width
+            ? json.root.data_width
+            : element.data_width,
+        } as DesignElement;
 
-        // Replace any reference to the include block with the json data it references for previous
-        // formattedElement values
-        for (const [, formattedElement] of formattedElements.entries()) {
-          let idx = formattedElement.children?.indexOf(element.id);
-          if (idx === undefined) {
-            idx = -1;
-          }
-
-          if (idx >= 0 && parentId && formattedElement.children) {
-            formattedElement.children = [
-              ...formattedElement.children.slice(0, idx),
-              ...json.root.children.map((childId) =>
-                [parentId, childId].join(".")
-              ),
-              ...formattedElement.children.slice(idx + 1),
-            ];
-          }
+        // Add the children of the root as children of the include block
+        for (const childId of Object.values(json.root.children)) {
+          elem.children?.push([elem.id, childId].join("."));
         }
 
         for (const child of Object.values(json.elements)) {
-          // Increase the offset of the fetched JSON element by the offset of the IncludeElement
-          // Only increase the address of the top level include children (their id will have no "."'s)
-          if (!child.id.includes(".")) {
-            child.offset =
-              parseInt(element.offset?.toString()) ||
-              0 + parseInt(child.offset?.toString()) ||
-              0;
-          }
-
           // Append the parentId to the id of the fetched json element
-          if (parentId) {
-            child.id = [parentId, child.id].join(".");
-          }
+          child.id = [elem.id, child.id].join(".");
 
           // Append the parentId to each child of the fetched JSON element
           if (child.type != "include" && child.children && parentId) {
             child.children = child.children.map((id) =>
-              [parentId, id].join(".")
+              [elem.id, id].join(".")
             );
           }
 
@@ -236,6 +214,7 @@ const formatData = async (
         ];
 
         // Merge together the new DesignElements with the previously collected elements
+        formattedElements.set(elem.id, elem);
         for (const [key, value] of newData.entries()) {
           formattedElements.set(key, value);
         }
