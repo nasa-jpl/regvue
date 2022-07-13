@@ -64,10 +64,10 @@ export const validateSemantics = (
     }
 
     // Validate that the offset is in a 32 bit address space
-    if (parse.stringToBitArray(element.offset.toString()).length > 32) {
+    if (parse.stringToBitArray((element.offset || 0).toString()).length > 32) {
       return `Element "${element.id}" has an offset greater than 32 bits.`;
     }
-    if (parse.stringToBitArray(element.addr.toString()).length > 32) {
+    if (parse.stringToBitArray((element.addr || 0).toString()).length > 32) {
       return `Element "${element.id}" has an address greater than 32 bits. Check that the sum of its offset and its ancestors' offsets don't exceed 32 bits`;
     }
 
