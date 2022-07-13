@@ -1,5 +1,6 @@
 import Ajv from "ajv";
 import { isValidDataWidth, DesignRoot, DesignElement } from "src/types";
+import parse from "src/parse";
 import schema from "../../schema/register-description-format.schema.json";
 
 const ajv = new Ajv({ allowUnionTypes: true });
@@ -62,10 +63,15 @@ export const validateSemantics = (
       }
     }
 
+    // Validate that the offset is in a 32 bit address space
+    if (parse.stringToBitArray(element.offset.toString()).length > 32) {
+      return `Element "${element.id}" has an offset greater than 32 bits.`;
+    }
+
     // Validate register specific arguments
     if (element.type == "reg") {
       if (!element.fields) {
-        throw Error(`Element ${element.id} is missing fields`);
+        throw Error(`Element "${element.id}" is missing fields`);
       }
 
       // Track the names of fields to prevent duplicates
