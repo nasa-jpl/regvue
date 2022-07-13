@@ -182,9 +182,9 @@ describe("register-layout", () => {
   it("shows enumerated field values", () => {
     cy.get("#input-box-long_command")
       .type("0x5{enter}")
-      .should("have.value", "0x5 (START)");
+      .should("have.value", "START (0x5)");
     cy.get("#select-display-type-binary").click();
-    cy.get("#input-box-long_command").should("have.value", "0b0101 (START)");
+    cy.get("#input-box-long_command").should("have.value", "START (0b0101)");
 
     cy.get("#input-box-long_command")
       .type("0b1010{enter}")
