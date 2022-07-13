@@ -183,19 +183,19 @@ const formatData = async (
           doc: element.doc,
           version: element.version,
           children: [],
-          data_width: element.data_width,
+          data_width: json.root.data_width
+            ? json.root.data_width
+            : element.data_width,
         } as DesignElement;
+
+        // Add the children of the root as children of the include block
+        for (const childId of Object.values(json.root.children)) {
+          elem.children?.push([elem.id, childId].join("."));
+        }
 
         for (const child of Object.values(json.elements)) {
           // Append the parentId to the id of the fetched json element
-          const originalId = child.id;
           child.id = [elem.id, child.id].join(".");
-
-          // If the child originally had no parent element (indicated by no "." in
-          //the id), add it as a child of the include element
-          if (!originalId.includes(".")) {
-            elem.children?.push(child.id);
-          }
 
           // Append the parentId to each child of the fetched JSON element
           if (child.type != "include" && child.children && parentId) {
