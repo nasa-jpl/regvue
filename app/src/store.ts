@@ -205,6 +205,15 @@ const formatData = async (
         }
 
         for (const child of Object.values(json.elements)) {
+          // Increase the offset of the fetched JSON element by the offset of the IncludeElement
+          // Only increase the address of the top level include children (their id will have no "."'s)
+          if (!child.id.includes(".")) {
+            child.offset =
+              parseInt(element.offset?.toString()) ||
+              0 + parseInt(child.offset?.toString()) ||
+              0;
+          }
+
           // Append the parentId to the id of the fetched json element
           if (parentId) {
             child.id = [parentId, child.id].join(".");
@@ -216,12 +225,6 @@ const formatData = async (
               [parentId, id].join(".")
             );
           }
-
-          // Increase the offset of the fetched JSON element by the offset of the IncludeElement
-          child.offset =
-            parseInt(element.offset?.toString()) ||
-            0 + parseInt(child.offset?.toString()) ||
-            0;
 
           data[child.id] = child;
         }
