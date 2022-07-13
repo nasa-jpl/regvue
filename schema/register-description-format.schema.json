@@ -26,12 +26,15 @@
       "description": "Contains design information",
       "type": "object",
       "required": [
-        "name",
         "children"
       ],
       "properties": {
         "name": {
           "description": "The name of the design",
+          "type": "string"
+        },
+        "display_name": {
+          "description": "The name of the design meant to be displayed",
           "type": "string"
         },
         "version": {
