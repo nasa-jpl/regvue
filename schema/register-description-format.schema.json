@@ -76,8 +76,7 @@
           "required": [
             "id",
             "name",
-            "type",
-            "offset"
+            "type"
           ],
           "properties": {
             "id": {
@@ -125,7 +124,8 @@
               },
               "then": {
                 "required": [
-                  "fields"
+                  "fields",
+                  "offset"
                 ],
                 "properties": {
                   "fields": {

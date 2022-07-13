@@ -162,6 +162,12 @@ const formatData = async (
         const response = await fetch(element.url);
         const json = (await response.json()) as RegisterDescriptionFile;
 
+        // Validate the JSON data's schema
+        const validateMsg = validateSchema(json);
+        if (validateMsg) {
+          throw Error(`Schema error at ${element.url}.\n${validateMsg}`);
+        }
+
         const data = {} as { [key: string]: DesignElement | IncludeElement };
 
         // Get the id of the parent of the current IncludeElement
@@ -220,9 +226,7 @@ const formatData = async (
         }
       } catch (e) {
         console.error(e);
-        throw Error(
-          `Failed to load include block "${element.id}". Check console for details.`
-        );
+        throw Error(e as string);
       }
     }
 
@@ -295,19 +299,20 @@ const getDefaultResetState = (
 // Helper function to get an element's address from its and its parents' offsets
 const getAddress = (
   key: string,
-  elements: Map<string, { offset: number | string }>
+  elements: Map<string, { offset?: number | string }>
 ) => {
   // How many elements are there in hierachy (e.g. blk.sub_blk.reg => 3)
   const count = key.split(".").length + 1;
 
   // Add up the offset of every element along the current key's hierarchy
-  let result = 0;
+  let result;
   for (let i = 1; i < count; i++) {
     const id = key.split(".").slice(0, i).join(".");
     const elem = elements.get(id);
     if (!elem) throw Error(`Could not find element ${id} (${i})`);
 
     if (elem.offset) {
+      if (result === undefined) result = 0;
       result += parseInt(elem.offset.toString());
     }
   }

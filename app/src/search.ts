@@ -28,11 +28,15 @@ export const createSearchIndex = (elements: Map<string, DesignElement>) => {
     for (const document of elements.values()) {
       let addr;
       try {
-        addr = format.getStringRepresentation(
-          document.addr,
-          "hexadecimal",
-          document.data_width
-        );
+        if (document.addr === undefined) {
+          addr = "";
+        } else {
+          addr = format.getStringRepresentation(
+            document.addr,
+            "hexadecimal",
+            document.data_width
+          );
+        }
       } catch (e) {
         console.warn(e);
         addr = "";

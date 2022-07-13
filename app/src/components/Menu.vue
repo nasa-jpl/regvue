@@ -56,7 +56,7 @@ const getNodes = (
       data: {
         name: child.display_name ? child.display_name : child.name,
         version: child.version,
-        addr: format.hex(child.addr || 0),
+        addr: child.addr === undefined ? "" : format.hex(child.addr),
       },
     } as MenuNode;
 
