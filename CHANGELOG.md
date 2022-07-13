@@ -4,15 +4,15 @@ All notable changes to the regvue project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
 ## [Unreleased]
+## [0.6.2] - 2022-07-13
 ### Added
 - Added table to field description cell to show enumerated values ([#123](https://github.jpl.nasa.gov/regvue/regvue/pull/123)).
 - Added support for 16 bit registers ([#110](https://github.jpl.nasa.gov/regvue/regvue/pull/110)).
 ### Fixed
 - Fixed a bug resulting in incorrect offsets of elements fetched from include blocks ([#125](https://github.jpl.nasa.gov/regvue/regvue/pull/125)).
 - Only display a single bit for the bit range of single bit fields ([#120](https://github.jpl.nasa.gov/regvue/regvue/pull/120)).
-- Numerous bug fixes affecting drap & drop, menu navigation, swapping display types, and loading include blocks ([#119](https://github.jpl.nasa.gov/regvue/regvue/pull/119)).
+- Fixed numerous bug fixes affecting drap & drop, menu navigation, swapping display types, and loading include blocks ([#119](https://github.jpl.nasa.gov/regvue/regvue/pull/119)).
 
 ### Changed
 - Removed the toggle menu button from the header. This button now shows on smaller screens on the bottom left of the screen ([#124](https://github.jpl.nasa.gov/regvue/regvue/pull/124)).
@@ -203,7 +203,8 @@ Lastly, several improvements were made to the search UI.
 
 - Initial release of regvue prototype.
 
-[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.6.1...HEAD
+[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.6.2...HEAD
+[0.6.2]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.5.2...v0.6.0
 [0.5.2]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.5.1...v0.5.2
