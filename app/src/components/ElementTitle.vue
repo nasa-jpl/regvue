@@ -52,7 +52,7 @@ const getLink = (index: number) => {
     </div>
 
     <!-- Show the address in hex -->
-    <div>
+    <div v-if="element.addr !== undefined">
       {{ "0x" + element.addr.toString(16) }}
     </div>
   </div>
