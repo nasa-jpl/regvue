@@ -188,7 +188,11 @@ const formatData = async (
         // Replace any reference to the include block with the json data it references for previous
         // formattedElement values
         for (const [, formattedElement] of formattedElements.entries()) {
-          const idx = formattedElement.children?.indexOf(element.id) || -1;
+          let idx = formattedElement.children?.indexOf(element.id);
+          if (idx === undefined) {
+            idx = -1;
+          }
+
           if (idx >= 0 && parentId && formattedElement.children) {
             formattedElement.children = [
               ...formattedElement.children.slice(0, idx),
