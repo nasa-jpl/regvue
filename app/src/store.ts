@@ -311,7 +311,7 @@ const getAddress = (
     const elem = elements.get(id);
     if (!elem) throw Error(`Could not find element ${id} (${i})`);
 
-    if (elem.offset) {
+    if (elem.offset !== undefined) {
       if (result === undefined) result = 0;
       result += parseInt(elem.offset.toString());
     }
