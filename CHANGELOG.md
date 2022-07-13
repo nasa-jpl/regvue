@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove schema requirement for `root.name` ([#131](https://github.jpl.nasa.gov/regvue/regvue/pull/131)).
 
 ### Changed
+- The `offset` property is now optional for `blk` elements. Empty offsets/addresses won't show in the menu ([#133](https://github.jpl.nasa.gov/regvue/regvue/pull/133)).
 - Include elements are no longer replaced with the children of the fetched root, but instead merged with the fetched root and turned into a `blk` element ([#132](https://github.jpl.nasa.gov/regvue/regvue/pull/132)).
 
 ## [0.6.2] - 2022-07-13
