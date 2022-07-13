@@ -67,6 +67,9 @@ export const validateSemantics = (
     if (parse.stringToBitArray(element.offset.toString()).length > 32) {
       return `Element "${element.id}" has an offset greater than 32 bits.`;
     }
+    if (parse.stringToBitArray(element.addr.toString()).length > 32) {
+      return `Element "${element.id}" has an address greater than 32 bits. Check that the sum of its offset and its ancestors' offsets don't exceed 32 bits`;
+    }
 
     // Validate register specific arguments
     if (element.type == "reg") {
