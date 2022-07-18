@@ -182,12 +182,14 @@ const formatData = async (
         const elem = {
           id: element.id,
           name: element.name,
-          display_name: element.display_name,
+          display_name: json.root.display_name
+            ? json.root.display_name
+            : element.display_name,
           addr: 0,
           offset: element.offset,
           type: "blk",
           doc: element.doc,
-          version: element.version,
+          version: json.root.version ? json.root.version : element.version,
           children: [],
           data_width: json.root.data_width
             ? json.root.data_width

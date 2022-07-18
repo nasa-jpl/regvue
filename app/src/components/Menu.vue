@@ -54,7 +54,7 @@ const getNodes = (
       key: child.id,
       styleClass: child.id,
       data: {
-        name: child.display_name ? child.display_name : child.name,
+        name: child.name,
         version: child.version,
         addr: child.addr === undefined ? "" : format.hex(child.addr),
       },
