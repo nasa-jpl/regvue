@@ -29,6 +29,9 @@ const getLink = (index: number) => {
         {{ element.display_name ? element.display_name : element.name }}
       </span>
 
+      <!-- Show the version if set -->
+      <template v-if="element.version"> ({{ element.version }}) </template>
+
       <!-- Show the full element id -->
       <span id="breadcrumb-links">
         -
@@ -43,11 +46,6 @@ const getLink = (index: number) => {
 
           <template v-if="i < element.id.split('.').length - 1">.</template>
         </template>
-      </span>
-
-      <!-- Show the version if set -->
-      <span v-if="element.version" class="text-sm">
-        ({{ element.version }})
       </span>
     </div>
 
