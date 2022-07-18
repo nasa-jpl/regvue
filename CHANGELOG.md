@@ -5,6 +5,8 @@ All notable changes to the regvue project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
+### Fixed
+- Fixed "0x0" not displaying in the block element table ([#135](https://github.jpl.nasa.gov/regvue/regvue/pull/135)).
 
 ## [0.6.3] - 2022-07-13
 ### Fixed
