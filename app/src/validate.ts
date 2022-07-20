@@ -168,7 +168,7 @@ const isValidResetValue = (
 
   if (value.toLowerCase().startsWith("0x")) {
     // Return false if the value is too large
-    if (value.substring(2).length > dataWidth / 4) {
+    if (value.substring(2).length > Math.ceil(dataWidth / 4)) {
       return `Value \`${value}\` is too large.`;
     }
   } else if (value.toLowerCase().startsWith("0b")) {
