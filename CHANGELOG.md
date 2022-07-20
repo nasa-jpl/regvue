@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.6.5] - 2022-07-20
 ### Fixed
 - Fix schema validation failing for decimal reset values ([#142](https://github.jpl.nasa.gov/regvue/regvue/pull/142)).
 - Fixed display error that added a second "0x" to string offset values ([#139](https://github.jpl.nasa.gov/regvue/regvue/pull/139)).
@@ -221,7 +223,8 @@ Lastly, several improvements were made to the search UI.
 
 - Initial release of regvue prototype.
 
-[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.6.4...HEAD
+[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.6.5...HEAD
+[0.6.5]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.6.4...v0.6.5
 [0.6.4]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.6.3...v0.6.4
 [0.6.3]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.6.2...v0.6.3
 [0.6.2]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.6.1...v0.6.2
