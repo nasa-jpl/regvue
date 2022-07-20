@@ -165,7 +165,7 @@
                             "number",
                             "object"
                           ],
-                          "pattern": "^(0x|0b)[0-9a-fA-F|?]+$",
+                          "pattern": "^(0x|0b)?[0-9a-fA-F|?]+$",
                           "properties": {
                             "value": {
                               "description": "the value of the reset",
@@ -173,7 +173,7 @@
                                 "string",
                                 "number"
                               ],
-                              "pattern": "^(0x|0b)[0-9a-fA-F|?]+$"
+                              "pattern": "^(0x|0b)?[0-9a-fA-F|?]+$"
                             },
                             "resets": {
                               "description": "named reset states to associate with the given reset value",
