@@ -27,9 +27,7 @@ const element = computed(() => {
 
 const doc = computed(() => element.value.doc);
 const addr = computed(() =>
-  element.value.offset !== undefined
-    ? "0x" + element.value.offset.toString(16)
-    : ""
+  element.value.addr !== undefined ? "0x" + element.value.addr.toString(16) : ""
 );
 
 const collapsed = ref(true);
