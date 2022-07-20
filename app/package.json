@@ -1,7 +1,7 @@
 {
   "name": "regvue",
   "private": true,
-  "version": "0.6.4",
+  "version": "0.6.5",
   "homepage": "https://github.jpl.nasa.gov/regvue/regvue",
   "scripts": {
     "dev": "vite",
