@@ -1,12 +1,21 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { DesignElement } from "src/types";
 
 import BlockTableEntry from "src/components/BlockTableEntry.vue";
 import ElementTitle from "src/components/ElementTitle.vue";
 
-defineProps<{
+const props = defineProps<{
   block: DesignElement;
 }>();
+
+const doc = computed(() => {
+  if (props.block && props.block.doc) {
+    return props.block.doc.replaceAll("\n", "<br />");
+  } else {
+    return null;
+  }
+});
 </script>
 
 <template>
@@ -15,8 +24,9 @@ defineProps<{
       <ElementTitle :element="block" />
 
       <!-- Display the doc -->
-      <div>
-        {{ block.doc }}
+      <div v-if="doc" class="m-auto mt-4">
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <span class="default-styles" v-html="doc"></span>
       </div>
     </div>
 
