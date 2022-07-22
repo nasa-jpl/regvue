@@ -63,7 +63,7 @@ const validateRoute = () => {
     router.push({
       name: "404",
       params: { catchAll: "404" },
-      query: { path: route.path },
+      query: { data: route.query.data, path: route.path },
     });
   }
 };
