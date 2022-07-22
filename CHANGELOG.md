@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- Fix nested children blocks being able to have no displayed addr ([#151](https://github.jpl.nasa.gov/regvue/regvue/pull/151)).
 - Fixed the URL shown on the 404 page ([#150](https://github.jpl.nasa.gov/regvue/regvue/pull/150)).
 - Allow for HTML in BlockPage doc descriptions just like in RegPage descriptions ([#147](https://github.jpl.nasa.gov/regvue/regvue/pull/147)).
 
