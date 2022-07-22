@@ -13,12 +13,19 @@
       "description": "Contains schema version information",
       "type": "object",
       "required": [
-        "version"
+        "version",
+        "name"
       ],
       "properties": {
         "version": {
           "description": "The register.schema.json version the document targets",
-          "type": "string"
+          "type": "string",
+          "pattern": "^v0.2(.[0-9]\\d*)*$"
+        },
+        "name": {
+          "description": "The name of the format that register.schema.json supports",
+          "type": "string",
+          "pattern": "register-description-format"
         }
       }
     },
