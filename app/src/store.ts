@@ -302,23 +302,30 @@ const getDefaultResetState = (
 const getAddress = (
   key: string,
   elements: Map<string, { offset?: number | string }>
-) => {
-  // How many elements are there in hierachy (e.g. blk.sub_blk.reg => 3)
-  const count = key.split(".").length + 1;
+): number | undefined => {
+  // Get the current element's offset
+  const offset = elements.get(key)?.offset;
 
-  // Add up the offset of every element along the current key's hierarchy
-  let result;
-  for (let i = 1; i < count; i++) {
-    const id = key.split(".").slice(0, i).join(".");
-    const elem = elements.get(id);
-    if (!elem) throw Error(`Could not find element ${id} (${i})`);
-
-    if (elem.offset !== undefined) {
-      if (result === undefined) result = 0;
-      result += parseInt(elem.offset.toString());
-    }
+  // If the offset is undefined then the addr should be undefined
+  if (offset === undefined) {
+    return undefined;
   }
-  return result;
+
+  // If the key of the element has a ".", then it has parent elements
+  if (key.includes(".")) {
+    // Get the parent's offset
+    const parentId = key.split(".").slice(0, -1).join(".");
+    const parentOffset = getAddress(parentId, elements);
+
+    // If the parent has a defined offset, add it to find the child's addr
+    if (parentOffset === undefined) {
+      return parseInt(offset.toString());
+    } else {
+      return parseInt(offset.toString()) + parentOffset;
+    }
+  } else {
+    return parseInt(offset.toString());
+  }
 };
 
 // Return an element's data width in nbits
