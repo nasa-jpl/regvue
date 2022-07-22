@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added a validation check for the `schema.name` and `schema.version` properties ([#152](https://github.jpl.nasa.gov/regvue/regvue/pull/152)).
+
 ### Fixed
 - Fix nested children blocks being able to have no displayed addr ([#151](https://github.jpl.nasa.gov/regvue/regvue/pull/151)).
 - Fixed the URL shown on the 404 page ([#150](https://github.jpl.nasa.gov/regvue/regvue/pull/150)).
