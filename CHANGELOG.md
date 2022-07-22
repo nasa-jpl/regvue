@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- Fixed the URL shown on the 404 page ([#150](https://github.jpl.nasa.gov/regvue/regvue/pull/150)).
 - Allow for HTML in BlockPage doc descriptions just like in RegPage descriptions ([#147](https://github.jpl.nasa.gov/regvue/regvue/pull/147)).
 
 ## [0.6.5] - 2022-07-20
