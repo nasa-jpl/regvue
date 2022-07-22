@@ -4,7 +4,10 @@ import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
 const router = useRouter();
 
-const baseUrl = window.location.origin + "/#";
+const baseUrl = window.location.href.substring(
+  0,
+  window.location.href.indexOf("/404")
+);
 const location = window.location;
 
 const getFirstRegisterHref = () => {
@@ -21,7 +24,8 @@ const getOpenPageHref = () => {
   <div class="flex h-[90vh] w-screen flex-col items-center justify-center">
     <h1 class="mb-2 text-3xl">Page not found</h1>
     <p class="text-sm text-gray-600">
-      {{ route.query.path ? baseUrl + route.query.path : location }}
+      {{ route.query.path ? baseUrl + route.query.path : location
+      }}{{ route.query.data ? `?data=${route.query.data}` : "" }}
     </p>
 
     <div class="mt-10">
