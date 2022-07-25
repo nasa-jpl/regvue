@@ -121,6 +121,9 @@ The `root` property supports the following additional keys:
 * `data_width` -- The size of register elements in number of bits.
 Applies to all children unless overwritten by a child element.
 If absent defaults to 32.
+* `doc` -- The documentation for the root element.
+Supports HTML.
+Optional.
 
 [source,yaml]
 .`root` snippet
@@ -228,6 +231,7 @@ Required.
 * `access`: The software access type of the field.
 Required.
 * `doc`: The documentation for the field.
+Supports HTML.
 Optional.
 * `repr`: The default representation.
 Default: `hex`.
