@@ -111,6 +111,11 @@ export const useStore = defineStore("store", {
         // Get an elements data_width
         element.data_width = getDataWidth(element, elements, root);
 
+        // Format the links as a Map object
+        if (element.links) {
+          element.links = new Map(Object.entries(element.links));
+        }
+
         // Set the default reset state
         if (element.type == "reg") {
           element.default_reset = getDefaultResetState(element, elements, root);
@@ -125,6 +130,13 @@ export const useStore = defineStore("store", {
           // Sort the fields so that the field with the highest LSB is first in the array
           element.fields?.sort((a, b) => b.lsb - a.lsb);
         }
+      }
+
+      if (!root.data_width) {
+        root.data_width = 32;
+      }
+      if (root.links) {
+        root.links = new Map(Object.entries(root.links));
       }
 
       // Check the semantic details of the parsed data
@@ -188,7 +200,8 @@ const formatData = async (
           addr: 0,
           offset: element.offset,
           type: "blk",
-          doc: element.doc,
+          links: json.root.links ? json.root.links : element.links,
+          doc: json.root.doc ? json.root.doc : element.doc,
           version: json.root.version ? json.root.version : element.version,
           children: [],
           data_width: json.root.data_width

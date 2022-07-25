@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, watch, onMounted, onUnmounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useStore } from "src/store";
 
 import Search from "src/components/Search.vue";
@@ -20,6 +20,7 @@ const emit = defineEmits(["toggle-menu", "show-open-modal"]);
 const store = useStore();
 
 const route = useRoute();
+const router = useRouter();
 
 const title = computed(
   () => (store.root?.display_name as string) || "display_name undefined"
@@ -46,6 +47,14 @@ const links = computed(() => {
   return [];
 });
 
+const getHomeLink = () => {
+  return router.resolve({
+    name: "element",
+    params: { elementId: "" },
+    query: { data: route.query.data },
+  }).href;
+};
+
 // Set the document title to match the design name
 onMounted(() => (document.title = "regvue - " + title.value));
 onUnmounted(() => (document.title = "regvue"));
@@ -62,9 +71,11 @@ watch(
       class="flex flex-row justify-between border-b border-gray-400 bg-gray-300 py-2 text-lg font-medium text-black md:text-xl"
     >
       <!-- Show design name -->
-      <div id="header-title" class="ml-6">
-        {{ title }}
-        <template v-if="version != ''">({{ version }})</template>
+      <div id="header-title" class="ml-6 hover:underline">
+        <a :href="getHomeLink()">
+          {{ title }}
+          <template v-if="version != ''">({{ version }})</template>
+        </a>
       </div>
 
       <Search />

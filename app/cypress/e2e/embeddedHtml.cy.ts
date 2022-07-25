@@ -1,6 +1,11 @@
 /// <reference types="cypress" />
 
 describe("embedded-html", () => {
+  it("shows html in the root description", () => {
+    cy.visit("/#/?data=example.json");
+    cy.get("h6:contains('Embedded html - example')").should("exist");
+  });
+
   it("shows html in block and BlockTableEntry descriptions", () => {
     cy.visit("/#/root/blkA?data=example.json");
     cy.get("h6:contains('Embedded html - blkA')").should("exist");

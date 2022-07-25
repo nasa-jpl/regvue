@@ -33,7 +33,7 @@ const getLink = (index: number) => {
       <template v-if="element.version"> ({{ element.version }}) </template>
 
       <!-- Show the full element id -->
-      <span id="breadcrumb-links">
+      <span v-if="element.id" id="breadcrumb-links">
         -
         <template v-for="(elem, i) in element.id.split('.')" :key="i">
           <!-- Show a breadcrumb link to navigate to an ancestor element -->
