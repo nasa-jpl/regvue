@@ -2,7 +2,7 @@
 
 describe("element-title-component", () => {
   beforeEach(() => {
-    cy.visit("/#/?data=example.json");
+    cy.visit("/#/root/blkA/sub_blkA/regA0?data=example.json");
   });
 
   it("shows the breadcrumb links as the id", () => {

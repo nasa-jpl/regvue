@@ -8,7 +8,7 @@
     "display_name": "Example Design",
     "name": "example",
     "links": {
-      "GitHub": "https://github.com/org/repo"
+      "GitHub": "https://github.jpl.nasa.gov/regvue/regvue"
     },
     "children": [
       "blkA",

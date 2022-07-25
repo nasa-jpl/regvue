@@ -7,7 +7,7 @@ describe("menu-component", () => {
   beforeEach(() => {
     // Make viewport large
     cy.viewport(1280, 800);
-    cy.visit("/#/?data=example.json");
+    cy.visit("/#/root/blkA/sub_blkA/regA0?data=example.json");
   });
 
   it("shows the unselected root nodes", () => {

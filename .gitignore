@@ -4,7 +4,6 @@ dist
 dist-ssr
 *.local
 
-
 # local env files
 .env.local
 .env.*.local
@@ -28,8 +27,9 @@ lerna-debug.log*
 *.sln
 *.sw?
 
-# Cypress test result video
+# Cypress test results
 *.mp4
+**/cypress/screenshots/*
 
 # Test data files
 app/public/*.json

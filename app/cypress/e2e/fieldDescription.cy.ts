@@ -2,7 +2,7 @@
 
 describe("register-fields-table", () => {
   beforeEach(() => {
-    cy.visit("/#/?data=example.json");
+    cy.visit("/#/root/blkA/sub_blkA/regA0?data=example.json");
   });
 
   it("toggles field display order", () => {

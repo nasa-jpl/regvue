@@ -37,20 +37,16 @@ const version = computed(() => {
 const links = computed(() => {
   let o = store.root?.links;
 
-  if (o != null) {
-    return Object.entries(o).map(([k, v]) => {
-      let e = { href: v, text: k };
-      return e;
-    });
-  }
+  if (!o) return [];
 
-  return [];
+  return Array.from(o.entries()).map((entry) => {
+    return { text: entry[0], href: entry[1] };
+  });
 });
 
 const getHomeLink = () => {
   return router.resolve({
-    name: "element",
-    params: { elementId: "" },
+    path: "/",
     query: { data: route.query.data },
   }).href;
 };

@@ -2,7 +2,7 @@
 
 describe("register-layout", () => {
   beforeEach(() => {
-    cy.visit("/#/?data=example.json");
+    cy.visit("/#/root/blkA/sub_blkA/regA0?data=example.json");
   });
 
   it("updates register value based on field values", () => {
