@@ -33,7 +33,7 @@ npm run format
 ### Run Cypress tests
 
 ```
-# First ensure the app is running on http://localhost:3000
+# First ensure the app is running on http://localhost:5173
 npx cypress run
 ```
 

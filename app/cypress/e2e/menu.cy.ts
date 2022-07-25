@@ -95,7 +95,7 @@ describe("menu-component", () => {
     const firstChild = data.elements[firstParent].children[0];
     const firstGrandChild = data.elements[firstChild].children[0];
 
-    cy.visit(`localhost:3000/#/${firstGrandChild}`);
+    cy.visit(`localhost:5173/#/${firstGrandChild}`);
     cy.get("[id^=menu-node-]").should(
       "have.length",
       data.root.children.length +

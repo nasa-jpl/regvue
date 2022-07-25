@@ -1,0 +1,19 @@
+/// <reference types="cypress" />
+
+describe("embedded-html", () => {
+  it("shows html in block and BlockTableEntry descriptions", () => {
+    cy.visit("/#/root/blkA?data=example.json");
+    cy.get("h6:contains('Embedded html - blkA')").should("exist");
+
+    // Check that HTML is rendered in BlockTableEntry rows
+    cy.get("tr").first().click();
+    cy.get("h6:contains('Embedded html - sub_blkA')").should("exist");
+  });
+
+  it("show html in register and field desciptions", () => {
+    cy.visit("/#/root/blkA/sub_blkA/regA0?data=example.json");
+    cy.get("h6:contains('Embedded html - regA0')").should("exist");
+
+    cy.get("h6:contains('Embedded html - rsvd')").should("exist");
+  });
+});
