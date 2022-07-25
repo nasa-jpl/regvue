@@ -1,18 +1,10 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import { useStore } from "src/store";
-// import Default from "src/views/Default.vue";
 import ElementView from "src/views/ElementView.vue";
 import PageNotFound from "src/views/PageNotFound.vue";
 import OpenView from "src/views/OpenView.vue";
 
 const routes = [
-  {
-    name: "default",
-    path: "/",
-    alias: "/root",
-    component: ElementView,
-    props: { elementId: "" },
-  },
   {
     name: "open",
     path: "/open",
@@ -20,8 +12,8 @@ const routes = [
   },
   {
     name: "element",
-    path: "/root/:elementId*",
-    alias: "/reg/:elementId*",
+    path: "/:elementId*",
+    alias: ["/reg/:elementId*", "/root/:elementId*"],
     component: ElementView,
     props: true,
   },

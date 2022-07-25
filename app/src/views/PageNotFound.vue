@@ -11,7 +11,7 @@ const baseUrl = window.location.href.substring(
 const location = window.location;
 
 const getFirstRegisterHref = () => {
-  return router.resolve({ name: "default", query: { data: route.query.data } })
+  return router.resolve({ name: "element", query: { data: route.query.data } })
     .href;
 };
 

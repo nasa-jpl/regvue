@@ -96,7 +96,7 @@ const onUrlDataInput = async () => {
 
   if (result == "") {
     router.push({
-      name: "default",
+      name: "element",
       query: { data: elem.value },
     });
 
@@ -127,7 +127,7 @@ const onDataFileOpen = async (event: Event) => {
   reader.onload = async (event) => {
     const result = await store.loadFile(event.target?.result as string);
     if (result == "") {
-      router.push({ name: "default" });
+      router.push({ name: "element" });
       emit("input-changed");
     } else {
       openError.value = result;
