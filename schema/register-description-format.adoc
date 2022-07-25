@@ -99,6 +99,18 @@ schema:
   version: v0.2
 ----
 
+The `schema` property is an object with the following properties:
+
+* `name` -- Specifies the name of the schema that the RDF JSON targets.
+Required.
+Type: string.
+The value must be `register-description-format`.
+
+* `version` -- Specifies the version of the schema that the RDF JSON targets.
+Required.
+Type: string.
+The value must be `v0.2` or `v0.2.x` where x is any positive integer.
+
 == Element IDs
 
 Element IDs uniquely identify elements.
