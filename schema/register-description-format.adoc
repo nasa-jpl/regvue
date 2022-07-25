@@ -130,18 +130,17 @@ regs
 
 == `root` Property
 
-The `root` property specifies the top level as a block element.
-See also <<block-elements>>.
+The `root` property is an object that specifies the design top level as a block element.
 
-The `root` property supports the following additional keys:
+The `root` property object supports all of the properties of <<block-elements>> with some differences.
 
-* `display_name` -- The design name intended for human consumption.
-* `data_width` -- The size of register elements in number of bits.
-Applies to all children unless overwritten by a child element.
-If absent defaults to 32.
-* `doc` -- The documentation for the root element.
-Supports HTML.
-Optional.
+The following block element properties are not valid for the `root` property object:
+
+* `offset` -- The `element.offset` property is not valid in the `root` property object.
+
+The following optional block element properties are required for the `root` property object:
+
+* `display_name` -- Required for `root`
 
 [source,yaml]
 .`root` snippet
