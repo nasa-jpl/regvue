@@ -14,7 +14,8 @@
       "blkA",
       "blkB"
     ],
-    "default_reset": "RS1"
+    "default_reset": "RS1",
+    "doc": "This is an example design. <h6>Embedded html - example</h6>"
   },
   "elements": {
     "blkA": {
