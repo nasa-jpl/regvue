@@ -12,8 +12,8 @@ const routes = [
   },
   {
     name: "element",
-    path: "/:elementId*",
-    alias: ["/reg/:elementId*", "/root/:elementId*"],
+    path: "/root/:elementId*",
+    alias: ["/reg/:elementId*", "/:elementId*"],
     component: ElementView,
     props: true,
   },
