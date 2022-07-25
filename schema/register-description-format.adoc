@@ -189,9 +189,12 @@ Required.
 * `doc` -- Documentation for the element.
 Supports HTML.
 Optional.
-* `data_width` -- Specifies the size of register elements in number of bits.
+* `data_width` -- Specifies the size of register elements in bits.
 Applies to all children unless overwritten by a child element.
 Optional.
+Default: 32.
+Type: number.
+Possible values: 16, 32.
 
 [#block-elements]
 === Block Elements (`blk`)

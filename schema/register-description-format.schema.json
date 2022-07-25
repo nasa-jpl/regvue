@@ -56,7 +56,12 @@
         },
         "data_width": {
           "description": "Size of registers in number of bits",
-          "type": "number"
+          "type": "number",
+          "enum": [
+            16,
+            32
+          ],
+          "default": 32
         },
         "children": {
           "description": "An array of top level element IDs",
@@ -101,7 +106,12 @@
             },
             "data_width": {
               "description": "Size of registers in number of bits",
-              "type": "number"
+              "type": "number",
+              "enum": [
+                16,
+                32
+              ],
+              "default": 32
             },
             "offset": {
               "description": "The offset of the element relative to its parent",
