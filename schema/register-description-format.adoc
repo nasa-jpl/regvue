@@ -18,7 +18,6 @@ schema:
   version: v0.2
 
 root:
-  name: example
   display_name: Example Design
   version: v1.0
   links:
@@ -129,7 +128,6 @@ If absent defaults to 32.
 .`root` snippet
 ----
 root:
-  name: example
   display_name: Example Design
   version: v1.0
   links:
