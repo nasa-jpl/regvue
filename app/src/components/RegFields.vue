@@ -127,9 +127,7 @@ const stopHighlightField = () => {
           <!-- Show the description as html -->
           <td class="border-l-2 px-2">
             <!-- eslint-disable-next-line vue/no-v-html -->
-            <div class="default-styles">
-              {{ field.doc }}
-            </div>
+            <div class="default-styles" v-html="field.doc"></div>
 
             <div v-if="field.enum" class="my-4 mx-0 w-fit text-left">
               <div>Enumerated values:</div>
