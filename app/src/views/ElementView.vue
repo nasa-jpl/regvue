@@ -40,12 +40,14 @@ let showOpenModal = ref(false);
 let element = computed(() => {
   if (elementId.value == "") {
     return {
+      id: "",
       name: root.value.name,
       display_name: root.value.display_name,
       type: "blk",
-      id: "",
+      links: root.value.links,
       children: root.value.children,
       data_width: root.value.data_width,
+      doc: root.value.doc,
     } as DesignElement;
   } else {
     return store.elements.get(elementId.value);

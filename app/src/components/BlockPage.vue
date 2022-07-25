@@ -28,6 +28,19 @@ const doc = computed(() => {
         <!-- eslint-disable-next-line vue/no-v-html -->
         <span class="default-styles" v-html="doc"></span>
       </div>
+
+      <!-- Display any links that the block has -->
+      <div v-if="block.links" class="mt-4">
+        <div v-for="[key, value] in block.links" :key="key">
+          <a
+            class="text-blue-500 underline"
+            :href="value"
+            target="_blank"
+            rel="noreferrer"
+            >{{ key }}</a
+          >
+        </div>
+      </div>
     </div>
 
     <!-- Display the child table -->

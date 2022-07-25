@@ -38,9 +38,7 @@ export interface DesignElement {
 export interface DesignRoot {
   display_name: string;
   name: string;
-  links?: {
-    [key: string]: string;
-  };
+  links?: Map<string, string>;
   version: string;
   doc?: string;
   children: string[];
