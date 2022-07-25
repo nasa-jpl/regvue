@@ -73,13 +73,19 @@ elements:
         reset: 0x0
 ----
 
-== Root Object
+== Document Top Level
 
-The root object contains the following properties:
+The document top level is an object with the following properties:
 
-* `schema` -- Specifies schema version information
-* `root` -- Specifies the top level design elements
-* `elements` -- Defines all design elements and their relationships
+* `schema` -- Specifies schema version information.
+Required.
+Type: object.
+* `root` -- Specifies the top level design elements.
+Required.
+Type: object.
+* `elements` -- Defines all design elements and their relationships.
+Required.
+Type: object.
 
 == `schema` Property
 
