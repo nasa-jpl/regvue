@@ -24,12 +24,12 @@
         "blkA.sub_blkA"
       ],
       "name": "blkA",
-      "id": "blkA"
+      "id": "blkA",
+      "doc": "This is a block element. <h6>Embedded html - blkA</h6>"
     },
     "blkA.sub_blkA": {
       "offset": 0,
       "type": "blk",
-      "doc": "This is a block of related registers.",
       "children": [
         "blkA.sub_blkA.regA0",
         "blkA.sub_blkA.regA1",
@@ -39,15 +39,16 @@
         "blkA.sub_blkA.regA5"
       ],
       "id": "blkA.sub_blkA",
-      "name": "sub_blkA"
+      "name": "sub_blkA",
+      "doc": "This is a block of related registers. <h6>Embedded html - sub_blkA</h6>"
     },
     "blkA.sub_blkA.regA0": {
       "offset": 0,
-      "doc": "regA0 - An example register.",
+      "doc": "regA0 - An example register. <h6>Embedded html - regA0</h6>",
       "fields": [
         {
           "access": "rsvd",
-          "doc": "A reserved field.",
+          "doc": "A reserved field. <h6>Embedded html - rsvd</h6>",
           "nbits": 24,
           "lsb": 8,
           "reset": 0,
