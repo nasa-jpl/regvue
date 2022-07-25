@@ -63,6 +63,11 @@
           ],
           "default": 32
         },
+        "default_reset": {
+          "description": "The name used for a reset when field.reset is specified as a scalar",
+          "type": "string",
+          "default": "Default"
+        },
         "children": {
           "description": "An array of top level element IDs",
           "type": "array",
@@ -112,6 +117,11 @@
                 32
               ],
               "default": 32
+            },
+            "default_reset": {
+              "description": "The name used for a reset when field.reset is specified as a scalar",
+              "type": "string",
+              "default": "Default"
             },
             "offset": {
               "description": "The offset of the element relative to its parent",

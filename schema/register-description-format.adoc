@@ -195,6 +195,11 @@ Optional.
 Default: 32.
 Type: number.
 Possible values: 16, 32.
+* `default_reset` -- The name used for a reset when `field.reset` is specified as a scalar.
+Applies to all children unless overwritten by a child element.
+Optional.
+Type: string.
+Default: "Default".
 
 [#block-elements]
 === Block Elements (`blk`)
