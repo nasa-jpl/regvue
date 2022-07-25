@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a validation check for the `schema.name` and `schema.version` properties ([#152](https://github.jpl.nasa.gov/regvue/regvue/pull/152)).
 
 ### Fixed
+- Fix regression and allow for HTML tags in field doc descriptions ([#155](https://github.jpl.nasa.gov/regvue/regvue/pull/155)).
 - Fix nested children blocks being able to have no displayed addr ([#151](https://github.jpl.nasa.gov/regvue/regvue/pull/151)).
 - Fixed the URL shown on the 404 page ([#150](https://github.jpl.nasa.gov/regvue/regvue/pull/150)).
 - Allow for HTML in BlockPage doc descriptions just like in RegPage descriptions ([#147](https://github.jpl.nasa.gov/regvue/regvue/pull/147)).
