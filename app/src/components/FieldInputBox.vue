@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeMount, ref, nextTick } from "vue";
 import { Bit, DisplayType, isUnknownBit } from "src/types";
-import format from "src/format";
+import { bitArrayToString, getStringRepresentation } from "src/format";
 import parse from "src/parse";
 
 import ChevronDown from "vue-material-design-icons/ChevronDown.vue";
@@ -24,7 +24,7 @@ let errorMessage = ref("");
 
 // Value to display when user stops editing
 let displayValue = ref(
-  format.bitArrayToString(props.bitArray, props.selectedDisplayType)
+  bitArrayToString(props.bitArray, props.selectedDisplayType)
 );
 onBeforeMount(() => {
   for (const e of props.enums) {
@@ -61,7 +61,7 @@ const deactivate = () => {
   showErrorTooltip.value = false;
 
   if (!isError.value) {
-    displayValue.value = format.bitArrayToString(
+    displayValue.value = bitArrayToString(
       props.bitArray,
       props.selectedDisplayType
     );
@@ -115,7 +115,7 @@ const selectEnumValue = (value: string | number, preview = false) => {
   const elem = document.getElementById(
     "input-box-" + props.name
   ) as HTMLInputElement;
-  elem.value = format.bitArrayToString(bitArr, props.selectedDisplayType);
+  elem.value = bitArrayToString(bitArr, props.selectedDisplayType);
 
   // If not previewing the change, save the selected enum val as the cachedValue
   if (preview) {
@@ -128,7 +128,7 @@ const selectEnumValue = (value: string | number, preview = false) => {
 
 // Restores the last user input value
 const restoreCachedValue = () => {
-  const value = format.bitArrayToString(cachedValue, props.selectedDisplayType);
+  const value = bitArrayToString(cachedValue, props.selectedDisplayType);
   selectEnumValue(value, true);
 };
 
@@ -267,7 +267,7 @@ const getErrorMessage = (value: string) => {
           >
             {{ e.name }}
             ({{
-              format.getStringRepresentation(
+              getStringRepresentation(
                 parse.num(e.value.toString()),
                 selectedDisplayType,
                 nbits

@@ -2,7 +2,7 @@
 /* eslint-disable vue/no-v-html */
 import { ref, computed } from "vue";
 import { Suggestion } from "src/types";
-import format from "src/format";
+import { getStringRepresentation } from "src/format";
 import { useStore } from "src/store";
 
 const props = defineProps<{
@@ -69,11 +69,7 @@ const addr = computed(() => {
 
   const addr = element.addr;
   if (addr) {
-    return format.getStringRepresentation(
-      addr,
-      "hexadecimal",
-      element.data_width
-    );
+    return getStringRepresentation(addr, "hexadecimal", element.data_width);
   } else {
     return "";
   }

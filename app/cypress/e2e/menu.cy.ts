@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import format from "../../src/format";
+import { hex } from "../../src/format";
 import data from "../../public/example.json";
 
 describe("menu-component", () => {
@@ -31,7 +31,7 @@ describe("menu-component", () => {
       cy.get(id)
         .children()
         .last()
-        .should("have.text", format.hex(data.elements[child].offset));
+        .should("have.text", hex(data.elements[child].offset));
     });
   });
 
@@ -67,7 +67,7 @@ describe("menu-component", () => {
       cy.get(id)
         .children()
         .last()
-        .should("have.text", format.hex(data.elements[child].offset));
+        .should("have.text", hex(data.elements[child].offset));
     });
 
     cy.get(".close-menu-node-btn").first().click();
