@@ -25,7 +25,13 @@ const element = computed(() => {
   return e as DesignElement;
 });
 
-const doc = computed(() => element.value.doc);
+const doc = computed(() => {
+  if (element.value.doc) {
+    return element.value.doc.replaceAll("\n", "<br />");
+  } else {
+    return null;
+  }
+});
 const addr = computed(() =>
   element.value.addr !== undefined ? "0x" + element.value.addr.toString(16) : ""
 );
@@ -82,7 +88,8 @@ const href = computed(
     </template>
     <template v-else-if="element.type == 'blk'">
       <td :colspan="dataWidth" class="truncate border-l-2 border-gray-400 px-2">
-        {{ element.doc }}
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <div class="default-styles" v-html="element.doc"></div>
       </td>
     </template>
     <template v-else-if="element.type == 'mem'">
