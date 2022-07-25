@@ -127,6 +127,10 @@ export const useStore = defineStore("store", {
         }
       }
 
+      if (!root.data_width) {
+        root.data_width = 32;
+      }
+
       // Check the semantic details of the parsed data
       const errorMessage = validateSemantics(root, elements);
       if (errorMessage) throw Error(errorMessage);

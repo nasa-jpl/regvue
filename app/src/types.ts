@@ -37,10 +37,12 @@ export interface DesignElement {
 // Interface representing the attributes of the root project description
 export interface DesignRoot {
   display_name: string;
+  name: string;
   links?: {
     [key: string]: string;
   };
   version: string;
+  doc?: string;
   children: string[];
   default_reset?: string;
   data_width?: DataWidth;

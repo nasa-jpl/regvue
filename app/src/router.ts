@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import { useStore } from "src/store";
-import Default from "src/views/Default.vue";
+// import Default from "src/views/Default.vue";
 import ElementView from "src/views/ElementView.vue";
 import PageNotFound from "src/views/PageNotFound.vue";
 import OpenView from "src/views/OpenView.vue";
@@ -9,7 +9,9 @@ const routes = [
   {
     name: "default",
     path: "/",
-    component: Default,
+    alias: "/root",
+    component: ElementView,
+    props: { elementId: "" },
   },
   {
     name: "open",
@@ -65,22 +67,6 @@ router.beforeEach(async (to) => {
       };
     } catch {
       return { name: "open" };
-    }
-  }
-
-  // Go to the first register entry if store is loaded and at root
-  if (to.path == "/" && store.loaded) {
-    if (store.url) {
-      return {
-        name: "element",
-        params: { elementId: store.getFirstRegister().split(".") },
-        query: { data: store.url },
-      };
-    } else {
-      return {
-        name: "element",
-        params: { elementId: store.getFirstRegister().split(".") },
-      };
     }
   }
 

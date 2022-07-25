@@ -2,6 +2,7 @@
 import { ref, computed, watch, onBeforeMount, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "src/store";
+import { DesignElement } from "src/types";
 
 import BlockPage from "src/components/BlockPage.vue";
 import Header from "src/components/Header.vue";
@@ -36,7 +37,20 @@ const root = computed(() => store.root);
 // Control whether or not to show the open modal
 let showOpenModal = ref(false);
 
-let element = computed(() => store.elements.get(elementId.value));
+let element = computed(() => {
+  if (elementId.value == "") {
+    return {
+      name: root.value.name,
+      display_name: root.value.display_name,
+      type: "blk",
+      id: "",
+      children: root.value.children,
+      data_width: root.value.data_width,
+    } as DesignElement;
+  } else {
+    return store.elements.get(elementId.value);
+  }
+});
 
 // Keyboard shortcut to open/close the nav menu
 const useKeyboardShortcut = (event: KeyboardEvent) => {
@@ -59,7 +73,7 @@ onUnmounted(() => {
 
 // Go to 404 page if the current props.elementId doesn't exist in the elements map
 const validateRoute = () => {
-  if (!store.elements.get(elementId.value)) {
+  if (elementId.value != "" && !store.elements.get(elementId.value)) {
     router.push({
       name: "404",
       params: { catchAll: "404" },
