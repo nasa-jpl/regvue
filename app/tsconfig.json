@@ -10,8 +10,7 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
-    "skipLibCheck": true,
-    "types": ["cypress"],
+    "types": ["cypress", "vitest/importMeta"],
     "baseUrl": "./",
 
     // Settings chosen from https://www.typescriptlang.org/tsconfig#Type_Checking_6248
