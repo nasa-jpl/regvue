@@ -38,7 +38,6 @@ elements:
     id: blk0.reg0
     type: reg
     name: reg0
-    addr: 0x0
     offset: 0x0
     doc: An example register.
     fields:
@@ -65,7 +64,6 @@ elements:
     id: blk0.reg1
     name: reg1
     data_width: 16
-    addr: 0x4
     offset: 0x4
     fields:
       - name: f0
@@ -165,8 +163,6 @@ Required.
 * `display_name` -- The name of the element meant for human consumption.
 Optional.
 * `type` -- One of `blk`, `mem`, or `reg`
-Required.
-* `addr` -- The address (bytes) of the element relative to the root.
 Required.
 * `offset`: The offset (bytes) of the element relative to its parent.
 Required.
@@ -270,7 +266,6 @@ blk0.reg0:
   id: blk0.reg0
   type: reg
   name: reg0
-  addr: 0x0
   offset: 0x0
   doc: An example register.
   fields:
