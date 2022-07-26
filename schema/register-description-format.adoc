@@ -18,7 +18,6 @@ schema:
   version: v0.2
 
 root:
-  name: example
   display_name: Example Design
   version: v1.0
   links:
@@ -39,7 +38,6 @@ elements:
     id: blk0.reg0
     type: reg
     name: reg0
-    addr: 0x0
     offset: 0x0
     doc: An example register.
     fields:
@@ -66,7 +64,6 @@ elements:
     id: blk0.reg1
     name: reg1
     data_width: 16
-    addr: 0x4
     offset: 0x4
     fields:
       - name: f0
@@ -76,13 +73,19 @@ elements:
         reset: 0x0
 ----
 
-== Root Object
+== Document Top Level
 
-The root object contains the following properties:
+The document top level is an object with the following properties:
 
-* `schema` -- Specifies schema version information
-* `root` -- Specifies the top level design elements
-* `elements` -- Defines all design elements and their relationships
+* `schema` -- Specifies schema version information.
+Required.
+Type: object.
+* `root` -- Specifies the top level design elements.
+Required.
+Type: object.
+* `elements` -- Defines all design elements and their relationships.
+Required.
+Type: object.
 
 == `schema` Property
 
@@ -95,6 +98,18 @@ schema:
   name: register-description-format
   version: v0.2
 ----
+
+The `schema` property is an object with the following properties:
+
+* `name` -- Specifies the name of the schema that the RDF JSON targets.
+Required.
+Type: string.
+The value must be `register-description-format`.
+
+* `version` -- Specifies the version of the schema that the RDF JSON targets.
+Required.
+Type: string.
+The value must be `v0.2` or `v0.2.x` where x is any positive integer.
 
 == Element IDs
 
@@ -115,21 +130,22 @@ regs
 
 == `root` Property
 
-The `root` property specifies the top level as a block element.
-See also <<block-elements>>.
+The `root` property is an object that specifies the design top level as a block element.
 
-The `root` property supports the following additional keys:
+The `root` property object supports all of the properties of <<block-elements>> with some differences.
 
-* `display_name` -- The design name intended for human consumption.
-* `data_width` -- The size of register elements in number of bits.
-Applies to all children unless overwritten by a child element.
-If absent defaults to 32.
+The following block element properties are not valid for the `root` property object:
+
+* `offset` -- The `element.offset` property is not valid in the `root` property object.
+
+The following optional block element properties are required for the `root` property object:
+
+* `display_name` -- Required for `root`
 
 [source,yaml]
 .`root` snippet
 ----
 root:
-  name: example
   display_name: Example Design
   version: v1.0
   links:
@@ -146,11 +162,12 @@ The `elements` property defines all design elements and their hierarchy.
 Elements are specified in a flat map indexed by element ID.
 Elements can reference other elements by their element ID to create a describe a tree structure.
 
-There are three element types.
+There are four element types.
 
 * Block (`blk`)
 * Register (`reg`)
 * Memory (`mem`)
+* Include (`include`)
 
 The element type is specified via the `type` property.
 
@@ -168,16 +185,22 @@ Required.
 Optional.
 * `type` -- One of `blk`, `mem`, or `reg`
 Required.
-* `addr` -- The address (bytes) of the element relative to the root.
-Required.
 * `offset`: The offset (bytes) of the element relative to its parent.
 Required.
 * `doc` -- Documentation for the element.
 Supports HTML.
 Optional.
-* `data_width` -- Specifies the size of register elements in number of bits.
+* `data_width` -- Specifies the size of register elements in bits.
 Applies to all children unless overwritten by a child element.
 Optional.
+Default: 32.
+Type: number.
+Possible values: 16, 32.
+* `default_reset` -- The name used for a reset when `field.reset` is specified as a scalar.
+Applies to all children unless overwritten by a child element.
+Optional.
+Type: string.
+Default: "Default".
 
 [#block-elements]
 === Block Elements (`blk`)
@@ -233,19 +256,32 @@ Required.
 Required.
 * `access`: The software access type of the field.
 Required.
-* `doc`: The documentation for the field.
+* `reset`: The reset definition of the field.
+Type: number or string or object.
+Strings values can be binary (`0b` prefix), decimal (no prefix), or hexadecimal (`0x` prefix).
+Object values are used to specify multiple resets or a non-default reset.
+Object values are in the form of `{ "value": scalar, "resets": ["name_a", "name_b", ...] }`.
+If no reset name is specified, the name specified by `default_reset` is used.
 Optional.
+* `doc`: The documentation for the field.
+Supports HTML.
+Optional.
+* `enum`: An array of EnumValue objects
+Optional.
+
+The following properties are experimental and are subject to change:
+
 * `repr`: The default representation.
 Default: `hex`.
 Optional.
 ** `bin`: Binary (e.g. `0b0101`)
 ** `dec`: Decimal (e.g. `5`)
 ** `hex`: Hexadecimal (e.g. `0x5`)
-* `enum`: A sequence of EnumValue objects
-Optional.
+
 * `custom_decode`: Custom decode function to apply.
 Default: None.
 Optional.
+
 * `custom_encode`: Custom decode function to apply.
 Default: None.
 Optional.
@@ -253,14 +289,15 @@ Optional.
 ===== EnumValue Objects
 
 Enum value objects describe a single enumerated value.
-They have the following keys:
+They have the following properties:
 
 * `name`: The symbolic name of the enumerated value.
 Required.
 * `value`: The numeric value of the enumerated value.
 Required.
+Type: number or string.
 * `doc`: The documentation for the enumerated value.
-HTML supportted.
+HTML supported.
 Optional.
 
 ==== Register Element Example
@@ -272,7 +309,6 @@ blk0.reg0:
   id: blk0.reg0
   type: reg
   name: reg0
-  addr: 0x0
   offset: 0x0
   doc: An example register.
   fields:
@@ -302,4 +338,35 @@ They are identified as memories via the `type: mem` key-value pair.
 They have the following keys:
 
 * `type`: `mem`
+* `id` -- A copy of the element ID.
+Must be unique.
+One convention is to concatenate hierarchical element names (e.g. `blk.sub_blk.reg`).
+Required.
+* `name` -- The name of the element.
+Must be a valid C language identifier.
+Meant for human and machine consumption.
+Required.
 * `size`: The size (bytes) of the memory.
+
+=== Include Elements (`include`)
+
+Include elements are used to include other RDF files.
+
+They have the following properties:
+
+* `type` -- `include`
+* `id` -- A copy of the element ID.
+Must be unique.
+One convention is to concatenate hierarchical element names (e.g. `blk.sub_blk.reg`).
+Required.
+* `name` -- The name of the element.
+Must be a valid C language identifier.
+Meant for human and machine consumption.
+Required.
+* `offset` -- The offset (bytes) of the element relative to its parent.
+Optional.
+* `url` -- The URL to the RDF JSON to be included.
+
+==== Include Semantics
+
+Includes work by effectively merging the `root` property of the included JSON into the include element and changing the include element type to `blk`.

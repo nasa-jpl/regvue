@@ -1,0 +1,68 @@
+= Schema Changlog
+
+== From v0.x to v1.0
+
+=== Breaking Changes
+
+* Undefined properties are now errors
++
+Previously, if an RDF JSON had a property that wasn't in the RDF JSON Schema, it would be silently ignored.
+In v1.0, this is now an error.
++
+** TODO: Add `"additionalProperties": false` to all RDF JSON Schema objects (see https://json-schema.org/understanding-json-schema/reference/object.html#additional-properties[Additional Properties] docs and https://github.jpl.nasa.gov/regvue/regvue/issues/162[regvue/regvue#162]).
+
+* `root.display_name` is now required
++
+Previously, this was optional.
+In v1.0, this is now required.
++
+** TODO: Add "display_name" to the RDF JSON Schema `/properties/root/required` array.
+
+== From v0.2.0 (prototype) to v0.6.5
+
+=== Removed
+
+* Removed the `root.name` property
++
+This was never officially supported or documented but was shown in the examples in the schema docs.
+It was used during experimentation with manual merge of RDF JSONs.
+It was superseded by Regvue include support.
+
+* Removed the `element.addr` property
++
+The `element.addr` property is no longer used.
+The address is now calculated dynamically using the `element.offset` property.
+The presence of the `element.addr` property will be made an error in v1.0.
+Can we make the presence of the `element.addr` property a warning in v0.99?
+See also https://github.jpl.nasa.gov/regvue/regvue/issues/80[regvue/regvue#80] and https://github.jpl.nasa.gov/regvue/regvue/issues/162[regvue/regvue#162].
+
+=== Added
+
+* Added `root.doc` property
++
+Optional. Supports HTML.
+
+* Added optional `root.data_width` and `element.data_width` properties.
+
+* Added optional `root.default_reset` and `element.default_reset` properties.
+** TODO: Change default to "Default".
+
+* Added string values to `field.reset`
++
+Previously, only number values were allowed.
+
+* Added ability to specify multiple resets by adding object values for `field.reset` in the form of `{ "value": value, "resets": ["name_a", "name_b", ...] }`.
+
+* Added string values to `element.offset`
++
+Previously, only number values were allowed.
++
+** TODO: Confirm this is implemented.
+** TODO: Schema currently allows hex values only.  Also accept bin and dec just like reset.  Basically, anything BigInt can parse, offset string scalars should support.
+
+* Added the `include` element type
+
+* Added the `field.enum` property
+* Added support for string values to `enum.value`
+** TODO: Add `enum.value` pattern to schema
+** TODO: Make sure bin, dec, hex string values are supported.
