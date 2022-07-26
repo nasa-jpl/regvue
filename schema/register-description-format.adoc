@@ -266,17 +266,22 @@ Optional.
 * `doc`: The documentation for the field.
 Supports HTML.
 Optional.
+* `enum`: An array of EnumValue objects
+Optional.
+
+The following properties are experimental and are subject to change:
+
 * `repr`: The default representation.
 Default: `hex`.
 Optional.
 ** `bin`: Binary (e.g. `0b0101`)
 ** `dec`: Decimal (e.g. `5`)
 ** `hex`: Hexadecimal (e.g. `0x5`)
-* `enum`: A sequence of EnumValue objects
-Optional.
+
 * `custom_decode`: Custom decode function to apply.
 Default: None.
 Optional.
+
 * `custom_encode`: Custom decode function to apply.
 Default: None.
 Optional.
@@ -284,14 +289,14 @@ Optional.
 ===== EnumValue Objects
 
 Enum value objects describe a single enumerated value.
-They have the following keys:
+They have the following properties:
 
 * `name`: The symbolic name of the enumerated value.
 Required.
 * `value`: The numeric value of the enumerated value.
 Required.
 * `doc`: The documentation for the enumerated value.
-HTML supportted.
+HTML supported.
 Optional.
 
 ==== Register Element Example
