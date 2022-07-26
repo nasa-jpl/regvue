@@ -60,3 +60,8 @@ Previously, only number values were allowed.
 ** TODO: Schema currently access hex values only.  Also accept bin and dec just like reset.  Basically, anything BigInt can parse, offset string scalars should support.
 
 * Added the `include` element type
+
+* Added the `field.enum` property
+* Added support for string values to `enum.value`
+** TODO: Add `enum.value` pattern to schema
+** TODO: Make sure bin, dec, hex string values are supported.

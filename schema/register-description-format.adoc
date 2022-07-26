@@ -295,6 +295,7 @@ They have the following properties:
 Required.
 * `value`: The numeric value of the enumerated value.
 Required.
+Type: number or string.
 * `doc`: The documentation for the enumerated value.
 HTML supported.
 Optional.
