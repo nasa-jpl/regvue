@@ -9,7 +9,7 @@
 Previously, if an RDF JSON had a property that wasn't in the RDF JSON Schema, it would be silently ignored.
 In v1.0, this is now an error.
 +
-** TODO: Add `"additionalProperties": false` to all RDF JSON Schema objects (see https://json-schema.org/understanding-json-schema/reference/object.html#additional-properties[Additional Properties] docs).
+** TODO: Add `"additionalProperties": false` to all RDF JSON Schema objects (see https://json-schema.org/understanding-json-schema/reference/object.html#additional-properties[Additional Properties] docs and https://github.jpl.nasa.gov/regvue/regvue/issues/162[regvue/regvue#162]).
 
 * `root.display_name` is now required
 +
@@ -32,8 +32,9 @@ It was superseded by Regvue include support.
 +
 The `element.addr` property is no longer used.
 The address is now calculated dynamically using the `element.offset` property.
-Presence of the `element.addr` property will be made a warning in v0.99 and an error in v1.0.
-See also https://github.jpl.nasa.gov/regvue/regvue/issues/80[regvue/regvue#80].
+The presence of the `element.addr` property will be made an error in v1.0.
+Can we make the presence of the `element.addr` property a warning in v0.99?
+See also https://github.jpl.nasa.gov/regvue/regvue/issues/80[regvue/regvue#80] and https://github.jpl.nasa.gov/regvue/regvue/issues/162[regvue/regvue#162].
 
 === Added
 
@@ -57,7 +58,7 @@ Previously, only number values were allowed.
 Previously, only number values were allowed.
 +
 ** TODO: Confirm this is implemented.
-** TODO: Schema currently access hex values only.  Also accept bin and dec just like reset.  Basically, anything BigInt can parse, offset string scalars should support.
+** TODO: Schema currently allows hex values only.  Also accept bin and dec just like reset.  Basically, anything BigInt can parse, offset string scalars should support.
 
 * Added the `include` element type
 
