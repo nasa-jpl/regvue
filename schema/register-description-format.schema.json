@@ -200,7 +200,10 @@
                             },
                             "resets": {
                               "description": "named reset states to associate with the given reset value",
-                              "type": "array"
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
                             }
                           }
                         },

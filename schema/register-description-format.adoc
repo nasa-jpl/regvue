@@ -256,6 +256,13 @@ Required.
 Required.
 * `access`: The software access type of the field.
 Required.
+* `reset`: The reset definition of the field.
+Type: number or string or object.
+Strings values can be binary (`0b` prefix), decimal (no prefix), or hexadecimal (`0x` prefix).
+Object values are used to specify multiple resets or a non-default reset.
+Object values are in the form of `{ "value": scalar, "resets": ["name_a", "name_b", ...] }`.
+If no reset name is specified, the name specified by `default_reset` is used.
+Optional.
 * `doc`: The documentation for the field.
 Supports HTML.
 Optional.
