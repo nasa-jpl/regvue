@@ -162,11 +162,12 @@ The `elements` property defines all design elements and their hierarchy.
 Elements are specified in a flat map indexed by element ID.
 Elements can reference other elements by their element ID to create a describe a tree structure.
 
-There are three element types.
+There are four element types.
 
 * Block (`blk`)
 * Register (`reg`)
 * Memory (`mem`)
+* Include (`include`)
 
 The element type is specified via the `type` property.
 
@@ -324,4 +325,35 @@ They are identified as memories via the `type: mem` key-value pair.
 They have the following keys:
 
 * `type`: `mem`
+* `id` -- A copy of the element ID.
+Must be unique.
+One convention is to concatenate hierarchical element names (e.g. `blk.sub_blk.reg`).
+Required.
+* `name` -- The name of the element.
+Must be a valid C language identifier.
+Meant for human and machine consumption.
+Required.
 * `size`: The size (bytes) of the memory.
+
+=== Include Elements (`include`)
+
+Include elements are used to include other RDF files.
+
+They have the following properties:
+
+* `type` -- `include`
+* `id` -- A copy of the element ID.
+Must be unique.
+One convention is to concatenate hierarchical element names (e.g. `blk.sub_blk.reg`).
+Required.
+* `name` -- The name of the element.
+Must be a valid C language identifier.
+Meant for human and machine consumption.
+Required.
+* `offset` -- The offset (bytes) of the element relative to its parent.
+Optional.
+* `url` -- The URL to the RDF JSON to be included.
+
+==== Include Semantics
+
+Includes work by effectively merging the `root` property of the included JSON into the include element and changing the include element type to `blk`.
