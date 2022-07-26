@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, onBeforeMount, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { DesignElement, DesignRoot, MenuNode } from "src/types";
-import format from "src/format";
+import { hex } from "src/format";
 
 import MenuDown from "vue-material-design-icons/MenuDown.vue";
 import MenuRight from "vue-material-design-icons/MenuRight.vue";
@@ -56,7 +56,7 @@ const getNodes = (
       data: {
         name: child.name,
         version: child.version,
-        addr: child.addr === undefined ? "" : format.hex(child.addr),
+        addr: child.addr === undefined ? "" : hex(child.addr),
       },
     } as MenuNode;
 

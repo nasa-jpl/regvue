@@ -1,4 +1,4 @@
-import format from "src/format";
+import { getStringRepresentation } from "src/format";
 import lunr from "lunr";
 import { DesignElement } from "src/types";
 
@@ -31,7 +31,7 @@ export const createSearchIndex = (elements: Map<string, DesignElement>) => {
         if (document.addr === undefined) {
           addr = "";
         } else {
-          addr = format.getStringRepresentation(
+          addr = getStringRepresentation(
             document.addr,
             "hexadecimal",
             document.data_width

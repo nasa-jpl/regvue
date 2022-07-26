@@ -8,7 +8,7 @@ import {
   IncludeElement,
   RegisterDescriptionFile,
 } from "src/types";
-import format from "src/format";
+import { bitArrayToString } from "src/format";
 import parse from "src/parse";
 import {
   validateSchema,
@@ -265,7 +265,7 @@ const formatData = async (
         } else {
           field.value = parse.stringToBitArray("?", field.nbits);
           field.reset = {
-            value: format.bitArrayToString(field.value, "hexadecimal"),
+            value: bitArrayToString(field.value, "hexadecimal"),
             resets: [],
           };
         }

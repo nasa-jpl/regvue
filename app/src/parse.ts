@@ -1,4 +1,4 @@
-import format from "src/format";
+import { getStringRepresentation } from "src/format";
 import { Bit, isUnknownBit } from "src/types";
 
 // Provides various string parsing functions
@@ -58,11 +58,7 @@ export default {
           const value = this.num("0x" + char);
 
           // Convert the number to a binary string (i.e. 10 => "0b1010")
-          const binaryString = format.getStringRepresentation(
-            value,
-            "binary",
-            4
-          );
+          const binaryString = getStringRepresentation(value, "binary", 4);
 
           // Append each binary digit after the prefix to the result array
           for (const digit of binaryString.substring(2)) {
