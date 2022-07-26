@@ -89,7 +89,7 @@ const href = computed(
     <template v-else-if="element.type == 'blk'">
       <td :colspan="dataWidth" class="truncate border-l-2 border-gray-400 px-2">
         <!-- eslint-disable-next-line vue/no-v-html -->
-        <div class="default-styles" v-html="element.doc"></div>
+        <div class="default-styles" v-html="doc"></div>
       </td>
     </template>
     <template v-else-if="element.type == 'mem'">
