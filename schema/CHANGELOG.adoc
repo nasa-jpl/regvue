@@ -9,14 +9,14 @@
 Previously, if an RDF JSON had a property that wasn't in the RDF JSON Schema, it would be silently ignored.
 In v1.0, this is now an error.
 +
-TODO: Add `"additionalProperties": false` to all RDF JSON Schema objects (see https://json-schema.org/understanding-json-schema/reference/object.html#additional-properties[Additional Properties] docs).
+** TODO: Add `"additionalProperties": false` to all RDF JSON Schema objects (see https://json-schema.org/understanding-json-schema/reference/object.html#additional-properties[Additional Properties] docs).
 
 * `root.display_name` is now required
 +
 Previously, this was optional.
 In v1.0, this is now required.
 +
-TODO: Add "display_name" to the RDF JSON Schema `/properties/root/required` array.
+** TODO: Add "display_name" to the RDF JSON Schema `/properties/root/required` array.
 
 == From v0.2.0 (prototype) to v0.6.5
 
@@ -44,8 +44,7 @@ Optional. Supports HTML.
 * Added optional `root.data_width` and `element.data_width` properties.
 
 * Added optional `root.default_reset` and `element.default_reset` properties.
-+
-TODO: Change default to "Default".
+** TODO: Change default to "Default".
 
 * Added string values to `field.reset`
 +
