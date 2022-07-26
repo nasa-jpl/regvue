@@ -57,6 +57,7 @@ Previously, only number values were allowed.
 +
 Previously, only number values were allowed.
 +
-TODO: Confirm this is implemented.
+** TODO: Confirm this is implemented.
+** TODO: Schema currently access hex values only.  Also accept bin and dec just like reset.  Basically, anything BigInt can parse, offset string scalars should support.
 
 * Added the `include` element type
