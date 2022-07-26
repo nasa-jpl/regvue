@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/* eslint-disable vue/no-v-html */
 import { ref, computed } from "vue";
 import { useCookies } from "vue3-cookies";
 import { Field } from "src/types";
@@ -126,8 +127,10 @@ const stopHighlightField = () => {
 
           <!-- Show the description as html -->
           <td class="border-l-2 px-2">
-            <!-- eslint-disable-next-line vue/no-v-html -->
-            <div class="default-styles" v-html="field.doc"></div>
+            <div
+              class="default-styles"
+              v-html="field.doc?.replaceAll('\n', '<br>')"
+            ></div>
 
             <div v-if="field.enum" class="my-4 mx-0 w-fit text-left">
               <div>Enumerated values:</div>
@@ -148,8 +151,10 @@ const stopHighlightField = () => {
                       {{ e.value }}
                     </td>
                     <td class="border-x-2 px-2">
-                      <!-- eslint-disable-next-line vue/no-v-html -->
-                      <div class="default-styles" v-html="e.doc"></div>
+                      <div
+                        class="default-styles"
+                        v-html="e.doc.replaceAll('\n', '<br>')"
+                      ></div>
                     </td>
                   </tr>
                 </tbody>
