@@ -147,7 +147,10 @@ const stopHighlightField = () => {
                     <td class="border-l-2 px-2">
                       {{ e.value }}
                     </td>
-                    <td class="border-x-2 px-2">{{ e.doc }}</td>
+                    <td class="border-x-2 px-2">
+                      <!-- eslint-disable-next-line vue/no-v-html -->
+                      <div class="default-styles" v-html="e.doc"></div>
+                    </td>
                   </tr>
                 </tbody>
               </table>

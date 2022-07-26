@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Added support for HTML in enum doc descriptions ([#166](https://github.jpl.nasa.gov/regvue/regvue/pull/166)).
 - Added the `Vitest` unit testing framework ([#158](https://github.jpl.nasa.gov/regvue/regvue/pull/158)).
 - Added a validation check for the `schema.name` and `schema.version` properties ([#152](https://github.jpl.nasa.gov/regvue/regvue/pull/152)).
 

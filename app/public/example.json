@@ -64,7 +64,7 @@
           "doc": "The command to execute.",
           "enum": [
             {
-              "doc": "Starts the operation.",
+              "doc": "Starts the operation. <h6>Embedded html - enum</h6>",
               "name": "START",
               "value": 5
             },

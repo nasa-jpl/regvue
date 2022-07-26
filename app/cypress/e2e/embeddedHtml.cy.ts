@@ -19,6 +19,10 @@ describe("embedded-html", () => {
     cy.visit("/#/root/blkA/sub_blkA/regA0?data=example.json");
     cy.get("h6:contains('Embedded html - regA0')").should("exist");
 
+    // Check that HTML is rendered in field tables
     cy.get("h6:contains('Embedded html - rsvd')").should("exist");
+
+    // Check that HTML is rendered in the enum tables
+    cy.get("h6:contains('Embedded html - enum')").should("exist");
   });
 });
