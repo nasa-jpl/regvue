@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 The URL pattern was changed back in [0.5.2] from `/reg/blk.sub_blk.reg` to `/root/blk/sub_blk/reg`. Backwards compatible support was added for the original pattern, but this pattern requires a plugin that does not yet support Vite 3. So upgrading to Vite 3 means dropping support for the original url pattern.
 
 ### Added
+- Added ability to control address map entry expansion ([#173](https://github.jpl.nasa.gov/regvue/regvue/pull/173)).
 - Added support for HTML in enum doc descriptions ([#166](https://github.jpl.nasa.gov/regvue/regvue/pull/166)).
 - Added the `Vitest` unit testing framework ([#158](https://github.jpl.nasa.gov/regvue/regvue/pull/158)).
 - Added a validation check for the `schema.name` and `schema.version` properties ([#152](https://github.jpl.nasa.gov/regvue/regvue/pull/152)).
