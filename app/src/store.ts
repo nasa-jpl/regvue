@@ -4,7 +4,6 @@ import {
   DesignElement,
   DesignRoot,
   DisplayType,
-  Field,
   IncludeElement,
   RegisterDescriptionFile,
 } from "src/types";
@@ -116,16 +115,60 @@ export const useStore = defineStore("store", {
           element.links = new Map(Object.entries(element.links));
         }
 
-        // Set the default reset state
+        // Create a list of possible reset states
+        // The default reset state is placed at the 0 index to begin
         if (element.type == "reg") {
-          element.default_reset = getDefaultResetState(element, elements, root);
+          element.resets = [getDefaultResetState(element, elements, root)];
 
-          // If a field reset value has no associated reset states, add the default state
-          element.fields?.forEach((field) => {
-            if (field.reset.resets.length == 0) {
-              field.reset.resets = [element.default_reset as string];
+          if (element.fields) {
+            for (const field of element.fields) {
+              // If there is an unnamed reset, associate it with the default reset
+              if (
+                typeof field.reset == "string" ||
+                typeof field.reset == "number"
+              ) {
+                field.reset = {
+                  value: field.reset, // Preserve the original reset value
+                  resets: element.resets[0] ? [element.resets[0]] : [], // But associate it with the default reset
+                };
+                field.value = parse.stringToBitArray(
+                  field.reset.value.toString(),
+                  field.nbits
+                );
+              }
+              // If there are named resets, use the default reset to set the value if present
+              // If the default reset is not present, set the value to "?"
+              else if (field.reset && field.reset.resets) {
+                // If the default reset is associated with a reset value
+                if (field.reset.resets.includes(element.resets[0] as string)) {
+                  // Then set the value to the default reset value
+                  field.value = parse.stringToBitArray(
+                    field.reset.value.toString(),
+                    field.nbits
+                  );
+                }
+                // Otherwise set the field value to "?"
+                else {
+                  field.value = parse.stringToBitArray("?", field.nbits);
+                }
+
+                // Add any missing reset states to the element's overall resets
+                for (const reset of field.reset.resets) {
+                  if (!element.resets.includes(reset)) {
+                    element.resets.push(reset);
+                  }
+                }
+              }
+              // If there is no reset value for the field set the value to "?"
+              else {
+                field.value = parse.stringToBitArray("?", field.nbits);
+                field.reset = {
+                  value: bitArrayToString(field.value, "hexadecimal"),
+                  resets: [],
+                };
+              }
             }
-          });
+          }
 
           // Sort the fields so that the field with the highest LSB is first in the array
           element.fields?.sort((a, b) => b.lsb - a.lsb);
@@ -204,6 +247,10 @@ const formatData = async (
           doc: json.root.doc ? json.root.doc : element.doc,
           version: json.root.version ? json.root.version : element.version,
           children: [],
+          default_reset: json.root.default_reset
+            ? json.root.default_reset
+            : "Default",
+          resets: json.root.default_reset ? [json.root.default_reset] : [],
           data_width: json.root.data_width
             ? json.root.data_width
             : element.data_width,
@@ -245,31 +292,8 @@ const formatData = async (
       }
     }
 
-    // If the element is not an IncludeElement, format its fields and add to formattedElements map
+    // Otherwise add it to formattedElements map
     else {
-      const fields = element.fields;
-
-      // Set the field.value to be a Bit[] that represents the field.reset or 0
-      fields?.forEach((field: Field) => {
-        if (typeof field.reset == "string" || typeof field.reset == "number") {
-          field.reset = { value: field.reset, resets: [] };
-          field.value = parse.stringToBitArray(
-            field.reset.value.toString(),
-            field.nbits
-          );
-        } else if (field.reset && field.reset.value != undefined) {
-          field.value = parse.stringToBitArray(
-            field.reset.value.toString(),
-            field.nbits
-          );
-        } else {
-          field.value = parse.stringToBitArray("?", field.nbits);
-          field.reset = {
-            value: bitArrayToString(field.value, "hexadecimal"),
-            resets: [],
-          };
-        }
-      });
       formattedElements.set(element.id, element);
     }
   }

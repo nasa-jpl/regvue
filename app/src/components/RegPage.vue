@@ -63,11 +63,17 @@ watch(
   (newValue) => (selectedField.value = (newValue as string) || "")
 );
 
+const regLayoutKey = ref(0);
 const selectDefaultReset = (resetState: string) => {
   const elem = store.elements.get(props.reg.id);
   if (!elem) throw Error(`Could not find element with id ${props.reg.id}`);
 
-  elem.default_reset = resetState;
+  const index = elem.resets.indexOf(resetState);
+  if (index !== -1) {
+    elem.resets.splice(index, 1);
+  }
+  elem.resets.unshift(resetState);
+  regLayoutKey.value += 1;
 };
 </script>
 
@@ -79,8 +85,9 @@ const selectDefaultReset = (resetState: string) => {
     <!-- Show the field/register value encode/decode table and associated buttons -->
     <RegLayout
       v-if="reg.fields"
+      :key="regLayoutKey"
       :fields="reg.fields"
-      :reset-state="reg.default_reset || ''"
+      :resets="reg.resets || []"
       :selected-field="selectedField"
       :data-width="reg.data_width"
       @select-field="selectField"

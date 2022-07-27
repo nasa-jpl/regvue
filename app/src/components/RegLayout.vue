@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, Ref, computed, nextTick, onBeforeMount, watch } from "vue";
+import { ref, Ref, nextTick, onBeforeMount, watch } from "vue";
 import { useRoute } from "vue-router";
 import { Bit, DataWidth, DisplayType, Field } from "src/types";
 import parse from "src/parse";
@@ -13,7 +13,7 @@ import ChevronDown from "vue-material-design-icons/ChevronDown.vue";
 const props = defineProps<{
   fields: Field[];
   selectedField?: string;
-  resetState: string;
+  resets: string[];
   dataWidth: DataWidth;
 }>();
 
@@ -28,21 +28,6 @@ const store = useStore();
 
 // Control whether or not to show dropdown menu of possible reset states
 let showResets = ref(false);
-
-// Get a list of all available reset states
-const resets = computed(() => {
-  let res = new Set();
-  for (const field of props.fields) {
-    field.reset?.resets.forEach((reset) => res.add(reset));
-  }
-
-  let arr = [...res];
-  arr = arr.filter((e) => e != props.resetState);
-  arr.sort();
-  arr.unshift(props.resetState);
-
-  return arr;
-});
 
 // Reset field values to the default reset state
 onBeforeMount(() => {
@@ -103,7 +88,7 @@ const updateDisplayType = (displayType: DisplayType) => {
 // Assigns each field.value based on its field.reset
 const resetValues = () => {
   props.fields.forEach((field) => {
-    if (field.reset.resets.includes(props.resetState)) {
+    if (props.resets[0] && field.reset.resets.includes(props.resets[0])) {
       field.value = parse.stringToBitArray(
         field.reset.value.toString(),
         field.nbits
