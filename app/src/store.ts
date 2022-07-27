@@ -95,20 +95,19 @@ export const useStore = defineStore("store", {
 
     // Parse JSON data and populate the store variables
     async load(data: RegisterDescriptionFile, url = "") {
-      const [elements, root] = (await formatData(data.elements, data.root)) as [
+      const [elements] = (await formatData(data.elements)) as [
         Map<string, DesignElement>,
         DesignRoot
       ];
 
       if (!elements) throw Error("Error formating data");
-      if (!root) throw Error("Error updating DesignRoot");
 
       for (const [, element] of elements.entries()) {
         // Calculate the address from an element's offset and its parents' offsets
         element.addr = getAddress(element.id, elements);
 
         // Get an elements data_width
-        element.data_width = getDataWidth(element, elements, root);
+        element.data_width = getDataWidth(element, elements, data.root);
 
         // Format the links as a Map object
         if (element.links) {
@@ -118,7 +117,7 @@ export const useStore = defineStore("store", {
         // Create a list of possible reset states
         // The default reset state is placed at the 0 index to begin
         if (element.type == "reg") {
-          element.resets = [getDefaultResetState(element, elements, root)];
+          element.resets = [getDefaultResetState(element, elements, data.root)];
 
           if (element.fields) {
             for (const field of element.fields) {
@@ -175,19 +174,19 @@ export const useStore = defineStore("store", {
         }
       }
 
-      if (!root.data_width) {
-        root.data_width = 32;
+      if (!data.root.data_width) {
+        data.root.data_width = 32;
       }
-      if (root.links) {
-        root.links = new Map(Object.entries(root.links));
+      if (data.root.links) {
+        data.root.links = new Map(Object.entries(data.root.links));
       }
 
       // Check the semantic details of the parsed data
-      const errorMessage = validateSemantics(root, elements);
+      const errorMessage = validateSemantics(data.root, elements);
       if (errorMessage) throw Error(errorMessage);
 
       this.elements = elements;
-      this.root = root;
+      this.root = data.root;
       this.url = url;
       this.loaded = true;
 
@@ -204,10 +203,9 @@ export const useStore = defineStore("store", {
   },
 });
 
-const formatData = async (
-  elements: { [key: string]: DesignElement | IncludeElement },
-  root: DesignRoot
-) => {
+const formatData = async (elements: {
+  [key: string]: DesignElement | IncludeElement;
+}) => {
   const formattedElements = new Map<string, DesignElement>();
 
   for (const element of Object.values(elements)) {
@@ -276,7 +274,7 @@ const formatData = async (
         }
 
         // From the fetched JSON data create a map of string keys to DesignElements
-        const [newData] = (await formatData(data, root)) as [
+        const [newData] = (await formatData(data)) as [
           Map<string, DesignElement>,
           unknown
         ];
@@ -298,7 +296,7 @@ const formatData = async (
     }
   }
 
-  return [formattedElements, root];
+  return [formattedElements];
 };
 
 // Return the parent element of a given element
