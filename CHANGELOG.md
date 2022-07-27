@@ -16,6 +16,7 @@ The URL pattern was changed back in [0.5.2] from `/reg/blk.sub_blk.reg` to `/roo
 - Added a validation check for the `schema.name` and `schema.version` properties ([#152](https://github.jpl.nasa.gov/regvue/regvue/pull/152)).
 
 ### Changed
+- Prefer properties on include elements over the roots they fetch ([#176](https://github.jpl.nasa.gov/regvue/regvue/pull/176)).
 - Upgraded from Vite 2.9.9 to Vite 3.0.3 ([#158](https://github.jpl.nasa.gov/regvue/regvue/pull/158)).
 - Removed support for `.` in URLs ([#158](https://github.jpl.nasa.gov/regvue/regvue/pull/158)).
 
