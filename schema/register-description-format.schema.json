@@ -310,6 +310,13 @@
 		    "type": "string",
 		    "default": "Default"
 		  },
+		  "size": {
+		    "description": "The size (in bytes) of the block",
+		    "type": [
+		      "string",
+		      "number"
+		    ]
+		  },
                   "children": {
                     "description": "An array of child element IDs",
                     "type": "array",
