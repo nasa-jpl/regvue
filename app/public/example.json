@@ -15,7 +15,12 @@
       "blkB"
     ],
     "default_reset": "RS1",
-    "doc": "This is an example design. <h6>Embedded html - example</h6>"
+    "doc": "This is an example design. <h6>Embedded html - example</h6>",
+    "expanded": [
+      "blkA",
+      "blkA.sub_blkA",
+      "blkB"
+    ]
   },
   "elements": {
     "blkA": {
