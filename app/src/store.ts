@@ -235,23 +235,23 @@ const formatData = async (elements: {
         const elem = {
           id: element.id,
           name: element.name,
-          display_name: json.root.display_name
-            ? json.root.display_name
-            : element.display_name,
+          display_name: element.display_name
+            ? element.display_name
+            : json.root.display_name,
           addr: 0,
           offset: element.offset,
           type: "blk",
-          links: json.root.links ? json.root.links : element.links,
-          doc: json.root.doc ? json.root.doc : element.doc,
-          version: json.root.version ? json.root.version : element.version,
+          links: element.links ? element.links : json.root.links,
+          doc: element.doc ? element.doc : json.root.doc,
+          version: element.version ? element.version : json.root.version,
           children: [],
           default_reset: json.root.default_reset
             ? json.root.default_reset
             : "Default",
           resets: json.root.default_reset ? [json.root.default_reset] : [],
-          data_width: json.root.data_width
-            ? json.root.data_width
-            : element.data_width,
+          data_width: element.data_width
+            ? element.data_width
+            : json.root.data_width,
         } as DesignElement;
 
         // Add the children of the root as children of the include block
