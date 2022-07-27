@@ -15,11 +15,6 @@ export default defineConfig({
     "import.meta.vitest": false,
   },
 
-  test: {
-    globals: true,
-    includeSource: ["src/*.ts", "src/**/*.ts"],
-  },
-
   // Allows the app to be run as an embedded deployment (i.e. in a non-root location)
   // https://vitejs.dev/config/#base
   base: "",
