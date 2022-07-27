@@ -34,3 +34,4 @@ lerna-debug.log*
 # Test data files
 app/public/*.json
 !app/public/example.json
+!app/public/include.json

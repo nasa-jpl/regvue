@@ -1,5 +1,5 @@
 import { it, expect } from "vitest";
-import { hex, getStringRepresentation } from "src/format";
+import { hex, getStringRepresentation } from "./src/format";
 
 // Test the hex() function
 // This function returns lowercase hex numbers
