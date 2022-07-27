@@ -265,7 +265,7 @@
               "type": "string"
             },
             "size": {
-              "description": "The size (in bytes) of the block",
+              "description": "The size (in bytes) of the element",
               "type": [
                 "string",
                 "number"
@@ -326,6 +326,28 @@
                   "data_width": false,
                   "default_reset": false,
                   "size": false,
+                  "children": false,
+                  "fields": false
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "const": "mem"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "size"
+                ],
+                "properties": {
+                  "version": false,
+                  "links": false,
+                  "data_width": false,
+                  "default_reset": false,
                   "children": false,
                   "fields": false
                 }
