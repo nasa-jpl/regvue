@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onBeforeMount, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { DesignElement, DesignRoot, MenuNode } from "src/types";
+import { useStore } from "src/store";
 import { hex } from "src/format";
 
 import MenuDown from "vue-material-design-icons/MenuDown.vue";
@@ -17,6 +18,7 @@ const emit = defineEmits(["menu-collapsed", "resize", "toggle-menu"]);
 
 const router = useRouter();
 const route = useRoute();
+const store = useStore();
 
 const currentElement = computed(() => {
   try {
@@ -92,6 +94,10 @@ const generateNodes = () => {
         ) {
           openChildrenNodes(node);
         }
+        // If the current element is a child of an id in the `root.expanded` array, then show its children
+        else if (store.root.expanded?.some((id) => id.includes(node.key))) {
+          openChildrenNodes(node);
+        }
         addNode(child, depth + 1);
       });
     }
@@ -107,7 +113,7 @@ const generateNodes = () => {
 let nodes = ref([] as MenuNode[]);
 onBeforeMount(() => (nodes.value = generateNodes()));
 watch(
-  () => [props.root, route.query.data],
+  [() => props.root.display_name, () => route.query.data],
   () => (nodes.value = generateNodes())
 );
 
