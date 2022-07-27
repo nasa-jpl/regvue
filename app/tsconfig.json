@@ -13,6 +13,11 @@
     "types": ["cypress"],
     "baseUrl": "./",
 
+    // Technically makes our code less strict, but this is necessary for certain @vue modules to be built
+    // We can just trust our dependencies to handle their own type checking
+    // https://stackoverflow.com/questions/52311779/usage-of-the-typescript-compiler-argument-skiplibcheck
+    "skipLibCheck": true,
+
     // Settings chosen from https://www.typescriptlang.org/tsconfig#Type_Checking_6248
     // to improve strictness of type checking
     "allowUnreachableCode": false,
