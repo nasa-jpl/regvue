@@ -45,6 +45,7 @@ export interface DesignRoot {
   children: string[];
   default_reset?: string;
   data_width?: DataWidth;
+  expanded?: string[];
 }
 
 // Type representing the supported ways of displaying bit values

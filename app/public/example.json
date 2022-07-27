@@ -12,10 +12,16 @@
     },
     "children": [
       "blkA",
-      "blkB"
+      "blkB",
+      "blkC"
     ],
     "default_reset": "RS1",
-    "doc": "This is an example design. <h6>Embedded html - example</h6>"
+    "doc": "This is an example design. <h6>Embedded html - example</h6>",
+    "expanded": [
+      "blkA",
+      "blkA.sub_blkA",
+      "blkB"
+    ]
   },
   "elements": {
     "blkA": {
@@ -262,6 +268,31 @@
       "type": "reg",
       "id": "blkB.regB0",
       "name": "regB0"
+    },
+    "blkC": {
+      "offset": 28,
+      "type": "blk",
+      "children": [
+        "blkC.regC0"
+      ],
+      "name": "blkC",
+      "id": "blkC"
+    },
+    "blkC.regC0": {
+      "offset": 0,
+      "doc": "regC0 - An example register.",
+      "fields": [
+        {
+          "access": "ro",
+          "reset": 305839190,
+          "nbits": 32,
+          "lsb": 0,
+          "name": "f0"
+        }
+      ],
+      "type": "reg",
+      "id": "blkC.regC0",
+      "name": "regC0"
     }
   }
 }
