@@ -66,3 +66,9 @@ Previously, only number values were allowed.
 * Added support for string values to `enum.value`
 ** TODO: Add `enum.value` pattern to schema
 ** TODO: Make sure bin, dec, hex string values are supported.
+
+=== Changed
+
+* Made the `element.offset` property optional.
++
+Previously, `element.offset` was required.

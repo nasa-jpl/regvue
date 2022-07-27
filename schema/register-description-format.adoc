@@ -1,115 +1,182 @@
-= Register Description File
+= Register Description Format
 :sectnums:
 :toc:
 :toclevels: 4
+:sectnumlevels: 5
+:sectlinks:
+:idprefix:
+:idsep: -
 
-Register Explorer uses a register description file to provide a hierarchical view into the design under test (DUT).
+:Root: <<root-object,Root>>
+:ElementID: <<element-ids,Element ID>>
+:Element: <<element-objects,Element>>
+:BlockElement: <<block-element-objects,BlockElement>>
+:RegisterElement: <<register-element-objects,RegisterElement>>
+:MemoryElement: <<memory-element-objects,MemoryElement>>
+:IncludeElement: <<include-element-objects,IncludeElement>>
 
-The register description files use YAML syntax, and must have either a `.yml` or `.yaml` file extension.
-If you're new to YAML and want to learn more, see "https://learnxinyminutes.com/docs/yaml/Learn[YAML in Y minutes]."
+The Register Description Format describes a hierarchical view of a hardware design.
+It takes some inspiration from the https://www.keil.com/pack/doc/CMSIS/SVD/html/index.html[CMSIS System View Description].
 
-Register description files are intended to be generated via a register automation solution.
+Register Description Format files use JSON syntax and have a `.json` file extension.
+If you're new to JSON and want to learn more, see "https://learnxinyminutes.com/docs/json[Learn JSON in Y minutes]."
 
-[source,yaml]
+Register Description Format files are intended to be generated via a register automation solution.
+
+[source,json]
 .Small complete example
 ----
-schema:
-  name: register-description-format
-  version: v0.2
-
-root:
-  display_name: Example Design
-  version: v1.0
-  links:
-    GitHub: https://github.com/org/repo
-  children:
-    - blk0
-
-elements:
-  blk0:
-    type: blk
-    id: blk0
-    name: blk0
-    children:
-      - blk0.reg0
-      - blk0.reg1
-
-  blk0.reg0:
-    id: blk0.reg0
-    type: reg
-    name: reg0
-    offset: 0x0
-    doc: An example register.
-    fields:
-      - name: rsvd
-        lsb: 5
-        nbits: 28
-        access: rw
-        doc: A reserved field.
-      - name: command
-        lsb: 0
-        nbits: 4
-        access: rw
-        doc: The command to execute.
-        enum:
-          - name: START
-            value: 0x5
-            doc: Starts the operation.
-          - name: STOP
-            value: 0xA
-            doc: Stops the operation.
-
-  blk0.reg1:
-    type: reg
-    id: blk0.reg1
-    name: reg1
-    data_width: 16
-    offset: 0x4
-    fields:
-      - name: f0
-        lsb: 0
-        nbits: 16
-        access: ro
-        reset: 0x0
+{
+  "schema": {
+    "name": "register-description-format",
+    "version": "v0.2"
+  },
+  "root": {
+    "display_name": "Example Design",
+    "version": "v1.0",
+    "links": {
+      "GitHub": "https://github.com/org/repo"
+    },
+    "children": [
+      "blk0"
+    ]
+  },
+  "elements": {
+    "blk0": {
+      "type": "blk",
+      "id": "blk0",
+      "name": "blk0",
+      "children": [
+        "blk0.reg0",
+        "blk0.reg1"
+      ]
+    },
+    "blk0.reg0": {
+      "id": "blk0.reg0",
+      "type": "reg",
+      "name": "reg0",
+      "offset": 0,
+      "doc": "An example register.",
+      "fields": [
+        {
+          "name": "rsvd",
+          "lsb": 5,
+          "nbits": 28,
+          "access": "rw",
+          "doc": "A reserved field."
+        },
+        {
+          "name": "command",
+          "lsb": 0,
+          "nbits": 4,
+          "access": "rw",
+          "doc": "The command to execute.",
+          "enum": [
+            {
+              "name": "START",
+              "value": 5,
+              "doc": "Starts the operation."
+            },
+            {
+              "name": "STOP",
+              "value": 10,
+              "doc": "Stops the operation."
+            }
+          ]
+        }
+      ]
+    },
+    "blk0.reg1": {
+      "type": "reg",
+      "id": "blk0.reg1",
+      "name": "reg1",
+      "data_width": 16,
+      "offset": 4,
+      "fields": [
+        {
+          "name": "f0",
+          "lsb": 0,
+          "nbits": 16,
+          "access": "ro",
+          "reset": 0
+        }
+      ]
+    }
+  }
+}
 ----
 
-== Document Top Level
+== Document Object
 
-The document top level is an object with the following properties:
+The Doucment object is the document top level object with the following properties:
 
-* `schema` -- Specifies schema version information.
-Required.
-Type: object.
-* `root` -- Specifies the top level design elements.
-Required.
-Type: object.
-* `elements` -- Defines all design elements and their relationships.
-Required.
-Type: object.
+[cols="1,1,1,4"]
+|===
+|Name |Required |Type |Description
 
-== `schema` Property
+a|`schema`
+|Yes
+|<<schema-object,Schema>> object
+|Specifies schema versioning information.
 
-The `schema` property specifies the version of the register schema used by the document.
+a|`root`
+|Yes
+|<<root-object,Root>> object
+|Specifies the top level design element.
+
+a|`elements`
+|Yes
+|<<elements-object,Elements>> object
+|Defines all other design elements and their relationships.
+|===
+
+[source,json]
+.Document object example
+----
+{
+  "schema": {
+    ...
+  },
+  "root": {
+    ...
+  },
+  "elements": {
+    ...
+  }
+}
+----
+
+== Schema Object
+
+The Schema object specifies the version of the register schema used by the document.
 
 [source,yaml]
-.`schema` snippet
+.Schema object example
 ----
-schema:
-  name: register-description-format
-  version: v0.2
+  {
+    "name": "register-description-format",
+    "version": "v0.2"
+  }
 ----
 
-The `schema` property is an object with the following properties:
+The Schema object has the following properties:
 
-* `name` -- Specifies the name of the schema that the RDF JSON targets.
-Required.
-Type: string.
+[cols="1,1,1,4"]
+|===
+|Name |Required |Type |Description
+
+a|`name`
+|Yes
+|string
+a|Specifies the name of the schema that the RDF JSON targets.
 The value must be `register-description-format`.
 
-* `version` -- Specifies the version of the schema that the RDF JSON targets.
-Required.
-Type: string.
-The value must be `v0.2` or `v0.2.x` where x is any positive integer.
+a|`version`
+|Yes
+|string
+|Specifies the version of the schema that the RDF JSON targets.
+The value must be `v0.2` or `v0.2.x` where `x` is any positive integer.
+|===
 
 == Element IDs
 
@@ -128,245 +195,534 @@ regs
     └── reg0
 ----
 
-== `root` Property
+== Root Object
 
-The `root` property is an object that specifies the design top level as a block element.
+The Root object specifies the design top level.
 
-The `root` property object supports all of the properties of <<block-elements>> with some differences.
+The Root object supports all of the properties of {BlockElement} objects with some differences.
 
-The following block element properties are not valid for the `root` property object:
+The following {BlockElement} object properties are not valid for the Root object:
 
-* `offset` -- The `element.offset` property is not valid in the `root` property object.
+[cols="1,1,1,4"]
+|===
+|Name |Required |Type |Description
 
-The following optional block element properties are required for the `root` property object:
+a|`offset`
+|n/a
+|n/a
+|The {BlockElement} `offset` property is not valid in the Root object.
 
-* `display_name` -- Required for `root`
+|===
 
-[source,yaml]
-.`root` snippet
+The following optional {BlockElement} object properties are required for the Root object:
+
+[cols="1,1,1,4"]
+|===
+|Name |Required |Type |Description
+
+a|`display_name`
+|Yes
+|string
+a|See the {BlockElement} object `display_name` property
+
+|===
+
+=== Root Object Example
+
+[source,json]
 ----
-root:
-  display_name: Example Design
-  version: v1.0
-  links:
-    GitHub: https://github.com/org/repo
-  children:
-    - element0
-    - element1
+  {
+    "display_name": "Example Design",
+    "version": "v1.0",
+    "links": {
+      "GitHub": "https://github.com/org/repo"
+    },
+    "children": [
+      "element0",
+      "element1"
+    ]
+  }
 ----
 
-== `elements` Property
+== Elements Object
 
-The `elements` property defines all design elements and their hierarchy.
+The Elements object defines all design elements and their hierarchy.
+It is a collection of key/value pairs where the keys are <<element-ids>> and the values are {Element} objects.
 
-Elements are specified in a flat map indexed by element ID.
-Elements can reference other elements by their element ID to create a describe a tree structure.
+=== Elements Object Example
+
+[source,json]
+----
+  {
+    "element0": {
+      ...
+    },
+    "element1": {
+      ...
+    },
+    ...
+  }
+----
+
+== Element Objects
 
 There are four element types.
 
-* Block (`blk`)
-* Register (`reg`)
-* Memory (`mem`)
-* Include (`include`)
+* {BlockElement}
+* {RegisterElement}
+* {MemoryElement}
+* {IncludeElement}
 
-The element type is specified via the `type` property.
+The element type is specified via the Element `type` property.
 
-All elements support the following keys:
+All element types support the following properties:
 
-* `id` -- A copy of the element ID.
+[cols="1,1,1,4"]
+|===
+|Name |Required |Type |Description
+
+a|`type`
+|Yes
+|string
+a|One of `blk`, `mem`, `reg`, or `include`
+
+a|`id`
+|Yes
+|string
+a|A copy of the {ElementID}.
 Must be unique.
-One convention is to concatenate hierarchical element names (e.g. `blk.sub_blk.reg`).
-Required.
-* `name` -- The name of the element.
+
+a|`name`
+|Yes
+|string
+|The name of the element.
 Must be a valid C language identifier.
 Meant for human and machine consumption.
-Required.
-* `display_name` -- The name of the element meant for human consumption.
-Optional.
-* `type` -- One of `blk`, `mem`, or `reg`
-Required.
-* `offset`: The offset (bytes) of the element relative to its parent.
-Required.
-* `doc` -- Documentation for the element.
+
+a|`display_name`
+|No
+|string
+|The name of the element meant for human consumption.
+
+a|`offset`
+|No
+|number or string
+a|The offset (in bytes) of the element relative to its parent.
+
+[source,json]
+.`offset` number example
+----
+"offset": 4,
+----
+
+[source,json]
+.`offset` string example
+----
+"offset": "0x4",
+----
+
+a|`doc`
+|No
+|string
+|Documentation for the element.
 Supports HTML.
-Optional.
-* `data_width` -- Specifies the size of register elements in bits.
+
+|===
+
+[#block-element-objects]
+=== BlockElement Objects
+
+BlockElement objects are a grouping of other {Element} objects.
+BlockElement objects can contain `reg`, `mem`, `include`, and other `blk` elements.
+They are identified as blocks via the `blk` `type`.
+
+BlockElement objects are {Element} objects with some additional properties:
+
+[cols="1,1,1,4"]
+|===
+|Name |Required |Type |Description
+
+a|`type`
+|Yes
+|string
+a|Value must be `blk`
+
+a|`version`
+|No
+|string
+|The version of the block
+
+a|`links`
+|No
+|object
+a|Relevant links (text/URI pairs)
+
+[source,json]
+.`links` example
+----
+"links": {
+  "GitHub": "https://github.com/org/repo",
+  "Specification": "https://example.com/spec.docx"
+}
+----
+
+a|`size`
+|No
+|number or string
+|The size (in bytes) of the block.
+
+a|`children`
+|Yes
+|array of strings
+|An array of element IDs.
+
+a|`data_width`
+|No
+|number
+|Specifies the size of register elements in bits.
 Applies to all children unless overwritten by a child element.
-Optional.
 Default: 32.
-Type: number.
-Possible values: 16, 32.
-* `default_reset` -- The name used for a reset when `field.reset` is specified as a scalar.
+Valid values: 16, 32.
+
+a|`default_reset`
+|No
+|string
+a|The name used for a reset when `field.reset` is specified as a scalar.
 Applies to all children unless overwritten by a child element.
-Optional.
-Type: string.
-Default: "Default".
+Default: `"Default"`.
 
-[#block-elements]
-=== Block Elements (`blk`)
+|===
 
-Block elements are a grouping of other elements.
-They are identified as blocks via the `type: blk` key-value pair.
-Block elements can contain `reg`, `mem`, and other `blk` elements.
-They have the following keys:
+==== BlockElement Object Example
 
-* `type`: `blk`
-* `version` -- the block version
-Optional.
-* `links` -- relevant links (text/URI pairs)
-Optional.
-* `size`: The size (bytes) of the block.
-Optional.
-* `children`: A sequence of element IDs.
-
-[source,yaml]
-.Block element example
+[source,json]
 ----
-block0:
-  id: block0
-  name: block0
-  type: blk
-  offset: 0x0
-  size: 0x1000
-  children:
-    - block1
-    - reg0
-    - mem0
+  {
+    "type": "blk",
+    "id": "block0",
+    "name": "block0",
+    "offset": 0,
+    "children": [
+      "block1",
+      "reg0",
+      "mem0"
+    ]
+  }
 ----
 
-=== Register Elements (`reg`)
+[#register-element-objects]
+=== RegisterElement Objects
 
-Register elements describe 32-bit hardware registers.
-They are identified as registers via the `type: reg` key-value pair.
-They have the following keys:
+RegisterElement objects describe n-bit hardware registers.
+They are identified as registers via the `reg` `type`.
 
-* `type`: `reg`
-* `fields`: A sequence of Field objects.
+RegisterElement objects are {Element} objects with some additional properties:
+
+[cols="1,1,1,4"]
+|===
+|Name |Required |Type |Description
+
+a|`type`
+|Yes
+|string
+a|Value must be `reg`
+
+a|`fields`
+|Yes
+|array of <<field-objects,Field>> objects
+|The bit fields that make up the register
+|===
+
+The following optional {Element} object properties are required for RegisterElement objects:
+
+[cols="1,1,1,4"]
+|===
+|Name |Required |Type |Description
+
+a|`offset`
+|Yes
+|number or string
+a|The offset (in bytes) of the element relative to its parent.
+
+[source,json]
+.`offset` number example
+----
+"offset": 4,
+----
+
+[source,json]
+.`offset` string example
+----
+"offset": "0x4",
+----
+|===
 
 ==== Field Objects
 
 Field objects describe an n-bit register field.
-They have the following keys:
+They have the following properties:
 
-* `name`: The name of the field.
-Required.
-* `nbits`: The size of the field in bits.
-Required.
-* `lsb`: The index of the least significant bit of the field relative to the register.
-Required.
-* `access`: The software access type of the field.
-Required.
-* `reset`: The reset definition of the field.
-Type: number or string or object.
+[cols="1,1,1,4"]
+|===
+|Name |Required |Type |Description
+
+a|`name`
+|Yes
+|string
+|The name of the field.
+
+a|`nbits`
+|Yes
+|number
+|The size of the field in bits.
+
+a|`lsb`
+|Yes
+|number
+|The index of the least significant bit of the field relative to the register.
+
+a|`access`
+|Yes
+|string
+|The software access type of the field.
+
+a|`reset`
+|No
+|number, string, or <<reset-objects,Reset>> object
+a|The reset definition of the field.
 Strings values can be binary (`0b` prefix), decimal (no prefix), or hexadecimal (`0x` prefix).
-Object values are used to specify multiple resets or a non-default reset.
-Object values are in the form of `{ "value": scalar, "resets": ["name_a", "name_b", ...] }`.
-If no reset name is specified, the name specified by `default_reset` is used.
-Optional.
-* `doc`: The documentation for the field.
+See <<reset-objects>> for the Reset object representation.
+If no reset name is specified (i.e. a number or string type is used), the name of the reset will be that specified by the closest `default_reset` property.
+
+a|`doc`
+|No
+|string
+|The documentation for the field.
 Supports HTML.
-Optional.
-* `enum`: An array of EnumValue objects
-Optional.
+
+a|`enum`
+|No
+|array of <<enum-value-objects,EnumValue>> objects
+|Provides symbolic representations of the numeric values
+
+|===
 
 The following properties are experimental and are subject to change:
 
-* `repr`: The default representation.
+[cols="1,1,1,4"]
+|===
+|Name |Required |Type |Description
+
+a|`repr`
+|No
+|string
+a|The default representation.
 Default: `hex`.
-Optional.
-** `bin`: Binary (e.g. `0b0101`)
-** `dec`: Decimal (e.g. `5`)
-** `hex`: Hexadecimal (e.g. `0x5`)
 
-* `custom_decode`: Custom decode function to apply.
+Valid values:
+
+[cols="1,3"]
+!===
+!Value !Description
+a!`"bin"`
+a!Binary (e.g. `Ob0101`)
+
+a!`"dec"`
+a!Decimal (e.g. `5`)
+
+a!`"hex"`
+a!Hexadecimal (e.g. `0x5`)
+!===
+
+a|`custom_decode`
+|No
+|string
+|Custom decode function to apply.
 Default: None.
-Optional.
 
-* `custom_encode`: Custom decode function to apply.
+a|`custom_encode`
+|No
+|string
+|Custom decode function to apply.
 Default: None.
-Optional.
 
+|===
+
+[#reset-objects]
+===== Reset Objects
+
+Reset objects allow specifying a non-default reset name and/or multiple reset names.
+They have the following properties:
+
+[cols="1,1,1,4"]
+|===
+|Name |Required |Type |Description
+
+a|`value`
+|Yes
+|number or string
+|The reset value
+
+a|`resets`
+|Yes
+|array of strings
+|One or more reset names
+|===
+
+[source,json]
+.Reset object example
+----
+{
+  "value": "0x5",
+  "resets": [
+    "POR",
+    "SW"
+  ]
+}
+----
+
+[#enum-value-objects]
 ===== EnumValue Objects
 
-Enum value objects describe a single enumerated value.
+EnumValue objects describe a single enumerated value.
 They have the following properties:
 
-* `name`: The symbolic name of the enumerated value.
-Required.
-* `value`: The numeric value of the enumerated value.
-Required.
-Type: number or string.
-* `doc`: The documentation for the enumerated value.
+[cols="1,1,1,4"]
+|===
+|Name |Required |Type |Description
+
+a|`name`
+|Yes
+|string
+|The symbolic name of the enumerated value.
+
+a|`value`
+|Yes
+|number or string
+|The numeric value of the enumerated value.
+
+a|`doc`
+|Yes
+|string
+|The documentation for the enumerated value.
 HTML supported.
-Optional.
+|===
 
-==== Register Element Example
+==== RegisterElement Object Example
 
-[source,yaml]
-.Register element example
+[source,json]
 ----
-blk0.reg0:
-  id: blk0.reg0
-  type: reg
-  name: reg0
-  offset: 0x0
-  doc: An example register.
-  fields:
-    - name: rsvd
-      lsb: 5
-      nbits: 28
-      access: rw
-      doc: A reserved field.
-    - name: command
-      lsb: 0
-      nbits: 4
-      access: rw
-      doc: The command to execute.
-      enum:
-        - name: START
-          value: 0x5
-          doc: Starts the operation.
-        - name: STOP
-          value: 0xA
-          doc: Stops the operation.
+  {
+    "type": "reg",
+    "id": "blk0.reg0",
+    "name": "reg0",
+    "offset": 0,
+    "doc": "An example register.",
+    "fields": [
+      {
+        "name": "rsvd",
+        "lsb": 5,
+        "nbits": 28,
+        "access": "rw",
+        "doc": "A reserved field."
+      },
+      {
+        "name": "command",
+        "lsb": 0,
+        "nbits": 4,
+        "access": "rw",
+        "doc": "The command to execute.",
+        "enum": [
+          {
+            "name": "START",
+            "value": 5,
+            "doc": "Starts the operation."
+          },
+          {
+            "name": "STOP",
+            "value": 10,
+            "doc": "Stops the operation."
+          }
+        ]
+      }
+    ]
+  }
 ----
 
-=== Memory Elements (`mem`)
+[#memory-element-objects]
+=== MemoryElement Objects
 
-Memory elements describe contiguous blocks of memory.
-They are identified as memories via the `type: mem` key-value pair.
-They have the following keys:
+MemoryElement objects describe contiguous blocks of memory.
+They are identified as registers via the `mem` `type`.
 
-* `type`: `mem`
-* `id` -- A copy of the element ID.
-Must be unique.
-One convention is to concatenate hierarchical element names (e.g. `blk.sub_blk.reg`).
-Required.
-* `name` -- The name of the element.
-Must be a valid C language identifier.
-Meant for human and machine consumption.
-Required.
-* `size`: The size (bytes) of the memory.
+MemoryElement objects are {Element} objects with some additional properties:
 
-=== Include Elements (`include`)
+[cols="1,1,1,4"]
+|===
+|Name |Required |Type |Description
 
-Include elements are used to include other RDF files.
+a|`type`
+|Yes
+|string
+a|Value must be `mem`
 
-They have the following properties:
+a|`size`
+|Yes
+|number or string
+a|The size (in bytes) of the memory.
+|===
 
-* `type` -- `include`
-* `id` -- A copy of the element ID.
-Must be unique.
-One convention is to concatenate hierarchical element names (e.g. `blk.sub_blk.reg`).
-Required.
-* `name` -- The name of the element.
-Must be a valid C language identifier.
-Meant for human and machine consumption.
-Required.
-* `offset` -- The offset (bytes) of the element relative to its parent.
-Optional.
-* `url` -- The URL to the RDF JSON to be included.
+The following optional {Element} object properties are required for RegisterElement objects:
+
+[cols="1,1,1,4"]
+|===
+|Name |Required |Type |Description
+
+a|`offset`
+|Yes
+|number or string
+a|The offset (in bytes) of the element relative to its parent.
+
+[source,json]
+.`offset` number example
+----
+"offset": 4,
+----
+
+[source,json]
+.`offset` string example
+----
+"offset": "0x4",
+----
+|===
+
+[#include-element-objects]
+=== IncludeElement Objects
+
+IncludeElement objects are used to include other RDF files.
+
+IncludeElement objects are {Element} objects with some additional properties:
+
+[cols="1,1,1,4"]
+|===
+|Name |Required |Type |Description
+
+a|`type`
+|Yes
+|string
+a|Value must be `include`
+
+a|`offset`
+|No
+|number or string
+a|The offset (in bytes) of the element relative to its parent.
+
+a|`url`
+|Yes
+|string
+|The URL to the RDF JSON to be included.
+|===
 
 ==== Include Semantics
 
-Includes work by effectively merging the `root` property of the included JSON into the include element and changing the include element type to `blk`.
+Includes work by effectively merging the {Root} object of the included JSON into the {IncludeElement} object and changing the {IncludeElement} type to `blk`.
