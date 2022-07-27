@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Breaking Changes
+The URL pattern was changed back in [0.5.2] from `/reg/blk.sub_blk.reg` to `/root/blk/sub_blk/reg`. Backwards compatible support was added for the original pattern, but this pattern requires a plugin that does not yet support Vite 3. So upgrading to Vite 3 means dropping support for the original url pattern.
+
 ### Added
 - Added support for HTML in enum doc descriptions ([#166](https://github.jpl.nasa.gov/regvue/regvue/pull/166)).
 - Added the `Vitest` unit testing framework ([#158](https://github.jpl.nasa.gov/regvue/regvue/pull/158)).
@@ -16,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed support for `.` in URLs ([#158](https://github.jpl.nasa.gov/regvue/regvue/pull/158)).
 
 ### Fixed
+- Fixed bug affecting fields with named resets but missing the default reset ([#172](https://github.jpl.nasa.gov/regvue/regvue/pull/172)).
 - Replace `\n` with `<br>` when displaying doc descriptions ([#171](https://github.jpl.nasa.gov/regvue/regvue/pull/171)).
 - Fix regression and allow for HTML tags in field doc descriptions ([#155](https://github.jpl.nasa.gov/regvue/regvue/pull/155)).
 - Fix nested children blocks being able to have no displayed addr ([#151](https://github.jpl.nasa.gov/regvue/regvue/pull/151)).

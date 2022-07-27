@@ -2,20 +2,11 @@
  * Provides formatting functions to convert various values to strings
  */
 
-import { Bit, DisplayType, Field, isUnknownBit } from "src/types";
+import { Bit, DisplayType, isUnknownBit } from "src/types";
 
 // Convert an integer to a hex string
 export const hex = (value: number) => {
   return "0x" + value.toString(16);
-};
-
-// Converts a field value to a string
-export const getFieldValue = (field: Field, value: number) => {
-  if (field.nbits == 1) {
-    return value;
-  } else {
-    return hex(value);
-  }
 };
 
 export const getStringRepresentation = (

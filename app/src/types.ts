@@ -30,7 +30,8 @@ export interface DesignElement {
   fields?: Field[];
   children?: string[];
   links?: Map<string, string>;
-  default_reset?: string;
+  default_reset: string;
+  resets: string[];
   data_width: DataWidth;
 }
 
