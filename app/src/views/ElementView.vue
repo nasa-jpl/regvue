@@ -14,13 +14,15 @@ import Close from "vue-material-design-icons/Close.vue";
 import HamburgerMenu from "vue-material-design-icons/Menu.vue";
 
 const props = defineProps<{
-  elementId: string[];
+  elementId: string | string[];
 }>();
 
 const elementId = computed(() => {
-  try {
+  if (typeof props.elementId == "string") {
+    return props.elementId;
+  } else if (props.elementId) {
     return props.elementId.join(".");
-  } catch {
+  } else {
     return "";
   }
 });
