@@ -278,6 +278,38 @@
                   "children"
                 ],
                 "properties": {
+		  "display_name": {
+		    "description": "The name of the design meant to be displayed",
+		    "type": "string"
+		  },
+		  "version": {
+		    "description": "The design version",
+		    "type": "string"
+		  },
+		  "links": {
+		    "description": "Relevant links (text/URL pairs) for the design.",
+		    "type": "object",
+		    "patternProperties": {
+		      ".*": {
+			"description": "A URI",
+			"type": "string"
+		      }
+		    }
+		  },
+		  "data_width": {
+		    "description": "Size of registers in number of bits",
+		    "type": "number",
+		    "enum": [
+		      16,
+		      32
+		    ],
+		    "default": 32
+		  },
+		  "default_reset": {
+		    "description": "The name used for a reset when field.reset is specified as a scalar",
+		    "type": "string",
+		    "default": "Default"
+		  },
                   "children": {
                     "description": "An array of child element IDs",
                     "type": "array",
