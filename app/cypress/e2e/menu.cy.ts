@@ -10,14 +10,12 @@ describe("menu-component", () => {
     cy.visit("/#/root/blkA/sub_blkA/regA0?data=example.json");
   });
 
-  it("shows the unselected root nodes", () => {
-    const rootElements = data.root.children;
-    const subBlks = data.elements[rootElements[0]].children;
-    const regs = data.elements[subBlks[0]].children;
-
+  it("shows the expanded root nodes", () => {
     cy.get("[id^=menu-node-]").should(
       "have.length",
-      rootElements.length + subBlks.length + regs.length
+      data.root.expanded
+        .map((id) => data.elements[id].children.length)
+        .reduce((a, b) => a + b, data.root.children.length)
     );
     data.root.children.forEach((child) => {
       const id = "#menu-node-" + child.split(".").join("-");
@@ -52,11 +50,12 @@ describe("menu-component", () => {
   it("toggles children visiblity on click", () => {
     const rootElements = data.root.children;
     const subBlks = data.elements[rootElements[0]].children;
-    const regs = data.elements[subBlks[0]].children;
 
     cy.get("[id^=menu-node-]").should(
       "have.length",
-      rootElements.length + subBlks.length + regs.length
+      data.root.expanded
+        .map((id) => data.elements[id].children.length)
+        .reduce((a, b) => a + b, data.root.children.length)
     );
 
     data.elements[subBlks[0]].children.forEach((child: string) => {
@@ -70,6 +69,7 @@ describe("menu-component", () => {
         .should("have.text", hex(data.elements[child].offset));
     });
 
+    cy.get(".close-menu-node-btn").first().click();
     cy.get(".close-menu-node-btn").first().click();
     cy.get("[id^=menu-node-]").should("have.length", rootElements.length);
 
@@ -91,16 +91,20 @@ describe("menu-component", () => {
   });
 
   it("reopens children nodes on refresh", () => {
-    const firstParent = data.root.children[0];
-    const firstChild = data.elements[firstParent].children[0];
-    const firstGrandChild = data.elements[firstChild].children[0];
+    const lastParent = data.root.children[data.root.children.length - 1];
+    const child = data.elements[lastParent].children[0];
 
-    cy.visit(`localhost:5173/#/${firstGrandChild}`);
+    // Wait for beforeEach to run and menu to be displayed
+    cy.get("[id^=menu-node-]");
+
+    // Navigate to a new link and ensure a non-default expanded block is still expanded
+    cy.visit(`/#/${child}?data=example.json`);
+    cy.reload();
     cy.get("[id^=menu-node-]").should(
       "have.length",
-      data.root.children.length +
-        data.elements[firstParent].children.length +
-        data.elements[firstChild].children.length
+      data.root.expanded
+        .map((id) => data.elements[id].children.length)
+        .reduce((a, b) => a + b, data.root.children.length) + 1
     );
   });
 
