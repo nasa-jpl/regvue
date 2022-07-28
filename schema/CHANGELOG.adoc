@@ -1,80 +1,78 @@
 = Schema Changlog
 
-== From v0.x to v1.0
+== Regvue Versions and Schema Versions
+
+* Regvue v0.x uses schema v0.2
+* Regvue v1.x uses schema v1
+
+== Changes from schema v0.x to schema v1
 
 === Breaking Changes
 
 * Undefined properties are now errors
 +
 Previously, if an RDF JSON had a property that wasn't in the RDF JSON Schema, it would be silently ignored.
-In v1.0, this is now an error.
+In Regvue v1.0 (schema v1), this is now an error.
 +
-** TODO: Add `"additionalProperties": false` to all RDF JSON Schema objects (see https://json-schema.org/understanding-json-schema/reference/object.html#additional-properties[Additional Properties] docs and https://github.jpl.nasa.gov/regvue/regvue/issues/162[regvue/regvue#162]).
+This is especially relevant to the removal of the BlockElement `addr` property from schema v0.x.
+JSON generated to schema v0.x will likely contain the `addr` property.
+The `addr` property will need to be removed to validate against schema v1.
 
-* `root.display_name` is now required
+* The link:register-description-format.adoc#root-object[Root] object `display_name` property is now required
 +
 Previously, this was optional.
-In v1.0, this is now required.
-+
-** TODO: Add "display_name" to the RDF JSON Schema `/properties/root/required` array.
+In Regvue v1.0 (schema v1), a missing Root `display_name` property is now an error.
 
-== From v0.2.0 (prototype) to v0.7
+== Changes made in schema v0.x
+
+All of these changes were made in a backwards compatible way.
 
 === Removed
 
-* Removed the `root.name` property
+* Removed `name` property from the Root object
 +
 This was never officially supported or documented but was shown in the examples in the schema docs.
 It was used during experimentation with manual merge of RDF JSONs.
 It was superseded by Regvue include support.
 
-* Removed the `element.addr` property
+* Removed the `addr` property on Element objects
 +
 The `element.addr` property is no longer used.
 The address is now calculated dynamically using the `element.offset` property.
-The presence of the `element.addr` property will be made an error in v1.0.
-Can we make the presence of the `element.addr` property a warning in v0.99?
+The presence of the `element.addr` property will be made an error in Regvue v1.0 (schema v1)
 See also https://github.jpl.nasa.gov/regvue/regvue/issues/80[regvue/regvue#80] and https://github.jpl.nasa.gov/regvue/regvue/issues/162[regvue/regvue#162].
 
 === Added
 
-* Added `root.doc` property
-+
-Optional. Supports HTML.
+* Added the optional `doc` property to the link:register-description-format.adoc#root-object[Root] object
+* Added the optional `expanded` property to the link:register-description-format.adoc#root-object[Root] object
+* Added the optional `data_width` and `default_reset` properties to the link:register-description-format.adoc#root-object[Root] object
 
-* Added the `expanded` property to the Root object
-
-* Added optional `root.data_width` and `element.data_width` properties.
-
-* Added optional `root.default_reset` and `element.default_reset` properties.
-** TODO: Change default to "Default".
-
-* Added string values to `field.reset`
-+
-Previously, only number values were allowed.
-
-* Added ability to specify multiple resets by adding object values for `field.reset` in the form of `{ "value": value, "resets": ["name_a", "name_b", ...] }`.
-
-* Added string values to `element.offset`
-+
-Previously, only number values were allowed.
-+
+* Added string as a value type for the link:register-description-format.adoc#element-objects[Element] `offset` property
 ** TODO: Confirm this is implemented.
 ** TODO: Schema currently allows hex values only.  Also accept bin and dec just like reset.  Basically, anything BigInt can parse, offset string scalars should support.
 
-* Added the `include` element type
-
-* Added the `field.enum` property
-* Added support for string values to `enum.value`
-** TODO: Add `enum.value` pattern to schema
-** TODO: Make sure bin, dec, hex string values are supported.
-
-* Added the `links`, `version`, and `display_name` properties to the BlockElement object type.
+* Added the optional `data_width` and `default_reset` properties to link:register-description-format.adoc#block-element-objects[BlockElement] objects
+* Added the `links`, `version`, and `display_name` properties to the link:register-description-format.adoc#block-element-objects[BlockElement] object type.
 +
-Previously, these properties only existed on the Root object.
+Previously, these properties only existed on the link:register-description-format.adoc#root-object[Root] object.
+
+* Added string as a value type for the Field `reset` property
+* Added link:register-description-format.adoc#reset-objects[Reset object] as a value type for the Field `reset` property (to support multiple resets)
+
+* Added the link:register-description-format.adoc#include-element-objects[IncludeElement] type
+
+* Added support to Regvue for the link:register-description-format.adoc#field-objects[Field] `enum` property
++
+This is not actually a schema change since the schema already supported this.
+The change here is that Regvue now supports this.
+
+* Added string as a value type for the link:register-description-format.adoc#enum-value-objects[EnumValue] `value` property
+** TODO: Add a pattern to the schema for the EnumValue `value` property
+** TODO: Make sure bin, dec, hex string values are supported.
 
 === Changed
 
-* Made the `element.offset` property optional.
+* Changed the link:register-description-format.adoc#element-objects[Element] `offset` property from required to optional.
 +
-Previously, `element.offset` was required.
+NOTE: The `offset` property is still required for link:register-description-format.adoc#register-element-objects[RegisterElement] objects but is not longer required for the other Element object types (i.e. BlockElement, MemoryElement, IncludeElement)
