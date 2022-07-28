@@ -9,6 +9,10 @@
 
 === Breaking Changes
 
+* The value of the `version` property on the Schema object must be "v1".
++
+Previously, this value was required to be "v0.2".
+
 * Undefined properties are now errors
 +
 Previously, if an RDF JSON had a property that wasn't in the RDF JSON Schema, it would be silently ignored.
@@ -18,10 +22,17 @@ This is especially relevant to the removal of the BlockElement `addr` property f
 JSON generated to schema v0.x will likely contain the `addr` property.
 The `addr` property will need to be removed to validate against schema v1.
 
-* The link:register-description-format.adoc#root-object[Root] object `display_name` property is now required
+* The `display_name` property has been renamed to `desc`.
+
+* The link:register-description-format.adoc#root-object[Root] object `desc` property is now required
++
+Previously, this was called `display_name` and it was optional for the Root object.
+In Regvue v1.0 (schema v1), a missing Root `desc` property is now an error.
+
+* The `size` property in the MemoryElement object is now required
 +
 Previously, this was optional.
-In Regvue v1.0 (schema v1), a missing Root `display_name` property is now an error.
+In Regvue v1.0 (schema v1), a missing MemoryElement `size` property is now an error.
 
 == Changes made in schema v0.x
 
