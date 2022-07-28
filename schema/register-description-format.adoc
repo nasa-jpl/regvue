@@ -227,6 +227,18 @@ a|See the {BlockElement} object `display_name` property
 
 |===
 
+The Root object has the following additional properties:
+
+[cols="1,1,1,4"]
+|===
+|Name |Required |Type |Description
+
+a|`expanded`
+|No
+|array of strings
+|An array of {ElementIDs} to expand in the home view.
+|===
+
 === Root Object Example
 
 [source,json]

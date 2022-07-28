@@ -68,6 +68,13 @@
           "type": "string",
           "default": "Default"
         },
+        "expanded": {
+          "description": "An array of element IDs to expand in the home view",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "children": {
           "description": "An array of top level element IDs",
           "type": "array",
