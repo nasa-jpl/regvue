@@ -67,6 +67,10 @@ Previously, only number values were allowed.
 ** TODO: Add `enum.value` pattern to schema
 ** TODO: Make sure bin, dec, hex string values are supported.
 
+* Added the `links`, `version`, and `display_name` properties to the BlockElement object type.
++
+Previously, these properties only existed on the Root object.
+
 === Changed
 
 * Made the `element.offset` property optional.
