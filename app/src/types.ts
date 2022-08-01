@@ -24,7 +24,7 @@ export interface DesignElement {
   addr: number | undefined;
   offset?: number;
   type: "reg" | "blk" | "mem";
-  display_name?: string;
+  desc?: string;
   doc?: string;
   version?: string;
   fields?: Field[];
@@ -37,7 +37,7 @@ export interface DesignElement {
 
 // Interface representing the attributes of the root project description
 export interface DesignRoot {
-  display_name: string;
+  desc: string;
   name: string;
   links?: Map<string, string>;
   version: string;
@@ -73,7 +73,7 @@ export interface Field {
 export interface IncludeElement {
   id: string;
   name: string;
-  display_name?: string;
+  desc?: string;
   offset: string | number;
   doc?: string;
   version?: string;

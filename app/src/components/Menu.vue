@@ -113,13 +113,13 @@ const generateNodes = () => {
 let nodes = ref([] as MenuNode[]);
 onBeforeMount(() => (nodes.value = generateNodes()));
 watch(
-  [() => props.root.display_name, () => route.query.data],
+  [() => props.root.desc, () => route.query.data],
   () => (nodes.value = generateNodes())
 );
 
 // Determine whether to add or remove all children of a node from visibleKeys
 const toggleChildrenNodes = (node: MenuNode) => {
-  if (node.children == null || node.children == []) return;
+  if (!node.children) return;
 
   if (node.children[0]?.isVisible) {
     closeChildrenNodes(node);

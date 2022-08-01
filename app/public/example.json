@@ -5,7 +5,7 @@
   },
   "root": {
     "version": "v1.0",
-    "display_name": "Example Design",
+    "desc": "Example Design",
     "links": {
       "GitHub": "https://github.jpl.nasa.gov/regvue/regvue"
     },

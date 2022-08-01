@@ -33,7 +33,7 @@ Register Description Format files are intended to be generated via a register au
     "version": "v0.2"
   },
   "root": {
-    "display_name": "Example Design",
+    "desc": "Example Design",
     "version": "v1.0",
     "links": {
       "GitHub": "https://github.com/org/repo"
@@ -206,7 +206,7 @@ The Root object has the following properties:
 |===
 |Name |Required |Type |Description
 
-a|`display_name`
+a|`desc`
 |Yes
 |string
 |The name of design.
@@ -269,7 +269,7 @@ Default: `"Default"`.
 [source,json]
 ----
   {
-    "display_name": "Example Design",
+    "desc": "Example Design",
     "version": "v1.0",
     "links": {
       "GitHub": "https://github.com/org/repo"
@@ -336,7 +336,7 @@ a|`name`
 Must be a valid C language identifier.
 Meant for human and machine consumption.
 
-a|`display_name`
+a|`desc`
 |No
 |string
 |The name of the element meant for human consumption.

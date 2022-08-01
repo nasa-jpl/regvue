@@ -22,9 +22,7 @@ const store = useStore();
 const route = useRoute();
 const router = useRouter();
 
-const title = computed(
-  () => (store.root?.display_name as string) || "display_name undefined"
-);
+const title = computed(() => (store.root?.desc as string) || "desc undefined");
 
 const version = computed(() => {
   if (store.root?.version || store.root?.version == "") {

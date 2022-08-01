@@ -26,7 +26,7 @@ const getLink = (index: number) => {
     <div>
       <!-- Show the display name -->
       <span id="element-name" class="text-xl font-semibold">
-        {{ element.display_name ? element.display_name : element.name }}
+        {{ element.desc ? element.desc : element.name }}
       </span>
 
       <!-- Show the version if set -->
