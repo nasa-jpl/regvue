@@ -6,7 +6,6 @@
   "root": {
     "version": "v1.0",
     "display_name": "Example Design",
-    "name": "example",
     "links": {
       "GitHub": "https://github.jpl.nasa.gov/regvue/regvue"
     },
@@ -159,7 +158,7 @@
           "access": "rw",
           "reset": {
             "value": 0,
-            "resets": [
+            "names": [
               "RS1",
               "RS2"
             ]
@@ -172,7 +171,7 @@
           "access": "rw",
           "reset": {
             "value": "0x1",
-            "resets": [
+            "names": [
               "RS3",
               "RS1"
             ]

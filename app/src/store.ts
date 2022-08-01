@@ -128,7 +128,7 @@ export const useStore = defineStore("store", {
               ) {
                 field.reset = {
                   value: field.reset, // Preserve the original reset value
-                  resets: element.resets[0] ? [element.resets[0]] : [], // But associate it with the default reset
+                  names: element.resets[0] ? [element.resets[0]] : [], // But associate it with the default reset
                 };
                 field.value = parse.stringToBitArray(
                   field.reset.value.toString(),
@@ -137,9 +137,9 @@ export const useStore = defineStore("store", {
               }
               // If there are named resets, use the default reset to set the value if present
               // If the default reset is not present, set the value to "?"
-              else if (field.reset && field.reset.resets) {
+              else if (field.reset && field.reset.names) {
                 // If the default reset is associated with a reset value
-                if (field.reset.resets.includes(element.resets[0] as string)) {
+                if (field.reset.names.includes(element.resets[0] as string)) {
                   // Then set the value to the default reset value
                   field.value = parse.stringToBitArray(
                     field.reset.value.toString(),
@@ -152,7 +152,7 @@ export const useStore = defineStore("store", {
                 }
 
                 // Add any missing reset states to the element's overall resets
-                for (const reset of field.reset.resets) {
+                for (const reset of field.reset.names) {
                   if (!element.resets.includes(reset)) {
                     element.resets.push(reset);
                   }
@@ -163,7 +163,7 @@ export const useStore = defineStore("store", {
                 field.value = parse.stringToBitArray("?", field.nbits);
                 field.reset = {
                   value: bitArrayToString(field.value, "hexadecimal"),
-                  resets: [],
+                  names: [],
                 };
               }
             }
