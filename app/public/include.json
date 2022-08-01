@@ -5,7 +5,7 @@
   },
   "root": {
     "version": "v0.1",
-    "display_name": "Include Example",
+    "desc": "Include Example",
     "links": {},
     "children": [
       "top_blk"
@@ -28,7 +28,7 @@
     },
     "top_blk.include1": {
       "name": "include1",
-      "display_name": "Include 1",
+      "desc": "Include 1",
       "id": "top_blk.include1",
       "type": "include",
       "offset": 0,
@@ -37,7 +37,7 @@
     },
     "top_blk.include2": {
       "name": "include2",
-      "display_name": "Include 2",
+      "desc": "Include 2",
       "id": "top_blk.include2",
       "type": "include",
       "offset": "0x2000",

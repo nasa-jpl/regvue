@@ -44,7 +44,7 @@ let element = computed(() => {
     return {
       id: "",
       name: root.value.name,
-      display_name: root.value.display_name,
+      desc: root.value.desc,
       type: "blk",
       links: root.value.links,
       children: root.value.children,

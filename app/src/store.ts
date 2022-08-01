@@ -235,9 +235,7 @@ const formatData = async (elements: {
         const elem = {
           id: element.id,
           name: element.name,
-          display_name: element.display_name
-            ? element.display_name
-            : json.root.display_name,
+          desc: element.desc ? element.desc : json.root.desc,
           addr: 0,
           offset: element.offset,
           type: "blk",

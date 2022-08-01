@@ -16,7 +16,7 @@ describe("header-component", () => {
 
     cy.get("#header-title").should(
       "have.text",
-      `${data.root.display_name} (${data.root.version})`
+      `${data.root.desc} (${data.root.version})`
     );
 
     cy.get("#header-links")

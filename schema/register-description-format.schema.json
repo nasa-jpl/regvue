@@ -35,12 +35,12 @@
       "description": "Contains design information",
       "type": "object",
       "required": [
-        "display_name",
+        "desc",
         "children"
       ],
       "additionalProperties": false,
       "properties": {
-        "display_name": {
+        "desc": {
           "description": "The name of the design meant to be displayed",
           "type": "string"
         },
@@ -118,7 +118,7 @@
               "description": "The name of the element",
               "type": "string"
             },
-            "display_name": {
+            "desc": {
               "description": "A human readable or formatted name of the element",
               "type": "string"
             },

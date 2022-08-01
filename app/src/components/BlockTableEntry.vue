@@ -126,9 +126,7 @@ const href = computed(
             <a
               class="text-blue-500 underline hover:cursor-pointer hover:text-blue-400"
               :href="href"
-              >{{
-                element.display_name ? element.display_name : element.name
-              }}</a
+              >{{ element.desc ? element.desc : element.name }}</a
             >
           </div>
 
