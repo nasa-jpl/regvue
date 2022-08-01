@@ -34,6 +34,8 @@ In Regvue v1.0 (schema v1), a missing Root `desc` property is now an error.
 Previously, this was optional.
 In Regvue v1.0 (schema v1), a missing MemoryElement `size` property is now an error.
 
+* The `resets` property on `reset` objects has been renamed to `names`.
+
 == Changes made in schema v0.x
 
 All of these changes were made in a backwards compatible way.

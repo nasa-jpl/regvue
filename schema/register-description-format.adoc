@@ -600,7 +600,7 @@ a|`value`
 |number or string
 |The reset value
 
-a|`resets`
+a|`names`
 |Yes
 |array of strings
 |One or more reset names
@@ -611,7 +611,7 @@ a|`resets`
 ----
 {
   "value": "0x5",
-  "resets": [
+  "names": [
     "POR",
     "SW"
   ]
