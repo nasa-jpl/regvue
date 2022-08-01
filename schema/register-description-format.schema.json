@@ -33,6 +33,7 @@
       "description": "Contains design information",
       "type": "object",
       "required": [
+        "display_name",
         "children"
       ],
       "properties": {
@@ -42,6 +43,10 @@
         },
         "version": {
           "description": "The design version",
+          "type": "string"
+        },
+        "doc": {
+          "description": "Documentation text describing the root element",
           "type": "string"
         },
         "links": {
