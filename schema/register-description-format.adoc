@@ -9,6 +9,7 @@
 
 :Root: <<root-object,Root>>
 :ElementID: <<element-ids,Element ID>>
+:ElementIDs: <<element-ids,Element IDs>>
 :Element: <<element-objects,Element>>
 :BlockElement: <<block-element-objects,BlockElement>>
 :RegisterElement: <<register-element-objects,RegisterElement>>
