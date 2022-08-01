@@ -112,6 +112,10 @@
               "description": "The name of the element",
               "type": "string"
             },
+            "display_name": {
+              "description": "A human readable or formatted name of the element",
+              "type": "string"
+            },
             "type": {
               "description": "The element type",
               "enum": [
