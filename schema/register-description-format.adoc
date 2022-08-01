@@ -9,6 +9,7 @@
 
 :Root: <<root-object,Root>>
 :ElementID: <<element-ids,Element ID>>
+:ElementIDs: <<element-ids,Element IDs>>
 :Element: <<element-objects,Element>>
 :BlockElement: <<block-element-objects,BlockElement>>
 :RegisterElement: <<register-element-objects,RegisterElement>>
@@ -199,22 +200,7 @@ regs
 
 The Root object specifies the design top level.
 
-The Root object supports all of the properties of {BlockElement} objects with some differences.
-
-The following {BlockElement} object properties are not valid for the Root object:
-
-[cols="1,1,1,4"]
-|===
-|Name |Required |Type |Description
-
-a|`offset`
-|n/a
-|n/a
-|The {BlockElement} `offset` property is not valid in the Root object.
-
-|===
-
-The following optional {BlockElement} object properties are required for the Root object:
+The Root object has the following properties:
 
 [cols="1,1,1,4"]
 |===
@@ -223,20 +209,59 @@ The following optional {BlockElement} object properties are required for the Roo
 a|`display_name`
 |Yes
 |string
-a|See the {BlockElement} object `display_name` property
+|The name of design.
+Meant for humans.
 
-|===
+a|`version`
+|No
+|string
+|The version of the design.
 
-The Root object has the following additional properties:
+a|`links`
+|No
+|object
+a|Relevant links (text/URI pairs)
 
-[cols="1,1,1,4"]
-|===
-|Name |Required |Type |Description
+[source,json]
+.`links` example
+----
+"links": {
+  "GitHub": "https://github.com/org/repo",
+  "Specification": "https://example.com/spec.docx"
+}
+----
+
+a|`doc`
+|No
+|string
+|Documentation for the design.
+Supports HTML.
+
+a|`children`
+|Yes
+|array of strings
+|An array of child {ElementIDs}.
 
 a|`expanded`
 |No
 |array of strings
 |An array of {ElementIDs} to expand in the home view.
+
+a|`data_width`
+|No
+|number
+|Specifies the size of register elements in bits.
+Recursively applies to all children unless overwritten by a child element.
+Default: 32.
+Valid values: 16, 32.
+
+a|`default_reset`
+|No
+|string
+a|The name used for a reset when `field.reset` is specified as a scalar.
+Recursively applies to all children unless overwritten by a child element.
+Default: `"Default"`.
+
 |===
 
 === Root Object Example
@@ -392,7 +417,7 @@ a|`data_width`
 |No
 |number
 |Specifies the size of register elements in bits.
-Applies to all children unless overwritten by a child element.
+Recursively applies to all children unless overwritten by a child element.
 Default: 32.
 Valid values: 16, 32.
 
@@ -400,7 +425,7 @@ a|`default_reset`
 |No
 |string
 a|The name used for a reset when `field.reset` is specified as a scalar.
-Applies to all children unless overwritten by a child element.
+Recursively applies to all children unless overwritten by a child element.
 Default: `"Default"`.
 
 |===
