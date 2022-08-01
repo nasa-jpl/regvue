@@ -262,8 +262,7 @@
             },
             "default_reset": {
               "description": "The name used for a reset when field.reset is specified as a scalar",
-              "type": "string",
-              "default": "Default"
+              "type": "string"
             },
             "size": {
               "description": "The size (in bytes) of the block",
