@@ -59,7 +59,7 @@ export interface Field {
   nbits: number;
   reset: {
     value: number | string;
-    resets: string[];
+    names: string[];
   };
   doc?: string;
   value: Bit[];

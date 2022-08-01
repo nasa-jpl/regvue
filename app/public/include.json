@@ -6,7 +6,6 @@
   "root": {
     "version": "v0.1",
     "display_name": "Include Example",
-    "name": "include_example",
     "links": {},
     "children": [
       "top_blk"

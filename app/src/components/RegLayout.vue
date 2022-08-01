@@ -88,7 +88,7 @@ const updateDisplayType = (displayType: DisplayType) => {
 // Assigns each field.value based on its field.reset
 const resetValues = () => {
   props.fields.forEach((field) => {
-    if (props.resets[0] && field.reset.resets.includes(props.resets[0])) {
+    if (props.resets[0] && field.reset.names.includes(props.resets[0])) {
       field.value = parse.stringToBitArray(
         field.reset.value.toString(),
         field.nbits
