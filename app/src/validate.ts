@@ -146,7 +146,7 @@ export const validateSemantics = (
 
 // Given a reset value return an error message if it is invalid or "" otherwise
 const isValidResetValue = (
-  reset: string | number | { value: string | number; resets: string[] },
+  reset: string | number | { value: string | number; names: string[] },
   dataWidth: number
 ): string => {
   let value: string;
