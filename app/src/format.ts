@@ -31,7 +31,11 @@ export const getStringRepresentation = (
   }
 };
 
-// Assumes a bitArray with length % 4 == 0
+/*
+ * Turns a Bit[] into a string representation of displayType
+ * Assumes a bitArray with length % 4 == 0
+ * Note - treats the 0th index as the LSB, so [1, 0, 1, 0] => "0b0101"
+ */
 export const bitArrayToString = (arr: Bit[], displayType: DisplayType) => {
   // Use slice to prevent calls to .reverse() from affecting the original array
   const bitArray = arr.slice();
