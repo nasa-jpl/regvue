@@ -41,17 +41,6 @@ export const useStore = defineStore("store", {
     };
   },
   actions: {
-    // Returns the first element in elements that has type "reg"
-    getFirstRegister() {
-      for (const key of this.elements.keys()) {
-        if (this.elements.get(key)?.type == "reg") {
-          return key;
-        }
-      }
-
-      return "";
-    },
-
     // Wrap any group of 16 or more digits in strings
     quoteLargeNumbers(jsonString: string) {
       return jsonString.replace(/("[^"]*"\s*:\s*)(\d{16,})/g, `$1"$2"`);

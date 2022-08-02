@@ -10,7 +10,7 @@ const baseUrl = window.location.href.substring(
 );
 const location = window.location;
 
-const getFirstRegisterHref = () => {
+const getRootHref = () => {
   return router.resolve({ name: "element", query: { data: route.query.data } })
     .href;
 };
@@ -31,7 +31,7 @@ const getOpenPageHref = () => {
     <div class="mt-10">
       <a
         class="underline hover:cursor-pointer hover:text-gray-500"
-        :href="getFirstRegisterHref()"
+        :href="getRootHref()"
         >Return</a
       >
       home
