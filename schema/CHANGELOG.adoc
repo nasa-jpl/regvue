@@ -42,7 +42,7 @@ In Regvue v1.0 (schema v1), a missing MemoryElement `size` property is now an er
 
 * The `resets` property on {Reset} objects has been renamed to `names`.
 
-* The `links` property on the {Root} object has been changed from an object of test/URL pairs to an array of objects with `text` and `href` properties.
+* The `links` property on the {Root} and {BlockElement} objects has been changed from an object of test/URL pairs to an array of objects with `text` and `href` properties.
 
 == Changes made in schema v0.x
 
