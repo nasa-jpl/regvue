@@ -36,6 +36,8 @@ In Regvue v1.0 (schema v1), a missing MemoryElement `size` property is now an er
 
 * The `resets` property on `reset` objects has been renamed to `names`.
 
+* The `links` property on the link:register-description-format.adoc#root-object[Root] object has been changed from an object of test/URL pairs to an array of objects with `text` and `href` properties.
+
 == Changes made in schema v0.x
 
 All of these changes were made in a backwards compatible way.
