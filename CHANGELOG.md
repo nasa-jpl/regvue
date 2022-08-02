@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Breaking Changes
 The JSON Schema no longer allows for any additional properties to be present in uploaded RDF files aside from those defined in the [regvue schema](https://github.jpl.nasa.gov/regvue/regvue/blob/main/schema/register-description-format.adoc).
 
+### Added
+- Added a display for mem elements ([#200](https://github.jpl.nasa.gov/regvue/regvue/pull/200)).
+
 ### Changed
 - Additional properties on uploaded RDF files now return as errors ([#162](https://github.jpl.nasa.gov/regvue/regvue/pull/162)).
 
