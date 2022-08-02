@@ -2,7 +2,7 @@
 import { onBeforeMount, ref, nextTick } from "vue";
 import { Bit, DisplayType, isUnknownBit } from "src/types";
 import { bitArrayToString, getStringRepresentation } from "src/format";
-import parse from "src/parse";
+import { num, stringToBitArray } from "src/parse";
 
 import ChevronDown from "vue-material-design-icons/ChevronDown.vue";
 
@@ -28,7 +28,7 @@ let displayValue = ref(
 );
 onBeforeMount(() => {
   for (const e of props.enums) {
-    if (e.value == parse.num(displayValue.value)) {
+    if (e.value == num(displayValue.value)) {
       displayValue.value = `${e.name} (${displayValue.value})`;
       return;
     }
@@ -67,7 +67,7 @@ const deactivate = () => {
     );
 
     for (const e of props.enums) {
-      if (e.value == parse.num(displayValue.value)) {
+      if (e.value == num(displayValue.value)) {
         displayValue.value = `${e.name} (${displayValue.value})`;
         return;
       }
@@ -96,7 +96,7 @@ const updateValue = (addEnumName = false) => {
   // Loop through enum values
   if (addEnumName) {
     for (const e of props.enums) {
-      if (e.value == parse.num(value)) {
+      if (e.value == num(value)) {
         displayValue.value = `${e.name} (${value})`;
         return;
       }
@@ -109,7 +109,7 @@ const updateValue = (addEnumName = false) => {
 // Update the input value to be the enum value
 const selectEnumValue = (value: string | number, preview = false) => {
   // Get the enum value as a Bit[]
-  const bitArr = parse.stringToBitArray(value.toString(), props.nbits);
+  const bitArr = stringToBitArray(value.toString(), props.nbits);
 
   // Set the input value to be equal to the enum value
   const elem = document.getElementById(
@@ -140,14 +140,14 @@ const getErrorMessage = (value: string) => {
 
   // Check that value can be parsed
   try {
-    parse.num(value);
+    num(value);
   } catch {
     return "Value could not be parsed as a number";
   }
 
   // Check that the value does not exceed max bit value
   const maxPossibleValue = Number((1n << BigInt(props.nbits)) - 1n);
-  if (parse.num(value) > maxPossibleValue) {
+  if (num(value) > maxPossibleValue) {
     return "Exceeds max possible value";
   }
 
@@ -268,7 +268,7 @@ const getErrorMessage = (value: string) => {
             {{ e.name }}
             ({{
               getStringRepresentation(
-                parse.num(e.value.toString()),
+                num(e.value.toString()),
                 selectedDisplayType,
                 nbits
               )
