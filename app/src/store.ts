@@ -8,7 +8,7 @@ import {
   RegisterDescriptionFile,
 } from "src/types";
 import { bitArrayToString } from "src/format";
-import parse from "src/parse";
+import { stringToBitArray } from "src/parse";
 import {
   validateSchema,
   validateSemantics,
@@ -130,7 +130,7 @@ export const useStore = defineStore("store", {
                   value: field.reset, // Preserve the original reset value
                   names: element.resets[0] ? [element.resets[0]] : [], // But associate it with the default reset
                 };
-                field.value = parse.stringToBitArray(
+                field.value = stringToBitArray(
                   field.reset.value.toString(),
                   field.nbits
                 );
@@ -141,14 +141,14 @@ export const useStore = defineStore("store", {
                 // If the default reset is associated with a reset value
                 if (field.reset.names.includes(element.resets[0] as string)) {
                   // Then set the value to the default reset value
-                  field.value = parse.stringToBitArray(
+                  field.value = stringToBitArray(
                     field.reset.value.toString(),
                     field.nbits
                   );
                 }
                 // Otherwise set the field value to "?"
                 else {
-                  field.value = parse.stringToBitArray("?", field.nbits);
+                  field.value = stringToBitArray("?", field.nbits);
                 }
 
                 // Add any missing reset states to the element's overall resets
@@ -160,7 +160,7 @@ export const useStore = defineStore("store", {
               }
               // If there is no reset value for the field set the value to "?"
               else {
-                field.value = parse.stringToBitArray("?", field.nbits);
+                field.value = stringToBitArray("?", field.nbits);
                 field.reset = {
                   value: bitArrayToString(field.value, "hexadecimal"),
                   names: [],

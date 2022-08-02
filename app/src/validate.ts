@@ -1,6 +1,6 @@
 import Ajv from "ajv";
 import { isValidDataWidth, DesignRoot, DesignElement } from "src/types";
-import parse from "src/parse";
+import { stringToBitArray } from "src/parse";
 import schema from "../../schema/register-description-format.schema.json";
 
 const ajv = new Ajv({ allowUnionTypes: true });
@@ -64,10 +64,10 @@ export const validateSemantics = (
     }
 
     // Validate that the offset is in a 32 bit address space
-    if (parse.stringToBitArray((element.offset || 0).toString()).length > 32) {
+    if (stringToBitArray((element.offset || 0).toString()).length > 32) {
       return `Element "${element.id}" has an offset greater than 32 bits.`;
     }
-    if (parse.stringToBitArray((element.addr || 0).toString()).length > 32) {
+    if (stringToBitArray((element.addr || 0).toString()).length > 32) {
       return `Element "${element.id}" has an address greater than 32 bits. Check that the sum of its offset and its ancestors' offsets don't exceed 32 bits`;
     }
 

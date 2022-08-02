@@ -2,7 +2,7 @@
 import { ref, Ref, nextTick, onBeforeMount, watch } from "vue";
 import { useRoute } from "vue-router";
 import { Bit, DataWidth, DisplayType, Field } from "src/types";
-import parse from "src/parse";
+import { stringToBitArray } from "src/parse";
 import { useStore } from "src/store";
 
 import FieldInputBox from "src/components/FieldInputBox.vue";
@@ -89,12 +89,9 @@ const updateDisplayType = (displayType: DisplayType) => {
 const resetValues = () => {
   props.fields.forEach((field) => {
     if (props.resets[0] && field.reset.names.includes(props.resets[0])) {
-      field.value = parse.stringToBitArray(
-        field.reset.value.toString(),
-        field.nbits
-      );
+      field.value = stringToBitArray(field.reset.value.toString(), field.nbits);
     } else {
-      field.value = parse.stringToBitArray("?", field.nbits);
+      field.value = stringToBitArray("?", field.nbits);
     }
   });
   updateRegisterValue();
@@ -131,7 +128,7 @@ updateRegisterValue(); // Initial call on setup
 
 // Parse the user input to update the field value
 const onFieldValueChange = (field: Field, value: string) => {
-  const newValue = parse.stringToBitArray(value, field.nbits);
+  const newValue = stringToBitArray(value, field.nbits);
   field.value = newValue;
 
   // Update the register value
@@ -144,7 +141,7 @@ const onFieldValueChange = (field: Field, value: string) => {
 
 // Obtains the input register value and uses it to update the field values
 const onRegisterInput = (input: string) => {
-  const value = parse.stringToBitArray(input);
+  const value = stringToBitArray(input);
   registerValue.value = value;
 
   populateFieldValuesFromRegisterValue(value);
