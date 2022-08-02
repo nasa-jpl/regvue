@@ -137,7 +137,7 @@
                 "string",
                 "number"
               ],
-              "pattern": "^0x[0-9a-fA-F]+$"
+              "pattern": "^(0x)?[0-9a-fA-F]+$"
             },
             "doc": {
               "description": "Element documentation",
