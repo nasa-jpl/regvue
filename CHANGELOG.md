@@ -15,6 +15,9 @@ The JSON Schema no longer allows for any additional properties to be present in 
 ### Changed
 - Additional properties on uploaded RDF files now return as errors ([#162](https://github.jpl.nasa.gov/regvue/regvue/pull/162)).
 
+### Fixed
+- `offset` properties are now treated as BigInts, meaning they are now longer capped at 53 bits ([#141](https://github.jpl.nasa.gov/regvue/regvue/pull/141)).
+
 ## [0.7.0]
 ### Breaking Changes
 The URL pattern was changed back in [0.5.2] from `/reg/blk.sub_blk.reg` to `/root/blk/sub_blk/reg`. Backwards compatible support was added for the original pattern, but this pattern requires a plugin that does not yet support Vite 3. So upgrading to Vite 3 means dropping support for the original url pattern.
