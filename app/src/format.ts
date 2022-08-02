@@ -5,7 +5,7 @@
 import { Bit, DisplayType, isUnknownBit } from "src/types";
 
 // Convert an integer to a hex string
-export const hex = (value: number) => {
+export const hex = (value: number | bigint) => {
   return "0x" + value.toString(16);
 };
 
@@ -20,10 +20,12 @@ export const getStringRepresentation = (
 
   if (displayType == "hexadecimal") {
     const ret = value.toString(16).toUpperCase();
-    return "0x" + "0".repeat(padding / 4 - ret.length) + ret;
+    const repeatCnt = Math.max(padding / 4 - ret.length, 0);
+    return "0x" + "0".repeat(repeatCnt) + ret;
   } else if (displayType == "binary") {
     const ret = value.toString(2);
-    return "0b" + "0".repeat(padding - ret.length) + ret;
+    const repeatCnt = Math.max(padding - ret.length, 0);
+    return "0b" + "0".repeat(repeatCnt) + ret;
   } else if (displayType == "decimal") {
     return value.toString();
   } else {
