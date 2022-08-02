@@ -52,6 +52,11 @@ export const useStore = defineStore("store", {
       return "";
     },
 
+    // Wrap any group of 16 or more digits in strings
+    quoteLargeNumbers(jsonString: string) {
+      return jsonString.replace(/("[^"]*"\s*:\s*)(\d{16,})/g, `$1"$2"`);
+    },
+
     // Try to get data from a url and call load() with that data
     // Return true on successful load and false if load fails
     async loadUrl(url: string) {
@@ -61,9 +66,11 @@ export const useStore = defineStore("store", {
         let validateMsg = validateResponse(result);
         if (validateMsg) return validateMsg;
 
-        // Validate the JSON data's schema
-        const data = await result.json();
+        const text = await result.text();
+        const data = await JSON.parse(this.quoteLargeNumbers(text));
         validateMsg = validateSchema(data);
+
+        // Validate the JSON data's schema
         if (validateMsg) return validateMsg;
 
         // If the data is valid load the data
@@ -79,7 +86,8 @@ export const useStore = defineStore("store", {
     // Return true on successful load and false if load fails
     async loadFile(jsonString: string) {
       try {
-        const data = await JSON.parse(jsonString);
+        const text = this.quoteLargeNumbers(jsonString);
+        const data = await JSON.parse(text);
 
         // Validate the JSON data's schema
         const validateMsg = validateSchema(data);
@@ -209,6 +217,11 @@ const formatData = async (elements: {
   const formattedElements = new Map<string, DesignElement>();
 
   for (const element of Object.values(elements)) {
+    // Reassign the offset to be a BigInt
+    if (element.offset !== undefined) {
+      element.offset = BigInt(element.offset);
+    }
+
     // If the element is an IncludeElement fetch and format from its url
     if (element.type == "include") {
       try {
@@ -236,8 +249,8 @@ const formatData = async (elements: {
           id: element.id,
           name: element.name,
           desc: element.desc ? element.desc : json.root.desc,
-          addr: 0,
-          offset: element.offset,
+          addr: BigInt(0),
+          offset: BigInt(element.offset),
           type: "blk",
           links: element.links ? element.links : json.root.links,
           doc: element.doc ? element.doc : json.root.doc,
@@ -334,8 +347,8 @@ const getDefaultResetState = (
 // Helper function to get an element's address from its and its parents' offsets
 const getAddress = (
   key: string,
-  elements: Map<string, { offset?: number | string }>
-): number | undefined => {
+  elements: Map<string, { offset?: bigint }>
+): bigint | undefined => {
   // Get the current element's offset
   const offset = elements.get(key)?.offset;
 
@@ -352,12 +365,12 @@ const getAddress = (
 
     // If the parent has a defined offset, add it to find the child's addr
     if (parentOffset === undefined) {
-      return parseInt(offset.toString());
+      return BigInt(offset.toString());
     } else {
-      return parseInt(offset.toString()) + parentOffset;
+      return BigInt(offset.toString()) + parentOffset;
     }
   } else {
-    return parseInt(offset.toString());
+    return BigInt(offset.toString());
   }
 };
 
