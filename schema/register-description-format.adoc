@@ -35,9 +35,9 @@ Register Description Format files are intended to be generated via a register au
   "root": {
     "desc": "Example Design",
     "version": "v1.0",
-    "links": {
-      "GitHub": "https://github.com/org/repo"
-    },
+    "links": [
+      { "text": "GitHub", "href": "https://github.com/org/repo" }
+    ],
     "children": [
       "blk0"
     ]
@@ -219,16 +219,16 @@ a|`version`
 
 a|`links`
 |No
-|object
-a|Relevant links (text/URI pairs)
+|array of <<link-objects,Link>> objects
+a|Relevant links to external information
 
 [source,json]
 .`links` example
 ----
-"links": {
-  "GitHub": "https://github.com/org/repo",
-  "Specification": "https://example.com/spec.docx"
-}
+"links": [
+  { "text": "GitHub", "href": "https://github.com/org/repo" },
+  { "text": "Specification", "href": "https://example.com/spec.docx" }
+]
 ----
 
 a|`doc`
@@ -272,7 +272,7 @@ Default: `"Default"`.
     "desc": "Example Design",
     "version": "v1.0",
     "links": {
-      "GitHub": "https://github.com/org/repo"
+      { "text": "GitHub", "href": "https://github.com/org/repo" }
     },
     "children": [
       "element0",
@@ -391,16 +391,16 @@ a|`version`
 
 a|`links`
 |No
-|object
-a|Relevant links (text/URI pairs)
+|array of <<link-objects,Link>> objects
+a|Relevant links to external information
 
 [source,json]
 .`links` example
 ----
-"links": {
-  "GitHub": "https://github.com/org/repo",
-  "Specification": "https://example.com/spec.docx"
-}
+"links": [
+  { "text": "GitHub", "href": "https://github.com/org/repo" },
+  { "text": "Specification", "href": "https://example.com/spec.docx" }
+]
 ----
 
 a|`size`
@@ -428,6 +428,26 @@ a|The name used for a reset when `field.reset` is specified as a scalar.
 Recursively applies to all children unless overwritten by a child element.
 Default: `"Default"`.
 
+|===
+
+==== Link Objects
+
+Link objects describe a single text/href pair that link to external information.
+They have the following properties:
+
+[cols="1,1,1,4"]
+|===
+|Name |Required |Type |Description
+
+a|`text`
+|Yes
+|string
+|The link text to display.
+
+a|`href`
+|Yes
+|string
+|The URL that the link points to.
 |===
 
 ==== BlockElement Object Example
