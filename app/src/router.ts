@@ -54,7 +54,6 @@ router.beforeEach(async (to) => {
       await store.loadUrl(to.query.data as string);
       return {
         name: "element",
-        params: { elementId: store.getFirstRegister().split(".") },
         query: { data: store.url },
       };
     } catch {
