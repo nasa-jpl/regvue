@@ -21,8 +21,8 @@ export const isValidDataWidth = (x: unknown): x is DataWidth => {
 export interface DesignElement {
   id: string;
   name: string;
-  addr: number | undefined;
-  offset?: number;
+  addr: bigint | undefined;
+  offset?: bigint;
   type: "reg" | "blk" | "mem";
   desc?: string;
   doc?: string;
@@ -75,7 +75,7 @@ export interface IncludeElement {
   id: string;
   name: string;
   desc?: string;
-  offset: string | number;
+  offset: bigint;
   doc?: string;
   version?: string;
   links?: Map<string, string>;
