@@ -33,6 +33,7 @@ export interface DesignElement {
   default_reset: string;
   resets: string[];
   data_width: DataWidth;
+  size: number;
 }
 
 // Interface representing the attributes of the root project description

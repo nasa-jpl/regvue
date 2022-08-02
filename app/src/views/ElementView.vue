@@ -6,6 +6,7 @@ import { DesignElement } from "src/types";
 
 import BlockPage from "src/components/BlockPage.vue";
 import Header from "src/components/Header.vue";
+import MemPage from "src/components/MemPage.vue";
 import Menu from "src/components/Menu.vue";
 import OpenModal from "src/components/OpenModal.vue";
 import RegPage from "src/components/RegPage.vue";
@@ -200,6 +201,7 @@ watch(
     >
       <BlockPage v-if="element?.type == 'blk'" :block="element" />
       <RegPage v-else-if="element?.type == 'reg'" :reg="element" />
+      <MemPage v-else-if="element?.type == 'mem'" :element="element" />
 
       <!-- Display footer text if available -->
       <div v-if="store.footerText" class="mx-auto max-w-[800px] text-xs">

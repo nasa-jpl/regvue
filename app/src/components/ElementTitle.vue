@@ -49,6 +49,11 @@ const getLink = (index: number) => {
       </span>
     </div>
 
+    <!-- Show the size of mem elements -->
+    <div v-if="element.size !== undefined">
+      {{ element.size }} bytes of memory
+    </div>
+
     <!-- Show the address in hex -->
     <div v-if="element.addr !== undefined">
       {{ "0x" + element.addr.toString(16) }}
