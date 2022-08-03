@@ -319,11 +319,7 @@ const getDefaultResetState = (
   if (!element.default_reset) {
     const parentElem = getParent(element.id, elements);
     if (!parentElem) {
-      if (root.default_reset) {
-        return root.default_reset;
-      } else {
-        return "Default";
-      }
+      return root.default_reset;
     }
 
     const parentDefaultReset = getDefaultResetState(parentElem, elements, root);
