@@ -65,7 +65,7 @@
         },
         "data_width": {
           "description": "Size of registers in number of bits",
-          "type": "number",
+          "type": "integer",
           "enum": [
             16,
             32
@@ -135,7 +135,7 @@
               "description": "The offset of the element relative to its parent",
               "type": [
                 "string",
-                "number"
+                "integer"
               ],
               "pattern": "^(0x)?[0-9a-fA-F]+$"
             },
@@ -178,7 +178,7 @@
                     "description": "The reset value of the field",
                     "type": [
                       "string",
-                      "number",
+                      "integer",
                       "object"
                     ],
                     "pattern": "^(0x|0b)?[0-9a-fA-F|?]+$",
@@ -188,7 +188,7 @@
                         "description": "the value of the reset",
                         "type": [
                           "string",
-                          "number"
+                          "integer"
                         ],
                         "pattern": "^(0x|0b)?[0-9a-fA-F|?]+$"
                       },
@@ -224,7 +224,7 @@
                           "description": "The field value to associate with the name",
                           "type": [
                             "string",
-                            "number"
+                            "integer"
                           ]
                         },
                         "doc": {
@@ -253,7 +253,7 @@
             },
             "data_width": {
               "description": "Size of registers in number of bits",
-              "type": "number",
+              "type": "integer",
               "enum": [
                 16,
                 32
@@ -268,7 +268,7 @@
               "description": "The size (in bytes) of the element",
               "type": [
                 "string",
-                "number"
+                "integer"
               ]
             },
             "children": {

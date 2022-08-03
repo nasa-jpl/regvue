@@ -249,7 +249,7 @@ a|`expanded`
 
 a|`data_width`
 |No
-|number
+|integer
 |Specifies the size of register elements in bits.
 Recursively applies to all children unless overwritten by a child element.
 Default: 32.
@@ -343,11 +343,11 @@ a|`desc`
 
 a|`offset`
 |No
-|number or string
+|integer or string
 a|The offset (in bytes) of the element relative to its parent.
 
 [source,json]
-.`offset` number example
+.`offset` integer example
 ----
 "offset": 4,
 ----
@@ -405,7 +405,7 @@ a|Relevant links (text/URI pairs)
 
 a|`size`
 |No
-|number or string
+|integer or string
 |The size (in bytes) of the block.
 
 a|`children`
@@ -415,7 +415,7 @@ a|`children`
 
 a|`data_width`
 |No
-|number
+|integer
 |Specifies the size of register elements in bits.
 Recursively applies to all children unless overwritten by a child element.
 Default: 32.
@@ -478,11 +478,11 @@ The following optional {Element} object properties are required for RegisterElem
 
 a|`offset`
 |Yes
-|number or string
+|integer or string
 a|The offset (in bytes) of the element relative to its parent.
 
 [source,json]
-.`offset` number example
+.`offset` integer example
 ----
 "offset": 4,
 ----
@@ -510,12 +510,12 @@ a|`name`
 
 a|`nbits`
 |Yes
-|number
+|integer
 |The size of the field in bits.
 
 a|`lsb`
 |Yes
-|number
+|integer
 |The index of the least significant bit of the field relative to the register.
 
 a|`access`
@@ -525,11 +525,11 @@ a|`access`
 
 a|`reset`
 |No
-|number, string, or <<reset-objects,Reset>> object
+|integer, string, or <<reset-objects,Reset>> object
 a|The reset definition of the field.
 Strings values can be binary (`0b` prefix), decimal (no prefix), or hexadecimal (`0x` prefix).
 See <<reset-objects>> for the Reset object representation.
-If no reset name is specified (i.e. a number or string type is used), the name of the reset will be that specified by the closest `default_reset` property.
+If no reset name is specified (i.e. an integer or string type is used), the name of the reset will be that specified by the closest `default_reset` property.
 
 a|`doc`
 |No
@@ -597,7 +597,7 @@ They have the following properties:
 
 a|`value`
 |Yes
-|number or string
+|integer or string
 |The reset value
 
 a|`names`
@@ -635,7 +635,7 @@ a|`name`
 
 a|`value`
 |Yes
-|number or string
+|integer or string
 |The numeric value of the enumerated value.
 
 a|`doc`
@@ -705,7 +705,7 @@ a|Value must be `mem`
 
 a|`size`
 |Yes
-|number or string
+|integer or string
 a|The size (in bytes) of the memory.
 |===
 
@@ -717,11 +717,11 @@ The following optional {Element} object properties are required for RegisterElem
 
 a|`offset`
 |Yes
-|number or string
+|integer or string
 a|The offset (in bytes) of the element relative to its parent.
 
 [source,json]
-.`offset` number example
+.`offset` integer example
 ----
 "offset": 4,
 ----
@@ -751,7 +751,7 @@ a|Value must be `include`
 
 a|`offset`
 |No
-|number or string
+|integer or string
 a|The offset (in bytes) of the element relative to its parent.
 
 a|`url`
