@@ -53,13 +53,24 @@
           "type": "string"
         },
         "links": {
-          "description": "Relevant links (text/URL pairs) for the design.",
-          "type": "object",
-          "additionalProperties": false,
-          "patternProperties": {
-            ".*": {
-              "description": "A URI",
-              "type": "string"
+          "description": "Relevant links for the design.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "text",
+              "href"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "text": {
+                "description": "The link text to display",
+                "type": "string"
+              },
+              "href": {
+                "description": "The URL that the link points to",
+                "type": "string"
+              }
             }
           }
         },
@@ -242,12 +253,24 @@
               "type": "string"
             },
             "links": {
-              "description": "Relevant links (text/URL pairs) for the design.",
-              "type": "object",
-              "patternProperties": {
-                ".*": {
-                  "description": "A URI",
-                  "type": "string"
+              "description": "Relevant links for the design.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "text",
+                  "href"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "text": {
+                    "description": "The link text to display",
+                    "type": "string"
+                  },
+                  "href": {
+                    "description": "The URL that the link points to",
+                    "type": "string"
+                  }
                 }
               }
             },

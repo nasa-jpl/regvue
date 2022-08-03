@@ -6,7 +6,7 @@
   "root": {
     "version": "v0.1",
     "desc": "Include Example",
-    "links": {},
+    "links": [],
     "children": [
       "top_blk"
     ],

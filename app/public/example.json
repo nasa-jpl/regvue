@@ -6,9 +6,12 @@
   "root": {
     "version": "v1.0",
     "desc": "Example Design",
-    "links": {
-      "GitHub": "https://github.jpl.nasa.gov/regvue/regvue"
-    },
+    "links": [
+      {
+        "text": "GitHub",
+        "href": "https://github.jpl.nasa.gov/regvue/regvue"
+      }
+    ],
     "children": [
       "blkA",
       "blkB",

@@ -7,18 +7,9 @@ import Search from "src/components/Search.vue";
 
 import FileReplaceOutline from "vue-material-design-icons/FileReplaceOutline.vue";
 
-defineProps<{
-  title?: string;
-  version?: string;
-  links?: {
-    href: string;
-    text: string;
-  }[];
-}>();
-
 const emit = defineEmits(["toggle-menu", "show-open-modal"]);
-const store = useStore();
 
+const store = useStore();
 const route = useRoute();
 const router = useRouter();
 
@@ -32,15 +23,7 @@ const version = computed(() => {
   return "version undefined";
 });
 
-const links = computed(() => {
-  let o = store.root?.links;
-
-  if (!o) return [];
-
-  return Array.from(o.entries()).map((entry) => {
-    return { text: entry[0], href: entry[1] };
-  });
-});
+const links = computed(() => store.root?.links);
 
 const getHomeLink = () => {
   return router.resolve({
@@ -80,10 +63,10 @@ watch(
       >
         <a
           v-for="link in links"
-          :key="link?.text"
-          :href="link?.href"
+          :key="link.href"
+          :href="link.href"
           class="text-sm hover:text-gray-500 hover:underline md:text-base"
-          >{{ link?.text }}</a
+          >{{ link.text }}</a
         >
 
         <!-- Show icon to open modal to choose new data file -->
