@@ -16,6 +16,7 @@ The JSON Schema no longer allows for any additional properties to be present in 
 - Additional properties on uploaded RDF files now return as errors ([#162](https://github.jpl.nasa.gov/regvue/regvue/pull/162)).
 
 ### Fixed
+- Prevent block table descriptions from overflowing and add a scroll bar for long descriptions ([#208](https://github.jpl.nasa.gov/regvue/regvue/pull/208)). 
 - `offset` properties are now treated as BigInts, meaning they are now longer capped at 53 bits ([#141](https://github.jpl.nasa.gov/regvue/regvue/pull/141)).
 
 ## [0.7.0]
