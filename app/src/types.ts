@@ -29,7 +29,7 @@ export interface DesignElement {
   version?: string;
   fields?: Field[];
   children?: string[];
-  links?: Map<string, string>;
+  links?: { text: string; href: string }[];
   default_reset: string;
   resets: string[];
   data_width: DataWidth;
@@ -39,7 +39,7 @@ export interface DesignElement {
 export interface DesignRoot {
   desc: string;
   name: string;
-  links?: Map<string, string>;
+  links?: { text: string; href: string }[];
   version: string;
   doc?: string;
   children: string[];
@@ -77,7 +77,7 @@ export interface IncludeElement {
   offset: string | number;
   doc?: string;
   version?: string;
-  links?: Map<string, string>;
+  links?: { text: string; href: string }[];
   type: "include";
   url: string;
   data_width?: number;

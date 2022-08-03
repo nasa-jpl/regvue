@@ -109,11 +109,6 @@ export const useStore = defineStore("store", {
         // Get an elements data_width
         element.data_width = getDataWidth(element, elements, data.root);
 
-        // Format the links as a Map object
-        if (element.links) {
-          element.links = new Map(Object.entries(element.links));
-        }
-
         // Create a list of possible reset states
         // The default reset state is placed at the 0 index to begin
         if (element.type == "reg") {
@@ -176,9 +171,6 @@ export const useStore = defineStore("store", {
 
       if (!data.root.data_width) {
         data.root.data_width = 32;
-      }
-      if (data.root.links) {
-        data.root.links = new Map(Object.entries(data.root.links));
       }
 
       // Check the semantic details of the parsed data

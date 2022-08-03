@@ -31,13 +31,13 @@ const doc = computed(() => {
 
       <!-- Display any links that the block has -->
       <div v-if="block.links" class="mt-4">
-        <div v-for="[key, value] in block.links" :key="key">
+        <div v-for="link in block.links" :key="link.href">
           <a
             class="text-blue-500 underline"
-            :href="value"
+            :href="link.href"
             target="_blank"
             rel="noreferrer"
-            >{{ key }}</a
+            >{{ link.text }}</a
           >
         </div>
       </div>
