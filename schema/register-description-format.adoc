@@ -260,7 +260,8 @@ a|`default_reset`
 |string
 a|The name used for a reset when `field.reset` is specified as a scalar.
 Recursively applies to all children unless overwritten by a child element.
-Default: `"Default"`.
+If no value is specified, it will inherit the closest `default_reset` assigned
+to an ancestor element.
 
 |===
 
