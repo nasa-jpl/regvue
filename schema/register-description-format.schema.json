@@ -27,7 +27,7 @@
         "name": {
           "description": "The name of the format that register.schema.json supports",
           "type": "string",
-          "pattern": "register-description-format"
+          "const": "register-description-format"
         }
       }
     },
