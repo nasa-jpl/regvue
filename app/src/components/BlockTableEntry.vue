@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/* eslint-disable vue/no-v-html */
 import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "src/store";
@@ -87,9 +88,14 @@ const href = computed(
       </td>
     </template>
     <template v-else-if="element.type == 'blk'">
-      <td :colspan="dataWidth" class="truncate border-l-2 border-gray-400 px-2">
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <div class="default-styles" v-html="doc"></div>
+      <td
+        :colspan="dataWidth"
+        class="border-l-2 border-gray-400 px-2 text-left"
+      >
+        <div
+          class="default-styles max-h-[8rem] overflow-y-scroll"
+          v-html="doc"
+        ></div>
       </td>
     </template>
     <template v-else-if="element.type == 'mem'">
