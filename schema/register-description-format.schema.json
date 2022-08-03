@@ -270,7 +270,9 @@
               "type": [
                 "string",
                 "integer"
-              ]
+              ],
+              "$comment": "Match decimal values and hexadecimal values",
+              "pattern": "^([0-9]+|0x[0-9a-fA-F]+)$"
             },
             "children": {
               "description": "An array of child element IDs",
