@@ -643,6 +643,7 @@ a|`value`
 |Yes
 |integer or string
 |The numeric value of the enumerated value.
+String values can be binary (e.g. "0b101"), decimal (e.g. "5") or hexadecimal (e.g. "0x5").
 
 a|`doc`
 |Yes
