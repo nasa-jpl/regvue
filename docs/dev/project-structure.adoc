@@ -1,0 +1,275 @@
+= Project Structure
+:sectnums:
+:toc:
+:toclevels: 4
+:sectnumlevels: 5
+:sectlinks:
+:idprefix:
+:idsep: -
+
+This is a quick overview of the overall project structure of regvue. It provides a high-level view of what each file does and where it is used in other files.
+
+== .devcontainer/
+
+Contains VSCode specific files dedicated to reproducing development enviornments.
+
+See: https://code.visualstudio.com/docs/remote/containers
+
+=== devcontainer.json
+
+Defines VSCode specific settings about how to launch the project in a devcontainer.
+
+It includes a list of extensions to automatically install when opening the project in a devcontainer.
+
+It also exposes port 5173, which is Vite's default port used to run `npm run dev`.
+
+
+=== Dockerfile
+
+Defines the container used as a devcontainer. It is based on Node 18 and installs GitHub CLI.
+
+== app/
+
+Contains all the source code, test files, and configuration files for the regvue app.
+
+=== cypress/
+
+Contains all the configuration files and test files used for Cypress e2e tests.
+All the folders/files were auto-generated except for the files inside `e2e/`.
+The files inside this folder are what are executed by the `cypress run` command.
+They are typically scoped to a single component or single behavior per file.
+
+=== public/
+
+Contains files that are meant to be available from the root URL when regvue is deployed.
+
+==== app.config.json
+
+Contains app-level configuration settings that can be changed for different deployments of regvue.
+At the momement it contains a single config option `footer`, which controls the footer text displayed at the bottom of regvue.
+
+==== example.json
+
+Provides an example of the RDF and is used by Cypress to populate regvue for e2e testing.
+
+==== include.json
+
+Provides another example of the RDF and is used by Cypress during e2e testing to test `include` elements.
+
+==== favicon.ico
+
+Provides the icon image that is displayed in the browser tab.
+
+=== src/
+
+Contains all Vue and Typescript source files. The main entry point is `main.ts`.
+
+==== components/
+
+Contains all Vue components aside from the root Vue component defined in `App.vue` and the larger router views defined in `views/`.
+
+===== AppVersion.vue
+
+Defines a floating box in the bottom right of the screen that contains the regvue version and a link to the regvue repo.
+
+===== BlockPage.vue
+
+Defines the main page displayed by `ElementView.vue` when the selected element is a `blk` type.
+It displays a `ElementTitle.vue` component, the element's `doc` property, and a table that displays the sub-blocks and registers that make up the block.
+Each row in this table is created as a `BlockTableEntry.vue` component.
+
+===== BlockTableEntry.vue
+
+Defines a single row in the table displayed by `BlockPage.vue`.
+This row will display the element's name, offset, and either the element's doc description or a breakdown of the element's fields if it is a `reg` type element.
+
+Clicking on this element will expand it and show a mini-page with the element's doc description and a field table if the element is a `reg` type element.
+
+===== DataFileInput.vue
+
+Defines a drag-and-drop input box to open local data files and a url text input box to open remote data files.
+When a file is opened or its URL is entered, this file makes a call to either `store.loadFile()` or `store.loadUrl()`.
+On a successful data load, the component will reroute to the base URL.
+
+This component is used in both `OpenView.vue` and `OpenModal.vue`.
+
+===== ElementTitle.vue
+
+Provides a formatted title section for `RegPage.vue`, `BlockPage.vue`, and `MemPage.vue`.
+It displays the element's name, id, version (if set), and address.
+
+===== ErrorWindow.vue
+
+Provides a modal that will become visible if regvue encounters any errors in the window.
+This modal provides a stack trace of what caused the error and a link to file a bug report at the regvue repo.
+
+===== FieldInputBox.vue
+
+Defines a single input box that is used as a part of the `RegLayout.vue` bit table.
+This component is the input box that the user interacts with and handles input validation, provides a quick select for enumerated field values, and will display any errors with the input.
+
+===== FieldName.vue
+
+Used to format and auto-rotate the names of fields in the `RegLayout.vue` bit table.
+This wraps the names with the `v-responsive-rotate` directive defined in `directives/ReponsiveRotate.ts`.
+
+===== Header.vue
+
+Provides the header bar visible in `ElementView.vue` routes.
+This header includes the root name, the `Search.vue` component, any links defined on the root, and a button used to display the `OpenModal.vue` component to choose a new data file.
+
+===== MemPage.vue
+
+Displays an `ElementTitle.vue` component and doc description for `mem` type elements.
+
+===== Menu.vue
+
+Defines a tree menu that is included as a part of the `ElementView.vue` view.
+This menu can be used to navigate to different elements.
+
+===== OpenModal.vue
+
+Defines a modal popup that serves as a smaller version of the `OpenView.vue` view.
+This modal is opened by clicking on the button in the top right of the `Header.vue` component.
+It displays a modal window with a `DataFileInput.vue` component that can be used to load a new data file.
+
+===== RegFields.vue
+
+Defines the field description table shown on `RegPage.vue`.
+It includes columns for bit range, name, access type, and description.
+
+===== RegLayout.vue
+
+Defines the interactive bit table seen on `RegPage.vue` pages.
+It provides a table with input boxes as well as buttons to change display types and reset to default values.
+
+===== RegPage.vue
+
+Defines the main page displayed by `ElementView.vue` when the selected element is a `reg` type.
+It positions the bit table defined by `RegLayout.vue`, the element's doc description, and the field description table defined by `RegFields.vue`.
+
+===== Search.vue
+
+Defines the input box for the search, the window that `SearchResult.vue` components are displayed in, and uses the `createSearchIndex()` function from `search.ts` to create and query an index of the loaded elements.
+
+Typing in the input box updates the search query and then this component displays the results.
+
+===== SearchResult.vue
+
+Defines a single formatted box that contains information about a returned search result.
+Used to organize what is displayed as a part of `Search.vue`.
+
+==== directives/
+
+Holds all custom directives.
+
+https://vuejs.org/guide/reusability/custom-directives.html
+
+===== ResponsiveRotate.ts
+
+Defines a custom directive that is used to automatically rotate text based on when it overflows it's container.
+It is used in `BlockTableEntry.vue` and `FieldName.vue` to ensure that element names/offsets are rotated and displayed vertically if they would overflow their table cell when displayed horizontally.
+
+==== views/
+
+Holds defined "route" components.
+When a user navigates to a route defined in `router.ts`, the route corresponds to a component defined in this folder.
+
+===== ElementView.vue
+
+Defines the main "element" view for regvue.
+This includes orientating `Header.vue` at the top of the page, including `Menu.vue` as a collapsable pane on the left of the screen, and filling the remaining screen with one of three components based on element type.
+
+`RegPage.vue` is used for `reg` elements, `BlockPage.vue` is used for `blk` elements, and `MemPage.vue` is used for `mem` elements.
+
+===== OpenView.vue
+
+Defines the "landing" view for regvue.
+When a user navigates to regvue without a `?data` url parameter, this screen is shown.
+It includes a welcome message and a `DataFileInput.vue` component to load a data file.
+On a successful load it reroutes to `ElementView.vue`.
+
+===== PageNotFound.vue
+
+Defines the "404" view for regvue.
+When the user enters a URL that does not map to a route in `router.ts` this view will be shown.
+If the user also inputs a URL path that includes an element id, `ElementView.vue` will reroute to this view if that element id cannot be found in `store.elements`.
+
+==== App.vue
+
+Defines the root Vue component.
+It provides a place for different views to be embedded in the `<router-view />` tag.
+It also includes absolutely positioned components like `ErrorWindow` and `AppVersion` that are rendered regardless of route.
+
+==== env.d.ts
+
+Declares Typescript modules that are not already declared as modules.
+
+==== index.css
+
+Provides an entry point for Tailwind. It also provides a predefined style class that will apply default HTML styles.
+
+==== main.ts
+
+Main entry point for Vue. It creates a Vue app and initializes the store and router.
+
+==== parse.ts
+
+Provides utility functions that are used to parse string values and return either numbers or Bit arrays.
+
+==== router.ts
+
+Defines the router that is invoked in `main.ts`. 
+It defines the routes, creates the router object, and specifies certain rerouting behavior based on if data has been loaded by the store.
+
+==== search.ts
+
+Exports a function used to build a Lunr search index object from a map of DesignElements.
+It is called from `components/Search.vue`.
+
+==== store.ts
+
+Exports a function used to access a Pinia store object.
+The store object also includes functions to read data, such as `loadUrl` and `loadFile`.
+
+==== types.ts
+
+Defines all custom types used throughout the regvue app.
+It also includes a few utlity functions such as `isUnknownBit` and `isValidDataWidth` that are used to check types at runtime.
+
+==== validate.ts
+
+Defines functions used to validate uploaded data.
+There are functions to validate both schema errors (i.e. syntax) and semantic errors (i.e. logical errors).
+This functions are used in `store.ts` when loading new data files.
+
+=== tests/
+
+Contains Vitest unit tests.
+
+== docs/dev/
+
+Provides documentation files aimed at developers and maintainers of regvue.
+This includes how to install regvue and host it on GitHub pages (`install-and-upgrade.adoc`), how to create a new release of regvue and publish to GitHub (`release.adoc`), and this file you're currently reading (`project-structure.adoc`).
+
+== schema/
+
+Documents the Register Description Format (RDF) used by regvue (we typically just refer to it as "the schema").
+
+=== register-description-format.adoc
+
+Provides documentation on the schema and all its properties and object types.
+
+=== register-description-format.schema.json
+
+Provides a https://json-schema.org[JSON Schema] formatted file that is used to validate data files and ensure they follow the RDF.
+
+=== CHANGELOG.adoc
+
+Documents any changes made to the schema itself.
+Because the schema can be used outside of regvue, either for generation or outside validation, these changes are tracked separately from the base `CHANGELOG.md` at the root of the project.
+
+== CHANGELOG.md
+
+Tracks all significant changes to the regvue app.
+It follows guidlines recommended by https://keepachangelog.com/en/1.0.0/[Keep a Changelog] and adheres to https://semver.org/spec/v2.0.0.html[Semantic Versioning].
