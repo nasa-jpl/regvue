@@ -345,6 +345,7 @@ a|`offset`
 |No
 |integer or string
 a|The offset (in bytes) of the element relative to its parent.
+String values can be decimal (e.g. "5") or hexadecimal (e.g. "0x5").
 
 [source,json]
 .`offset` integer example
@@ -407,6 +408,7 @@ a|`size`
 |No
 |integer or string
 |The size (in bytes) of the block.
+String values can be decimal (e.g. "5") or hexadecimal (e.g. "0x5").
 
 a|`children`
 |Yes
@@ -480,6 +482,7 @@ a|`offset`
 |Yes
 |integer or string
 a|The offset (in bytes) of the element relative to its parent.
+String values can be decimal (e.g. "5") or hexadecimal (e.g. "0x5").
 
 [source,json]
 .`offset` integer example
@@ -527,7 +530,8 @@ a|`reset`
 |No
 |integer, string, or <<reset-objects,Reset>> object
 a|The reset definition of the field.
-Strings values can be binary (`0b` prefix), decimal (no prefix), or hexadecimal (`0x` prefix).
+String values can be binary (`0b` prefix), decimal (no prefix), or hexadecimal (`0x` prefix).
+String values can contain unknowns (e.g. "0b1?0", "?", "0xf??d").
 See <<reset-objects>> for the Reset object representation.
 If no reset name is specified (i.e. an integer or string type is used), the name of the reset will be that specified by the closest `default_reset` property.
 
@@ -599,6 +603,8 @@ a|`value`
 |Yes
 |integer or string
 |The reset value
+String values can be binary (`0b` prefix), decimal (no prefix), or hexadecimal (`0x` prefix).
+String values can contain unknowns (e.g. "0b1?0", "?", "0xf??d").
 
 a|`names`
 |Yes
@@ -707,6 +713,7 @@ a|`size`
 |Yes
 |integer or string
 a|The size (in bytes) of the memory.
+String values can be decimal (e.g. "5") or hexadecimal (e.g. "0x5").
 |===
 
 The following optional {Element} object properties are required for RegisterElement objects:
@@ -719,6 +726,7 @@ a|`offset`
 |Yes
 |integer or string
 a|The offset (in bytes) of the element relative to its parent.
+String values can be decimal (e.g. "5") or hexadecimal (e.g. "0x5").
 
 [source,json]
 .`offset` integer example
@@ -753,6 +761,7 @@ a|`offset`
 |No
 |integer or string
 a|The offset (in bytes) of the element relative to its parent.
+String values can be decimal (e.g. "5") or hexadecimal (e.g. "0x5").
 
 a|`url`
 |Yes
