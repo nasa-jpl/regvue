@@ -30,7 +30,7 @@ Register Description Format files are intended to be generated via a register au
 {
   "schema": {
     "name": "register-description-format",
-    "version": "v0.2"
+    "version": "v1"
   },
   "root": {
     "desc": "Example Design",
@@ -156,7 +156,7 @@ The Schema object specifies the version of the register schema used by the docum
 ----
   {
     "name": "register-description-format",
-    "version": "v0.2"
+    "version": "v1"
   }
 ----
 
@@ -176,7 +176,7 @@ a|`version`
 |Yes
 |string
 |Specifies the version of the schema that the RDF JSON targets.
-The value must be `v0.2` or `v0.2.x` where `x` is any positive integer.
+The value must be `v1` or `v1.x` where `x` is any positive integer.
 |===
 
 == Element IDs
