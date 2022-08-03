@@ -44,7 +44,7 @@ export interface DesignRoot {
   version: string;
   doc?: string;
   children: string[];
-  default_reset?: string;
+  default_reset: string;
   data_width?: DataWidth;
   expanded?: string[];
 }
