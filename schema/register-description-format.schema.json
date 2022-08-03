@@ -22,7 +22,7 @@
         "version": {
           "description": "The register.schema.json version the document targets",
           "type": "string",
-          "pattern": "^v0.2(.[0-9]\\d*)*$"
+          "pattern": "^v1(.\\d+)*$"
         },
         "name": {
           "description": "The name of the format that register.schema.json supports",

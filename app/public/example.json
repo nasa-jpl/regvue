@@ -1,6 +1,6 @@
 {
   "schema": {
-    "version": "v0.2",
+    "version": "v1",
     "name": "register-description-format"
   },
   "root": {
