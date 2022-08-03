@@ -27,7 +27,7 @@
         "name": {
           "description": "The name of the format that register.schema.json supports",
           "type": "string",
-          "pattern": "register-description-format"
+          "const": "register-description-format"
         }
       }
     },
@@ -76,7 +76,7 @@
         },
         "data_width": {
           "description": "Size of registers in number of bits",
-          "type": "number",
+          "type": "integer",
           "enum": [
             16,
             32
@@ -146,9 +146,10 @@
               "description": "The offset of the element relative to its parent",
               "type": [
                 "string",
-                "number"
+                "integer"
               ],
-              "pattern": "^(0x)?[0-9a-fA-F]+$"
+              "$comment": "Match decimal values and hexadecimal values",
+              "pattern": "^([0-9]+|0x[0-9a-fA-F]+)$"
             },
             "doc": {
               "description": "Element documentation",
@@ -189,19 +190,21 @@
                     "description": "The reset value of the field",
                     "type": [
                       "string",
-                      "number",
+                      "integer",
                       "object"
                     ],
-                    "pattern": "^(0x|0b)?[0-9a-fA-F|?]+$",
+                    "$comment": "Match binary values with partial unknowns, decimal values without unknowns, full unknowns, and hexadecimal values with unknowns",
+                    "pattern": "^(0b[01?]+|[0-9]+|[?]+|0x[0-9a-fA-F?]+)$",
                     "additionalProperties": false,
                     "properties": {
                       "value": {
                         "description": "the value of the reset",
                         "type": [
                           "string",
-                          "number"
+                          "integer"
                         ],
-                        "pattern": "^(0x|0b)?[0-9a-fA-F|?]+$"
+                        "$comment": "Match binary values with partial unknowns, decimal values without unknowns, full unknowns, and hexadecimal values with unknowns",
+                        "pattern": "^(0b[01?]+|[0-9]+|[?]+|0x[0-9a-fA-F?]+)$"
                       },
                       "names": {
                         "description": "named reset states to associate with the given reset value",
@@ -235,8 +238,10 @@
                           "description": "The field value to associate with the name",
                           "type": [
                             "string",
-                            "number"
-                          ]
+                            "integer"
+                          ],
+                          "$comment": "Match binary values, decimal values, and hexadecimal values",
+                          "pattern": "^(0b[01]+|[0-9]+|0x[0-9a-fA-F]+)$"
                         },
                         "doc": {
                           "description": "The description of the enumerated field value",
@@ -276,7 +281,7 @@
             },
             "data_width": {
               "description": "Size of registers in number of bits",
-              "type": "number",
+              "type": "integer",
               "enum": [
                 16,
                 32
@@ -291,8 +296,10 @@
               "description": "The size (in bytes) of the element",
               "type": [
                 "string",
-                "number"
-              ]
+                "integer"
+              ],
+              "$comment": "Match decimal values and hexadecimal values",
+              "pattern": "^([0-9]+|0x[0-9a-fA-F]+)$"
             },
             "children": {
               "description": "An array of child element IDs",

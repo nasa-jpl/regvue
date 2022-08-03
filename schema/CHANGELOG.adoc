@@ -70,8 +70,6 @@ See also https://github.jpl.nasa.gov/regvue/regvue/issues/80[regvue/regvue#80] a
 * Added the optional `data_width` and `default_reset` properties to the link:register-description-format.adoc#root-object[Root] object
 
 * Added string as a value type for the link:register-description-format.adoc#element-objects[Element] `offset` property
-** TODO: Confirm this is implemented.
-** TODO: Schema currently allows hex values only.  Also accept bin and dec just like reset.  Basically, anything BigInt can parse, offset string scalars should support.
 
 * Added the optional `data_width` and `default_reset` properties to link:register-description-format.adoc#block-element-objects[BlockElement] objects
 * Added the `links`, `version`, and `display_name` properties to the link:register-description-format.adoc#block-element-objects[BlockElement] object type.
@@ -89,8 +87,6 @@ This is not actually a schema change since the schema already supported this.
 The change here is that Regvue now supports this.
 
 * Added string as a value type for the link:register-description-format.adoc#enum-value-objects[EnumValue] `value` property
-** TODO: Add a pattern to the schema for the EnumValue `value` property
-** TODO: Make sure bin, dec, hex string values are supported.
 
 === Changed
 
