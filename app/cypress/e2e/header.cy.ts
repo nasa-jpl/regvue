@@ -22,7 +22,7 @@ describe("header-component", () => {
     cy.get("#header-links")
       .children()
       .filter("a")
-      .should("have.length", Object.keys(data.root.links).length);
+      .should("have.length", data.root.links.length);
 
     cy.get("#search-input").should("exist");
   });
