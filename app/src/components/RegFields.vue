@@ -94,7 +94,7 @@ const stopHighlightField = () => {
           :key="field.name"
           class="border-b-2"
           :class="[
-            selectedField == field.name ? 'bg-yellow-50' : '',
+            selectedField == field.name ? 'bg-yellow-100/60' : '',
             selectedField || selectedField == '' ? 'hover:cursor-pointer' : '',
           ]"
           @mouseenter="highlightField(field.name)"
