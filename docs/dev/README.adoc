@@ -1,0 +1,41 @@
+= Regvue Developer Docs
+
+== Getting Started
+
+To help new developers get started quickly and to ensure a consistent development environment across developers, the regvue project makes use of VS Code's devcontainer feature.
+The project comes with a `.devcontainer/` directory that lets VS Code use containers to recreate the development environment from the OS all the way up to the VS Code extensions.
+
+=== Prequisites
+
+* Git
+
+* VS Code
+
+* Docker
+
+=== Opening the project
+
+Clone the project
+```
+git clone git@github.jpl.nasa.gov:regvue/regvue.git
+```
+
+Open the project in VS Code
+```
+cd regvue
+code .
+```
+
+Open regvue in container
+
+- Execute the: `Remote Containers: Open Folder in Container` command in VS Code and wait for the container to build
+
+- See the https://code.visualstudio.com/docs/remote/containers#_quick-start-open-an-existing-folder-in-a-container[devcontainer docs] for more info.
+
+Run regvue locally
+```
+# must be run from the `app/` directory
+npm run dev
+```
+
+More npm scripts can be seen at `app/README.md`.
