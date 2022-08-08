@@ -86,10 +86,7 @@ export const useStore = defineStore("store", {
     // Parse JSON data and populate the store variables
     async load(data: RegisterDescriptionFile, url = "") {
       const baseUrl = url.slice(0, url.lastIndexOf("/") + 1);
-      const [elements] = (await formatData(data.elements, baseUrl)) as [
-        Map<string, DesignElement>,
-        DesignRoot
-      ];
+      const elements = await formatData(data.elements, baseUrl);
 
       if (!elements) throw Error("Error formating data");
 
@@ -268,10 +265,7 @@ const formatData = async (
         }
 
         // From the fetched JSON data create a map of string keys to DesignElements
-        const [newData] = (await formatData(data, baseUrl)) as [
-          Map<string, DesignElement>,
-          unknown
-        ];
+        const newData = await formatData(data, baseUrl);
 
         // Merge together the new DesignElements with the previously collected elements
         formattedElements.set(elem.id, elem);
@@ -290,7 +284,7 @@ const formatData = async (
     }
   }
 
-  return [formattedElements];
+  return formattedElements;
 };
 
 // Return the parent element of a given element
