@@ -183,17 +183,18 @@ The value must be `v1` or `v1.x` where `x` is any positive integer.
 
 Element IDs uniquely identify elements.
 
-=== Hierarchy
+=== Dot Notation
 
-By convention, hierarchy is denoted via the `.` character.
+Element IDs are a joining of the all the element names in the hierarchy with the `.` character.
 
-For example, the element ID `regs.blk0.reg0` has the following hierarchy:
+For example, the following hierarchy of element names has an Element ID of `grandparent.parent.child`.
 
 [listing]
+.Hierarchy of element names
 ----
-regs
-└── blk0
-    └── reg0
+grandparent
+└── parent
+    └── child
 ----
 
 == Root Object
