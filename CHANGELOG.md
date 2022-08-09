@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 The JSON Schema no longer allows for any additional properties to be present in uploaded RDF files aside from those defined in the [regvue schema](https://github.jpl.nasa.gov/regvue/regvue/blob/main/schema/register-description-format.adoc).
 
 ### Added
+- Allows for spaces to be included while typing register and field values ([#228](https://github.jpl.nasa.gov/regvue/regvue/pull/228)).
 - Added a display for mem elements ([#200](https://github.jpl.nasa.gov/regvue/regvue/pull/200)).
 
 ### Changed
