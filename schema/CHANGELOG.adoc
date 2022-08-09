@@ -8,7 +8,9 @@
 == Changes from schema v0.x to schema v1
 
 :BlockElement: link:register-description-format.adoc#block-element-objects[BlockElement]
+:EnumValue: link:register-description-format.adoc#enum-value-objects[EnumValue]
 :MemoryElement: link:register-description-format.adoc#memory-element-objects[MemoryElement]
+:RegisterElement: link:register-description-format.adoc#register-element-objects[RegisterElement]
 :Root: link:register-description-format.adoc#root-object[Root]
 :Reset: link:register-description-format.adoc#reset-objects[Reset]
 :Schema: link:register-description-format.adoc#schema-object[Schema]
@@ -43,6 +45,16 @@ In Regvue v1.0 (schema v1), a missing MemoryElement `size` property is now an er
 * The `resets` property on {Reset} objects has been renamed to `names`.
 
 * The `links` property on the {Root} and {BlockElement} objects has been changed from an object of test/URL pairs to an array of objects with `text` and `href` properties.
+
+* The `reset` property on {RegisterElement} objects can no longer be specified as an integer.
+
+* The `offset` property for {BlockElement} objects and {RegisterElement} objects can no longer be specified as an integer.
+
+* The `size` property for {BlockElement} objects and {MemoryElement} objects can no longer be specified as an integer.
+
+* The `value` property on {Reset} objects can no longer be specified as an integer.
+
+* The `value` property on {EnumValue} objects can no longer be specified as an integer.
 
 == Changes made in schema v0.x
 
@@ -86,10 +98,10 @@ Previously, these properties only existed on the link:register-description-forma
 This is not actually a schema change since the schema already supported this.
 The change here is that Regvue now supports this.
 
-* Added string as a value type for the link:register-description-format.adoc#enum-value-objects[EnumValue] `value` property
+* Added string as a value type for the {EnumValue} `value` property
 
 === Changed
 
 * Changed the link:register-description-format.adoc#element-objects[Element] `offset` property from required to optional.
 +
-NOTE: The `offset` property is still required for link:register-description-format.adoc#register-element-objects[RegisterElement] objects but is not longer required for the other Element object types (i.e. BlockElement, MemoryElement, IncludeElement)
+NOTE: The `offset` property is still required for {RegisterElement} objects but is not longer required for the other Element object types (i.e. BlockElement, MemoryElement, IncludeElement)

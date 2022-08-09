@@ -56,7 +56,7 @@ Register Description Format files are intended to be generated via a register au
       "id": "blk0.reg0",
       "type": "reg",
       "name": "reg0",
-      "offset": 0,
+      "offset": "0",
       "doc": "An example register.",
       "fields": [
         {
@@ -75,12 +75,12 @@ Register Description Format files are intended to be generated via a register au
           "enum": [
             {
               "name": "START",
-              "value": 5,
+              "value": "5",
               "doc": "Starts the operation."
             },
             {
               "name": "STOP",
-              "value": 10,
+              "value": "10",
               "doc": "Stops the operation."
             }
           ]
@@ -92,14 +92,14 @@ Register Description Format files are intended to be generated via a register au
       "id": "blk0.reg1",
       "name": "reg1",
       "data_width": 16,
-      "offset": 4,
+      "offset": "4",
       "fields": [
         {
           "name": "f0",
           "lsb": 0,
           "nbits": 16,
           "access": "ro",
-          "reset": 0
+          "reset": "0"
         }
       ]
     }
@@ -344,18 +344,12 @@ a|`desc`
 
 a|`offset`
 |No
-|integer or string
+|string
 a|The offset (in bytes) of the element relative to its parent.
 String values can be decimal (e.g. "5") or hexadecimal (e.g. "0x5").
 
 [source,json]
-.`offset` integer example
-----
-"offset": 4,
-----
-
-[source,json]
-.`offset` string example
+.`offset` example
 ----
 "offset": "0x4",
 ----
@@ -407,9 +401,9 @@ a|Relevant links to external information
 
 a|`size`
 |No
-|integer or string
+|string
 |The size (in bytes) of the block.
-String values can be decimal (e.g. "5") or hexadecimal (e.g. "0x5").
+Values can be decimal (e.g. "5") or hexadecimal (e.g. "0x5").
 
 a|`children`
 |Yes
@@ -461,7 +455,7 @@ a|`href`
     "type": "blk",
     "id": "block0",
     "name": "block0",
-    "offset": 0,
+    "offset": "0",
     "children": [
       "block1",
       "reg0",
@@ -501,18 +495,12 @@ The following optional {Element} object properties are required for RegisterElem
 
 a|`offset`
 |Yes
-|integer or string
+|string
 a|The offset (in bytes) of the element relative to its parent.
 String values can be decimal (e.g. "5") or hexadecimal (e.g. "0x5").
 
 [source,json]
-.`offset` integer example
-----
-"offset": 4,
-----
-
-[source,json]
-.`offset` string example
+.`offset` example
 ----
 "offset": "0x4",
 ----
@@ -549,12 +537,12 @@ a|`access`
 
 a|`reset`
 |No
-|integer, string, or <<reset-objects,Reset>> object
+|string or <<reset-objects,Reset>> object
 a|The reset definition of the field.
 String values can be binary (`0b` prefix), decimal (no prefix), or hexadecimal (`0x` prefix).
 String values can contain unknowns (e.g. "0b1?0", "?", "0xf??d").
 See <<reset-objects>> for the Reset object representation.
-If no reset name is specified (i.e. an integer or string type is used), the name of the reset will be that specified by the closest `default_reset` property.
+If no reset name is specified (i.e. a string type is used), the name of the reset will be that specified by the closest `default_reset` property.
 
 a|`doc`
 |No
@@ -622,10 +610,10 @@ They have the following properties:
 
 a|`value`
 |Yes
-|integer or string
+|string
 |The reset value
-String values can be binary (`0b` prefix), decimal (no prefix), or hexadecimal (`0x` prefix).
-String values can contain unknowns (e.g. "0b1?0", "?", "0xf??d").
+Values can be binary (`0b` prefix), decimal (no prefix), or hexadecimal (`0x` prefix).
+Values can contain unknowns (e.g. "0b1?0", "?", "0xf??d").
 
 a|`names`
 |Yes
@@ -662,9 +650,9 @@ a|`name`
 
 a|`value`
 |Yes
-|integer or string
+|string
 |The numeric value of the enumerated value.
-String values can be binary (e.g. "0b101"), decimal (e.g. "5") or hexadecimal (e.g. "0x5").
+Values can be binary (e.g. "0b101"), decimal (e.g. "5") or hexadecimal (e.g. "0x5").
 
 a|`doc`
 |Yes
@@ -681,7 +669,7 @@ HTML supported.
     "type": "reg",
     "id": "blk0.reg0",
     "name": "reg0",
-    "offset": 0,
+    "offset": "0",
     "doc": "An example register.",
     "fields": [
       {
@@ -700,12 +688,12 @@ HTML supported.
         "enum": [
           {
             "name": "START",
-            "value": 5,
+            "value": "5",
             "doc": "Starts the operation."
           },
           {
             "name": "STOP",
-            "value": 10,
+            "value": "10",
             "doc": "Stops the operation."
           }
         ]
@@ -733,9 +721,9 @@ a|Value must be `mem`
 
 a|`size`
 |Yes
-|integer or string
+|string
 a|The size (in bytes) of the memory.
-String values can be decimal (e.g. "5") or hexadecimal (e.g. "0x5").
+Values can be decimal (e.g. "5") or hexadecimal (e.g. "0x5").
 |===
 
 The following optional {Element} object properties are required for RegisterElement objects:
@@ -746,18 +734,12 @@ The following optional {Element} object properties are required for RegisterElem
 
 a|`offset`
 |Yes
-|integer or string
+|string
 a|The offset (in bytes) of the element relative to its parent.
-String values can be decimal (e.g. "5") or hexadecimal (e.g. "0x5").
+Values can be decimal (e.g. "5") or hexadecimal (e.g. "0x5").
 
 [source,json]
-.`offset` integer example
-----
-"offset": 4,
-----
-
-[source,json]
-.`offset` string example
+.`offset` example
 ----
 "offset": "0x4",
 ----
@@ -781,9 +763,9 @@ a|Value must be `include`
 
 a|`offset`
 |No
-|integer or string
+|string
 a|The offset (in bytes) of the element relative to its parent.
-String values can be decimal (e.g. "5") or hexadecimal (e.g. "0x5").
+Values can be decimal (e.g. "5") or hexadecimal (e.g. "0x5").
 
 a|`url`
 |Yes

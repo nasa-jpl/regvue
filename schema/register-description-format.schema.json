@@ -144,10 +144,7 @@
             },
             "offset": {
               "description": "The offset of the element relative to its parent",
-              "type": [
-                "string",
-                "integer"
-              ],
+              "type": "string",
               "$comment": "Match decimal values and hexadecimal values",
               "pattern": "^([0-9]+|0x[0-9a-fA-F]+)$"
             },
@@ -190,7 +187,6 @@
                     "description": "The reset value of the field",
                     "type": [
                       "string",
-                      "integer",
                       "object"
                     ],
                     "$comment": "Match binary values with partial unknowns, decimal values without unknowns, full unknowns, and hexadecimal values with unknowns",
@@ -199,10 +195,7 @@
                     "properties": {
                       "value": {
                         "description": "the value of the reset",
-                        "type": [
-                          "string",
-                          "integer"
-                        ],
+                        "type": "string",
                         "$comment": "Match binary values with partial unknowns, decimal values without unknowns, full unknowns, and hexadecimal values with unknowns",
                         "pattern": "^(0b[01?]+|[0-9]+|[?]+|0x[0-9a-fA-F?]+)$"
                       },
@@ -236,10 +229,7 @@
                         },
                         "value": {
                           "description": "The field value to associate with the name",
-                          "type": [
-                            "string",
-                            "integer"
-                          ],
+                          "type": "string",
                           "$comment": "Match binary values, decimal values, and hexadecimal values",
                           "pattern": "^(0b[01]+|[0-9]+|0x[0-9a-fA-F]+)$"
                         },
@@ -294,10 +284,7 @@
             },
             "size": {
               "description": "The size (in bytes) of the element",
-              "type": [
-                "string",
-                "integer"
-              ],
+              "type": "string",
               "$comment": "Match decimal values and hexadecimal values",
               "pattern": "^([0-9]+|0x[0-9a-fA-F]+)$"
             },
