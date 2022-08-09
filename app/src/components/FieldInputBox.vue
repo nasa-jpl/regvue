@@ -2,7 +2,7 @@
 import { onBeforeMount, ref, nextTick } from "vue";
 import { Bit, DisplayType, isUnknownBit } from "src/types";
 import { bitArrayToString, getStringRepresentation } from "src/format";
-import { num, stringToBitArray } from "src/parse";
+import { num, removeWhitespace, stringToBitArray } from "src/parse";
 
 import ChevronDown from "vue-material-design-icons/ChevronDown.vue";
 
@@ -138,6 +138,9 @@ const getErrorMessage = (value: string) => {
     return "Empty value";
   }
 
+  // Remove any underscores or spaces
+  value = removeWhitespace(value);
+
   // Check that value can be parsed
   try {
     num(value);
@@ -153,8 +156,7 @@ const getErrorMessage = (value: string) => {
     return "Exceeds max possible value";
   }
 
-  // Remove any underscores and starting base encodings for character check
-  value = value.replaceAll("_", "");
+  // Check that only valid characters are included
   if (value.startsWith("0x") || value.startsWith("0X")) {
     value = value.substring(2);
     // There should be a value after the base encoding
