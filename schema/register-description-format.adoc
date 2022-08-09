@@ -772,6 +772,9 @@ a|`url`
 |Yes
 |string
 |The URL to the RDF JSON to be included.
+The URL can be absolute (e.g. `\https://example.com/file.json`) or relative (e.g. `file.json`).
+Relative URLs are relative to the current JSON document.
+For example, if `\https://example.com/path/to/parent/parent.json` includes `child.json`, the expanded path for `child.json` will be `\https://example.com/path/to/parent/child.json`.
 |===
 
 ==== Include Semantics
