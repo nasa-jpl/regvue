@@ -43,6 +43,10 @@ export const getBase = (s: string) => {
   }
 };
 
+export const removeWhitespace = (str: string): string => {
+  return str.trim().replaceAll(" ", "").replaceAll("_", "");
+};
+
 /*
  * Converts a string representing a register/field value into a Bit[]
  * Uses the prefix ("0b", "0x", or "") to determine the numeric type
@@ -50,7 +54,7 @@ export const getBase = (s: string) => {
  */
 export const stringToBitArray = (value: string, length = 32) => {
   const res: Bit[] = [];
-  value = value.replaceAll("_", "");
+  value = removeWhitespace(value);
 
   // Hexadecimal case
   if (value.substring(0, 2) == "0x") {
