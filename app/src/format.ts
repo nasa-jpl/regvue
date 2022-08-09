@@ -5,8 +5,8 @@
 import { Bit, DisplayType, isUnknownBit } from "src/types";
 
 // Convert an integer to a hex string
-export const hex = (value: number | bigint) => {
-  return "0x" + value.toString(16);
+export const hex = (value: number | bigint | string) => {
+  return "0x" + BigInt(value.toString()).toString(16);
 };
 
 export const getStringRepresentation = (
