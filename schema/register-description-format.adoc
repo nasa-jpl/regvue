@@ -771,10 +771,14 @@ Values can be decimal (e.g. "5") or hexadecimal (e.g. "0x5").
 a|`url`
 |Yes
 |string
-|The URL to the RDF JSON to be included.
+a|The URL to the RDF JSON to be included.
 The URL can be absolute (e.g. `\https://example.com/file.json`) or relative (e.g. `file.json`).
 Relative URLs are relative to the current JSON document.
 For example, if `\https://example.com/path/to/parent/parent.json` includes `child.json`, the expanded path for `child.json` will be `\https://example.com/path/to/parent/child.json`.
+
+RDF JSON documents with relative include URLs cannot be loaded from the filesystem.
+They must be loaded from a HTTP/HTTPS URL.
+For testing purposes, a https://developer.mozilla.org/en-US/docs/Learn/Common_questions/set_up_a_local_testing_server[local HTTP testing server] can be used.
 |===
 
 ==== Include Semantics
