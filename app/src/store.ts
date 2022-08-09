@@ -41,11 +41,6 @@ export const useStore = defineStore("store", {
     };
   },
   actions: {
-    // Wrap any group of 16 or more digits in strings
-    quoteLargeNumbers(jsonString: string) {
-      return jsonString.replace(/("[^"]*"\s*:\s*)(\d{16,})/g, `$1"$2"`);
-    },
-
     // Try to get data from a url and call load() with that data
     // Return true on successful load and false if load fails
     async loadUrl(url: string) {
@@ -55,8 +50,7 @@ export const useStore = defineStore("store", {
         let validateMsg = validateResponse(result);
         if (validateMsg) return validateMsg;
 
-        const text = await result.text();
-        const data = await JSON.parse(this.quoteLargeNumbers(text));
+        const data = await result.json();
         validateMsg = validateSchema(data);
 
         // Validate the JSON data's schema
@@ -75,8 +69,7 @@ export const useStore = defineStore("store", {
     // Return true on successful load and false if load fails
     async loadFile(jsonString: string) {
       try {
-        const text = this.quoteLargeNumbers(jsonString);
-        const data = await JSON.parse(text);
+        const data = await JSON.parse(jsonString);
 
         // Validate the JSON data's schema
         const validateMsg = validateSchema(data);
@@ -92,10 +85,8 @@ export const useStore = defineStore("store", {
 
     // Parse JSON data and populate the store variables
     async load(data: RegisterDescriptionFile, url = "") {
-      const [elements] = (await formatData(data.elements)) as [
-        Map<string, DesignElement>,
-        DesignRoot
-      ];
+      const baseUrl = url.slice(0, url.lastIndexOf("/") + 1);
+      const elements = await formatData(data.elements, baseUrl);
 
       if (!elements) throw Error("Error formating data");
 
@@ -192,9 +183,10 @@ export const useStore = defineStore("store", {
   },
 });
 
-const formatData = async (elements: {
-  [key: string]: DesignElement | IncludeElement;
-}) => {
+const formatData = async (
+  elements: { [key: string]: DesignElement | IncludeElement },
+  baseUrl: string
+) => {
   const formattedElements = new Map<string, DesignElement>();
 
   for (const element of Object.values(elements)) {
@@ -206,7 +198,14 @@ const formatData = async (elements: {
     // If the element is an IncludeElement fetch and format from its url
     if (element.type == "include") {
       try {
-        const response = await fetch(element.url);
+        let url = element.url;
+
+        // If the url is not absolute, prepend the base URL
+        if (!isAbsoluteUrl(element.url)) {
+          url = baseUrl + element.url;
+        }
+
+        const response = await fetch(url);
         const json = (await response.json()) as RegisterDescriptionFile;
 
         // Validate the JSON data's schema
@@ -266,10 +265,7 @@ const formatData = async (elements: {
         }
 
         // From the fetched JSON data create a map of string keys to DesignElements
-        const [newData] = (await formatData(data)) as [
-          Map<string, DesignElement>,
-          unknown
-        ];
+        const newData = await formatData(data, baseUrl);
 
         // Merge together the new DesignElements with the previously collected elements
         formattedElements.set(elem.id, elem);
@@ -288,7 +284,7 @@ const formatData = async (elements: {
     }
   }
 
-  return [formattedElements];
+  return formattedElements;
 };
 
 // Return the parent element of a given element
@@ -373,4 +369,10 @@ const getDataWidth = (
   }
 
   return element.data_width;
+};
+
+// Returns true is a given URL is absolute (i.e. https://example.com/data.json)
+// returns false is a given URL is relative (i.e. data.json)
+const isAbsoluteUrl = (url: string): boolean => {
+  return url.includes("://");
 };
