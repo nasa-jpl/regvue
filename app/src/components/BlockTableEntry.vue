@@ -122,7 +122,6 @@ const href = computed(
         <div class="m-3 grow rounded bg-white px-6">
           <!-- Show the register doc description -->
           <div v-if="doc" class="mt-2 py-2 text-left">
-            <!-- eslint-disable-next-line vue/no-v-html -->
             <span class="default-styles" v-html="doc"></span>
           </div>
 
@@ -140,7 +139,7 @@ const href = computed(
           <RegFields
             v-if="element.fields"
             :fields="element.fields"
-            class="m-auto mt-4 w-full bg-white pb-4"
+            class="mt-4 w-full bg-white pb-4 text-left"
           />
         </div>
       </div>
