@@ -40,7 +40,6 @@
       "desc": "Include 2",
       "id": "top_blk.include2",
       "type": "include",
-      "offset": "0x2000",
       "url": "example.json"
     }
   }
