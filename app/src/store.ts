@@ -230,7 +230,8 @@ const formatData = async (
           name: element.name,
           desc: element.desc ? element.desc : json.root.desc,
           addr: BigInt(0),
-          offset: BigInt(element.offset),
+          offset:
+            element.offset !== undefined ? BigInt(element.offset) : undefined,
           type: "blk",
           links: element.links ? element.links : json.root.links,
           doc: element.doc ? element.doc : json.root.doc,
@@ -338,12 +339,12 @@ const getAddress = (
 
     // If the parent has a defined offset, add it to find the child's addr
     if (parentOffset === undefined) {
-      return BigInt(offset.toString());
+      return offset;
     } else {
-      return BigInt(offset.toString()) + parentOffset;
+      return offset + parentOffset;
     }
   } else {
-    return BigInt(offset.toString());
+    return offset;
   }
 };
 
