@@ -7,14 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Breaking Changes
-The JSON Schema no longer allows for any additional properties to be present in uploaded RDF files aside from those defined in the [regvue schema](https://github.jpl.nasa.gov/regvue/regvue/blob/main/schema/register-description-format.adoc).
+
+This release contains several breaking changes to the schema.
+See the [schema changelog](schema/CHANGELOG.adoc) for more details.
 
 ### Added
 - Allows for spaces to be included while typing register and field values ([#228](https://github.jpl.nasa.gov/regvue/regvue/pull/228)).
 - Added a display for mem elements ([#200](https://github.jpl.nasa.gov/regvue/regvue/pull/200)).
+- Added the ability to customize which elements are expanded in the home view via the schema `expanded` property on the [Root](schema/register-description-format.adoc#root-object) object.
+- Added support for relative URLs for IncludeElements
 
 ### Changed
 - Additional properties on uploaded RDF files now return as errors ([#162](https://github.jpl.nasa.gov/regvue/regvue/pull/162)).
+- Overhauled the [schema documentation](schema/register-description-format.adoc)
 
 ### Fixed
 - Fixed text align for field descriptions in BlockTable component ([#229](https://github.jpl.nasa.gov/regvue/regvue/pull/229)).
