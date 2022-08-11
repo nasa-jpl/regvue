@@ -15,7 +15,7 @@ import Close from "vue-material-design-icons/Close.vue";
 import HamburgerMenu from "vue-material-design-icons/Menu.vue";
 
 const props = defineProps<{
-  elementId: string | string[];
+  elementId?: string | string[];
 }>();
 
 const elementId = computed(() => {
