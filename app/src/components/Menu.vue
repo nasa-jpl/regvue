@@ -168,6 +168,8 @@ const getIndent = (node: MenuNode) => {
 
 // Scroll to element
 const scrollToElement = (element_id: string) => {
+  if (!element_id) return;
+
   const elem = document.getElementById(element_id);
 
   const parent = elem?.parentNode as HTMLElement;
