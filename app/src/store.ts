@@ -15,6 +15,10 @@ import {
   validateResponse,
 } from "src/validate";
 
+const DEFAULT_DATA_WIDTH = 32;
+const DEFAULT_DEFAULT_RESET = "Default";
+const DEFAULT_DISPLAY_TYPE = "hexadecimal" as DisplayType;
+
 export const useStore = defineStore("store", {
   state: () => {
     return {
@@ -34,7 +38,7 @@ export const useStore = defineStore("store", {
       useByteSwap: false,
 
       // Which display type to show field and register values as in RegLayout
-      selectedDisplayType: "hexadecimal" as DisplayType,
+      selectedDisplayType: DEFAULT_DISPLAY_TYPE,
 
       // Any text to show in the footer
       footerText: "",
@@ -331,7 +335,7 @@ const getDataWidth = (
       if (root.data_width) {
         return root.data_width;
       } else {
-        return 32;
+        return DEFAULT_DATA_WIDTH;
       }
     }
 
