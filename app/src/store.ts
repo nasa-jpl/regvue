@@ -21,7 +21,7 @@ export const useStore = defineStore("store", {
       // Object representing info about the overall design (e.g. name, version, and root elements)
       root: {} as DesignRoot,
 
-      // A map of id : DesignElement for elements (reg/blk/mem) in the design
+      // A map of <element id : DesignElement> for elements (reg/blk/mem) in the design
       elements: new Map<string, DesignElement>(),
 
       // Whether or not store.load() has been called successfully
@@ -42,7 +42,7 @@ export const useStore = defineStore("store", {
   },
   actions: {
     // Try to get data from a url and call load() with that data
-    // Return true on successful load and false if load fails
+    // Return "" on successful load and an error string if load fails
     async loadUrl(url: string) {
       try {
         // Fetch and validate the response
@@ -56,7 +56,7 @@ export const useStore = defineStore("store", {
         // Validate the JSON data's schema
         if (validateMsg) return validateMsg;
 
-        // If the data is valid load the data
+        // If the data is valid then load the data
         await this.load(data, url);
         return "";
       } catch (e) {
@@ -65,8 +65,8 @@ export const useStore = defineStore("store", {
       }
     },
 
-    // Try load the store by parsing the provided JSON string
-    // Return true on successful load and false if load fails
+    // Try to load the store by parsing the provided JSON string
+    // Return "" on successful load and an error string if load fails
     async loadFile(jsonString: string) {
       try {
         const data = await JSON.parse(jsonString);
@@ -75,6 +75,7 @@ export const useStore = defineStore("store", {
         const validateMsg = validateSchema(data);
         if (validateMsg) return validateMsg;
 
+        // If the data is valid then load the data
         await this.load(data);
         return "";
       } catch (e) {
@@ -166,27 +167,21 @@ export const useStore = defineStore("store", {
       if (errorMessage) throw Error(errorMessage);
 
       this.elements = elements;
+      this.footerText = await getFooterText();
+      this.loaded = true;
       this.root = data.root;
       this.url = url;
-      this.loaded = true;
-
-      // Get the footer text from app.config.json
-      try {
-        const configInfo = await fetch("app.config.json").then((response) =>
-          response.json()
-        );
-        this.footerText = configInfo.footer;
-      } catch {
-        this.footerText = "";
-      }
     },
   },
 });
 
+// Transforms an RDF JSON file into a map of formatted DesignElements
+// Will fetch and replace any IncludeElements
 const formatData = async (
   elements: { [key: string]: DesignElement | IncludeElement },
   baseUrl: string
 ) => {
+  // Create a Map to store formatted elements as <element id: formatted DesignElement>
   const formattedElements = new Map<string, DesignElement>();
 
   for (const element of Object.values(elements)) {
@@ -205,6 +200,7 @@ const formatData = async (
           url = baseUrl + element.url;
         }
 
+        // Fetch an RDF from the IncludeElement's URL
         const response = await fetch(url);
         const json = (await response.json()) as RegisterDescriptionFile;
 
@@ -318,7 +314,7 @@ const getDefaultResetState = (
   return element.default_reset;
 };
 
-// Helper function to get an element's address from its and its parents' offsets
+// Helper function to get an element's address from its and its ancestors' offsets
 const getAddress = (
   key: string,
   elements: Map<string, { offset?: bigint }>
@@ -349,7 +345,7 @@ const getAddress = (
 };
 
 // Return an element's data width in nbits
-// If not found on element, return the data width of the nearest ancestor with one set
+// If not found on element, return the first valid data width of an ancestor
 const getDataWidth = (
   element: DesignElement,
   elements: Map<string, DesignElement>,
@@ -372,6 +368,17 @@ const getDataWidth = (
   return element.data_width;
 };
 
+// Get the footer text from app.config.json
+const getFooterText = async (): Promise<string> => {
+  try {
+    const configInfo = await fetch("app.config.json").then((response) =>
+      response.json()
+    );
+    return configInfo.footer ? configInfo.footer : "";
+  } catch {
+    return "";
+  }
+};
 // Returns true is a given URL is absolute (i.e. https://example.com/data.json)
 // returns false is a given URL is relative (i.e. data.json)
 const isAbsoluteUrl = (url: string): boolean => {
