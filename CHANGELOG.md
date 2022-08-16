@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1]
+
 ### Fixed
 - Fixed display issue with root sub-element table heading ([#240](https://github.jpl.nasa.gov/regvue/regvue/pull/240)).
 
@@ -270,7 +272,8 @@ Lastly, several improvements were made to the search UI.
 
 - Initial release of regvue prototype.
 
-[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.0.0...HEAD
+[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.0.1...HEAD
+[1.0.1]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.7.0...v1.0.0
 [0.7.0]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.6.5...v0.7.0
 [0.6.5]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.6.4...v0.6.5
