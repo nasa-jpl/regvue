@@ -93,6 +93,10 @@ export const useStore = defineStore("store", {
       const baseUrl = url.slice(0, url.lastIndexOf("/") + 1);
       const elements = await formatData(data.elements, baseUrl);
 
+      if (data.root.data_width === undefined) {
+        data.root.data_width = DEFAULT_DATA_WIDTH;
+      }
+
       for (const element of elements.values()) {
         // Calculate the address from an element's offset and its parents' offsets
         element.addr = getAddress(element.id, elements);
