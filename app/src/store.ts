@@ -89,77 +89,17 @@ export const useStore = defineStore("store", {
       const baseUrl = url.slice(0, url.lastIndexOf("/") + 1);
       const elements = await formatData(data.elements, baseUrl);
 
-      if (!elements) throw Error("Error formating data");
-
-      for (const [, element] of elements.entries()) {
+      for (const element of elements.values()) {
         // Calculate the address from an element's offset and its parents' offsets
         element.addr = getAddress(element.id, elements);
 
         // Get an elements data_width
         element.data_width = getDataWidth(element, elements, data.root);
 
-        // Create a list of possible reset states
-        // The default reset state is placed at the 0 index to begin
         if (element.type == "reg") {
-          element.resets = [getDefaultResetState(element, elements, data.root)];
-
-          if (element.fields) {
-            for (const field of element.fields) {
-              // If there is an unnamed reset, associate it with the default reset
-              if (
-                typeof field.reset == "string" ||
-                typeof field.reset == "number"
-              ) {
-                field.reset = {
-                  value: field.reset, // Preserve the original reset value
-                  names: element.resets[0] ? [element.resets[0]] : [], // But associate it with the default reset
-                };
-                field.value = stringToBitArray(
-                  field.reset.value.toString(),
-                  field.nbits
-                );
-              }
-              // If there are named resets, use the default reset to set the value if present
-              // If the default reset is not present, set the value to "?"
-              else if (field.reset && field.reset.names) {
-                // If the default reset is associated with a reset value
-                if (field.reset.names.includes(element.resets[0] as string)) {
-                  // Then set the value to the default reset value
-                  field.value = stringToBitArray(
-                    field.reset.value.toString(),
-                    field.nbits
-                  );
-                }
-                // Otherwise set the field value to "?"
-                else {
-                  field.value = stringToBitArray("?", field.nbits);
-                }
-
-                // Add any missing reset states to the element's overall resets
-                for (const reset of field.reset.names) {
-                  if (!element.resets.includes(reset)) {
-                    element.resets.push(reset);
-                  }
-                }
-              }
-              // If there is no reset value for the field set the value to "?"
-              else {
-                field.value = stringToBitArray("?", field.nbits);
-                field.reset = {
-                  value: bitArrayToString(field.value, "hexadecimal"),
-                  names: [],
-                };
-              }
-            }
-          }
-
-          // Sort the fields so that the field with the highest LSB is first in the array
-          element.fields?.sort((a, b) => b.lsb - a.lsb);
+          // Associate each field with the appropriate named reset states
+          formatResets(element, elements, data.root);
         }
-      }
-
-      if (!data.root.data_width) {
-        data.root.data_width = 32;
       }
 
       // Check the semantic details of the parsed data
@@ -287,57 +227,65 @@ const mergeIncludeElement = (
   return elem;
 };
 
-        // From the fetched JSON data create a map of string keys to DesignElements
-        const newData = await formatData(data, baseUrl);
-
-        // Merge together the new DesignElements with the previously collected elements
-        formattedElements.set(elem.id, elem);
-        for (const [key, value] of newData.entries()) {
-          formattedElements.set(key, value);
-        }
-      } catch (e) {
-        console.error(e);
-        throw Error(e as string);
-      }
-    }
-
-    // Otherwise add it to formattedElements map
-    else {
-      formattedElements.set(element.id, element);
-    }
-  }
-
-  return formattedElements;
-};
-
-// Return the parent element of a given element
-const getParent = (elementId: string, elements: Map<string, DesignElement>) => {
-  const arr = elementId.split(".");
-  const parentId = arr.slice(0, arr.length - 1).join(".");
-
-  const parentElement = elements.get(parentId);
-  if (!parentElement) return null;
-  return parentElement;
-};
-
-// Return an element's default reset state
-// If not found on element, return the default reset state of nearest ancestor
-const getDefaultResetState = (
+// Will assign each reset value for each field with the appropriate named reset states
+const formatResets = (
   element: DesignElement,
   elements: Map<string, DesignElement>,
   root: DesignRoot
-): string => {
-  if (!element.default_reset) {
-    const parentElem = getParent(element.id, elements);
-    if (!parentElem) {
-      return root.default_reset;
-    }
+) => {
+  // Create a list to track possible reset states
+  // The default reset state is placed at the 0 index to begin
+  element.resets = [getDefaultResetState(element, elements, root)];
 
-    const parentDefaultReset = getDefaultResetState(parentElem, elements, root);
-    return parentDefaultReset;
+  if (element.fields) {
+    for (const field of element.fields) {
+      // If there is an unnamed reset, associate it with the default reset
+      if (typeof field.reset == "string" || typeof field.reset == "number") {
+        field.reset = {
+          value: field.reset, // Preserve the original reset value
+          names: element.resets[0] ? [element.resets[0]] : [], // But associate it with the default reset
+        };
+        field.value = stringToBitArray(
+          field.reset.value.toString(),
+          field.nbits
+        );
+      }
+      // If there are named resets, use the default reset to set the value if present
+      // If the default reset is not present, set the value to "?"
+      else if (field.reset && field.reset.names) {
+        // If the default reset is associated with a reset value
+        if (field.reset.names.includes(element.resets[0] as string)) {
+          // Then set the value to the default reset value
+          field.value = stringToBitArray(
+            field.reset.value.toString(),
+            field.nbits
+          );
+        }
+        // Otherwise set the field value to "?"
+        else {
+          field.value = stringToBitArray("?", field.nbits);
+        }
+
+        // Add any missing reset states to the element's overall resets
+        for (const reset of field.reset.names) {
+          if (!element.resets.includes(reset)) {
+            element.resets.push(reset);
+          }
+        }
+      }
+      // If there is no reset value for the field set the value to "?"
+      else {
+        field.value = stringToBitArray("?", field.nbits);
+        field.reset = {
+          value: bitArrayToString(field.value, "hexadecimal"),
+          names: [],
+        };
+      }
+    }
   }
 
-  return element.default_reset;
+  // Sort the fields so that the field with the highest LSB is first in the array
+  element.fields?.sort((a, b) => b.lsb - a.lsb);
 };
 
 // Helper function to get an element's address from its and its ancestors' offsets
@@ -405,6 +353,37 @@ const getFooterText = async (): Promise<string> => {
     return "";
   }
 };
+
+// Return an element's default reset state
+// If not found on element, return the first default reset state of an ancestor
+const getDefaultResetState = (
+  element: DesignElement,
+  elements: Map<string, DesignElement>,
+  root: DesignRoot
+): string => {
+  if (!element.default_reset) {
+    const parentElem = getParent(element.id, elements);
+    if (!parentElem) {
+      return root.default_reset;
+    }
+
+    const parentDefaultReset = getDefaultResetState(parentElem, elements, root);
+    return parentDefaultReset;
+  }
+
+  return element.default_reset;
+};
+
+// Return the parent element of a given element
+const getParent = (elementId: string, elements: Map<string, DesignElement>) => {
+  const arr = elementId.split(".");
+  const parentId = arr.slice(0, arr.length - 1).join(".");
+
+  const parentElement = elements.get(parentId);
+  if (!parentElement) return null;
+  return parentElement;
+};
+
 // Returns true is a given URL is absolute (i.e. https://example.com/data.json)
 // returns false is a given URL is relative (i.e. data.json)
 const isAbsoluteUrl = (url: string): boolean => {
