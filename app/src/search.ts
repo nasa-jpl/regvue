@@ -27,19 +27,14 @@ export const createSearchIndex = (elements: Map<string, DesignElement>) => {
     // Add all reg/blk/mem elements to the search index
     for (const document of elements.values()) {
       let addr;
-      try {
-        if (document.addr === undefined) {
-          addr = "";
-        } else {
-          addr = getStringRepresentation(
-            document.addr,
-            "hexadecimal",
-            document.data_width
-          );
-        }
-      } catch (e) {
-        console.warn(e);
+      if (document.addr === undefined) {
         addr = "";
+      } else {
+        addr = getStringRepresentation(
+          document.addr,
+          "hexadecimal",
+          document.data_width
+        );
       }
 
       builder.add(

@@ -15,13 +15,17 @@ import {
   validateResponse,
 } from "src/validate";
 
+const DEFAULT_DATA_WIDTH = 32;
+const DEFAULT_DEFAULT_RESET = "Default";
+const DEFAULT_DISPLAY_TYPE = "hexadecimal" as DisplayType;
+
 export const useStore = defineStore("store", {
   state: () => {
     return {
       // Object representing info about the overall design (e.g. name, version, and root elements)
       root: {} as DesignRoot,
 
-      // A map of id : DesignElement for elements (reg/blk/mem) in the design
+      // A map of <element id : DesignElement> for elements (reg/blk/mem) in the design
       elements: new Map<string, DesignElement>(),
 
       // Whether or not store.load() has been called successfully
@@ -34,7 +38,7 @@ export const useStore = defineStore("store", {
       useByteSwap: false,
 
       // Which display type to show field and register values as in RegLayout
-      selectedDisplayType: "hexadecimal" as DisplayType,
+      selectedDisplayType: DEFAULT_DISPLAY_TYPE,
 
       // Any text to show in the footer
       footerText: "",
@@ -42,7 +46,7 @@ export const useStore = defineStore("store", {
   },
   actions: {
     // Try to get data from a url and call load() with that data
-    // Return true on successful load and false if load fails
+    // Return "" on successful load and an error string if load fails
     async loadUrl(url: string) {
       try {
         // Fetch and validate the response
@@ -56,7 +60,7 @@ export const useStore = defineStore("store", {
         // Validate the JSON data's schema
         if (validateMsg) return validateMsg;
 
-        // If the data is valid load the data
+        // If the data is valid then load the data
         await this.load(data, url);
         return "";
       } catch (e) {
@@ -65,8 +69,8 @@ export const useStore = defineStore("store", {
       }
     },
 
-    // Try load the store by parsing the provided JSON string
-    // Return true on successful load and false if load fails
+    // Try to load the store by parsing the provided JSON string
+    // Return "" on successful load and an error string if load fails
     async loadFile(jsonString: string) {
       try {
         const data = await JSON.parse(jsonString);
@@ -75,6 +79,7 @@ export const useStore = defineStore("store", {
         const validateMsg = validateSchema(data);
         if (validateMsg) return validateMsg;
 
+        // If the data is valid then load the data
         await this.load(data);
         return "";
       } catch (e) {
@@ -88,77 +93,17 @@ export const useStore = defineStore("store", {
       const baseUrl = url.slice(0, url.lastIndexOf("/") + 1);
       const elements = await formatData(data.elements, baseUrl);
 
-      if (!elements) throw Error("Error formating data");
-
-      for (const [, element] of elements.entries()) {
+      for (const element of elements.values()) {
         // Calculate the address from an element's offset and its parents' offsets
         element.addr = getAddress(element.id, elements);
 
         // Get an elements data_width
         element.data_width = getDataWidth(element, elements, data.root);
 
-        // Create a list of possible reset states
-        // The default reset state is placed at the 0 index to begin
         if (element.type == "reg") {
-          element.resets = [getDefaultResetState(element, elements, data.root)];
-
-          if (element.fields) {
-            for (const field of element.fields) {
-              // If there is an unnamed reset, associate it with the default reset
-              if (
-                typeof field.reset == "string" ||
-                typeof field.reset == "number"
-              ) {
-                field.reset = {
-                  value: field.reset, // Preserve the original reset value
-                  names: element.resets[0] ? [element.resets[0]] : [], // But associate it with the default reset
-                };
-                field.value = stringToBitArray(
-                  field.reset.value.toString(),
-                  field.nbits
-                );
-              }
-              // If there are named resets, use the default reset to set the value if present
-              // If the default reset is not present, set the value to "?"
-              else if (field.reset && field.reset.names) {
-                // If the default reset is associated with a reset value
-                if (field.reset.names.includes(element.resets[0] as string)) {
-                  // Then set the value to the default reset value
-                  field.value = stringToBitArray(
-                    field.reset.value.toString(),
-                    field.nbits
-                  );
-                }
-                // Otherwise set the field value to "?"
-                else {
-                  field.value = stringToBitArray("?", field.nbits);
-                }
-
-                // Add any missing reset states to the element's overall resets
-                for (const reset of field.reset.names) {
-                  if (!element.resets.includes(reset)) {
-                    element.resets.push(reset);
-                  }
-                }
-              }
-              // If there is no reset value for the field set the value to "?"
-              else {
-                field.value = stringToBitArray("?", field.nbits);
-                field.reset = {
-                  value: bitArrayToString(field.value, "hexadecimal"),
-                  names: [],
-                };
-              }
-            }
-          }
-
-          // Sort the fields so that the field with the highest LSB is first in the array
-          element.fields?.sort((a, b) => b.lsb - a.lsb);
+          // Associate each field with the appropriate named reset states
+          formatResets(element, elements, data.root);
         }
-      }
-
-      if (!data.root.data_width) {
-        data.root.data_width = 32;
       }
 
       // Check the semantic details of the parsed data
@@ -166,27 +111,21 @@ export const useStore = defineStore("store", {
       if (errorMessage) throw Error(errorMessage);
 
       this.elements = elements;
+      this.footerText = await getFooterText();
+      this.loaded = true;
       this.root = data.root;
       this.url = url;
-      this.loaded = true;
-
-      // Get the footer text from app.config.json
-      try {
-        const configInfo = await fetch("app.config.json").then((response) =>
-          response.json()
-        );
-        this.footerText = configInfo.footer;
-      } catch {
-        this.footerText = "";
-      }
     },
   },
 });
 
+// Transforms an RDF JSON file into a map of formatted DesignElements
+// Will fetch and replace any IncludeElements
 const formatData = async (
   elements: { [key: string]: DesignElement | IncludeElement },
   baseUrl: string
 ) => {
+  // Create a Map to store formatted elements as <element id: formatted DesignElement>
   const formattedElements = new Map<string, DesignElement>();
 
   for (const element of Object.values(elements)) {
@@ -195,16 +134,19 @@ const formatData = async (
       element.offset = BigInt(element.offset);
     }
 
-    // If the element is an IncludeElement fetch and format from its url
-    if (element.type == "include") {
+    if (element.type != "include") {
+      formattedElements.set(element.id, element);
+    }
+    // If the element is an IncludeElement then fetch from its url and format the fetched data
+    else {
       try {
-        let url = element.url;
-
         // If the url is not absolute, prepend the base URL
+        let url = element.url;
         if (!isAbsoluteUrl(element.url)) {
           url = baseUrl + element.url;
         }
 
+        // Fetch an RDF from the IncludeElement's URL
         const response = await fetch(url);
         const json = (await response.json()) as RegisterDescriptionFile;
 
@@ -214,62 +156,18 @@ const formatData = async (
           throw Error(`Schema error at ${element.url}.\n${validateMsg}`);
         }
 
+        // Merge the IncludeElement and the fetched Root into a blk DesignElement
+        const mergedElement = mergeIncludeElement(element, json);
+        formattedElements.set(mergedElement.id, mergedElement);
+
+        // From the fetched JSON data, create a formatted map of string keys to DesignElements
         const data = {} as { [key: string]: DesignElement | IncludeElement };
-
-        // Get the id of the parent of the current IncludeElement
-        const idArr = element.id.split(".");
-        let parentId: string;
-        if (idArr.length == 1) {
-          parentId = "";
-        } else {
-          parentId = idArr.slice(0, idArr.length - 1).join(".");
-        }
-
-        const elem = {
-          id: element.id,
-          name: element.name,
-          desc: element.desc ? element.desc : json.root.desc,
-          addr: BigInt(0),
-          offset:
-            element.offset !== undefined ? BigInt(element.offset) : undefined,
-          type: "blk",
-          links: element.links ? element.links : json.root.links,
-          doc: element.doc ? element.doc : json.root.doc,
-          version: element.version ? element.version : json.root.version,
-          children: [],
-          default_reset: json.root.default_reset
-            ? json.root.default_reset
-            : "Default",
-          resets: json.root.default_reset ? [json.root.default_reset] : [],
-          data_width: element.data_width
-            ? element.data_width
-            : json.root.data_width,
-        } as DesignElement;
-
-        // Add the children of the root as children of the include block
-        for (const childId of Object.values(json.root.children)) {
-          elem.children?.push([elem.id, childId].join("."));
-        }
-
         for (const child of Object.values(json.elements)) {
-          // Append the parentId to the id of the fetched json element
-          child.id = [elem.id, child.id].join(".");
-
-          // Append the parentId to each child of the fetched JSON element
-          if (child.type != "include" && child.children && parentId) {
-            child.children = child.children.map((id) =>
-              [elem.id, id].join(".")
-            );
-          }
-
           data[child.id] = child;
         }
-
-        // From the fetched JSON data create a map of string keys to DesignElements
         const newData = await formatData(data, baseUrl);
 
         // Merge together the new DesignElements with the previously collected elements
-        formattedElements.set(elem.id, elem);
         for (const [key, value] of newData.entries()) {
           formattedElements.set(key, value);
         }
@@ -278,47 +176,123 @@ const formatData = async (
         throw Error(e as string);
       }
     }
-
-    // Otherwise add it to formattedElements map
-    else {
-      formattedElements.set(element.id, element);
-    }
   }
 
   return formattedElements;
 };
 
-// Return the parent element of a given element
-const getParent = (elementId: string, elements: Map<string, DesignElement>) => {
-  const arr = elementId.split(".");
-  const parentId = arr.slice(0, arr.length - 1).join(".");
+// Combines an IncludeElement with a fetched Root object to create a blk DesignElement
+const mergeIncludeElement = (
+  includeElement: IncludeElement,
+  json: RegisterDescriptionFile
+): DesignElement => {
+  // Create a DesignElement by combining the properties of the IncludeElement and the fetched DesignRoot
+  // Prefers properties on the IncludeElement over the fetched DesignRoot
+  const elem = {
+    id: includeElement.id,
+    name: includeElement.name,
+    type: "blk",
+    desc: includeElement.desc ? includeElement.desc : json.root.desc,
+    offset:
+      includeElement.offset !== undefined
+        ? BigInt(includeElement.offset)
+        : undefined,
+    links: includeElement.links ? includeElement.links : json.root.links,
+    doc: includeElement.doc ? includeElement.doc : json.root.doc,
+    version: includeElement.version
+      ? includeElement.version
+      : json.root.version,
+    default_reset: json.root.default_reset
+      ? json.root.default_reset
+      : DEFAULT_DEFAULT_RESET,
+    resets: json.root.default_reset ? [json.root.default_reset] : [],
+    data_width: includeElement.data_width
+      ? includeElement.data_width
+      : json.root.data_width,
+    addr: BigInt(0), // Will be updated in load() by a call to getAddress()
+    children: [], // Populated below
+  } as DesignElement;
 
-  const parentElement = elements.get(parentId);
-  if (!parentElement) return null;
-  return parentElement;
+  // Add the children of the fetched DesignRoot as children of the block element
+  for (const childId of Object.values(json.root.children)) {
+    elem.children?.push([elem.id, childId].join("."));
+  }
+
+  // Modify the fetched children id's
+  for (const child of Object.values(json.elements)) {
+    child.id = [elem.id, child.id].join(".");
+
+    // Append the block element's id to each child of the fetched JSON element
+    if (child.type != "include" && child.children) {
+      child.children = child.children.map((id) => [elem.id, id].join("."));
+    }
+  }
+
+  return elem;
 };
 
-// Return an element's default reset state
-// If not found on element, return the default reset state of nearest ancestor
-const getDefaultResetState = (
+// Will assign each reset value for each field with the appropriate named reset states
+const formatResets = (
   element: DesignElement,
   elements: Map<string, DesignElement>,
   root: DesignRoot
-): string => {
-  if (!element.default_reset) {
-    const parentElem = getParent(element.id, elements);
-    if (!parentElem) {
-      return root.default_reset;
-    }
+) => {
+  // Create a list to track possible reset states
+  // The default reset state is placed at the 0 index to begin
+  element.resets = [getDefaultResetState(element, elements, root)];
 
-    const parentDefaultReset = getDefaultResetState(parentElem, elements, root);
-    return parentDefaultReset;
+  if (element.fields) {
+    for (const field of element.fields) {
+      // If there is an unnamed reset, associate it with the default reset
+      if (typeof field.reset == "string" || typeof field.reset == "number") {
+        field.reset = {
+          value: field.reset, // Preserve the original reset value
+          names: element.resets[0] ? [element.resets[0]] : [], // But associate it with the default reset
+        };
+        field.value = stringToBitArray(
+          field.reset.value.toString(),
+          field.nbits
+        );
+      }
+      // If there are named resets, use the default reset to set the value if present
+      // If the default reset is not present, set the value to "?"
+      else if (field.reset && field.reset.names) {
+        // If the default reset is associated with a reset value
+        if (field.reset.names.includes(element.resets[0] as string)) {
+          // Then set the value to the default reset value
+          field.value = stringToBitArray(
+            field.reset.value.toString(),
+            field.nbits
+          );
+        }
+        // Otherwise set the field value to "?"
+        else {
+          field.value = stringToBitArray("?", field.nbits);
+        }
+
+        // Add any missing reset states to the element's overall resets
+        for (const reset of field.reset.names) {
+          if (!element.resets.includes(reset)) {
+            element.resets.push(reset);
+          }
+        }
+      }
+      // If there is no reset value for the field set the value to "?"
+      else {
+        field.value = stringToBitArray("?", field.nbits);
+        field.reset = {
+          value: bitArrayToString(field.value, "hexadecimal"),
+          names: [],
+        };
+      }
+    }
   }
 
-  return element.default_reset;
+  // Sort the fields so that the field with the highest LSB is first in the array
+  element.fields?.sort((a, b) => b.lsb - a.lsb);
 };
 
-// Helper function to get an element's address from its and its parents' offsets
+// Helper function to get an element's address from its and its ancestors' offsets
 const getAddress = (
   key: string,
   elements: Map<string, { offset?: bigint }>
@@ -349,7 +323,7 @@ const getAddress = (
 };
 
 // Return an element's data width in nbits
-// If not found on element, return the data width of the nearest ancestor with one set
+// If not found on element, return the first valid data width of an ancestor
 const getDataWidth = (
   element: DesignElement,
   elements: Map<string, DesignElement>,
@@ -361,7 +335,7 @@ const getDataWidth = (
       if (root.data_width) {
         return root.data_width;
       } else {
-        return 32;
+        return DEFAULT_DATA_WIDTH;
       }
     }
 
@@ -370,6 +344,48 @@ const getDataWidth = (
   }
 
   return element.data_width;
+};
+
+// Get the footer text from app.config.json
+const getFooterText = async (): Promise<string> => {
+  try {
+    const configInfo = await fetch("app.config.json").then((response) =>
+      response.json()
+    );
+    return configInfo.footer ? configInfo.footer : "";
+  } catch {
+    return "";
+  }
+};
+
+// Return an element's default reset state
+// If not found on element, return the first default reset state of an ancestor
+const getDefaultResetState = (
+  element: DesignElement,
+  elements: Map<string, DesignElement>,
+  root: DesignRoot
+): string => {
+  if (!element.default_reset) {
+    const parentElem = getParent(element.id, elements);
+    if (!parentElem) {
+      return root.default_reset;
+    }
+
+    const parentDefaultReset = getDefaultResetState(parentElem, elements, root);
+    return parentDefaultReset;
+  }
+
+  return element.default_reset;
+};
+
+// Return the parent element of a given element
+const getParent = (elementId: string, elements: Map<string, DesignElement>) => {
+  const arr = elementId.split(".");
+  const parentId = arr.slice(0, arr.length - 1).join(".");
+
+  const parentElement = elements.get(parentId);
+  if (!parentElement) return null;
+  return parentElement;
 };
 
 // Returns true is a given URL is absolute (i.e. https://example.com/data.json)
