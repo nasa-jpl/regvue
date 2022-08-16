@@ -190,12 +190,14 @@ const formatData = async (
       element.offset = BigInt(element.offset);
     }
 
-    // If the element is an IncludeElement fetch and format from its url
-    if (element.type == "include") {
+    if (element.type != "include") {
+      formattedElements.set(element.id, element);
+    }
+    // If the element is an IncludeElement then fetch from its url and format the fetched data
+    else {
       try {
-        let url = element.url;
-
         // If the url is not absolute, prepend the base URL
+        let url = element.url;
         if (!isAbsoluteUrl(element.url)) {
           url = baseUrl + element.url;
         }
@@ -210,56 +212,80 @@ const formatData = async (
           throw Error(`Schema error at ${element.url}.\n${validateMsg}`);
         }
 
+        // Merge the IncludeElement and the fetched Root into a blk DesignElement
+        const mergedElement = mergeIncludeElement(element, json);
+        formattedElements.set(mergedElement.id, mergedElement);
+
+        // From the fetched JSON data, create a formatted map of string keys to DesignElements
         const data = {} as { [key: string]: DesignElement | IncludeElement };
-
-        // Get the id of the parent of the current IncludeElement
-        const idArr = element.id.split(".");
-        let parentId: string;
-        if (idArr.length == 1) {
-          parentId = "";
-        } else {
-          parentId = idArr.slice(0, idArr.length - 1).join(".");
-        }
-
-        const elem = {
-          id: element.id,
-          name: element.name,
-          desc: element.desc ? element.desc : json.root.desc,
-          addr: BigInt(0),
-          offset:
-            element.offset !== undefined ? BigInt(element.offset) : undefined,
-          type: "blk",
-          links: element.links ? element.links : json.root.links,
-          doc: element.doc ? element.doc : json.root.doc,
-          version: element.version ? element.version : json.root.version,
-          children: [],
-          default_reset: json.root.default_reset
-            ? json.root.default_reset
-            : "Default",
-          resets: json.root.default_reset ? [json.root.default_reset] : [],
-          data_width: element.data_width
-            ? element.data_width
-            : json.root.data_width,
-        } as DesignElement;
-
-        // Add the children of the root as children of the include block
-        for (const childId of Object.values(json.root.children)) {
-          elem.children?.push([elem.id, childId].join("."));
-        }
-
         for (const child of Object.values(json.elements)) {
-          // Append the parentId to the id of the fetched json element
-          child.id = [elem.id, child.id].join(".");
-
-          // Append the parentId to each child of the fetched JSON element
-          if (child.type != "include" && child.children && parentId) {
-            child.children = child.children.map((id) =>
-              [elem.id, id].join(".")
-            );
-          }
-
           data[child.id] = child;
         }
+        const newData = await formatData(data, baseUrl);
+
+        // Merge together the new DesignElements with the previously collected elements
+        for (const [key, value] of newData.entries()) {
+          formattedElements.set(key, value);
+        }
+      } catch (e) {
+        console.error(e);
+        throw Error(e as string);
+      }
+    }
+  }
+
+  return formattedElements;
+};
+
+// Combines an IncludeElement with a fetched Root object to create a blk DesignElement
+const mergeIncludeElement = (
+  includeElement: IncludeElement,
+  json: RegisterDescriptionFile
+): DesignElement => {
+  // Create a DesignElement by combining the properties of the IncludeElement and the fetched DesignRoot
+  // Prefers properties on the IncludeElement over the fetched DesignRoot
+  const elem = {
+    id: includeElement.id,
+    name: includeElement.name,
+    type: "blk",
+    desc: includeElement.desc ? includeElement.desc : json.root.desc,
+    offset:
+      includeElement.offset !== undefined
+        ? BigInt(includeElement.offset)
+        : undefined,
+    links: includeElement.links ? includeElement.links : json.root.links,
+    doc: includeElement.doc ? includeElement.doc : json.root.doc,
+    version: includeElement.version
+      ? includeElement.version
+      : json.root.version,
+    default_reset: json.root.default_reset
+      ? json.root.default_reset
+      : DEFAULT_DEFAULT_RESET,
+    resets: json.root.default_reset ? [json.root.default_reset] : [],
+    data_width: includeElement.data_width
+      ? includeElement.data_width
+      : json.root.data_width,
+    addr: BigInt(0), // Will be updated in load() by a call to getAddress()
+    children: [], // Populated below
+  } as DesignElement;
+
+  // Add the children of the fetched DesignRoot as children of the block element
+  for (const childId of Object.values(json.root.children)) {
+    elem.children?.push([elem.id, childId].join("."));
+  }
+
+  // Modify the fetched children id's
+  for (const child of Object.values(json.elements)) {
+    child.id = [elem.id, child.id].join(".");
+
+    // Append the block element's id to each child of the fetched JSON element
+    if (child.type != "include" && child.children) {
+      child.children = child.children.map((id) => [elem.id, id].join("."));
+    }
+  }
+
+  return elem;
+};
 
         // From the fetched JSON data create a map of string keys to DesignElements
         const newData = await formatData(data, baseUrl);
