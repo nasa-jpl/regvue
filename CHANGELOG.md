@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fixed display issue with root sub-element table heading ([#240](https://github.jpl.nasa.gov/regvue/regvue/pull/240)).
+
 ## [1.0.0]
 ### Breaking Changes
 
