@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.0.0]
 ### Breaking Changes
 
 This release contains several breaking changes to the schema.
@@ -265,7 +267,8 @@ Lastly, several improvements were made to the search UI.
 
 - Initial release of regvue prototype.
 
-[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.7.0...HEAD
+[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.0.0...HEAD
+[1.0.0]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.7.0...v1.0.0
 [0.7.0]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.6.5...v0.7.0
 [0.6.5]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.6.4...v0.6.5
 [0.6.4]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.6.3...v0.6.4
