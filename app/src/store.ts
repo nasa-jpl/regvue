@@ -40,6 +40,9 @@ export const useStore = defineStore("store", {
       // Whether or not to display the register value as byte swapped in RegLayout
       useByteSwap: false,
 
+      // Whether or not to display the register value as word swapped in RegLayout
+      useWordSwap: false,
+
       // Which display type to show field and register values as in RegLayout
       selectedDisplayType: DEFAULT_DISPLAY_TYPE,
 

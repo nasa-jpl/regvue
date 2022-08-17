@@ -123,6 +123,32 @@ describe("register-layout", () => {
     cy.get("#input-box-register").should("have.value", "0x90EFCDAB");
   });
 
+  it("can word swap", () => {
+    // Type values into the fields
+    cy.get("#input-box-rsvd").type("0xABCDEF");
+    cy.get("#input-box-long_command").type("0x9");
+
+    // Only the register should change when the word swap button is clicked
+    cy.get("#input-box-register").should("have.value", "0xABCDEF90");
+    cy.get("#toggle-word-swap-button").click();
+    cy.get("#input-box-register").should("have.value", "0xEF90ABCD");
+    cy.get("#input-box-rsvd").type("0xABCDEF");
+    cy.get("#input-box-long_command").should("have.value", "0x9");
+
+    // Typing the in register with word swap enabled should update fields differently
+    cy.get("#input-box-register").type("0xABCDEF90");
+    cy.get("#input-box-rsvd").should("have.value", "0xEF90AB");
+    cy.get("#input-box-long_command").should("have.value", "0xC");
+    cy.get("#input-box-flag3").should("have.value", "1");
+    cy.get("#input-box-flag2").should("have.value", "1");
+    cy.get("#input-box-flag1").should("have.value", "0");
+    cy.get("#input-box-flag0").should("have.value", "1");
+
+    // Clicking word swap button again should update register
+    cy.get("#toggle-word-swap-button").click();
+    cy.get("#input-box-register").should("have.value", "0xEF90ABCD");
+  });
+
   it("supports unknown values", () => {
     // Typing an unknown value in the register will update the fields
     cy.get("#input-box-register").type("0xABCDEF1?");
@@ -161,13 +187,13 @@ describe("register-layout", () => {
     cy.get("#element-name").should("have.text", "regA2");
 
     // Ensure that the reset states button starts off with the defaults
-    cy.get("#reset-values-button").should("include.text", "RS1 Reset");
+    cy.get("#reset-values-button").should("include.text", "RS1");
     cy.get("#reset-states-dropdown-button").click();
     cy.get("#reset-states-div").should("be.visible");
 
     // Choose the next reset state
     cy.get("#select-reset-state-0").click();
-    cy.get("#reset-values-button").should("include.text", "RS2 Reset").click();
+    cy.get("#reset-values-button").should("include.text", "RS2").click();
     cy.get("#reset-states-div").should("not.exist");
 
     // Ensure that the register value resets to RS2

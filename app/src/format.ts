@@ -98,3 +98,19 @@ export const bitArrayToString = (arr: Bit[], displayType: DisplayType) => {
     throw new Error(`Invalid display type specified: ${displayType}`);
   }
 };
+
+export const byteSwap = (bitArray: Bit[]) => swapBits(bitArray, 8);
+export const wordSwap = (bitArray: Bit[]) => swapBits(bitArray, 16);
+
+const swapBits = (bitArray: Bit[], nbits: number) => {
+  if (bitArray.length % nbits != 0) {
+    throw Error("Tried to word swap a value with invalid number of bits");
+  }
+
+  // Add 8 bits at a time to the front of the new Bit[] result
+  const res: Bit[] = [];
+  for (let i = 0; i < bitArray.length; i += nbits) {
+    res.unshift(...bitArray.slice(i, i + nbits));
+  }
+  return res;
+};

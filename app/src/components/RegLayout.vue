@@ -3,6 +3,7 @@ import { ref, Ref, nextTick, onBeforeMount, watch } from "vue";
 import { useRoute } from "vue-router";
 import { Bit, DataWidth, DisplayType, Field } from "src/types";
 import { stringToBitArray } from "src/parse";
+import { byteSwap, wordSwap } from "src/format";
 import { useStore } from "src/store";
 
 import FieldInputBox from "src/components/FieldInputBox.vue";
@@ -35,41 +36,44 @@ onBeforeMount(() => {
 });
 
 // Store the value of the register as an array of Bits
-let registerValue = ref(Array(props.dataWidth).map(() => 0 as Bit));
+const registerValue = ref(Array(props.dataWidth).map(() => 0 as Bit));
 
 // Control whether or not to display LSB or MSB first
-let useByteSwap = ref(store.useByteSwap);
+const useByteSwap = ref(store.useByteSwap);
+const useWordSwap = ref(store.useWordSwap);
 
 // Control what base the field/register values should be displayed in
-let selectedDisplayType: Ref<DisplayType> = ref(store.selectedDisplayType);
-let displayTypes: DisplayType[] = ["binary", "decimal", "hexadecimal"];
+const selectedDisplayType: Ref<DisplayType> = ref(store.selectedDisplayType);
+const displayTypes: DisplayType[] = ["binary", "decimal", "hexadecimal"];
 
 // Index variables that can be incremeneted to force a reload of the child
 // FieldInputBox components
-let fieldKeyIndex = ref(0);
-let registerKeyIndex = ref(0);
-
-// Perform a byte swap on a Bit[]
-const byteSwap = (bitArray: Bit[]) => {
-  if (bitArray.length % 8 != 0) {
-    throw Error("Tried to byte swap a value with not invalid number of bits");
-  }
-
-  let res: Bit[] = [];
-
-  // Add 8 bits at a time to the front of the new Bit[] result
-  for (let i = 0; i < bitArray.length; i += 8) {
-    res.unshift(...bitArray.slice(i, i + 8));
-  }
-  return res;
-};
+const fieldKeyIndex = ref(0);
+const registerKeyIndex = ref(0);
 
 // Toggles the useByteSwap variable and forces a reload/recalculate
 // of register value
 const toggleByteSwap = () => {
   useByteSwap.value = !useByteSwap.value;
+  useWordSwap.value = false;
+
   // Update store value so value persists on rerender
   store.useByteSwap = useByteSwap.value;
+  store.useWordSwap = false;
+
+  updateRegisterValue();
+  registerKeyIndex.value += 1;
+};
+
+// Toggles the useWordSwap variable and forces a reload/recalculate
+// of register value
+const toggleWordSwap = () => {
+  useWordSwap.value = !useWordSwap.value;
+  useByteSwap.value = false;
+
+  // Update store value so value persists on rerender
+  store.useWordSwap = !store.useWordSwap;
+  store.useByteSwap = false;
 
   updateRegisterValue();
   registerKeyIndex.value += 1;
@@ -120,6 +124,8 @@ const updateRegisterValue = () => {
   // Byte swap the values if enabled
   if (useByteSwap.value) {
     result = byteSwap(result);
+  } else if (useWordSwap.value) {
+    result = wordSwap(result);
   }
 
   registerValue.value = result;
@@ -152,6 +158,8 @@ const onRegisterInput = (input: string) => {
 const populateFieldValuesFromRegisterValue = (value: Bit[]) => {
   if (useByteSwap.value) {
     value = byteSwap(value);
+  } else if (useWordSwap.value) {
+    value = wordSwap(value);
   }
 
   // Assign each field by indexing the register value according to lsb and nbits
@@ -253,6 +261,10 @@ watch(
       <!-- Show buttons to change display type -->
       <div class="flex flex-row space-x-2">
         <div>
+          <!-- Label for the base buttons -->
+          <div class="font-bold text-gray-500">Base</div>
+
+          <!-- Create a select base button for each display type -->
           <button
             v-for="(displayType, i) in displayTypes"
             :id="'select-display-type-' + displayType"
@@ -273,29 +285,51 @@ watch(
           </button>
         </div>
 
-        <!-- Show byte swap button -->
-        <button
-          id="toggle-byte-swap-button"
-          class="rounded border border-gray-400 px-1 hover:cursor-pointer"
-          :class="
-            useByteSwap
-              ? 'bg-gray-200 font-semibold text-green-700'
-              : 'hover:bg-gray-100'
-          "
-          title="Toggle byte swapping for the register value"
-          @click="toggleByteSwap()"
-        >
-          Byte Swap
-        </button>
+        <div>
+          <!-- Label for the swap buttons -->
+          <div class="font-bold text-gray-500">Swap</div>
+
+          <!-- Show byte swap button -->
+          <button
+            id="toggle-byte-swap-button"
+            class="rounded-l border border-gray-400 px-1 hover:cursor-pointer"
+            :class="
+              useByteSwap
+                ? 'text-shadow bg-gray-200 text-green-700'
+                : 'hover:bg-gray-100'
+            "
+            title="Toggle byte swapping for the register value"
+            @click="toggleByteSwap()"
+          >
+            Byte
+          </button>
+
+          <!-- Show the word swap button -->
+          <button
+            id="toggle-word-swap-button"
+            class="rounded-r border border-gray-400 px-1 hover:cursor-pointer"
+            :class="
+              useWordSwap
+                ? 'text-shadow bg-gray-200 text-green-700'
+                : 'hover:bg-gray-100'
+            "
+            title="Toggle word swapping for the register value"
+            @click="toggleWordSwap()"
+          >
+            Word
+          </button>
+        </div>
       </div>
 
       <!-- Show reset values button -->
       <div>
+        <div class="text-right font-bold text-gray-500">Reset</div>
+
         <div class="flex flex-row">
           <!-- Button to reset values to the last selected reset state -->
           <button
             id="reset-values-button"
-            class="w-32 truncate rounded-tl border border-gray-400 bg-white px-1 shadow hover:bg-gray-100"
+            class="w-20 truncate rounded-tl border border-gray-400 bg-white px-1 shadow hover:bg-gray-100"
             :class="[
               showResets ? '' : 'rounded-bl',
               resets.length > 1 ? 'border-r-0' : 'rounded-r',
@@ -303,7 +337,7 @@ watch(
             :title="'Reset field values to ' + resets[0] + ' Reset'"
             @click="resetValues()"
           >
-            {{ resets[0] }} Reset
+            {{ resets[0] }}
           </button>
 
           <!-- Button to open dropdown menu with other states -->
@@ -323,7 +357,7 @@ watch(
         <div
           v-if="showResets"
           id="reset-states-div"
-          class="fixed z-50 mr-8 w-[calc(9.5rem+2px)] divide-y rounded-b border border-t-0 border-gray-400 bg-white"
+          class="fixed z-50 mr-8 w-[calc(6.5rem+2px)] divide-y rounded-b border border-t-0 border-gray-400 bg-white"
         >
           <button
             v-for="(reset, i) in resets.slice(1)"
@@ -333,10 +367,16 @@ watch(
             :title="'Reset field values to ' + reset + ' Reset'"
             @mousedown="selectResetState(reset as string)"
           >
-            {{ reset }} Reset
+            {{ reset }}
           </button>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style>
+.text-shadow {
+  text-shadow: 0 0 1px rgb(21 128 61);
+}
+</style>
