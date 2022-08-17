@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added loading indicator when opening a file ([#243](https://github.jpl.nasa.gov/regvue/regvue/pull/243)).
 
+### Changed
+- RDF files are now fetched in parallel, reducing load time by over 50% ([#242](https://github.jpl.nasa.gov/regvue/regvue/pull/242)).
+
 ## [1.0.1]
 
 ### Fixed
