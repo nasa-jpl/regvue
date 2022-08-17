@@ -3,6 +3,7 @@ import { ref, Ref, nextTick, onBeforeMount, watch } from "vue";
 import { useRoute } from "vue-router";
 import { Bit, DataWidth, DisplayType, Field } from "src/types";
 import { stringToBitArray } from "src/parse";
+import { byteSwap, wordSwap } from "src/format";
 import { useStore } from "src/store";
 
 import FieldInputBox from "src/components/FieldInputBox.vue";
@@ -35,41 +36,44 @@ onBeforeMount(() => {
 });
 
 // Store the value of the register as an array of Bits
-let registerValue = ref(Array(props.dataWidth).map(() => 0 as Bit));
+const registerValue = ref(Array(props.dataWidth).map(() => 0 as Bit));
 
 // Control whether or not to display LSB or MSB first
-let useByteSwap = ref(store.useByteSwap);
+const useByteSwap = ref(store.useByteSwap);
+const useWordSwap = ref(store.useWordSwap);
 
 // Control what base the field/register values should be displayed in
-let selectedDisplayType: Ref<DisplayType> = ref(store.selectedDisplayType);
-let displayTypes: DisplayType[] = ["binary", "decimal", "hexadecimal"];
+const selectedDisplayType: Ref<DisplayType> = ref(store.selectedDisplayType);
+const displayTypes: DisplayType[] = ["binary", "decimal", "hexadecimal"];
 
 // Index variables that can be incremeneted to force a reload of the child
 // FieldInputBox components
-let fieldKeyIndex = ref(0);
-let registerKeyIndex = ref(0);
-
-// Perform a byte swap on a Bit[]
-const byteSwap = (bitArray: Bit[]) => {
-  if (bitArray.length % 8 != 0) {
-    throw Error("Tried to byte swap a value with not invalid number of bits");
-  }
-
-  let res: Bit[] = [];
-
-  // Add 8 bits at a time to the front of the new Bit[] result
-  for (let i = 0; i < bitArray.length; i += 8) {
-    res.unshift(...bitArray.slice(i, i + 8));
-  }
-  return res;
-};
+const fieldKeyIndex = ref(0);
+const registerKeyIndex = ref(0);
 
 // Toggles the useByteSwap variable and forces a reload/recalculate
 // of register value
 const toggleByteSwap = () => {
   useByteSwap.value = !useByteSwap.value;
+  useWordSwap.value = false;
+
   // Update store value so value persists on rerender
   store.useByteSwap = useByteSwap.value;
+  store.useWordSwap = false;
+
+  updateRegisterValue();
+  registerKeyIndex.value += 1;
+};
+
+// Toggles the useWordSwap variable and forces a reload/recalculate
+// of register value
+const toggleWordSwap = () => {
+  useWordSwap.value = !useWordSwap.value;
+  useByteSwap.value = false;
+
+  // Update store value so value persists on rerender
+  store.useWordSwap = !store.useWordSwap;
+  store.useByteSwap = false;
 
   updateRegisterValue();
   registerKeyIndex.value += 1;
@@ -120,6 +124,8 @@ const updateRegisterValue = () => {
   // Byte swap the values if enabled
   if (useByteSwap.value) {
     result = byteSwap(result);
+  } else if (useWordSwap.value) {
+    result = wordSwap(result);
   }
 
   registerValue.value = result;
@@ -152,6 +158,8 @@ const onRegisterInput = (input: string) => {
 const populateFieldValuesFromRegisterValue = (value: Bit[]) => {
   if (useByteSwap.value) {
     value = byteSwap(value);
+  } else if (useWordSwap.value) {
+    value = wordSwap(value);
   }
 
   // Assign each field by indexing the register value according to lsb and nbits
@@ -286,6 +294,21 @@ watch(
           @click="toggleByteSwap()"
         >
           Byte Swap
+        </button>
+
+        <!-- Show the word swap button -->
+        <button
+          id="toggle-byte-swap-button"
+          class="rounded border border-gray-400 px-1 hover:cursor-pointer"
+          :class="
+            useWordSwap
+              ? 'bg-gray-200 font-semibold text-green-700'
+              : 'hover:bg-gray-100'
+          "
+          title="Toggle word swapping for the register value"
+          @click="toggleWordSwap()"
+        >
+          Word Swap
         </button>
       </div>
 
