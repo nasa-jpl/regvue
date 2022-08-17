@@ -20,10 +20,10 @@ const store = useStore();
 const element = computed(() => {
   const e = store.elements.get(props.elementId);
   if (!e) {
-    throw Error(`Could not find element with id ${props.elementId}`);
+    return { name: "", doc: "", id: "", addr: undefined } as DesignElement;
   }
 
-  return e as DesignElement;
+  return e;
 });
 
 const doc = computed(() => {
