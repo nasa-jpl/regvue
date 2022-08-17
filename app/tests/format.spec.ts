@@ -1,5 +1,12 @@
 import { it, expect } from "vitest";
-import { bitArrayToString, getStringRepresentation, hex } from "./src/format";
+import {
+  bitArrayToString,
+  byteSwap,
+  getStringRepresentation,
+  hex,
+  wordSwap,
+} from "./src/format";
+import { stringToBitArray } from "./src/parse";
 import { Bit } from "./src/types";
 
 // Test the hex() function
@@ -38,4 +45,36 @@ it("bitArrayToString", () => {
   expect(bitArrayToString(arr, "hexadecimal")).toBe("0xAF");
   expect(bitArrayToString(arr, "binary")).toBe("0b10101111");
   expect(bitArrayToString(arr, "decimal")).toBe("175");
+});
+
+// Test the byteSwap() function
+// This function will byte swap a bit array
+it("byteSwap", () => {
+  expect(byteSwap(stringToBitArray("0x0000_0000"))).toStrictEqual(
+    stringToBitArray("0x0000_0000")
+  );
+
+  expect(byteSwap(stringToBitArray("0xAB", 8))).toStrictEqual(
+    stringToBitArray("0xAB", 8)
+  );
+
+  expect(byteSwap(stringToBitArray("0xABCD_1234"))).toStrictEqual(
+    stringToBitArray("0x3412_CDAB")
+  );
+});
+
+// Test the wordSwap() function
+// This function will word swap a bit array
+it("wordSwap", () => {
+  expect(wordSwap(stringToBitArray("0x0000_0000"))).toStrictEqual(
+    stringToBitArray("0x0000_0000")
+  );
+
+  expect(wordSwap(stringToBitArray("0xABCD_1234"))).toStrictEqual(
+    stringToBitArray("0x1234_ABCD")
+  );
+
+  expect(wordSwap(stringToBitArray("0xABCD", 16))).toStrictEqual(
+    stringToBitArray("0xABCD", 16)
+  );
 });
