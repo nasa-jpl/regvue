@@ -90,6 +90,8 @@ export const useStore = defineStore("store", {
 
     // Parse JSON data and populate the store variables
     async load(data: RegisterDescriptionFile, url = "") {
+      getFooterText().then((text) => (this.footerText = text));
+
       const baseUrl = url.slice(0, url.lastIndexOf("/") + 1);
       const elements = await formatData(data.elements, baseUrl);
 
@@ -118,8 +120,6 @@ export const useStore = defineStore("store", {
       this.loaded = true;
       this.root = data.root;
       this.url = url;
-
-      getFooterText().then((text) => (this.footerText = text));
     },
   },
 });
