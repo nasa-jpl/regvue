@@ -3,6 +3,7 @@ import packageInfo from "../package.json";
 
 import AppVersion from "src/components/AppVersion.vue";
 import ErrorWindow from "src/components/ErrorWindow.vue";
+import LoadingIndicator from "src/components/LoadingIndicator.vue";
 
 const appInfo = {
   name: packageInfo.name,
@@ -20,6 +21,9 @@ const appInfo = {
 
     <!-- Show an error window that will capture and display console errors -->
     <ErrorWindow />
+
+    <!-- Show a loading indicator -->
+    <LoadingIndicator />
 
     <!-- Display a link to the GitHub repo at the bottom right of the page -->
     <AppVersion

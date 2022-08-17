@@ -28,6 +28,9 @@ export const useStore = defineStore("store", {
       // A map of <element id : DesignElement> for elements (reg/blk/mem) in the design
       elements: new Map<string, DesignElement>(),
 
+      // Whether or not the store is currently loading a file
+      isLoading: false,
+
       // Whether or not store.load() has been called successfully
       loaded: false,
 
@@ -48,6 +51,9 @@ export const useStore = defineStore("store", {
     // Try to get data from a url and call load() with that data
     // Return "" on successful load and an error string if load fails
     async loadUrl(url: string) {
+      this.isLoading = true;
+      let ret = "";
+
       try {
         // Fetch and validate the response
         const result = await fetch(url);
@@ -62,16 +68,21 @@ export const useStore = defineStore("store", {
 
         // If the data is valid then load the data
         await this.load(data, url);
-        return "";
       } catch (e) {
         console.error(e);
-        return e as string;
+        ret = e as string;
       }
+
+      this.isLoading = false;
+      return ret;
     },
 
     // Try to load the store by parsing the provided JSON string
     // Return "" on successful load and an error string if load fails
     async loadFile(jsonString: string) {
+      this.isLoading = true;
+      let ret = "";
+
       try {
         const data = await JSON.parse(jsonString);
 
@@ -81,11 +92,13 @@ export const useStore = defineStore("store", {
 
         // If the data is valid then load the data
         await this.load(data);
-        return "";
       } catch (e) {
         console.error(e);
-        return e as string;
+        ret = e as string;
       }
+
+      this.isLoading = false;
+      return ret;
     },
 
     // Parse JSON data and populate the store variables
