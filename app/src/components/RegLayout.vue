@@ -261,6 +261,10 @@ watch(
       <!-- Show buttons to change display type -->
       <div class="flex flex-row space-x-2">
         <div>
+          <!-- Label for the base buttons -->
+          <div class="font-bold text-gray-500">Base</div>
+
+          <!-- Create a select base button for each display type -->
           <button
             v-for="(displayType, i) in displayTypes"
             :id="'select-display-type-' + displayType"
@@ -281,44 +285,51 @@ watch(
           </button>
         </div>
 
-        <!-- Show byte swap button -->
-        <button
-          id="toggle-byte-swap-button"
-          class="rounded border border-gray-400 px-1 hover:cursor-pointer"
-          :class="
-            useByteSwap
-              ? 'bg-gray-200 font-semibold text-green-700'
-              : 'hover:bg-gray-100'
-          "
-          title="Toggle byte swapping for the register value"
-          @click="toggleByteSwap()"
-        >
-          Byte Swap
-        </button>
+        <div>
+          <!-- Label for the swap buttons -->
+          <div class="font-bold text-gray-500">Swap</div>
 
-        <!-- Show the word swap button -->
-        <button
-          id="toggle-byte-swap-button"
-          class="rounded border border-gray-400 px-1 hover:cursor-pointer"
-          :class="
-            useWordSwap
-              ? 'bg-gray-200 font-semibold text-green-700'
-              : 'hover:bg-gray-100'
-          "
-          title="Toggle word swapping for the register value"
-          @click="toggleWordSwap()"
-        >
-          Word Swap
-        </button>
+          <!-- Show byte swap button -->
+          <button
+            id="toggle-byte-swap-button"
+            class="rounded-l border border-gray-400 px-1 hover:cursor-pointer"
+            :class="
+              useByteSwap
+                ? 'text-shadow bg-gray-200 text-green-700'
+                : 'hover:bg-gray-100'
+            "
+            title="Toggle byte swapping for the register value"
+            @click="toggleByteSwap()"
+          >
+            Byte
+          </button>
+
+          <!-- Show the word swap button -->
+          <button
+            id="toggle-word-swap-button"
+            class="rounded-r border border-gray-400 px-1 hover:cursor-pointer"
+            :class="
+              useWordSwap
+                ? 'text-shadow bg-gray-200 text-green-700'
+                : 'hover:bg-gray-100'
+            "
+            title="Toggle word swapping for the register value"
+            @click="toggleWordSwap()"
+          >
+            Word
+          </button>
+        </div>
       </div>
 
       <!-- Show reset values button -->
       <div>
+        <div class="text-right font-bold text-gray-500">Reset</div>
+
         <div class="flex flex-row">
           <!-- Button to reset values to the last selected reset state -->
           <button
             id="reset-values-button"
-            class="w-32 truncate rounded-tl border border-gray-400 bg-white px-1 shadow hover:bg-gray-100"
+            class="w-20 truncate rounded-tl border border-gray-400 bg-white px-1 shadow hover:bg-gray-100"
             :class="[
               showResets ? '' : 'rounded-bl',
               resets.length > 1 ? 'border-r-0' : 'rounded-r',
@@ -326,7 +337,7 @@ watch(
             :title="'Reset field values to ' + resets[0] + ' Reset'"
             @click="resetValues()"
           >
-            {{ resets[0] }} Reset
+            {{ resets[0] }}
           </button>
 
           <!-- Button to open dropdown menu with other states -->
@@ -346,7 +357,7 @@ watch(
         <div
           v-if="showResets"
           id="reset-states-div"
-          class="fixed z-50 mr-8 w-[calc(9.5rem+2px)] divide-y rounded-b border border-t-0 border-gray-400 bg-white"
+          class="fixed z-50 mr-8 w-[calc(6.5rem+2px)] divide-y rounded-b border border-t-0 border-gray-400 bg-white"
         >
           <button
             v-for="(reset, i) in resets.slice(1)"
@@ -356,10 +367,16 @@ watch(
             :title="'Reset field values to ' + reset + ' Reset'"
             @mousedown="selectResetState(reset as string)"
           >
-            {{ reset }} Reset
+            {{ reset }}
           </button>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style>
+.text-shadow {
+  text-shadow: 0 0 1px rgb(21 128 61);
+}
+</style>
