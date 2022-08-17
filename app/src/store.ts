@@ -115,10 +115,11 @@ export const useStore = defineStore("store", {
       if (errorMessage) throw Error(errorMessage);
 
       this.elements = elements;
-      this.footerText = await getFooterText();
       this.loaded = true;
       this.root = data.root;
       this.url = url;
+
+      getFooterText().then((text) => (this.footerText = text));
     },
   },
 });
@@ -132,55 +133,59 @@ const formatData = async (
   // Create a Map to store formatted elements as <element id: formatted DesignElement>
   const formattedElements = new Map<string, DesignElement>();
 
-  for (const element of Object.values(elements)) {
-    // Reassign the offset to be a BigInt
-    if (element.offset !== undefined) {
-      element.offset = BigInt(element.offset);
-    }
-
-    if (element.type != "include") {
-      formattedElements.set(element.id, element);
-    }
-    // If the element is an IncludeElement then fetch from its url and format the fetched data
-    else {
-      try {
-        // If the url is not absolute, prepend the base URL
-        let url = element.url;
-        if (!isAbsoluteUrl(element.url)) {
-          url = baseUrl + element.url;
-        }
-
-        // Fetch an RDF from the IncludeElement's URL
-        const response = await fetch(url);
-        const json = (await response.json()) as RegisterDescriptionFile;
-
-        // Validate the JSON data's schema
-        const validateMsg = validateSchema(json);
-        if (validateMsg) {
-          throw Error(`Schema error at ${element.url}.\n${validateMsg}`);
-        }
-
-        // Merge the IncludeElement and the fetched Root into a blk DesignElement
-        const mergedElement = mergeIncludeElement(element, json);
-        formattedElements.set(mergedElement.id, mergedElement);
-
-        // From the fetched JSON data, create a formatted map of string keys to DesignElements
-        const data = {} as { [key: string]: DesignElement | IncludeElement };
-        for (const child of Object.values(json.elements)) {
-          data[child.id] = child;
-        }
-        const newData = await formatData(data, baseUrl);
-
-        // Merge together the new DesignElements with the previously collected elements
-        for (const [key, value] of newData.entries()) {
-          formattedElements.set(key, value);
-        }
-      } catch (e) {
-        console.error(e);
-        throw Error(e as string);
+  await Promise.all(
+    Object.values(elements).map(async (element) => {
+      // Reassign the offset to be a BigInt
+      if (element.offset !== undefined) {
+        element.offset = BigInt(element.offset);
       }
-    }
-  }
+
+      if (element.type != "include") {
+        formattedElements.set(element.id, element);
+      }
+      // If the element is an IncludeElement then fetch from its url and format the fetched data
+      else {
+        try {
+          // If the url is not absolute, prepend the base URL
+          let url = element.url;
+          if (!isAbsoluteUrl(element.url)) {
+            url = baseUrl + element.url;
+          }
+
+          // Fetch an RDF from the IncludeElement's URL
+          const response = await fetch(url);
+          const json = (await response.json()) as RegisterDescriptionFile;
+
+          // Validate the JSON data's schema
+          const validateMsg = validateSchema(json);
+          if (validateMsg) {
+            throw Error(`Schema error at ${element.url}.\n${validateMsg}`);
+          }
+
+          // Merge the IncludeElement and the fetched Root into a blk DesignElement
+          const mergedElement = mergeIncludeElement(element, json);
+          formattedElements.set(mergedElement.id, mergedElement);
+
+          // From the fetched JSON data, create a formatted map of string keys to DesignElements
+          const data = {} as {
+            [key: string]: DesignElement | IncludeElement;
+          };
+          for (const child of Object.values(json.elements)) {
+            data[child.id] = child;
+          }
+          const newData = await formatData(data, baseUrl);
+
+          // Merge together the new DesignElements with the previously collected elements
+          for (const [key, value] of newData.entries()) {
+            formattedElements.set(key, value);
+          }
+        } catch (e) {
+          console.error(e);
+          throw Error(e as string);
+        }
+      }
+    })
+  );
 
   return formattedElements;
 };
