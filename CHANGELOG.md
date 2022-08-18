@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0]
+
 ### Added
 - Added a word swap button ([#245](https://github.jpl.nasa.gov/regvue/regvue/pull/245)).
 - Added loading indicator when opening a file ([#243](https://github.jpl.nasa.gov/regvue/regvue/pull/243)).
@@ -279,7 +281,8 @@ Lastly, several improvements were made to the search UI.
 
 - Initial release of regvue prototype.
 
-[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.0.1...HEAD
+[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.0...HEAD
+[1.0.1]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.7.0...v1.0.0
 [0.7.0]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.6.5...v0.7.0
