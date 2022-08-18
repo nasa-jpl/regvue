@@ -2,9 +2,9 @@
 :imagesdir: images
 :toc: macro
 
-:latest_deployment: latest
+:latest_deployment: v1
 :deployment_url: https://github.jpl.nasa.gov/pages/regvue/regvue/{latest_deployment}/#/
-:demo_register_description: https://github.jpl.nasa.gov/pages/regvue/regvue/demo/example.json
+:demo_register_description: https://github.jpl.nasa.gov/regvue/regvue/raw/main/app/public/example.json
 
 A modern web-based viewer for FPGA/ASIC register documentation.
 
