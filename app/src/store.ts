@@ -61,13 +61,13 @@ export const useStore = defineStore("store", {
         // Fetch and validate the response
         const result = await fetch(url);
         let validateMsg = validateResponse(result);
-        if (validateMsg) return validateMsg;
+        if (validateMsg) throw Error(validateMsg);
 
         const data = await result.json();
-        validateMsg = validateSchema(data);
 
         // Validate the JSON data's schema
-        if (validateMsg) return validateMsg;
+        validateMsg = validateSchema(data);
+        if (validateMsg) throw Error(validateMsg);
 
         // If the data is valid then load the data
         await this.load(data, url);
@@ -91,7 +91,7 @@ export const useStore = defineStore("store", {
 
         // Validate the JSON data's schema
         const validateMsg = validateSchema(data);
-        if (validateMsg) return validateMsg;
+        if (validateMsg) throw Error(validateMsg);
 
         // If the data is valid then load the data
         await this.load(data);
