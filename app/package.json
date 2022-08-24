@@ -9,9 +9,11 @@
     "preview": "vite preview",
     "lint": "npx eslint --ext .js,.ts,.vue --ignore-path ../.gitignore --fix src",
     "format": "npx prettier --write .",
-    "test": "vitest"
+    "test": "vitest",
+    "tauri": "tauri"
   },
   "dependencies": {
+    "@tauri-apps/api": "^1",
     "ajv": "^8.11.0",
     "big-integer": "^1.6.51",
     "lunr": "^2.3.9",
@@ -22,6 +24,7 @@
     "vue3-cookies": "^1.0.6"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^1",
     "@types/lunr": "^2.3.4",
     "@types/node": "^18.7.23",
     "@typescript-eslint/eslint-plugin": "^5.25.0",
