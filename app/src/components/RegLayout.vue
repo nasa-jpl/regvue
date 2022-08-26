@@ -292,7 +292,7 @@ watch(
           <!-- Show byte swap button -->
           <button
             id="toggle-byte-swap-button"
-            class="rounded-l border border-gray-400 px-1 hover:cursor-pointer"
+            class="rounded-l border border-gray-400 px-1 shadow hover:cursor-pointer"
             :class="
               useByteSwap
                 ? 'text-shadow bg-gray-200 text-green-700'
@@ -307,7 +307,7 @@ watch(
           <!-- Show the word swap button -->
           <button
             id="toggle-word-swap-button"
-            class="rounded-r border border-gray-400 px-1 hover:cursor-pointer"
+            class="rounded-r border border-gray-400 px-1 shadow hover:cursor-pointer"
             :class="
               useWordSwap
                 ? 'text-shadow bg-gray-200 text-green-700'
