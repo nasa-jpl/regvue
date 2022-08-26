@@ -262,7 +262,7 @@ watch(
       <div class="flex flex-row space-x-2">
         <div>
           <!-- Label for the base buttons -->
-          <div class="font-bold text-gray-500">Base</div>
+          <div class="text-sm text-gray-500">Base</div>
 
           <!-- Create a select base button for each display type -->
           <button
@@ -287,7 +287,7 @@ watch(
 
         <div>
           <!-- Label for the swap buttons -->
-          <div class="font-bold text-gray-500">Swap</div>
+          <div class="text-sm text-gray-500">Swap</div>
 
           <!-- Show byte swap button -->
           <button
@@ -323,7 +323,7 @@ watch(
 
       <!-- Show reset values button -->
       <div>
-        <div class="text-right font-bold text-gray-500">Reset</div>
+        <div class="text-right text-sm text-gray-500">Reset</div>
 
         <div class="flex flex-row">
           <!-- Button to reset values to the last selected reset state -->
