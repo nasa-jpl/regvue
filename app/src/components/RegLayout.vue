@@ -192,7 +192,7 @@ watch(
         <th
           v-for="bit in dataWidth"
           :key="bit"
-          class="border border-black font-medium"
+          class="border border-black text-xs font-medium"
           :class="
             Math.floor((bit - 1) / 4) % 2 == 0 ? 'bg-gray-100' : 'bg-gray-300'
           "
