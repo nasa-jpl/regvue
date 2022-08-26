@@ -376,7 +376,8 @@ watch(
 </template>
 
 <style>
+/* Emulates bold w/o affecting text width and thus w/o reflow */
 .text-shadow {
-  text-shadow: 0 0 1px rgb(21 128 61);
+  text-shadow: 1px 0 0 rgb(21 128 61);
 }
 </style>
