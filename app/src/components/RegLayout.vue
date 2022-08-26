@@ -269,7 +269,7 @@ watch(
             v-for="(displayType, i) in displayTypes"
             :id="'select-display-type-' + displayType"
             :key="displayType"
-            class="border-[0.5px] border-gray-400 px-1 shadow"
+            class="border border-gray-400 px-1 shadow"
             :class="[
               selectedDisplayType == displayType
                 ? 'text-shadow bg-gray-200 text-green-700'
