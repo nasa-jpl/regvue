@@ -272,7 +272,7 @@ watch(
             class="border-[0.5px] border-gray-400 px-1 shadow"
             :class="[
               selectedDisplayType == displayType
-                ? 'bg-gray-200 font-semibold text-green-700'
+                ? 'text-shadow bg-gray-200 text-green-700'
                 : 'hover:bg-gray-100',
               i == 0 ? 'rounded-l' : '',
               i == displayTypes.length - 1 ? 'rounded-r' : '',
