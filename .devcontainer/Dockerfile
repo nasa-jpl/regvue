@@ -25,6 +25,23 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | s
     apt-get update && \
     apt-get install gh
 
+# Install Tauri deps
+# https://tauri.app/v1/guides/getting-started/prerequisites#setting-up-linux
+RUN apt-get update \
+    && apt-get install -y \
+        libwebkit2gtk-4.0-dev \
+        build-essential \
+        curl \
+        wget \
+        libssl-dev \
+        libgtk-3-dev \
+        libayatana-appindicator3-dev \
+        librsvg2-dev
+
+# Install Rust
+# https://rustup.rs/
+RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
+
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 #     && apt-get -y install --no-install-recommends <your-package-list-here>
