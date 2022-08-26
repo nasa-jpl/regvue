@@ -302,62 +302,79 @@ watch(
       </div>
 
       <!-- Show reset values button -->
-      <div>
-        <div class="text-right text-sm text-gray-500">Reset</div>
+      <div class="flex flex-row space-x-2">
+        <div>
+          <div class="text-right text-sm text-gray-500">Reset</div>
 
-        <div class="flex flex-row">
-          <!-- Button to reset values to the last selected reset state -->
-          <button
-            id="reset-values-button"
-            class="w-20 truncate rounded-tl border border-gray-400 bg-white px-1 shadow hover:bg-gray-100"
-            :class="[
-              showResets ? '' : 'rounded-bl',
-              resets.length > 1 ? 'border-r-0' : 'rounded-r',
-            ]"
-            :title="'Reset field values to ' + resets[0] + ' Reset'"
-            @click="resetValues()"
-          >
-            {{ resets[0] }}
-          </button>
+          <div class="flex flex-row">
+            <!-- Button to reset values to the last selected reset state -->
+            <button
+              id="reset-values-button"
+              class="w-20 truncate rounded-tl border border-gray-400 bg-white px-1 shadow hover:bg-gray-100"
+              :class="[
+                showResets ? '' : 'rounded-bl',
+                resets.length > 1 ? 'border-r-0' : 'rounded-r',
+              ]"
+              :title="'Reset field values to ' + resets[0] + ' Reset'"
+              @click="resetValues()"
+            >
+              {{ resets[0] }}
+            </button>
 
-          <!-- Button to open dropdown menu with other states -->
-          <button
-            v-if="resets.length > 1"
-            id="reset-states-dropdown-button"
-            class="rounded-tr border border-gray-400 bg-white shadow hover:cursor-pointer hover:bg-gray-100"
-            :class="showResets ? '' : 'rounded-br'"
-            @click="showResets = !showResets"
-            @blur="showResets = false"
+            <!-- Button to open dropdown menu with other states -->
+            <button
+              v-if="resets.length > 1"
+              id="reset-states-dropdown-button"
+              class="rounded-tr border border-gray-400 bg-white shadow hover:cursor-pointer hover:bg-gray-100"
+              :class="showResets ? '' : 'rounded-br'"
+              @click="showResets = !showResets"
+              @blur="showResets = false"
+            >
+              <chevron-down />
+            </button>
+          </div>
+
+          <!-- Menu with buttons to reset to other reset states -->
+          <div
+            v-if="showResets"
+            id="reset-states-div"
+            class="fixed z-50 mr-8 w-[calc(6.5rem+2px)] divide-y rounded-b border border-t-0 border-gray-400 bg-white"
           >
-            <chevron-down />
-          </button>
+            <button
+              v-for="(reset, i) in resets.slice(1)"
+              :id="'select-reset-state-' + i"
+              :key="reset as string"
+              class="w-full truncate px-1 text-left shadow hover:bg-gray-100"
+              :title="'Reset field values to ' + reset + ' Reset'"
+              @mousedown="selectResetState(reset as string)"
+            >
+              {{ reset }}
+            </button>
+          </div>
         </div>
 
-        <!-- Menu with buttons to reset to other reset states -->
-        <div
-          v-if="showResets"
-          id="reset-states-div"
-          class="fixed z-50 mr-8 w-[calc(6.5rem+2px)] divide-y rounded-b border border-t-0 border-gray-400 bg-white"
-        >
-          <button
-            v-for="(reset, i) in resets.slice(1)"
-            :id="'select-reset-state-' + i"
-            :key="reset as string"
-            class="w-full truncate px-1 text-left shadow hover:bg-gray-100"
-            :title="'Reset field values to ' + reset + ' Reset'"
-            @mousedown="selectResetState(reset as string)"
-          >
-            {{ reset }}
-          </button>
+        <!-- Access buttons -->
+        <div>
+          <div class="text-right text-sm text-gray-500">Access</div>
+
+          <div>
+            <button
+              id="write-button"
+              class="active:text-shadow rounded-l border border-gray-400 px-1 shadow hover:cursor-pointer active:bg-gray-200 active:text-green-700"
+              title="Perform a register write"
+            >
+              Wr
+            </button>
+            <button
+              id="read-button"
+              class="active:text-shadow rounded-r border border-gray-400 px-1 shadow hover:cursor-pointer active:bg-gray-200 active:text-green-700"
+              title="Perform a register read"
+            >
+              Rd
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
-<style>
-/* Emulates bold w/o affecting text width and thus w/o reflow */
-.text-shadow {
-  text-shadow: 1px 0 0 rgb(21 128 61);
-}
-</style>
