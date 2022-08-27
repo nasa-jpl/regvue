@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { invoke } from "@tauri-apps/api/tauri";
 import { useStore } from "src/store";
 import { DesignElement } from "src/types";
 
@@ -75,6 +76,21 @@ const selectDefaultReset = (resetState: string) => {
   elem.resets.unshift(resetState);
   regLayoutKey.value += 1;
 };
+
+const writeCommand = (data: bigint) => {
+  if (props.reg.addr) {
+    invoke("js2rs_write_command", {
+      addr: "0x" + props.reg.addr.toString(16),
+      data: data,
+    });
+  }
+};
+
+const readCommand = () => {
+  if (props.reg.addr) {
+    invoke("js2rs_read_command", { addr: "0x" + props.reg.addr.toString(16) });
+  }
+};
 </script>
 
 <template>
@@ -94,6 +110,8 @@ const selectDefaultReset = (resetState: string) => {
       @highlight-field="highlightField"
       @stop-highlight-field="stopHighlightField"
       @select-reset-state="selectDefaultReset($event)"
+      @write-command="writeCommand"
+      @read-command="readCommand"
     />
 
     <!-- Show the register doc description -->

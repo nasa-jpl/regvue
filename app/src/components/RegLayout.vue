@@ -3,7 +3,7 @@ import { ref, Ref, nextTick, onBeforeMount, watch } from "vue";
 import { useRoute } from "vue-router";
 import { Bit, DataWidth, DisplayType, Field, Swap } from "src/types";
 import { stringToBitArray } from "src/parse";
-import { valueToFields, fieldsToValue } from "src/format";
+import { bitArrayToString, valueToFields, fieldsToValue } from "src/format";
 import { useStore } from "src/store";
 
 import FieldInputBox from "src/components/FieldInputBox.vue";
@@ -23,6 +23,8 @@ const emit = defineEmits([
   "highlight-field",
   "stop-highlight-field",
   "select-reset-state",
+  "write-command",
+  "read-command",
 ]);
 
 const store = useStore();
@@ -146,6 +148,14 @@ const onRegisterInput = (input: string) => {
 // Assigns all fields a new value based on a new register value
 const populateFieldValuesFromRegisterValue = (value: Bit[]) => {
   valueToFields(swap.value, value, props.fields);
+};
+
+const writeCommand = () => {
+  emit("write-command", bitArrayToString(registerValue.value, "hexadecimal"));
+};
+
+const readCommand = () => {
+  emit("read-command");
 };
 
 // Force input components to reload when leaving the page
@@ -362,6 +372,7 @@ watch(
               id="write-button"
               class="active:text-shadow rounded-l border border-gray-400 px-1 shadow hover:cursor-pointer active:bg-gray-200 active:text-green-700"
               title="Perform a register write"
+              @click="writeCommand"
             >
               Wr
             </button>
@@ -369,6 +380,7 @@ watch(
               id="read-button"
               class="active:text-shadow rounded-r border border-gray-400 px-1 shadow hover:cursor-pointer active:bg-gray-200 active:text-green-700"
               title="Perform a register read"
+              @click="readCommand"
             >
               Rd
             </button>
