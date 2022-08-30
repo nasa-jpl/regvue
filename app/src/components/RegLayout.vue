@@ -192,7 +192,7 @@ watch(
         <th
           v-for="bit in dataWidth"
           :key="bit"
-          class="border border-black font-medium"
+          class="border border-black text-xs font-medium"
           :class="
             Math.floor((bit - 1) / 4) % 2 == 0 ? 'bg-gray-100' : 'bg-gray-300'
           "
@@ -262,17 +262,17 @@ watch(
       <div class="flex flex-row space-x-2">
         <div>
           <!-- Label for the base buttons -->
-          <div class="font-bold text-gray-500">Base</div>
+          <div class="text-sm text-gray-500">Base</div>
 
           <!-- Create a select base button for each display type -->
           <button
             v-for="(displayType, i) in displayTypes"
             :id="'select-display-type-' + displayType"
             :key="displayType"
-            class="border-[0.5px] border-gray-400 px-1 shadow"
+            class="border border-gray-400 px-1 shadow"
             :class="[
               selectedDisplayType == displayType
-                ? 'bg-gray-200 font-semibold text-green-700'
+                ? 'text-shadow bg-gray-200 text-green-700'
                 : 'hover:bg-gray-100',
               i == 0 ? 'rounded-l' : '',
               i == displayTypes.length - 1 ? 'rounded-r' : '',
@@ -287,12 +287,12 @@ watch(
 
         <div>
           <!-- Label for the swap buttons -->
-          <div class="font-bold text-gray-500">Swap</div>
+          <div class="text-sm text-gray-500">Swap</div>
 
           <!-- Show byte swap button -->
           <button
             id="toggle-byte-swap-button"
-            class="rounded-l border border-gray-400 px-1 hover:cursor-pointer"
+            class="rounded-l border border-gray-400 px-1 shadow hover:cursor-pointer"
             :class="
               useByteSwap
                 ? 'text-shadow bg-gray-200 text-green-700'
@@ -307,7 +307,7 @@ watch(
           <!-- Show the word swap button -->
           <button
             id="toggle-word-swap-button"
-            class="rounded-r border border-gray-400 px-1 hover:cursor-pointer"
+            class="rounded-r border border-gray-400 px-1 shadow hover:cursor-pointer"
             :class="
               useWordSwap
                 ? 'text-shadow bg-gray-200 text-green-700'
@@ -323,7 +323,7 @@ watch(
 
       <!-- Show reset values button -->
       <div>
-        <div class="text-right font-bold text-gray-500">Reset</div>
+        <div class="text-right text-sm text-gray-500">Reset</div>
 
         <div class="flex flex-row">
           <!-- Button to reset values to the last selected reset state -->
@@ -376,7 +376,8 @@ watch(
 </template>
 
 <style>
+/* Emulates bold w/o affecting text width and thus w/o reflow */
 .text-shadow {
-  text-shadow: 0 0 1px rgb(21 128 61);
+  text-shadow: 1px 0 0 rgb(21 128 61);
 }
 </style>
