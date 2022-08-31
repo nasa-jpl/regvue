@@ -77,7 +77,7 @@ const selectDefaultReset = (resetState: string) => {
   regLayoutKey.value += 1;
 };
 
-const writeCommand = (data: bigint) => {
+const writeCommand = (data: bigInt.BigInteger) => {
   if (props.reg.addr) {
     invoke("js2rs_write_command", {
       addr: "0x" + props.reg.addr.toString(16),

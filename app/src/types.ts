@@ -1,3 +1,4 @@
+import { InjectionKey, Ref } from "vue";
 import { LocationQueryValue } from "vue-router";
 import bigInt from "big-integer";
 
@@ -133,3 +134,18 @@ export interface Suggestion {
     };
   };
 }
+
+export interface Rs2JsEventRaw {
+  type: "read" | "write";
+  addr: number;
+  data: number;
+}
+
+export interface Rs2JsEvent {
+  type: "read" | "write";
+  addr: bigInt.BigInteger;
+  data: Bit[];
+}
+
+export const LastRs2JsEvent: InjectionKey<Ref<Rs2JsEvent | undefined>> =
+  Symbol("Rs2JsEvent");

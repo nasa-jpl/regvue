@@ -1,7 +1,14 @@
 <script setup lang="ts">
-import { ref, Ref, nextTick, onBeforeMount, watch } from "vue";
+import { inject, ref, Ref, nextTick, onBeforeMount, watch } from "vue";
 import { useRoute } from "vue-router";
-import { Bit, DataWidth, DisplayType, Field, Swap } from "src/types";
+import {
+  Bit,
+  DataWidth,
+  DisplayType,
+  Field,
+  LastRs2JsEvent,
+  Swap,
+} from "src/types";
 import { stringToBitArray } from "src/parse";
 import { bitArrayToString, valueToFields, fieldsToValue } from "src/format";
 import { useStore } from "src/store";
@@ -168,6 +175,22 @@ watch(
       fieldKeyIndex.value += 1;
       registerKeyIndex.value += 1;
     });
+  }
+);
+
+const lastRs2JsEvent = inject(LastRs2JsEvent);
+watch(
+  () => lastRs2JsEvent?.value,
+  () => {
+    const id = (route.params.elementId as string[]).join(".");
+    const element_addr = store.elements.get(id)?.addr;
+    const event_addr = lastRs2JsEvent?.value?.addr;
+
+    if (event_addr && element_addr?.equals(event_addr)) {
+      updateRegisterValue();
+      fieldKeyIndex.value += 1;
+      registerKeyIndex.value += 1;
+    }
   }
 );
 </script>
