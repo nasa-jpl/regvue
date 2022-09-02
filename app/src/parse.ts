@@ -1,5 +1,6 @@
 import { getStringRepresentation } from "src/format";
 import { Bit, isUnknownBit } from "src/types";
+import bigInt from "big-integer";
 
 /*
  * Provides various string parsing functions
@@ -125,4 +126,19 @@ export const stringToBitArray = (value: string, length = 32) => {
 
   // Return reversed so that the 0 index refers to the lsb
   return res.reverse().slice(0, length);
+};
+
+// Converts a string with base encoding to a BigInteger
+export const parseBigInt = (
+  value: string | number | bigInt.BigInteger
+): bigInt.BigInteger => {
+  value = value.toString();
+
+  if (value.startsWith("0x")) {
+    return bigInt(value.substring(2), 16);
+  } else if (value.startsWith("0b")) {
+    return bigInt(value.substring(2), 2);
+  } else {
+    return bigInt(value);
+  }
 };
