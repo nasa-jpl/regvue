@@ -1,6 +1,7 @@
 import { it, expect } from "vitest";
-import { getBase, num, stringToBitArray } from "./src/parse";
+import { getBase, num, stringToBitArray, parseBigInt } from "./src/parse";
 import { Bit } from "./src/types";
+import bigInt from "big-integer";
 
 // Test the getBase() function
 it("getBase", () => {
@@ -36,4 +37,11 @@ it("stringToBitArray", () => {
 
   res = new Array(12).fill("?");
   expect(stringToBitArray("?", 12)).toStrictEqual(res);
+});
+
+// Test the parseBigInt() function
+it("parseBigInt", () => {
+  expect(parseBigInt("0xABCD")).toStrictEqual(bigInt("ABCD", 16));
+  expect(parseBigInt("0b1010")).toStrictEqual(bigInt("1010", 2));
+  expect(parseBigInt("1234")).toStrictEqual(bigInt("1234"));
 });
