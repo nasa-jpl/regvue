@@ -1,4 +1,5 @@
 import { LocationQueryValue } from "vue-router";
+import bigInt from "big-integer";
 
 // Types representing the different states a single bit value can take
 export type Bit = 0 | 1 | UnknownBit;
@@ -21,8 +22,8 @@ export const isValidDataWidth = (x: unknown): x is DataWidth => {
 export interface DesignElement {
   id: string;
   name: string;
-  addr: bigint | undefined;
-  offset?: bigint;
+  addr: bigInt.BigInteger | undefined;
+  offset?: bigInt.BigInteger;
   type: "reg" | "blk" | "mem";
   desc?: string;
   doc?: string;
@@ -75,7 +76,7 @@ export interface IncludeElement {
   id: string;
   name: string;
   desc?: string;
-  offset: bigint;
+  offset: bigInt.BigInteger;
   doc?: string;
   version?: string;
   links?: { text: string; href: string }[];
