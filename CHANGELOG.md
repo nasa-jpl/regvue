@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Adds a polyfill for BigInt to support older web views ([#257](https://github.jpl.nasa.gov/regvue/regvue/pull/257)).
+- Removed expand children button for `blk` elements with no children in navigation menu ([#271](https://github.jpl.nasa.gov/regvue/regvue/pull/271)).
 - Fixed loading indicator not disappearing after a failed load ([#250](https://github.jpl.nasa.gov/regvue/regvue/pull/250)).
 
 ## [1.1.0]

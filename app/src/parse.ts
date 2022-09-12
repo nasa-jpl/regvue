@@ -120,12 +120,14 @@ export const stringToBitArray = (value: string, length = 32) => {
   }
 
   // Pad the front of the array with 0's to fill up the remaining length
-  for (let i = res.length; i < length; i++) {
-    res.unshift(0);
-  }
+  const zeros =
+    length > res.length ? new Array(length - res.length).fill(0) : [];
 
   // Return reversed so that the 0 index refers to the lsb
-  return res.reverse().slice(0, length);
+  return res
+    .reverse()
+    .concat(...zeros)
+    .slice(0, length);
 };
 
 // Converts a string with base encoding to a BigInteger

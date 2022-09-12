@@ -154,7 +154,7 @@ const getIndent = (node: MenuNode) => {
   let result = 0;
 
   // Add an extra indent if there are no children to account for the missing button
-  if (!node.children) {
+  if (!node.children || node.children.length == 0) {
     result += 25;
   }
 
@@ -265,22 +265,17 @@ onMounted(() => {
           >
             <!--  Display the name and the open button for a menu node-->
             <button
+              v-if="node.children && node.children.length > 0"
               class="z-10"
               @click.stop.prevent="toggleChildrenNodes(node)"
             >
               <!-- Show a close button if the node has open children-->
-              <template
-                v-if="
-                  node.children &&
-                  node.children.length > 0 &&
-                  node.children[0]?.isVisible
-                "
-              >
+              <template v-if="node.children[0]?.isVisible">
                 <menu-down class="close-menu-node-btn" />
               </template>
 
               <!-- Show an open button if the node has closed children -->
-              <template v-else-if="node.children">
+              <template v-else>
                 <menu-right class="open-menu-node-btn" />
               </template>
             </button>
