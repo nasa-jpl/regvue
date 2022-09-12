@@ -2,15 +2,17 @@
  * Provides formatting functions to convert various values to strings
  */
 
+import bigInt from "big-integer";
 import { Bit, DisplayType, isUnknownBit } from "src/types";
+import { parseBigInt } from "src/parse";
 
 // Convert an integer to a hex string
-export const hex = (value: number | bigint | string) => {
-  return "0x" + BigInt(value.toString()).toString(16);
+export const hex = (value: number | bigInt.BigInteger | string) => {
+  return "0x" + parseBigInt(value.toString()).toString(16);
 };
 
 export const getStringRepresentation = (
-  value: number | bigint,
+  value: number | bigInt.BigInteger,
   displayType: DisplayType,
   padding: number
 ) => {

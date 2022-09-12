@@ -8,7 +8,7 @@ import {
   RegisterDescriptionFile,
 } from "src/types";
 import { bitArrayToString } from "src/format";
-import { stringToBitArray } from "src/parse";
+import { stringToBitArray, parseBigInt } from "src/parse";
 import {
   validateSchema,
   validateSemantics,
@@ -153,7 +153,7 @@ const formatData = async (
     Object.values(elements).map(async (element) => {
       // Reassign the offset to be a BigInt
       if (element.offset !== undefined) {
-        element.offset = BigInt(element.offset);
+        element.offset = parseBigInt(element.offset);
       }
 
       if (element.type != "include") {
@@ -220,7 +220,7 @@ const mergeIncludeElement = (
     desc: includeElement.desc ? includeElement.desc : json.root.desc,
     offset:
       includeElement.offset !== undefined
-        ? BigInt(includeElement.offset)
+        ? parseBigInt(includeElement.offset)
         : undefined,
     links: includeElement.links ? includeElement.links : json.root.links,
     doc: includeElement.doc ? includeElement.doc : json.root.doc,
@@ -234,7 +234,7 @@ const mergeIncludeElement = (
     data_width: includeElement.data_width
       ? includeElement.data_width
       : json.root.data_width,
-    addr: BigInt(0), // Will be updated in load() by a call to getAddress()
+    addr: parseBigInt(0), // Will be updated in load() by a call to getAddress()
     children: [], // Populated below
   } as DesignElement;
 
@@ -320,8 +320,8 @@ const formatResets = (
 // Helper function to get an element's address from its and its ancestors' offsets
 const getAddress = (
   key: string,
-  elements: Map<string, { offset?: bigint }>
-): bigint | undefined => {
+  elements: Map<string, { offset?: bigInt.BigInteger }>
+): bigInt.BigInteger | undefined => {
   // Get the current element's offset
   const offset = elements.get(key)?.offset;
 
@@ -340,7 +340,7 @@ const getAddress = (
     if (parentOffset === undefined) {
       return offset;
     } else {
-      return offset + parentOffset;
+      return offset.add(parentOffset);
     }
   } else {
     return offset;

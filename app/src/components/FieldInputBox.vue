@@ -3,6 +3,7 @@ import { onBeforeMount, ref, nextTick } from "vue";
 import { Bit, DisplayType, isUnknownBit } from "src/types";
 import { bitArrayToString, getStringRepresentation } from "src/format";
 import { num, removeWhitespace, stringToBitArray } from "src/parse";
+import bigInt from "big-integer";
 
 import ChevronDown from "vue-material-design-icons/ChevronDown.vue";
 
@@ -149,9 +150,10 @@ const getErrorMessage = (value: string) => {
   }
 
   // Check that the value does not exceed max bit value
-  const maxPossibleValue = Number(
-    (BigInt(1) << BigInt(props.nbits)) - BigInt(1)
-  );
+  const maxPossibleValue = bigInt(1)
+    .shiftLeft(props.nbits)
+    .subtract(1)
+    .toJSNumber();
   if (num(value) > maxPossibleValue) {
     return "Exceeds max possible value";
   }
