@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, onUnmounted } from "vue";
 import { useCookies } from "vue3-cookies";
 import { useRouter } from "vue-router";
 import { useStore } from "src/store";
@@ -59,6 +59,15 @@ onBeforeMount(() => {
       // Try to load the url of the dropped object
       onUrlDataInput();
     }
+  });
+});
+
+// Remove event listeners
+onUnmounted(() => {
+  ["dragover", "drop"].forEach((eventName) => {
+    window.removeEventListener(eventName, (e) => {
+      e.preventDefault();
+    });
   });
 });
 
