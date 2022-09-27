@@ -22,7 +22,8 @@ Increment the version according to https://semver.org/[Semantic Versioning 2] wh
   "version": "$version",
 ----
 
- git add app/package.json
+ (cd app; npm install) # update package-lock.json
+ git add app/package.json app/package-lock.json
  git commit
  git push
 

@@ -7,10 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+No unreleased changes.
+
+## [v1.1.1]
+
 ### Fixed
-- Adds a polyfill for BigInt to support older web views ([#257](https://github.jpl.nasa.gov/regvue/regvue/pull/257)).
-- Removed expand children button for `blk` elements with no children in navigation menu ([#271](https://github.jpl.nasa.gov/regvue/regvue/pull/271)).
+- Fixed `BigInt` not found in older web views ([#257](https://github.jpl.nasa.gov/regvue/regvue/issues/257)).
+- Fixed showing expand children button for child-less `blk` elements ([#270](https://github.jpl.nasa.gov/regvue/regvue/issues/270)).
 - Fixed loading indicator not disappearing after a failed load ([#250](https://github.jpl.nasa.gov/regvue/regvue/pull/250)).
+- Fixed styling of base and swap buttons and labels ([#262](https://github.jpl.nasa.gov/regvue/regvue/issues/262)).
+- Fixed excessive memory usage loading malformed inputs ([#255](https://github.jpl.nasa.gov/regvue/regvue/issues/255)).
+- Fixed drag-n-drop errors ([#272](https://github.jpl.nasa.gov/regvue/regvue/issues/272)).
+
+### Dev
+- Fixed VS Code not inserting final newline ([#265](https://github.jpl.nasa.gov/regvue/regvue/pull/265)).
 
 ## [1.1.0]
 
@@ -286,8 +296,9 @@ Lastly, several improvements were made to the search UI.
 
 - Initial release of regvue prototype.
 
-[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.0...HEAD
-[1.0.1]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.0.1...v1.1.0
+[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.1...HEAD
+[1.1.1]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.0...v1.1.1
+[1.1.0]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.7.0...v1.0.0
 [0.7.0]: https://github.jpl.nasa.gov/regvue/regvue/compare/v0.6.5...v0.7.0
