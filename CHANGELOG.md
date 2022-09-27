@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 No unreleased changes.
 
-## [v1.1.1]
+## [1.1.1]
 
 ### Fixed
 - Fixed `BigInt` not found in older web views ([#257](https://github.jpl.nasa.gov/regvue/regvue/issues/257)).
