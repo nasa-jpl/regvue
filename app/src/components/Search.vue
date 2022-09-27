@@ -309,7 +309,7 @@ watch(
         spellcheck="false"
         @input="updateQuery"
         @keyup.enter="
-          ($event) => {
+          ($event: Event) => {
             if (focusIndex < 0) {
               focused = false;
               focusIndex = -1;
