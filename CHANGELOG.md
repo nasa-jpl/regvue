@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 No unreleased changes.
 
+## [1.1.2]
+
+### Fixed
+- Fixed drag-n-drop errors for real this time ([#272](https://github.jpl.nasa.gov/regvue/regvue/issues/272)).
+
 ## [1.1.1]
 
 ### Fixed
@@ -296,7 +301,8 @@ Lastly, several improvements were made to the search UI.
 
 - Initial release of regvue prototype.
 
-[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.1...HEAD
+[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.2...HEAD
+[1.1.2]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.0.0...v1.0.1
