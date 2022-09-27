@@ -31,44 +31,44 @@ onBeforeMount(() => {
   recentUrls.value = arr;
 });
 
+const onDragOver = (e: DragEvent) => {
+  e.preventDefault();
+}
+
+const onDrop = (e: DragEvent) => {
+  // Disable default behavior of opening file in the browser window
+  if ((e.target as HTMLElement)?.tagName != "INPUT") {
+    e.preventDefault();
+  }
+
+  // Check if the dropped object has a URL field
+  const url =
+    e.dataTransfer?.getData("URL") || e.dataTransfer?.getData("text");
+  if (url && url != "") {
+    e.preventDefault();
+
+    // Set the data-url-input equal to dropped object URL field
+    const elem = document.getElementById(
+        "data-url-input"
+        ) as HTMLInputElement;
+    elem.value = url;
+
+    // Try to load the url of the dropped object
+    onUrlDataInput();
+  }
+}
+
 // Prevent dropping a file outside the input box from opening the file
 // in the browser
 onBeforeMount(() => {
-  window.addEventListener("dragover", (e) => {
-    e.preventDefault();
-  });
-
-  window.addEventListener("drop", (e) => {
-    // Disable default behavior of opening file in the browser window
-    if ((e.target as HTMLElement)?.tagName != "INPUT") {
-      e.preventDefault();
-    }
-
-    // Check if the dropped object has a URL field
-    const url =
-      e.dataTransfer?.getData("URL") || e.dataTransfer?.getData("text");
-    if (url && url != "") {
-      e.preventDefault();
-
-      // Set the data-url-input equal to dropped object URL field
-      const elem = document.getElementById(
-        "data-url-input"
-      ) as HTMLInputElement;
-      elem.value = url;
-
-      // Try to load the url of the dropped object
-      onUrlDataInput();
-    }
-  });
+  window.addEventListener("dragover", onDragOver);
+  window.addEventListener("drop", onDrop);
 });
 
 // Remove event listeners
 onUnmounted(() => {
-  ["dragover", "drop"].forEach((eventName) => {
-    window.removeEventListener(eventName, (e) => {
-      e.preventDefault();
-    });
-  });
+  window.removeEventListener("dragover", onDragOver);
+  window.removeEventListener("drop", onDrop);
 });
 
 const saveRecentUrlSearch = (url: string) => {
