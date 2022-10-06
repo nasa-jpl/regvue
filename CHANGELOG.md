@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 No unreleased changes.
 
+### Changed
+- Header links now open in a new tab ([#275](https://github.jpl.nasa.gov/regvue/regvue/issues/275)).
+
 ## [1.1.2]
 
 ### Fixed
