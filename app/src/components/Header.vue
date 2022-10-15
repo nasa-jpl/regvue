@@ -65,6 +65,8 @@ watch(
           v-for="link in links"
           :key="link.href"
           :href="link.href"
+          target="_blank"
+          rel="noreferrer"
           class="text-sm hover:text-gray-500 hover:underline md:text-base"
           >{{ link.text }}</a
         >
