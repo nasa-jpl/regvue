@@ -7,7 +7,7 @@ import { Bit, DisplayType, isUnknownBit } from "src/types";
 import { parseBigInt } from "src/parse";
 
 // Convert an integer to a hex string
-export const hex = (value: number | bigInt.BigInteger | string) => {
+export const hex = (value: number | bigInt.BigInteger | string): string => {
   return "0x" + parseBigInt(value.toString()).toString(16);
 };
 
@@ -15,7 +15,7 @@ export const getStringRepresentation = (
   value: number | bigInt.BigInteger,
   displayType: DisplayType,
   padding: number
-) => {
+): string => {
   if (padding == 1) {
     return value.toString();
   }
@@ -40,7 +40,10 @@ export const getStringRepresentation = (
  * Assumes a bitArray with length % 4 == 0
  * Note - treats the 0th index as the LSB, so [1, 0, 1, 0] => "0b0101"
  */
-export const bitArrayToString = (arr: Bit[], displayType: DisplayType) => {
+export const bitArrayToString = (
+  arr: Bit[],
+  displayType: DisplayType
+): string => {
   // Use slice to prevent calls to .reverse() from affecting the original array
   const bitArray = arr.slice();
 
@@ -101,10 +104,10 @@ export const bitArrayToString = (arr: Bit[], displayType: DisplayType) => {
   }
 };
 
-export const byteSwap = (bitArray: Bit[]) => swapBits(bitArray, 8);
-export const wordSwap = (bitArray: Bit[]) => swapBits(bitArray, 16);
+export const byteSwap = (bitArray: Bit[]): Bit[] => swapBits(bitArray, 8);
+export const wordSwap = (bitArray: Bit[]): Bit[] => swapBits(bitArray, 16);
 
-const swapBits = (bitArray: Bit[], nbits: number) => {
+const swapBits = (bitArray: Bit[], nbits: number): Bit[] => {
   if (bitArray.length % nbits != 0) {
     throw Error("Tried to word swap a value with invalid number of bits");
   }
