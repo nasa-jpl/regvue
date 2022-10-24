@@ -6,6 +6,7 @@ import {
   DisplayType,
   IncludeElement,
   RegisterDescriptionFile,
+  Swap,
 } from "src/types";
 import { bitArrayToString } from "src/format";
 import { stringToBitArray, parseBigInt } from "src/parse";
@@ -37,11 +38,8 @@ export const useStore = defineStore("store", {
       // URL where the Register Description File was loaded from ("" for local files)
       url: "",
 
-      // Whether or not to display the register value as byte swapped in RegLayout
-      useByteSwap: false,
-
-      // Whether or not to display the register value as word swapped in RegLayout
-      useWordSwap: false,
+      // How to swap the data (e.g. byte swap)
+      swap: Swap.None,
 
       // Which display type to show field and register values as in RegLayout
       selectedDisplayType: DEFAULT_DISPLAY_TYPE,

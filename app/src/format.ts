@@ -3,7 +3,7 @@
  */
 
 import bigInt from "big-integer";
-import { Bit, DisplayType, isUnknownBit } from "src/types";
+import { Bit, Field, DisplayType, isUnknownBit, Swap } from "src/types";
 import { parseBigInt } from "src/parse";
 
 // Convert an integer to a hex string
@@ -118,4 +118,42 @@ const swapBits = (bitArray: Bit[], nbits: number): Bit[] => {
     res.unshift(...bitArray.slice(i, i + nbits));
   }
   return res;
+};
+
+export const valueToFields = (swap: Swap, value: Bit[], fields: Field[]) => {
+  switch (swap) {
+    case Swap.Byte: {
+      value = byteSwap(value);
+      break;
+    }
+    case Swap.Word: {
+      value = wordSwap(value);
+      break;
+    }
+  }
+
+  // Assign each field by indexing the register value according to lsb and nbits
+  fields.forEach((field) => {
+    field.value = value.slice(field.lsb, field.lsb + field.nbits);
+  });
+};
+
+export const fieldsToValue = (swap: Swap, fields: Field[]): Bit[] => {
+  let value: Bit[] = [];
+
+  fields.forEach((field) => {
+    value.unshift(...field.value);
+  });
+
+  switch (swap) {
+    case Swap.None: {
+      return value;
+    }
+    case Swap.Byte: {
+      return byteSwap(value);
+    }
+    case Swap.Word: {
+      return wordSwap(value);
+    }
+  }
 };
