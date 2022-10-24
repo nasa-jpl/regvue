@@ -210,8 +210,8 @@ const getErrorMessage = (value: string) => {
         :title="displayValue"
         @focus="
           ($event.target as HTMLInputElement).select();
-          showErrorTooltip=true;
-          showEnum=true;
+          showErrorTooltip = true;
+          showEnum = true;
         "
         @blur="nextTick(() => deactivate())"
         @keydown.esc="($event.target as HTMLInputElement).blur()"
