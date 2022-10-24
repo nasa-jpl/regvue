@@ -18,6 +18,13 @@ export const isValidDataWidth = (x: unknown): x is DataWidth => {
   }
 };
 
+// How to swap the data
+export enum Swap {
+  None,
+  Byte,
+  Word,
+}
+
 // Interface representing a design element such as a register, block, or memory segment
 export interface DesignElement {
   id: string;

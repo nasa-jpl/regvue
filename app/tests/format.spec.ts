@@ -5,9 +5,11 @@ import {
   getStringRepresentation,
   hex,
   wordSwap,
+  valueToFields,
+  fieldsToValue,
 } from "./src/format";
 import { stringToBitArray } from "./src/parse";
-import { Bit } from "./src/types";
+import { Bit, Swap } from "./src/types";
 
 // Test the hex() function
 // This function returns lowercase hex numbers
@@ -77,4 +79,47 @@ it("wordSwap", () => {
   expect(wordSwap(stringToBitArray("0xABCD", 16))).toStrictEqual(
     stringToBitArray("0xABCD", 16)
   );
+});
+
+it("valueToFields", () => {
+  let fields = [
+    {
+      lsb: 16,
+      nbits: 16,
+    }, {
+      lsb: 0,
+      nbits: 16,
+    }
+  ];
+  let expected = [
+    {
+      lsb: 16,
+      nbits: 16,
+      value: stringToBitArray("0x6745", 16),
+    }, {
+      lsb: 0,
+      nbits: 16,
+      value: stringToBitArray("0x2301", 16),
+    }
+  ];
+
+  valueToFields(Swap.Byte, stringToBitArray("0x01234567"), fields);
+  expect(fields).toStrictEqual(expected);
+});
+
+it("fieldsToValue", () => {
+  let fields = [
+    {
+      lsb: 16,
+      nbits: 16,
+      value: stringToBitArray("0x6745", 16),
+    }, {
+      lsb: 0,
+      nbits: 16,
+      value: stringToBitArray("0x2301", 16),
+    }
+  ];
+  let expected = "0x01234567";
+  let actual = bitArrayToString(fieldsToValue(Swap.Byte, fields), "hexadecimal");
+  expect(actual).toStrictEqual(expected);
 });

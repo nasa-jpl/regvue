@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, Ref, nextTick, onBeforeMount, watch } from "vue";
 import { useRoute } from "vue-router";
-import { Bit, DataWidth, DisplayType, Field } from "src/types";
+import { Bit, DataWidth, DisplayType, Field, Swap } from "src/types";
 import { stringToBitArray } from "src/parse";
-import { byteSwap, wordSwap } from "src/format";
+import { valueToFields, fieldsToValue } from "src/format";
 import { useStore } from "src/store";
 
 import FieldInputBox from "src/components/FieldInputBox.vue";
@@ -38,9 +38,8 @@ onBeforeMount(() => {
 // Store the value of the register as an array of Bits
 const registerValue = ref(Array(props.dataWidth).map(() => 0 as Bit));
 
-// Control whether or not to display LSB or MSB first
-const useByteSwap = ref(store.useByteSwap);
-const useWordSwap = ref(store.useWordSwap);
+// Control how the data is swapped
+const swap = ref(store.swap);
 
 // Control what base the field/register values should be displayed in
 const selectedDisplayType: Ref<DisplayType> = ref(store.selectedDisplayType);
@@ -54,12 +53,14 @@ const registerKeyIndex = ref(0);
 // Toggles the useByteSwap variable and forces a reload/recalculate
 // of register value
 const toggleByteSwap = () => {
-  useByteSwap.value = !useByteSwap.value;
-  useWordSwap.value = false;
+  if (swap.value == Swap.Byte) {
+    swap.value = Swap.None;
+  } else {
+    swap.value = Swap.Byte;
+  }
 
   // Update store value so value persists on rerender
-  store.useByteSwap = useByteSwap.value;
-  store.useWordSwap = false;
+  store.swap = swap.value;
 
   updateRegisterValue();
   registerKeyIndex.value += 1;
@@ -68,12 +69,14 @@ const toggleByteSwap = () => {
 // Toggles the useWordSwap variable and forces a reload/recalculate
 // of register value
 const toggleWordSwap = () => {
-  useWordSwap.value = !useWordSwap.value;
-  useByteSwap.value = false;
+  if (swap.value == Swap.Word) {
+    swap.value = Swap.None;
+  } else {
+    swap.value = Swap.Word;
+  }
 
   // Update store value so value persists on rerender
-  store.useWordSwap = !store.useWordSwap;
-  store.useByteSwap = false;
+  store.swap = swap.value;
 
   updateRegisterValue();
   registerKeyIndex.value += 1;
@@ -114,21 +117,7 @@ const selectResetState = (resetState: string) => {
 
 // Ues the field values to obtain a new value for the register
 const updateRegisterValue = () => {
-  let result: Bit[] = [];
-
-  // Loops through the fields and add their values to the front of the result arr
-  props.fields.forEach((field) => {
-    result.unshift(...field.value);
-  });
-
-  // Byte swap the values if enabled
-  if (useByteSwap.value) {
-    result = byteSwap(result);
-  } else if (useWordSwap.value) {
-    result = wordSwap(result);
-  }
-
-  registerValue.value = result;
+  registerValue.value = fieldsToValue(swap.value, props.fields);
 };
 updateRegisterValue(); // Initial call on setup
 
@@ -156,16 +145,7 @@ const onRegisterInput = (input: string) => {
 
 // Assigns all fields a new value based on a new register value
 const populateFieldValuesFromRegisterValue = (value: Bit[]) => {
-  if (useByteSwap.value) {
-    value = byteSwap(value);
-  } else if (useWordSwap.value) {
-    value = wordSwap(value);
-  }
-
-  // Assign each field by indexing the register value according to lsb and nbits
-  props.fields.forEach((field) => {
-    field.value = value.slice(field.lsb, field.lsb + field.nbits);
-  });
+  valueToFields(swap.value, value, props.fields);
 };
 
 // Force input components to reload when leaving the page
@@ -294,7 +274,7 @@ watch(
             id="toggle-byte-swap-button"
             class="rounded-l border border-gray-400 px-1 shadow hover:cursor-pointer"
             :class="
-              useByteSwap
+              swap == Swap.Byte
                 ? 'text-shadow bg-gray-200 text-green-700'
                 : 'hover:bg-gray-100'
             "
@@ -309,7 +289,7 @@ watch(
             id="toggle-word-swap-button"
             class="rounded-r border border-gray-400 px-1 shadow hover:cursor-pointer"
             :class="
-              useWordSwap
+              swap == Swap.Word
                 ? 'text-shadow bg-gray-200 text-green-700'
                 : 'hover:bg-gray-100'
             "
