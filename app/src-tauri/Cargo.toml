@@ -16,10 +16,11 @@ tauri-build = { version = "1", features = [] }
 
 [dependencies]
 clap = { version = "3", features = ["derive"] }
+futures-util = "0.3"
 serde_json = "1"
 serde = { version = "1", features = ["derive"] }
 tauri = { version = "1", features = ["api-all"] }
-tokio = { version = "1", features = ["sync"] }
+tokio = { version = "1", features = ["signal", "sync"] }
 tracing = "0.1"
 tracing-subscriber = "0.3"
 uart-dap = { git = "https://github.com/rfdonnelly/uart-dap" }

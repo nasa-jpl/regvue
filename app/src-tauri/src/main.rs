@@ -4,10 +4,11 @@
 )]
 
 use clap::Parser;
+use futures_util::future::{AbortHandle, Abortable};
 use serde::{Deserialize, Serialize};
-use tauri::Manager;
+use tauri::{Manager, WindowEvent};
 use tokio::sync::{mpsc, Mutex};
-use tracing::info;
+use tracing::{error, info};
 
 use uart_dap::{self, UartDap};
 
@@ -89,6 +90,26 @@ fn main() -> AppResult<()> {
             js2rs_read_command
         ])
         .setup(move |app| {
+            let (abort_handle_close, abort_registration) = AbortHandle::new_pair();
+            let abort_handle_ctrlc = abort_handle_close.clone();
+
+            app.get_window("main")
+                .unwrap()
+                .on_window_event(move |event| {
+                    if let WindowEvent::CloseRequested { .. } = event {
+                        abort_handle_close.abort();
+                    }
+                });
+            tauri::async_runtime::spawn(async move {
+                match tokio::signal::ctrl_c().await {
+                    Ok(()) => info!("received ctrl-c, shutting down"),
+                    Err(e) => error!(?e, "unable to listen for shutdown signal"),
+                }
+
+                abort_handle_ctrlc.abort();
+                info!("waiting for graceful shutdown");
+            });
+
             if let Some(serial_port) = args.serial_port {
                 tauri::async_runtime::spawn(async move {
                     let uart_dap = UartDap::new(
@@ -98,10 +119,16 @@ fn main() -> AppResult<()> {
                         args.line_ending.into(),
                     )
                     .unwrap();
-                    uart_dap
-                        .run(async_proc_input_rx, async_proc_output_tx)
-                        .await
-                        .unwrap()
+
+                    let abortable_result = Abortable::new(
+                        uart_dap.run(async_proc_input_rx, async_proc_output_tx),
+                        abort_registration,
+                    )
+                    .await;
+
+                    if let Ok(uart_dap_result) = abortable_result {
+                        uart_dap_result.unwrap();
+                    }
                 });
             }
 
