@@ -39,6 +39,8 @@ const store = useStore();
 // Control whether or not to show dropdown menu of possible reset states
 let showResets = ref(false);
 
+const showAccessButtons = import.meta.env.VITE_PLATFORM == "desktop";
+
 // Reset field values to the default reset state
 onBeforeMount(() => {
   resetValues();
@@ -387,7 +389,7 @@ watch(
         </div>
 
         <!-- Access buttons -->
-        <div>
+        <div v-if="showAccessButtons">
           <div class="text-right text-sm text-gray-500">Access</div>
 
           <div>

@@ -22,29 +22,36 @@ const appInfo = {
   version: packageInfo.version,
 };
 
+const appName =
+  import.meta.env.VITE_PLATFORM == "desktop"
+    ? appInfo.name + "-desktop"
+    : appInfo.name;
+
 const store = useStore();
 
 const lastRs2JsEvent: Ref<undefined | Rs2JsEvent> = ref(undefined);
 provide(LastRs2JsEvent, lastRs2JsEvent);
 
-onMounted(async () => {
-  await listen("rs2js", (event: Event<Rs2JsEventRaw>) => {
-    console.log("rs2js", event.payload);
+if (import.meta.env.VITE_PLATFORM == "desktop") {
+  onMounted(async () => {
+    await listen("rs2js", (event: Event<Rs2JsEventRaw>) => {
+      console.log("rs2js", event.payload);
 
-    const rs2jsEvent: Rs2JsEvent = {
-      type: event.payload.type,
-      addr: parseBigInt(event.payload.addr),
-      data: stringToBitArray("0x" + event.payload.data.toString(16)),
-    };
+      const rs2jsEvent: Rs2JsEvent = {
+        type: event.payload.type,
+        addr: parseBigInt(event.payload.addr),
+        data: stringToBitArray("0x" + event.payload.data.toString(16)),
+      };
 
-    const element = findRegByAddr(rs2jsEvent.addr, store.elements);
-    if (element && element?.fields) {
-      valueToFields(store.swap, rs2jsEvent.data, element.fields);
-    }
+      const element = findRegByAddr(rs2jsEvent.addr, store.elements);
+      if (element && element?.fields) {
+        valueToFields(store.swap, rs2jsEvent.data, element.fields);
+      }
 
-    lastRs2JsEvent.value = rs2jsEvent;
+      lastRs2JsEvent.value = rs2jsEvent;
+    });
   });
-});
+}
 
 const findRegByAddr = (
   bigaddr: bigInt.BigInteger,
@@ -75,7 +82,7 @@ const findRegByAddr = (
     <!-- Display a link to the GitHub repo at the bottom right of the page -->
     <AppVersion
       :url="appInfo.url"
-      :name="appInfo.name"
+      :name="appName"
       :version="appInfo.version"
       class="absolute bottom-4 right-4"
     />

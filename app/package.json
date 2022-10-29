@@ -5,12 +5,14 @@
   "homepage": "https://github.jpl.nasa.gov/regvue/regvue",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vue-tsc --noEmit && env VITE_PLATFORM=web vite build",
+    "dev-desktop": "env VITE_PLATFORM=desktop vite",
+    "build-desktop": "vue-tsc --noEmit && env VITE_PLATFORM=desktop vite build",
     "preview": "vite preview",
     "lint": "npx eslint --ext .js,.ts,.vue --ignore-path ../.gitignore --fix src",
     "format": "npx prettier --write .",
     "test": "vitest",
-    "tauri": "tauri"
+    "tauri": "env VITE_PLATFORM=desktop tauri"
   },
   "dependencies": {
     "@tauri-apps/api": "^1",

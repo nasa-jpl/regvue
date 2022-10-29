@@ -8,3 +8,11 @@ declare module "*.vue" {
 }
 
 declare module "vue-material-design-icons";
+
+interface ImportMetaEnv {
+  readonly VITE_PLATFORM: "desktop" | "web";
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}

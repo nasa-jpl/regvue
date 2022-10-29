@@ -78,17 +78,25 @@ const selectDefaultReset = (resetState: string) => {
 };
 
 const writeCommand = (data: bigInt.BigInteger) => {
-  if (props.reg.addr) {
-    invoke("js2rs_write_command", {
-      addr: "0x" + props.reg.addr.toString(16),
-      data: data,
-    });
+  if (import.meta.env.VITE_PLATFORM == "desktop") {
+    if (props.reg.addr) {
+      console.log("js2rs_write_command");
+      invoke("js2rs_write_command", {
+        addr: "0x" + props.reg.addr.toString(16),
+        data: data,
+      });
+    }
   }
 };
 
 const readCommand = () => {
-  if (props.reg.addr) {
-    invoke("js2rs_read_command", { addr: "0x" + props.reg.addr.toString(16) });
+  if (import.meta.env.VITE_PLATFORM == "desktop") {
+    if (props.reg.addr) {
+      console.log("js2rs_read_command");
+      invoke("js2rs_read_command", {
+        addr: "0x" + props.reg.addr.toString(16),
+      });
+    }
   }
 };
 </script>
