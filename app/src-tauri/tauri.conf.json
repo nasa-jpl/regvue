@@ -7,7 +7,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "regvue",
+    "productName": "regvue-desktop",
     "version": "0.1.0"
   },
   "tauri": {
@@ -58,7 +58,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "regvue",
+        "title": "Regvue Desktop",
         "width": 800
       }
     ]
