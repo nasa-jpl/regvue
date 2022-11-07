@@ -152,7 +152,7 @@ const focusOnInput = () => {
 };
 
 // Update the query value
-let timer: number;
+let timer: ReturnType<typeof setTimeout>;
 const updateQuery = () => {
   clearTimeout(timer);
 
