@@ -12,6 +12,7 @@ import {
 import { stringToBitArray } from "src/parse";
 import { bitArrayToString, valueToFields, fieldsToValue } from "src/format";
 import { useStore } from "src/store";
+import { isDesktop } from "src/platform";
 
 import FieldInputBox from "src/components/FieldInputBox.vue";
 import FieldName from "src/components/FieldName.vue";
@@ -39,7 +40,7 @@ const store = useStore();
 // Control whether or not to show dropdown menu of possible reset states
 let showResets = ref(false);
 
-const showAccessButtons = import.meta.env.VITE_PLATFORM == "desktop";
+const showAccessButtons = isDesktop;
 
 // Reset field values to the default reset state
 onBeforeMount(() => {

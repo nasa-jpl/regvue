@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { invoke } from "@tauri-apps/api/tauri";
 import { useStore } from "src/store";
 import { DesignElement } from "src/types";
+import { regReadCommand, regWriteCommand } from "src/platform";
 
 import ElementTitle from "src/components/ElementTitle.vue";
 import RegFields from "src/components/RegFields.vue";
@@ -78,26 +78,11 @@ const selectDefaultReset = (resetState: string) => {
 };
 
 const writeCommand = (data: bigInt.BigInteger) => {
-  if (import.meta.env.VITE_PLATFORM == "desktop") {
-    if (props.reg.addr) {
-      console.log("js2rs_write_command");
-      invoke("js2rs_write_command", {
-        addr: "0x" + props.reg.addr.toString(16),
-        data: data,
-      });
-    }
-  }
+  regWriteCommand(props.reg, data);
 };
 
 const readCommand = () => {
-  if (import.meta.env.VITE_PLATFORM == "desktop") {
-    if (props.reg.addr) {
-      console.log("js2rs_read_command");
-      invoke("js2rs_read_command", {
-        addr: "0x" + props.reg.addr.toString(16),
-      });
-    }
-  }
+  regReadCommand(props.reg);
 };
 </script>
 
