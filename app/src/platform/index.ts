@@ -10,6 +10,7 @@ if (isDesktop) {
   platform = await import("src/platform/web");
 }
 
+export const fetch = platform.fetch;
 export const regWriteCommand = platform.regWriteCommand;
 export const regReadCommand = platform.regReadCommand;
 export const listenForEvents = platform.listenForEvents;

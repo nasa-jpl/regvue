@@ -2,6 +2,10 @@ import { DesignElement, Rs2JsEvent } from "src/types";
 import { Ref } from "vue";
 import packageInfo from "../../package.json";
 
+export async function fetch(input: RequestInfo | URL): Promise<Response> {
+  return await window.fetch(input);
+}
+
 export function regWriteCommand(_reg: DesignElement, _data: bigInt.BigInteger) {
   // Not implemented
 }

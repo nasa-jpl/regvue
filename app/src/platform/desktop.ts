@@ -1,4 +1,5 @@
 import { listen, Event } from "@tauri-apps/api/event";
+import { fetch as tauriFetch } from "@tauri-apps/api/http";
 import { invoke } from "@tauri-apps/api/tauri";
 import { Ref } from "vue";
 
@@ -7,6 +8,22 @@ import { DesignElement, Rs2JsEvent, Rs2JsEventRaw } from "src/types";
 import { valueToFields } from "src/format";
 import { useStore } from "src/store";
 import { parseBigInt, stringToBitArray } from "src/parse";
+
+// A browser compatible Fetch API
+//
+// From: https://github.com/tauri-apps/tauri/issues/4490
+export async function fetch(input: RequestInfo | URL): Promise<Response> {
+  const response = await tauriFetch(input.toString());
+
+  const body = JSON.stringify(response.data);
+  return new Response(body, {
+    status: response.status,
+    headers: {
+      "content-type": "text/plain",
+      "content-length": body.length.toString(),
+    },
+  });
+}
 
 export function regWriteCommand(reg: DesignElement, data: bigInt.BigInteger) {
   if (reg.addr) {

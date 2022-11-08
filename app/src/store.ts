@@ -15,6 +15,7 @@ import {
   validateSemantics,
   validateResponse,
 } from "src/validate";
+import { fetch } from "src/platform";
 
 const DEFAULT_DATA_WIDTH = 32;
 const DEFAULT_DEFAULT_RESET = "Default";
