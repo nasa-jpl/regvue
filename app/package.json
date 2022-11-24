@@ -1,5 +1,6 @@
 {
   "name": "regvue",
+  "description": "Modern hardware/software interface (HSI) documentation",
   "private": true,
   "version": "1.1.2",
   "homepage": "https://github.jpl.nasa.gov/regvue/regvue",
