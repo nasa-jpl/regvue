@@ -139,7 +139,7 @@ export const valueToFields = (swap: Swap, value: Bit[], fields: Field[]) => {
 };
 
 export const fieldsToValue = (swap: Swap, fields: Field[]): Bit[] => {
-  let value: Bit[] = [];
+  const value: Bit[] = [];
 
   fields.forEach((field) => {
     value.unshift(...field.value);
