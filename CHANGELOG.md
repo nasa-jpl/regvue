@@ -9,8 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 No unreleased changes.
 
+## [1.1.3]
+
 ### Changed
 - Header links now open in a new tab ([#275](https://github.jpl.nasa.gov/regvue/regvue/issues/275)).
+
+### Added
+- Added sourcemap to aid debug in production ([#283](https://github.jpl.nasa.gov/regvue/regvue/issues/283)).
 
 ## [1.1.2]
 
@@ -304,7 +309,8 @@ Lastly, several improvements were made to the search UI.
 
 - Initial release of regvue prototype.
 
-[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.2...HEAD
+[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.3...HEAD
+[1.1.3]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.0.1...v1.1.0
