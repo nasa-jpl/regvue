@@ -1,0 +1,46 @@
+{
+  "schema": {
+    "version": "v1",
+    "name": "register-description-format"
+  },
+  "root": {
+    "version": "v0.1",
+    "desc": "Include Example",
+    "links": [],
+    "children": [
+      "top_blk"
+    ],
+    "expanded": [
+      "top_blk"
+    ]
+  },
+  "elements": {
+    "top_blk": {
+      "offset": "0",
+      "type": "blk",
+      "children": [
+        "top_blk.include1",
+        "top_blk.include2"
+      ],
+      "name": "top_blk",
+      "id": "top_blk",
+      "doc": "This is the top level block element."
+    },
+    "top_blk.include1": {
+      "name": "include1",
+      "desc": "Include 1",
+      "id": "top_blk.include1",
+      "type": "include",
+      "offset": "0",
+      "url": "example.json",
+      "doc": "This element was fetched by include. <h6>Embedded html - include</h6>"
+    },
+    "top_blk.include2": {
+      "name": "include2",
+      "desc": "Include 2",
+      "id": "top_blk.include2",
+      "type": "include",
+      "url": "example.json"
+    }
+  }
+}
