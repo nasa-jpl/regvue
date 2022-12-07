@@ -91,7 +91,9 @@ git clone --branch gh-pages "$OPT_DEPLOYMENT_REPOSITORY" deployment
 deployment_path="deployment/$OPT_DEPLOYMENT_PATH"
 
 # Backup the existing data.json
-cp "$deployment_path/data.json" data.json
+if test -f "$deployment_path/data.json"; then
+    cp "$deployment_path/data.json" data.json
+fi
 
 # Remove the existing deployment
 rm -rf "$deployment_path"/*
@@ -100,7 +102,9 @@ rm -rf "$deployment_path"/*
 tar xf "$filename" --strip-components 1 -C "$deployment_path"
 
 # Restore data.json
-cp data.json "$deployment_path/data.json"
+if test -f data.json; then
+    cp data.json "$deployment_path/data.json"
+fi
 
 # Deploy
 git -C deployment add .
