@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [vue()],
   build: {
     target: "esnext",
+    sourcemap: true,
   },
 
   // Ensure in-source tests aren't included in production
