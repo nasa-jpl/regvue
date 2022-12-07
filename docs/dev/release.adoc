@@ -16,14 +16,10 @@ Increment the version according to https://semver.org/[Semantic Versioning 2] wh
 * Backwards compatible feature additions => increment minor version
 * Bug fixes only => increment patch version
 
-[source,json]
-.app/package.json
-----
-  "version": "$version",
-----
+ cd app
+ npm version $version
 
- (cd app; npm install) # update package-lock.json
- git add app/package.json app/package-lock.json
+ git add package.json package-lock.json
  git commit
  git push
 
