@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "lint": "npx eslint --ext .js,.ts,.vue --ignore-path ../.gitignore --fix src",
     "format": "npx prettier --write .",
-    "test": "vitest"
+    "test": "vitest",
+    "cypress": "npx cypress run"
   },
   "dependencies": {
     "ajv": "^8.11.0",
