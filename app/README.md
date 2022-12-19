@@ -40,3 +40,15 @@ npx cypress run
 Include `--config video=false` to prevent recording and saving videos of the tests
 
 **Note:** in order to use the cypress testing GUI you can run `npx cypress open` outside of the dev container. This requires a local install of node.
+
+### Run Playwright Tests
+
+```
+npx playwright test
+```
+
+Run subset of tests on Chromium only
+
+```
+npx playwright test --project chromium --grep html
+```
