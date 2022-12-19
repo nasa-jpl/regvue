@@ -21,14 +21,15 @@
     "bradlc.vscode-tailwindcss",
     "Vue.volar",
     "christian-kohler.npm-intellisense",
-    "asciidoctor.asciidoctor-vscode"
+    "asciidoctor.asciidoctor-vscode",
+    "ms-playwright.playwright"
   ],
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   "forwardPorts": [5173],
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "cd app && npm install && npx cypress install",
+  "postCreateCommand": "cd app && npm install && npx playwright install chromium",
 
   "customizations": {
     "vscode": {

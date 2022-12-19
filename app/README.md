@@ -30,13 +30,14 @@ npm run lint
 npm run format
 ```
 
-### Run Cypress tests
+### Run Playwright Tests
 
 ```
-# First ensure the app is running on http://localhost:5173
-npx cypress run
+npx playwright test
 ```
 
-Include `--config video=false` to prevent recording and saving videos of the tests
+Run subset of tests on Chromium only
 
-**Note:** in order to use the cypress testing GUI you can run `npx cypress open` outside of the dev container. This requires a local install of node.
+```
+npx playwright test --project chromium --grep html
+```

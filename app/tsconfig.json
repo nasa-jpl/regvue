@@ -10,7 +10,6 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
-    "types": ["cypress"],
     "baseUrl": "./",
 
     // Technically makes our code less strict, but this is necessary for certain @vue modules to be built
@@ -36,7 +35,7 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "e2e/**/*.ts", "tests/**/*.ts"],
   "references": [{ "path": "./tsconfig.node.json" }],
   "paths": {
     "src": ["./src/"]

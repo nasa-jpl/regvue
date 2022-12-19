@@ -12,7 +12,7 @@ module.exports = {
 
   extends: [
     "eslint:recommended",
-    "plugin:cypress/recommended",
+    "plugin:playwright/playwright-test",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:vue/vue3-recommended",

@@ -8,10 +8,11 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "lint": "npx eslint --ext .js,.ts,.vue --ignore-path ../.gitignore --fix src",
+    "lint": "npx eslint --ext .js,.ts,.vue --ignore-path ../.gitignore --fix src tests e2e",
     "format": "npx prettier --write .",
-    "test": "vitest",
-    "cypress": "npx cypress run"
+    "pretest": "vue-tsc --noEmit",
+    "test": "vitest tests",
+    "playwright": "npx playwright test --project chromium"
   },
   "dependencies": {
     "ajv": "^8.11.2",
@@ -24,17 +25,17 @@
     "vue3-cookies": "^1.0.6"
   },
   "devDependencies": {
+    "@playwright/test": "^1.29",
     "@types/lunr": "^2.3.4",
     "@types/node": "^18.11.15",
     "@typescript-eslint/eslint-plugin": "^5.46.1",
     "@typescript-eslint/parser": "^5.46.1",
     "@vitejs/plugin-vue": "^4.0.0",
     "autoprefixer": "^10.4.13",
-    "cypress": "^12.1.0",
     "eslint": "^8.29.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-html": "^7.1.0",
+    "eslint-plugin-playwright": "^0.11.2",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.8.0",
     "postcss": "^8.4.20",
