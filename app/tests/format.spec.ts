@@ -82,25 +82,27 @@ it("wordSwap", () => {
 });
 
 it("valueToFields", () => {
-  let fields = [
+  const fields = [
     <Field>{
       lsb: 16,
       nbits: 16,
-    }, <Field>{
+    },
+    <Field>{
       lsb: 0,
       nbits: 16,
-    }
+    },
   ];
-  let expected = [
+  const expected = [
     {
       lsb: 16,
       nbits: 16,
       value: stringToBitArray("0x6745", 16),
-    }, {
+    },
+    {
       lsb: 0,
       nbits: 16,
       value: stringToBitArray("0x2301", 16),
-    }
+    },
   ];
 
   valueToFields(Swap.Byte, stringToBitArray("0x01234567"), fields);
@@ -108,18 +110,22 @@ it("valueToFields", () => {
 });
 
 it("fieldsToValue", () => {
-  let fields = [
+  const fields = [
     <Field>{
       lsb: 16,
       nbits: 16,
       value: stringToBitArray("0x6745", 16),
-    }, <Field>{
+    },
+    <Field>{
       lsb: 0,
       nbits: 16,
       value: stringToBitArray("0x2301", 16),
-    }
+    },
   ];
-  let expected = "0x01234567";
-  let actual = bitArrayToString(fieldsToValue(Swap.Byte, fields), "hexadecimal");
+  const expected = "0x01234567";
+  const actual = bitArrayToString(
+    fieldsToValue(Swap.Byte, fields),
+    "hexadecimal"
+  );
   expect(actual).toStrictEqual(expected);
 });
