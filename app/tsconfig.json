@@ -10,7 +10,6 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
-    "types": ["cypress"],
     "baseUrl": "./",
 
     // Technically makes our code less strict, but this is necessary for certain @vue modules to be built
