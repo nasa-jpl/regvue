@@ -8,7 +8,7 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "lint": "npx eslint --ext .js,.ts,.vue --ignore-path ../.gitignore --fix src",
+    "lint": "npx eslint --ext .js,.ts,.vue --ignore-path ../.gitignore --fix src tests e2e",
     "format": "npx prettier --write .",
     "pretest": "vue-tsc --noEmit",
     "test": "vitest tests",
