@@ -35,7 +35,7 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "e2e/**/*.ts", "tests/**/*.ts"],
   "references": [{ "path": "./tsconfig.node.json" }],
   "paths": {
     "src": ["./src/"]
