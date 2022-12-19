@@ -1,6 +1,6 @@
 import { it, expect } from "vitest";
-import { getBase, num, stringToBitArray, parseBigInt } from "./src/parse";
-import { Bit } from "./src/types";
+import { getBase, num, stringToBitArray, parseBigInt } from "src/parse";
+import { Bit } from "src/types";
 import bigInt from "big-integer";
 
 // Test the getBase() function

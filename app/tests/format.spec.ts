@@ -7,9 +7,9 @@ import {
   wordSwap,
   valueToFields,
   fieldsToValue,
-} from "./src/format";
-import { stringToBitArray } from "./src/parse";
-import { Bit, Swap } from "./src/types";
+} from "src/format";
+import { stringToBitArray } from "src/parse";
+import { Bit, Swap, Field } from "src/types";
 
 // Test the hex() function
 // This function returns lowercase hex numbers
@@ -83,10 +83,10 @@ it("wordSwap", () => {
 
 it("valueToFields", () => {
   let fields = [
-    {
+    <Field>{
       lsb: 16,
       nbits: 16,
-    }, {
+    }, <Field>{
       lsb: 0,
       nbits: 16,
     }
@@ -109,11 +109,11 @@ it("valueToFields", () => {
 
 it("fieldsToValue", () => {
   let fields = [
-    {
+    <Field>{
       lsb: 16,
       nbits: 16,
       value: stringToBitArray("0x6745", 16),
-    }, {
+    }, <Field>{
       lsb: 0,
       nbits: 16,
       value: stringToBitArray("0x2301", 16),
