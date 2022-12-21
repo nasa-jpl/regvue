@@ -1,0 +1,8 @@
+{
+  "editor.formatOnSave": true,
+
+  // Sane newline handling
+  "files.insertFinalNewline": true,
+  "editor.renderFinalNewline": false,
+  "files.trimTrailingWhitespace": true
+}

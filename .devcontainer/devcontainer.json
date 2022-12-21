@@ -29,14 +29,5 @@
   "forwardPorts": [5173],
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "cd app && npm install && npx playwright install chromium",
-
-  "customizations": {
-    "vscode": {
-      "settings": {
-        "editor.formatOnSave": true,
-        "files.insertFinalNewline": true
-      }
-    }
-  }
+  "postCreateCommand": "cd app && npm install && npx playwright install chromium"
 }
