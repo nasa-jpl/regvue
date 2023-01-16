@@ -1,0 +1,30 @@
+{
+  "schema": {
+    "version": "v1",
+    "name": "register-description-format"
+  },
+  "root": {
+    "version": "v1.0",
+    "desc": "Bad Field Name",
+    "children": [
+      "reg"
+    ]
+  },
+  "elements": {
+    "reg": {
+      "offset": "0",
+      "fields": [
+        {
+          "access": "ro",
+          "nbits": 32,
+          "lsb": 0,
+          "reset": "0",
+          "name": "field[31:0]"
+        }
+      ],
+      "type": "reg",
+      "id": "reg",
+      "name": "reg"
+    }
+  }
+}
