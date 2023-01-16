@@ -520,6 +520,8 @@ a|`name`
 |Yes
 |string
 |The name of the field.
+Must be a valid C language identifier.
+Meant for human and machine consumption.
 
 a|`nbits`
 |Yes
@@ -648,6 +650,8 @@ a|`name`
 |Yes
 |string
 |The symbolic name of the enumerated value.
+Must be a valid C language identifier.
+Meant for human and machine consumption.
 
 a|`value`
 |Yes

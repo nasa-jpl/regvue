@@ -127,7 +127,9 @@
             },
             "name": {
               "description": "The name of the element",
-              "type": "string"
+              "type": "string",
+              "$comment": "Match C language identifiers",
+              "pattern": "^[_a-zA-Z][_a-zA-Z0-9]*$"
             },
             "desc": {
               "description": "A human readable or formatted name of the element",
@@ -178,7 +180,9 @@
                   },
                   "name": {
                     "description": "The name of the register field",
-                    "type": "string"
+                    "type": "string",
+                    "$comment": "Match C language identifiers",
+                    "pattern": "^[_a-zA-Z][_a-zA-Z0-9]*$"
                   },
                   "access": {
                     "description": "The software access type of the field",
@@ -226,7 +230,9 @@
                       "properties": {
                         "name": {
                           "description": "The name of the enumerated field value",
-                          "type": "string"
+                          "type": "string",
+                          "$comment": "Match C language identifiers",
+                          "pattern": "^[_a-zA-Z][_a-zA-Z0-9]*$"
                         },
                         "value": {
                           "description": "The field value to associate with the name",
