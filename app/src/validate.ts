@@ -1,9 +1,16 @@
 import Ajv from "ajv";
+import { DefinedError as AjvError } from "ajv";
+import AjvErrors from "ajv-errors";
 import { isValidDataWidth, DesignRoot, DesignElement } from "src/types";
 import { stringToBitArray } from "src/parse";
 import schema from "../../schema/register-description-format.schema.json";
 
-const ajv = new Ajv({ allowUnionTypes: true });
+const ajv = new Ajv({
+  allowUnionTypes: true,
+  allErrors: true,
+  verbose: true,
+});
+AjvErrors(ajv);
 const schemaValidator = ajv.compile(schema);
 
 // Ensures that a response has returned JSON content with non-zero length
@@ -18,6 +25,15 @@ export const validateResponse = (response: Response): string => {
   return "";
 };
 
+function formatAjvError(e: AjvError): string {
+  switch (e.keyword as string) {
+    case "errorMessage":
+      return `Bad value for instance "${e.instancePath}". ${e.message}.`;
+    default:
+      return `${e.instancePath} ${e.message}`;
+  }
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const validateSchema = (data: any): string => {
   if (schemaValidator(data)) {
@@ -27,7 +43,7 @@ export const validateSchema = (data: any): string => {
     const error = schemaValidator.errors?.at(0);
 
     if (error) {
-      return `${error.instancePath} ${error.message}.`;
+      return formatAjvError(error as AjvError);
     } else {
       return "Error validating schema.";
     }

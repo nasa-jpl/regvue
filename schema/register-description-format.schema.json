@@ -129,7 +129,10 @@
               "description": "The name of the element",
               "type": "string",
               "$comment": "Match C language identifiers",
-              "pattern": "^[_a-zA-Z][_a-zA-Z0-9]*$"
+              "pattern": "^[_a-zA-Z][_a-zA-Z0-9]*$",
+              "errorMessage": {
+                "pattern": "Must be a valid C language identifier. Current value is ${0}"
+              }
             },
             "desc": {
               "description": "A human readable or formatted name of the element",
@@ -182,7 +185,10 @@
                     "description": "The name of the register field",
                     "type": "string",
                     "$comment": "Match C language identifiers",
-                    "pattern": "^[_a-zA-Z][_a-zA-Z0-9]*$"
+                    "pattern": "^[_a-zA-Z][_a-zA-Z0-9]*$",
+                    "errorMessage": {
+                      "pattern": "Must be a valid C language identifier. Current value is ${0}"
+                    }
                   },
                   "access": {
                     "description": "The software access type of the field",
@@ -232,7 +238,10 @@
                           "description": "The name of the enumerated field value",
                           "type": "string",
                           "$comment": "Match C language identifiers",
-                          "pattern": "^[_a-zA-Z][_a-zA-Z0-9]*$"
+                          "pattern": "^[_a-zA-Z][_a-zA-Z0-9]*$",
+                          "errorMessage": {
+                            "pattern": "Must be a valid C language identifier. Current value is ${0}"
+                          }
                         },
                         "value": {
                           "description": "The field value to associate with the name",
