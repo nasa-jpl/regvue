@@ -46,6 +46,10 @@ export const useStore = defineStore("store", {
 
       // Any text to show in the footer
       footerText: "",
+
+      // Persist any load errors during routing
+      // Clear on load, set on load error
+      loadError: null as string | null,
     };
   },
   actions: {
@@ -53,6 +57,7 @@ export const useStore = defineStore("store", {
     // Return "" on successful load and an error string if load fails
     async loadUrl(url: string) {
       this.isLoading = true;
+      this.loadError = null;
       let ret = "";
 
       try {
@@ -82,6 +87,7 @@ export const useStore = defineStore("store", {
     // Return "" on successful load and an error string if load fails
     async loadFile(jsonString: string) {
       this.isLoading = true;
+      this.loadError = null;
       let ret = "";
 
       try {

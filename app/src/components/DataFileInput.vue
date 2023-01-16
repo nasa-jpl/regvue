@@ -29,6 +29,10 @@ onBeforeMount(() => {
   }
 
   recentUrls.value = arr;
+
+  if (store.loadError != null) {
+    fetchError.value = store.loadError;
+  }
 });
 
 const onDragOver = (e: DragEvent) => {
