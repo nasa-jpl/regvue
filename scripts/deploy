@@ -10,35 +10,53 @@ function show_usage() {
     cat <<EOF
 SYNOPSYS
 
-    upgrade [options]
+    deploy [options]
 
 DESCRIPTION
 
-    Upgrades an existing GitHub Pages deployment of regvue to the latest
-    version of regvue.
+    Deploys Regvue to GitHub Pages.  This uses the gh-pages branch and assumes
+    that the gh-pages branch already exists in the deploymnet repository.
 
 OPTIONS
 
     --deployment-repository REPO
 
-        The Git repository containing a deployment of regvue in its gh-pages
+        The Git repository containing a deployment of Regvue in its gh-pages
         branch.
 
     --deployment-path PATH
 
-        The path to the regvue deployment in the gh-pages branch.  Relative to
+        The path to the Regvue deployment in the gh-pages branch.  Relative to
         the root of the gh-pages branch.
+
+    --release RELEASE
+
+        The name of the Regvue GitHub release to deploy. Default: "latest"
 
 EXAMPLES
 
-    upgrade --deployment-repository https://github.jpl.nasa.gov/org/repo --deployment-path regvue
+    Update the deployment at the regvue/ path in the gh-pages branch of the
+    org/repo JPL GitHub project to the latest release.
+
+        deploy \\
+            --deployment-repository https://github.jpl.nasa.gov/org/repo \\
+            --deployment-path regvue \\
+            --release latest
+
+    Update the deployment at the uat/ path in the gh-pages branch of the
+    regvue/regvue JPL GitHub project to the v1.1.4 release.
+
+        deploy \\
+            --deployment-repository https://github.jpl.nasa.gov/regvue/regvue \\
+            --deployment-path uat \\
+            --release v1.1.4
 EOF
 }
 
 while test $# -gt 0; do
     case $1 in
         --release)
-            OPT_RELEASE="$1"
+            OPT_RELEASE="$2"
             shift
             shift
             ;;
@@ -74,9 +92,13 @@ gh="gh --repo $REGVUE_REPO"
 
 set -x
 
-# Get the latest release information
-tag=$($gh release view --json tagName --jq .tagName)
-filename=$($gh release view --json assets --jq ".assets[0].name")
+tag="$OPT_RELEASE"
+if test "$tag" = "latest"; then
+    # Get the latest release information
+    tag=$($gh release view --json tagName --jq .tagName)
+fi
+# Assumes that the first artifact is the release .tar.gz
+filename=$($gh release view --json assets --jq ".assets[0].name" $tag)
 
 # Download the release
 if ! test -f "$filename"; then
@@ -89,6 +111,9 @@ if test -d deployment; then
 fi
 git clone --branch gh-pages "$OPT_DEPLOYMENT_REPOSITORY" deployment
 deployment_path="deployment/$OPT_DEPLOYMENT_PATH"
+
+# Create the deployment if it doesn't already exist
+test -d "$deployment_path" || mkdir -p "$deployment_path"
 
 # Backup the existing data.json
 if test -f "$deployment_path/data.json"; then
@@ -108,5 +133,9 @@ fi
 
 # Deploy
 git -C deployment add .
-git -C deployment commit -m "Upgrade regvue to $tag"
-git -C deployment push
+git -C deployment commit -m "Install Regvue $tag to $OPT_DEPLOYMENT_PATH/"
+git -C deployment show --stat
+
+set +x
+echo "Run the following command to push:"
+echo "git -C deployment push"
