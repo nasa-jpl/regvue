@@ -29,6 +29,10 @@ onBeforeMount(() => {
   }
 
   recentUrls.value = arr;
+
+  if (store.loadError != null) {
+    fetchError.value = store.loadError;
+  }
 });
 
 const onDragOver = (e: DragEvent) => {
@@ -215,6 +219,7 @@ const onDataFileOpen = async (event: Event) => {
         </button>
       </div>
       <div
+        id="fetchError"
         class="m-auto mt-3 text-sm text-rose-500"
         :class="!fetchError ? 'opacity-0' : ''"
       >

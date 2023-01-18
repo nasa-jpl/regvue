@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-No unreleased changes.
+### Fixed
+- Fixed silent error when loading bad JSON via direct link ([#282](https://github.jpl.nasa.gov/regvue/regvue/issues/275)).
+- Fixed lack of enforcement for the C language identifier format requirement for Element, Field, and EnumValue names ([#288](https://github.jpl.nasa.gov/regvue/regvue/issues/288)).
 
 ## [1.1.3]
 
