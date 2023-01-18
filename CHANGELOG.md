@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+No unreleased changes.
+
+## [1.1.4]
+
+### Breaking Changes
+
+This release has the potential to break existing Regvue JSON files that target v1 of the schema.
+The schema requires all names (i.e. Element, Field, and EnumValue names) be valid C language identifiers.
+Prior to this release, this requirement was not enforced.
+With this release, attempting to load JSON that does not meet this requirement will result in an error.
+
 ### Fixed
 - Fixed silent error when loading bad JSON via direct link ([#282](https://github.jpl.nasa.gov/regvue/regvue/issues/275)).
 - Fixed lack of enforcement for the C language identifier format requirement for Element, Field, and EnumValue names ([#288](https://github.jpl.nasa.gov/regvue/regvue/issues/288)).
@@ -311,7 +322,8 @@ Lastly, several improvements were made to the search UI.
 
 - Initial release of regvue prototype.
 
-[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.3...HEAD
+[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.4...HEAD
+[1.1.4]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.3...v1.1.4
 [1.1.3]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.0...v1.1.1
