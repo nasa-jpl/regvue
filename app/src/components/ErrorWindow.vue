@@ -7,8 +7,15 @@ let url = ref("");
 let stackTrace = ref("");
 
 const errorsToIgnore = [
+  // I think these are all the same root error but with a different error
+  // message depending on the browser.
+
+  // Firefox
   "ResizeObserver loop completed with undelivered notifications",
+  // Chrome
   "ResizeObserver loop limit exceeded",
+  // Safari
+  "Script error.",
 ];
 
 // Capture when an error occurs and populate variables with it
