@@ -49,7 +49,7 @@ rm -rf gh-pages # <5>
 . Click the "Settings" tab
 . For the GitHub Pages Source, select 'gh-pages branch'
 
-=== Install Regvue
+=== Install or Upgrade Regvue
 
 Clone the `gh-pages` branch:
 
@@ -61,20 +61,42 @@ cd gh-pages
 
 Download the https://github.jpl.nasa.gov/regvue/regvue/releases[latest release].
 
-Extract `regvue`:
+Set variables:
 
 [source,sh]
 ----
-mkdir regvue
-tar xf regvue-0.1.0.tar.gz --strip-components 1 -C regvue # <1>
+# This is the path under GitHub Pages where Regvue will be installed
+deployment_path=regvue/v1
+# This is the version of Regvue to install. It must match the tar-zip version.
+version=1.1.5
 ----
-<1> Extract the https://github.jpl.nasa.gov/regvue/regvue/releases[latest release] to the `regvue` directory
+
+Create the deployment path (if installing):
+
+[source,sh]
+----
+mkdir -p $deployment_path
+----
+
+Remove content of existing deployment (if upgrading):
+
+[source,sh]
+----
+rm -rf $deployment_path/*
+----
+
+Extract Regvue:
+
+[source,sh]
+----
+tar xf regvue-$version.tar.gz --strip-components 1 -C $deployment_path
+----
 
 Replace `data.json` with your own link:../schema/register-description-format.adoc[Register Description Format JSON]:
 
 [source,sh]
 ----
-cp path/to/my_design.json regvue/data.json
+cp path/to/my_design.json $deployment_path/data.json
 ----
 
 Add, commit, and push the changes:
@@ -92,7 +114,7 @@ The `--amend` option solves this by overwriting the current commit instead of cr
 
 === View
 
-The `regvue` app is now availble at `\https://github.jpl.nasa.gov/pages/<organization>/<repository>/regvue`.
+The Regvue app is now availble at `\https://github.jpl.nasa.gov/pages/<organization>/<repository>/$deployment_path`.
 
 == Run on Local Machine
 
@@ -102,12 +124,22 @@ Most popular scripting languages like Python come with a basic static web server
 
 Download the https://github.jpl.nasa.gov/regvue/regvue/releases[latest release].
 
-Extract `regvue`:
+Set variables:
 
 [source,sh]
 ----
-tar xf regvue-0.1.0.tar.gz
-cd regvue-0.1.0
+# This is the path under GitHub Pages where Regvue will be installed
+deployment_path=regvue/v1
+# This is the version of Regvue to install. It must match the tar-zip version.
+version=1.1.5
+----
+
+Extract Regvue:
+
+[source,sh]
+----
+tar xf regvue-$version.tar.gz
+cd regvue-$version
 ----
 
 Replace `data.json` with your own link:../schema/register-description-format.adoc[Register Description Format JSON]:
