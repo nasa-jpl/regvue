@@ -166,3 +166,13 @@ scripts/deploy \
     --deployment-path v1.1.4 \
     --release v1.1.4
 ----
+
+Upgrade the official v1 deployment to the latest version.
+
+[source,sh]
+----
+scripts/deploy \
+    --deployment-repository https://github.jpl.nasa.gov/regvue/regvue \
+    --deployment-path v1 \
+    --release latest
+----
