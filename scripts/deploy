@@ -15,7 +15,7 @@ SYNOPSYS
 DESCRIPTION
 
     Deploys Regvue to GitHub Pages.  This uses the gh-pages branch and assumes
-    that the gh-pages branch already exists in the deploymnet repository.
+    that the gh-pages branch already exists in the deployment repository.
 
 OPTIONS
 
@@ -49,6 +49,13 @@ EXAMPLES
         deploy \\
             --deployment-repository https://github.jpl.nasa.gov/regvue/regvue \\
             --deployment-path uat \\
+            --release v1.1.4
+
+    Create a v1.1.4 deployment using the v1.1.4 release.
+
+        deploy \\
+            --deployment-repository https://github.jpl.nasa.gov/regvue/regvue \\
+            --deployment-path v1.1.4 \\
             --release v1.1.4
 EOF
 }

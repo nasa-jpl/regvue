@@ -130,13 +130,39 @@ python -m SimpleHTTPServer 8080
 
 Open http://localhost:8080
 
-== Upgrade Regvue
+== Deploy Script
 
-Existing GitHub Pages deployments of Regvue are easily upgraded with the link:scripts/upgrade[upgrade script].
-To use the upgrade script, you must have the https://cli.github.com/[GitHub CLI] installed and it must be authenticated to your GitHub instance.
+The link:scripts/deploy[deploy script] automates creating new or upgrade existing deployments on GitHub Pages.
+To use the deploy script, you must have the https://cli.github.com/[GitHub CLI] installed and it must be authenticated to your GitHub instance.
+
+=== Examples
+
+Upgrade the self-hosted deployment at `https://github.jpl.nasa.gov/pages/org/repo/regvue` to the latest version.
 
 [source,sh]
-.Example: Upgrade the https://github.jpl.nasa.gov/pages/regvue/regvue/v0.5[v0.5 deployment]
 ----
-scripts/upgrade --deployment-repository git@github.jpl.nasa.gov:regvue/regvue.git --deployment-path v0.5
+scripts/deploy \
+    --deployment-repository https://github.jpl.nasa.gov/org/repo \
+    --deployment-path regvue \
+    --release latest
+----
+
+Upgrade the official UAT deployment to version v1.1.4.
+
+[source,sh]
+----
+scripts/deploy \
+    --deployment-repository https://github.jpl.nasa.gov/regvue/regvue \
+    --deployment-path uat \
+    --release v1.1.4
+----
+
+Create an official v1.1.4 deployment.
+
+[source,sh]
+----
+scripts/deploy \
+    --deployment-repository https://github.jpl.nasa.gov/regvue/regvue \
+    --deployment-path v1.1.4 \
+    --release v1.1.4
 ----
