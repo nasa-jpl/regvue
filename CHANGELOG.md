@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 No unreleased changes.
 
+## [1.1.5]
+
+### Fixed
+- Fixed "Script error." no field name rotation in Safari ([#290](https://github.jpl.nasa.gov/regvue/regvue/issues/290))
+
+### Removed
+- Removed latest version check ([#294](https://github.jpl.nasa.gov/regvue/regvue/pull/294))
+
 ## [1.1.4]
 
 ### Breaking Changes
@@ -322,7 +330,8 @@ Lastly, several improvements were made to the search UI.
 
 - Initial release of regvue prototype.
 
-[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.4...HEAD
+[unreleased]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.5...HEAD
+[1.1.5]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.4...v1.1.5
 [1.1.4]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.3...v1.1.4
 [1.1.3]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.jpl.nasa.gov/regvue/regvue/compare/v1.1.1...v1.1.2
