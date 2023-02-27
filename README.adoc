@@ -11,6 +11,10 @@ A modern web-based viewer for FPGA/ASIC register documentation.
 
 toc::[]
 
+== Screenshot
+
+image::https://user-images.githubusercontent.com/28975/221743969-e6512938-a2f4-4c40-85e7-7aa7fba6b551.png[]
+
 == Demos
 
 * https://nasa-jpl.github.io/regvue/v1/#/?data=example.json[Basic demo]
