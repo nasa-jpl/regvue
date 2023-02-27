@@ -1,0 +1,7606 @@
+{
+  "schema": {
+    "name": "register-description-format",
+    "version": "v1"
+  },
+  "root": {
+    "desc": "SOC",
+    "version": "1.0",
+    "children": [
+      "reboot",
+      "crg",
+      "gpio",
+      "uart",
+      "console",
+      "app_uart",
+      "info",
+      "sram_ext",
+      "memlcd",
+      "com",
+      "i2c",
+      "btevents",
+      "messible",
+      "messible2",
+      "ticktimer",
+      "susres",
+      "power",
+      "spinor",
+      "keyboard",
+      "keyinject",
+      "seed",
+      "keyrom",
+      "audio",
+      "trng_kernel",
+      "trng_server",
+      "trng",
+      "sha512",
+      "engine",
+      "jtag",
+      "wdt",
+      "d11ctime",
+      "identifier_mem",
+      "timer0"
+    ]
+  },
+  "elements": {
+    "reboot": {
+      "type": "blk",
+      "children": [
+        "reboot.soc_reset",
+        "reboot.addr",
+        "reboot.cpu_reset"
+      ],
+      "id": "reboot",
+      "name": "reboot",
+      "offset": "0xf0000000",
+      "doc": ""
+    },
+    "reboot.soc_reset": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "soc_reset",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "reboot.soc_reset",
+      "name": "soc_reset",
+      "offset": "0x0",
+      "doc": "Writing 0xAC to this register will do a full SoC reset, including CRGs and\nperipherals"
+    },
+    "reboot.addr": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "addr",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "reboot.addr",
+      "name": "addr",
+      "offset": "0x4",
+      "doc": "The address written here will be used as the next reset vector"
+    },
+    "reboot.cpu_reset": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "cpu_reset",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "reboot.cpu_reset",
+      "name": "cpu_reset",
+      "offset": "0x8",
+      "doc": "Writing anything to this register resets the CPU, and the CPU only; does not\naffect CRG or peripherals"
+    },
+    "crg": {
+      "type": "blk",
+      "children": [
+        "crg.mmcm_drp_reset",
+        "crg.mmcm_drp_locked",
+        "crg.mmcm_drp_read",
+        "crg.mmcm_drp_write",
+        "crg.mmcm_drp_drdy",
+        "crg.mmcm_drp_adr",
+        "crg.mmcm_drp_dat_w",
+        "crg.mmcm_drp_dat_r"
+      ],
+      "id": "crg",
+      "name": "crg",
+      "offset": "0xf0001000",
+      "doc": ""
+    },
+    "crg.mmcm_drp_reset": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "mmcm_drp_reset",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "crg.mmcm_drp_reset",
+      "name": "mmcm_drp_reset",
+      "offset": "0x0",
+      "doc": ""
+    },
+    "crg.mmcm_drp_locked": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "mmcm_drp_locked",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "crg.mmcm_drp_locked",
+      "name": "mmcm_drp_locked",
+      "offset": "0x4",
+      "doc": ""
+    },
+    "crg.mmcm_drp_read": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "mmcm_drp_read",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "crg.mmcm_drp_read",
+      "name": "mmcm_drp_read",
+      "offset": "0x8",
+      "doc": ""
+    },
+    "crg.mmcm_drp_write": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "mmcm_drp_write",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "crg.mmcm_drp_write",
+      "name": "mmcm_drp_write",
+      "offset": "0xc",
+      "doc": ""
+    },
+    "crg.mmcm_drp_drdy": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "mmcm_drp_drdy",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "crg.mmcm_drp_drdy",
+      "name": "mmcm_drp_drdy",
+      "offset": "0x10",
+      "doc": ""
+    },
+    "crg.mmcm_drp_adr": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 7,
+          "nbits": 25,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "mmcm_drp_adr",
+          "lsb": 0,
+          "nbits": 7,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "crg.mmcm_drp_adr",
+      "name": "mmcm_drp_adr",
+      "offset": "0x14",
+      "doc": ""
+    },
+    "crg.mmcm_drp_dat_w": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 16,
+          "nbits": 16,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "mmcm_drp_dat_w",
+          "lsb": 0,
+          "nbits": 16,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "crg.mmcm_drp_dat_w",
+      "name": "mmcm_drp_dat_w",
+      "offset": "0x18",
+      "doc": ""
+    },
+    "crg.mmcm_drp_dat_r": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 16,
+          "nbits": 16,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "mmcm_drp_dat_r",
+          "lsb": 0,
+          "nbits": 16,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "crg.mmcm_drp_dat_r",
+      "name": "mmcm_drp_dat_r",
+      "offset": "0x1c",
+      "doc": ""
+    },
+    "gpio": {
+      "type": "blk",
+      "children": [
+        "gpio.output",
+        "gpio.input",
+        "gpio.drive",
+        "gpio.intena",
+        "gpio.intpol",
+        "gpio.uartsel",
+        "gpio.ev_status",
+        "gpio.ev_pending",
+        "gpio.ev_enable"
+      ],
+      "id": "gpio",
+      "name": "gpio",
+      "offset": "0xf0002000",
+      "doc": ""
+    },
+    "gpio.output": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "output",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "gpio.output",
+      "name": "output",
+      "offset": "0x0",
+      "doc": "Values to appear on GPIO when respective `drive` bit is asserted"
+    },
+    "gpio.input": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "input",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "gpio.input",
+      "name": "input",
+      "offset": "0x4",
+      "doc": "Value measured on the respective GPIO pin"
+    },
+    "gpio.drive": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "drive",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "gpio.drive",
+      "name": "drive",
+      "offset": "0x8",
+      "doc": "When a bit is set to `1`, the respective pad drives its value out"
+    },
+    "gpio.intena": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "intena",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "gpio.intena",
+      "name": "intena",
+      "offset": "0xc",
+      "doc": "Enable interrupts when a respective bit is set"
+    },
+    "gpio.intpol": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "intpol",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "gpio.intpol",
+      "name": "intpol",
+      "offset": "0x10",
+      "doc": "When a bit is `1`, falling-edges cause interrupts. Otherwise, rising edges cause\ninterrupts."
+    },
+    "gpio.uartsel": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "uartsel",
+          "lsb": 0,
+          "nbits": 2,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "gpio.uartsel",
+      "name": "uartsel",
+      "offset": "0x14",
+      "doc": "Used to select which UART is routed to physical pins, 00 = kernel debug, 01 =\nconsole, others reserved based on build"
+    },
+    "gpio.ev_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "event7",
+          "lsb": 7,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``event7`` event"
+        },
+        {
+          "name": "event6",
+          "lsb": 6,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``event6`` event"
+        },
+        {
+          "name": "event5",
+          "lsb": 5,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``event5`` event"
+        },
+        {
+          "name": "event4",
+          "lsb": 4,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``event4`` event"
+        },
+        {
+          "name": "event3",
+          "lsb": 3,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``event3`` event"
+        },
+        {
+          "name": "event2",
+          "lsb": 2,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``event2`` event"
+        },
+        {
+          "name": "event1",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``event1`` event"
+        },
+        {
+          "name": "event0",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``event0`` event"
+        }
+      ],
+      "id": "gpio.ev_status",
+      "name": "ev_status",
+      "offset": "0x18",
+      "doc": "This register contains the current raw level of the event7 event trigger.\nWrites to this register have no effect."
+    },
+    "gpio.ev_pending": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "event7",
+          "lsb": 7,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a this particular event occurred. This Event is triggered on a **rising**\nedge."
+        },
+        {
+          "name": "event6",
+          "lsb": 6,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a this particular event occurred. This Event is triggered on a **rising**\nedge."
+        },
+        {
+          "name": "event5",
+          "lsb": 5,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a this particular event occurred. This Event is triggered on a **rising**\nedge."
+        },
+        {
+          "name": "event4",
+          "lsb": 4,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a this particular event occurred. This Event is triggered on a **rising**\nedge."
+        },
+        {
+          "name": "event3",
+          "lsb": 3,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a this particular event occurred. This Event is triggered on a **rising**\nedge."
+        },
+        {
+          "name": "event2",
+          "lsb": 2,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a this particular event occurred. This Event is triggered on a **rising**\nedge."
+        },
+        {
+          "name": "event1",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a this particular event occurred. This Event is triggered on a **rising**\nedge."
+        },
+        {
+          "name": "event0",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a this particular event occurred. This Event is triggered on a **rising**\nedge."
+        }
+      ],
+      "id": "gpio.ev_pending",
+      "name": "ev_pending",
+      "offset": "0x1c",
+      "doc": "When a  event7 event occurs, the corresponding bit will be set in this register.\nTo clear the Event, set the corresponding bit in this register."
+    },
+    "gpio.ev_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "event7",
+          "lsb": 7,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``event7`` Event"
+        },
+        {
+          "name": "event6",
+          "lsb": 6,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``event6`` Event"
+        },
+        {
+          "name": "event5",
+          "lsb": 5,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``event5`` Event"
+        },
+        {
+          "name": "event4",
+          "lsb": 4,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``event4`` Event"
+        },
+        {
+          "name": "event3",
+          "lsb": 3,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``event3`` Event"
+        },
+        {
+          "name": "event2",
+          "lsb": 2,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``event2`` Event"
+        },
+        {
+          "name": "event1",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``event1`` Event"
+        },
+        {
+          "name": "event0",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``event0`` Event"
+        }
+      ],
+      "id": "gpio.ev_enable",
+      "name": "ev_enable",
+      "offset": "0x20",
+      "doc": "This register enables the corresponding event7 events.  Write a ``0`` to this\nregister to disable individual events."
+    },
+    "uart": {
+      "type": "blk",
+      "children": [
+        "uart.rxtx",
+        "uart.txfull",
+        "uart.rxempty",
+        "uart.ev_status",
+        "uart.ev_pending",
+        "uart.ev_enable",
+        "uart.txempty",
+        "uart.rxfull"
+      ],
+      "id": "uart",
+      "name": "uart",
+      "offset": "0xf0004000",
+      "doc": ""
+    },
+    "uart.rxtx": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rxtx",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "uart.rxtx",
+      "name": "rxtx",
+      "offset": "0x0",
+      "doc": ""
+    },
+    "uart.txfull": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "txfull",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "uart.txfull",
+      "name": "txfull",
+      "offset": "0x4",
+      "doc": ""
+    },
+    "uart.rxempty": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rxempty",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "uart.rxempty",
+      "name": "rxempty",
+      "offset": "0x8",
+      "doc": ""
+    },
+    "uart.ev_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rx",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``rx`` event"
+        },
+        {
+          "name": "tx",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``tx`` event"
+        }
+      ],
+      "id": "uart.ev_status",
+      "name": "ev_status",
+      "offset": "0xc",
+      "doc": "This register contains the current raw level of the rx event trigger.  Writes to\nthis register have no effect."
+    },
+    "uart.ev_pending": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rx",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a `rx` event occurred. This Event is triggered on a **falling** edge."
+        },
+        {
+          "name": "tx",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a `tx` event occurred. This Event is triggered on a **falling** edge."
+        }
+      ],
+      "id": "uart.ev_pending",
+      "name": "ev_pending",
+      "offset": "0x10",
+      "doc": "When a  rx event occurs, the corresponding bit will be set in this register.  To\nclear the Event, set the corresponding bit in this register."
+    },
+    "uart.ev_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rx",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``rx`` Event"
+        },
+        {
+          "name": "tx",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``tx`` Event"
+        }
+      ],
+      "id": "uart.ev_enable",
+      "name": "ev_enable",
+      "offset": "0x14",
+      "doc": "This register enables the corresponding rx events.  Write a ``0`` to this\nregister to disable individual events."
+    },
+    "uart.txempty": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "txempty",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "uart.txempty",
+      "name": "txempty",
+      "offset": "0x18",
+      "doc": ""
+    },
+    "uart.rxfull": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rxfull",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "uart.rxfull",
+      "name": "rxfull",
+      "offset": "0x1c",
+      "doc": ""
+    },
+    "console": {
+      "type": "blk",
+      "children": [
+        "console.rxtx",
+        "console.txfull",
+        "console.rxempty",
+        "console.ev_status",
+        "console.ev_pending",
+        "console.ev_enable",
+        "console.txempty",
+        "console.rxfull"
+      ],
+      "id": "console",
+      "name": "console",
+      "offset": "0xf0006000",
+      "doc": ""
+    },
+    "console.rxtx": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rxtx",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "console.rxtx",
+      "name": "rxtx",
+      "offset": "0x0",
+      "doc": ""
+    },
+    "console.txfull": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "txfull",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "console.txfull",
+      "name": "txfull",
+      "offset": "0x4",
+      "doc": ""
+    },
+    "console.rxempty": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rxempty",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "console.rxempty",
+      "name": "rxempty",
+      "offset": "0x8",
+      "doc": ""
+    },
+    "console.ev_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rx",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``rx`` event"
+        },
+        {
+          "name": "tx",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``tx`` event"
+        }
+      ],
+      "id": "console.ev_status",
+      "name": "ev_status",
+      "offset": "0xc",
+      "doc": "This register contains the current raw level of the rx event trigger.  Writes to\nthis register have no effect."
+    },
+    "console.ev_pending": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rx",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a `rx` event occurred. This Event is triggered on a **falling** edge."
+        },
+        {
+          "name": "tx",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a `tx` event occurred. This Event is triggered on a **falling** edge."
+        }
+      ],
+      "id": "console.ev_pending",
+      "name": "ev_pending",
+      "offset": "0x10",
+      "doc": "When a  rx event occurs, the corresponding bit will be set in this register.  To\nclear the Event, set the corresponding bit in this register."
+    },
+    "console.ev_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rx",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``rx`` Event"
+        },
+        {
+          "name": "tx",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``tx`` Event"
+        }
+      ],
+      "id": "console.ev_enable",
+      "name": "ev_enable",
+      "offset": "0x14",
+      "doc": "This register enables the corresponding rx events.  Write a ``0`` to this\nregister to disable individual events."
+    },
+    "console.txempty": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "txempty",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "console.txempty",
+      "name": "txempty",
+      "offset": "0x18",
+      "doc": ""
+    },
+    "console.rxfull": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rxfull",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "console.rxfull",
+      "name": "rxfull",
+      "offset": "0x1c",
+      "doc": ""
+    },
+    "app_uart": {
+      "type": "blk",
+      "children": [
+        "app_uart.rxtx",
+        "app_uart.txfull",
+        "app_uart.rxempty",
+        "app_uart.ev_status",
+        "app_uart.ev_pending",
+        "app_uart.ev_enable",
+        "app_uart.txempty",
+        "app_uart.rxfull"
+      ],
+      "id": "app_uart",
+      "name": "app_uart",
+      "offset": "0xf0008000",
+      "doc": ""
+    },
+    "app_uart.rxtx": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rxtx",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "app_uart.rxtx",
+      "name": "rxtx",
+      "offset": "0x0",
+      "doc": ""
+    },
+    "app_uart.txfull": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "txfull",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "app_uart.txfull",
+      "name": "txfull",
+      "offset": "0x4",
+      "doc": ""
+    },
+    "app_uart.rxempty": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rxempty",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "app_uart.rxempty",
+      "name": "rxempty",
+      "offset": "0x8",
+      "doc": ""
+    },
+    "app_uart.ev_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rx",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``rx`` event"
+        },
+        {
+          "name": "tx",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``tx`` event"
+        }
+      ],
+      "id": "app_uart.ev_status",
+      "name": "ev_status",
+      "offset": "0xc",
+      "doc": "This register contains the current raw level of the rx event trigger.  Writes to\nthis register have no effect."
+    },
+    "app_uart.ev_pending": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rx",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a `rx` event occurred. This Event is triggered on a **falling** edge."
+        },
+        {
+          "name": "tx",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a `tx` event occurred. This Event is triggered on a **falling** edge."
+        }
+      ],
+      "id": "app_uart.ev_pending",
+      "name": "ev_pending",
+      "offset": "0x10",
+      "doc": "When a  rx event occurs, the corresponding bit will be set in this register.  To\nclear the Event, set the corresponding bit in this register."
+    },
+    "app_uart.ev_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rx",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``rx`` Event"
+        },
+        {
+          "name": "tx",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``tx`` Event"
+        }
+      ],
+      "id": "app_uart.ev_enable",
+      "name": "ev_enable",
+      "offset": "0x14",
+      "doc": "This register enables the corresponding rx events.  Write a ``0`` to this\nregister to disable individual events."
+    },
+    "app_uart.txempty": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "txempty",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "app_uart.txempty",
+      "name": "txempty",
+      "offset": "0x18",
+      "doc": ""
+    },
+    "app_uart.rxfull": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rxfull",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "app_uart.rxfull",
+      "name": "rxfull",
+      "offset": "0x1c",
+      "doc": ""
+    },
+    "info": {
+      "type": "blk",
+      "children": [
+        "info.dna_id1",
+        "info.dna_id0",
+        "info.git_major",
+        "info.git_minor",
+        "info.git_revision",
+        "info.git_gitrev",
+        "info.git_gitextra",
+        "info.git_dirty",
+        "info.platform_platform1",
+        "info.platform_platform0",
+        "info.platform_target1",
+        "info.platform_target0"
+      ],
+      "id": "info",
+      "name": "info",
+      "offset": "0xf0009000",
+      "doc": ""
+    },
+    "info.dna_id1": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "dna_id",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "info.dna_id1",
+      "name": "dna_id1",
+      "offset": "0x0",
+      "doc": "Bits 32-56 of `INFO_DNA_ID`."
+    },
+    "info.dna_id0": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "dna_id",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "info.dna_id0",
+      "name": "dna_id0",
+      "offset": "0x4",
+      "doc": "Bits 0-31 of `INFO_DNA_ID`."
+    },
+    "info.git_major": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "git_major",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "info.git_major",
+      "name": "git_major",
+      "offset": "0x8",
+      "doc": "Major git tag version.  For example, this firmware was built from git tag\n``v0.8.0``, so this value is ``0``."
+    },
+    "info.git_minor": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "git_minor",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "8",
+          "doc": ""
+        }
+      ],
+      "id": "info.git_minor",
+      "name": "git_minor",
+      "offset": "0xc",
+      "doc": "Minor git tag version.  For example, this firmware was built from git tag\n``v0.8.0``, so this value is ``8``."
+    },
+    "info.git_revision": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "git_revision",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "info.git_revision",
+      "name": "git_revision",
+      "offset": "0x10",
+      "doc": "Revision git tag version.  For example, this firmware was built from git tag\n``v0.8.0``, so this value is ``0``."
+    },
+    "info.git_gitrev": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "git_gitrev",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "1169946449",
+          "doc": ""
+        }
+      ],
+      "id": "info.git_gitrev",
+      "name": "git_gitrev",
+      "offset": "0x14",
+      "doc": "First 32-bits of the git revision.  This documentation was built from git rev\n``45bbf751``, so this value is 1169946449, which should be enough to check out\nthe exact git version used to build this firmware."
+    },
+    "info.git_gitextra": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 10,
+          "nbits": 22,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "git_gitextra",
+          "lsb": 0,
+          "nbits": 10,
+          "access": "",
+          "reset": "10",
+          "doc": ""
+        }
+      ],
+      "id": "info.git_gitextra",
+      "name": "git_gitextra",
+      "offset": "0x18",
+      "doc": "The number of additional commits beyond the git tag.  For example, if this value\nis ``1``, then the repository this was built from has one additional commit\nbeyond the tag indicated in `MAJOR`, `MINOR`, and `REVISION`."
+    },
+    "info.git_dirty": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "dirty",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "1",
+          "doc": "Set to ``1`` if this device was built from a git repo with uncommitted\nmodifications."
+        }
+      ],
+      "id": "info.git_dirty",
+      "name": "git_dirty",
+      "offset": "0x1c",
+      "doc": ""
+    },
+    "info.platform_platform1": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "platform_platform",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "info.platform_platform1",
+      "name": "platform_platform1",
+      "offset": "0x20",
+      "doc": "Bits 32-63 of `INFO_PLATFORM_PLATFORM`."
+    },
+    "info.platform_platform0": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "platform_platform",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "info.platform_platform0",
+      "name": "platform_platform0",
+      "offset": "0x24",
+      "doc": "Bits 0-31 of `INFO_PLATFORM_PLATFORM`."
+    },
+    "info.platform_target1": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "platform_target",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "info.platform_target1",
+      "name": "platform_target1",
+      "offset": "0x28",
+      "doc": "Bits 32-63 of `INFO_PLATFORM_TARGET`."
+    },
+    "info.platform_target0": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "platform_target",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "info.platform_target0",
+      "name": "platform_target0",
+      "offset": "0x2c",
+      "doc": "Bits 0-31 of `INFO_PLATFORM_TARGET`."
+    },
+    "sram_ext": {
+      "type": "blk",
+      "children": [
+        "sram_ext.config_status",
+        "sram_ext.read_config"
+      ],
+      "id": "sram_ext",
+      "name": "sram_ext",
+      "offset": "0xf000a000",
+      "doc": ""
+    },
+    "sram_ext.config_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "mode",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": "The current configuration mode of the SRAM"
+        }
+      ],
+      "id": "sram_ext.config_status",
+      "name": "config_status",
+      "offset": "0x0",
+      "doc": ""
+    },
+    "sram_ext.read_config": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "trigger",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Writing to this bit triggers the SRAM mode status read update"
+        }
+      ],
+      "id": "sram_ext.read_config",
+      "name": "read_config",
+      "offset": "0x4",
+      "doc": ""
+    },
+    "memlcd": {
+      "type": "blk",
+      "children": [
+        "memlcd.command",
+        "memlcd.busy",
+        "memlcd.prescaler",
+        "memlcd.ev_status",
+        "memlcd.ev_pending",
+        "memlcd.ev_enable"
+      ],
+      "id": "memlcd",
+      "name": "memlcd",
+      "offset": "0xf000b000",
+      "doc": ""
+    },
+    "memlcd.command": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "updateall",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Update full screen regardless of tag state"
+        },
+        {
+          "name": "updatedirty",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to flush dirty lines to the LCD"
+        }
+      ],
+      "id": "memlcd.command",
+      "name": "command",
+      "offset": "0x0",
+      "doc": ""
+    },
+    "memlcd.busy": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "busy",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "memlcd.busy",
+      "name": "busy",
+      "offset": "0x4",
+      "doc": "A ``1`` indicates that the block is currently updating the LCD"
+    },
+    "memlcd.prescaler": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "prescaler",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "99",
+          "doc": ""
+        }
+      ],
+      "id": "memlcd.prescaler",
+      "name": "prescaler",
+      "offset": "0x8",
+      "doc": "Prescaler value. LCD clock is module ``(clock / (prescaler+1))``. Reset value:\n``99``, so for a default sysclk of 100MHz this yields an LCD ``SCLK`` of 1MHz"
+    },
+    "memlcd.ev_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "done",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``done`` event"
+        }
+      ],
+      "id": "memlcd.ev_status",
+      "name": "ev_status",
+      "offset": "0xc",
+      "doc": "This register contains the current raw level of the done event trigger.  Writes\nto this register have no effect."
+    },
+    "memlcd.ev_pending": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "done",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a `done` event occurred. This Event is triggered on a **falling** edge."
+        }
+      ],
+      "id": "memlcd.ev_pending",
+      "name": "ev_pending",
+      "offset": "0x10",
+      "doc": "When a  done event occurs, the corresponding bit will be set in this register.\nTo clear the Event, set the corresponding bit in this register."
+    },
+    "memlcd.ev_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "done",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``done`` Event"
+        }
+      ],
+      "id": "memlcd.ev_enable",
+      "name": "ev_enable",
+      "offset": "0x14",
+      "doc": "This register enables the corresponding done events.  Write a ``0`` to this\nregister to disable individual events."
+    },
+    "com": {
+      "type": "blk",
+      "children": [
+        "com.tx",
+        "com.rx",
+        "com.control",
+        "com.status",
+        "com.ev_status",
+        "com.ev_pending",
+        "com.ev_enable"
+      ],
+      "id": "com",
+      "name": "com",
+      "offset": "0xf000c000",
+      "doc": ""
+    },
+    "com.tx": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 16,
+          "nbits": 16,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "tx",
+          "lsb": 0,
+          "nbits": 16,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "com.tx",
+      "name": "tx",
+      "offset": "0x0",
+      "doc": "Tx data, for COPI. Note: 32-bit CSRs are required for this block to work!"
+    },
+    "com.rx": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 16,
+          "nbits": 16,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rx",
+          "lsb": 0,
+          "nbits": 16,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "com.rx",
+      "name": "rx",
+      "offset": "0x4",
+      "doc": "Rx data, from CIPO"
+    },
+    "com.control": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "autohold",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Disallow transmission start if hold if asserted"
+        },
+        {
+          "name": "intena",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Enable interrupt on transaction finished"
+        }
+      ],
+      "id": "com.control",
+      "name": "control",
+      "offset": "0x8",
+      "doc": ""
+    },
+    "com.status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "hold",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Set when peripheral asserts hold"
+        },
+        {
+          "name": "tip",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Set when transaction is in progress"
+        }
+      ],
+      "id": "com.status",
+      "name": "status",
+      "offset": "0xc",
+      "doc": ""
+    },
+    "com.ev_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "spi_hold",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``spi_hold`` event"
+        },
+        {
+          "name": "spi_int",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``spi_int`` event"
+        }
+      ],
+      "id": "com.ev_status",
+      "name": "ev_status",
+      "offset": "0x10",
+      "doc": "This register contains the current raw level of the spi_hold event trigger.\nWrites to this register have no effect."
+    },
+    "com.ev_pending": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "spi_hold",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a `spi_hold` event occurred. This Event is triggered on a **falling**\nedge."
+        },
+        {
+          "name": "spi_int",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a `spi_int` event occurred. This Event is triggered on a **falling**\nedge."
+        }
+      ],
+      "id": "com.ev_pending",
+      "name": "ev_pending",
+      "offset": "0x14",
+      "doc": "When a  spi_hold event occurs, the corresponding bit will be set in this\nregister.  To clear the Event, set the corresponding bit in this register."
+    },
+    "com.ev_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "spi_hold",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``spi_hold`` Event"
+        },
+        {
+          "name": "spi_int",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``spi_int`` Event"
+        }
+      ],
+      "id": "com.ev_enable",
+      "name": "ev_enable",
+      "offset": "0x18",
+      "doc": "This register enables the corresponding spi_hold events.  Write a ``0`` to this\nregister to disable individual events."
+    },
+    "i2c": {
+      "type": "blk",
+      "children": [
+        "i2c.prescale",
+        "i2c.control",
+        "i2c.txr",
+        "i2c.rxr",
+        "i2c.command",
+        "i2c.status",
+        "i2c.core_reset",
+        "i2c.ev_status",
+        "i2c.ev_pending",
+        "i2c.ev_enable"
+      ],
+      "id": "i2c",
+      "name": "i2c",
+      "offset": "0xf000d000",
+      "doc": ""
+    },
+    "i2c.prescale": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 16,
+          "nbits": 16,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "prescale",
+          "lsb": 0,
+          "nbits": 16,
+          "access": "",
+          "reset": "65535",
+          "doc": ""
+        }
+      ],
+      "id": "i2c.prescale",
+      "name": "prescale",
+      "offset": "0x0",
+      "doc": "Prescaler value. Set to (module clock / (5 * I2C freq) - 1). Example: if module\nclock is equal to sysclk; syclk is 100MHz; and I2C freq is 100kHz, then\nprescaler is (100MHz / (5 * 100kHz) - 1) = 199. Reset value: 0xFFFF"
+    },
+    "i2c.control": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "en",
+          "lsb": 7,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "When set to `1`, the core is enabled."
+        },
+        {
+          "name": "ien",
+          "lsb": 6,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "When set to `1`, interrupts are enabled."
+        },
+        {
+          "name": "resvd",
+          "lsb": 0,
+          "nbits": 6,
+          "access": "",
+          "reset": "0",
+          "doc": "Reserved (for cross-compatibility with OpenCores drivers)"
+        }
+      ],
+      "id": "i2c.control",
+      "name": "control",
+      "offset": "0x4",
+      "doc": ""
+    },
+    "i2c.txr": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "txr",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "i2c.txr",
+      "name": "txr",
+      "offset": "0x8",
+      "doc": "Next byte to transmit to slave devices. LSB indicates R/W during address phases,\n`1` for reading from slaves, `0` for writing to slaves"
+    },
+    "i2c.rxr": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rxr",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "i2c.rxr",
+      "name": "rxr",
+      "offset": "0xc",
+      "doc": "Data being read from slaved devices"
+    },
+    "i2c.command": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "sta",
+          "lsb": 7,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "generate (repeated) start condition"
+        },
+        {
+          "name": "sto",
+          "lsb": 6,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "generate stop condition"
+        },
+        {
+          "name": "rd",
+          "lsb": 5,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "read from slave"
+        },
+        {
+          "name": "wr",
+          "lsb": 4,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "write to slave"
+        },
+        {
+          "name": "ack",
+          "lsb": 3,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "when a receiver, sent ack (`ACK=0`) or nack (`ACK=1`)"
+        },
+        {
+          "name": "resvd",
+          "lsb": 1,
+          "nbits": 2,
+          "access": "",
+          "reset": "0",
+          "doc": "reserved for cross-compatibility with OpenCores drivers"
+        },
+        {
+          "name": "iack",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Interrupt acknowledge; when set, clears a pending interrupt"
+        }
+      ],
+      "id": "i2c.command",
+      "name": "command",
+      "offset": "0x10",
+      "doc": ""
+    },
+    "i2c.status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rxack",
+          "lsb": 7,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Received acknowledge from slave. 1 = no ack received, 0 = ack received"
+        },
+        {
+          "name": "busy",
+          "lsb": 6,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "I2C block is busy processing the latest command"
+        },
+        {
+          "name": "arblost",
+          "lsb": 5,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Set when arbitration for the bus is lost"
+        },
+        {
+          "name": "resvd",
+          "lsb": 2,
+          "nbits": 3,
+          "access": "",
+          "reset": "0",
+          "doc": "reserved for cross-compatibility with OpenCores drivers"
+        },
+        {
+          "name": "tip",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "transfer in progress"
+        },
+        {
+          "name": "if",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Interrupt flag, This bit is set when an interrupt is pending, which will cause a\nprocessor interrupt request if the IEN bit is set. The Interrupt Flag is set\nupon the completion of one byte of data transfer."
+        }
+      ],
+      "id": "i2c.status",
+      "name": "status",
+      "offset": "0x14",
+      "doc": ""
+    },
+    "i2c.core_reset": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "reset",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write `1` for a synchronous reset of the I2C core. Does not reset the prescale\nvalue. This signal is outside of the OpenCores spec."
+        }
+      ],
+      "id": "i2c.core_reset",
+      "name": "core_reset",
+      "offset": "0x18",
+      "doc": ""
+    },
+    "i2c.ev_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "txrx_done",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``txrx_done`` event"
+        },
+        {
+          "name": "i2c_int",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``i2c_int`` event"
+        }
+      ],
+      "id": "i2c.ev_status",
+      "name": "ev_status",
+      "offset": "0x1c",
+      "doc": "Triggered on the falling edge of TIP"
+    },
+    "i2c.ev_pending": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "txrx_done",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Triggered on the falling edge of TIP"
+        },
+        {
+          "name": "i2c_int",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Triggered when arbitration is lost or transaction done. Requires IACK write to\nclear or else it will re-trigger."
+        }
+      ],
+      "id": "i2c.ev_pending",
+      "name": "ev_pending",
+      "offset": "0x20",
+      "doc": "Triggered on the falling edge of TIP"
+    },
+    "i2c.ev_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "txrx_done",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``txrx_done`` Event"
+        },
+        {
+          "name": "i2c_int",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``i2c_int`` Event"
+        }
+      ],
+      "id": "i2c.ev_enable",
+      "name": "ev_enable",
+      "offset": "0x24",
+      "doc": "Triggered on the falling edge of TIP"
+    },
+    "btevents": {
+      "type": "blk",
+      "children": [
+        "btevents.ev_status",
+        "btevents.ev_pending",
+        "btevents.ev_enable"
+      ],
+      "id": "btevents",
+      "name": "btevents",
+      "offset": "0xf000e000",
+      "doc": ""
+    },
+    "btevents.ev_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rtc_int",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``rtc_int`` event"
+        },
+        {
+          "name": "com_int",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``com_int`` event"
+        }
+      ],
+      "id": "btevents.ev_status",
+      "name": "ev_status",
+      "offset": "0x0",
+      "doc": "This register contains the current raw level of the rtc_int event trigger.\nWrites to this register have no effect."
+    },
+    "btevents.ev_pending": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rtc_int",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a `rtc_int` event occurred. This Event is triggered on a **falling**\nedge."
+        },
+        {
+          "name": "com_int",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a `com_int` event occurred. This Event is triggered on a **rising** edge."
+        }
+      ],
+      "id": "btevents.ev_pending",
+      "name": "ev_pending",
+      "offset": "0x4",
+      "doc": "When a  rtc_int event occurs, the corresponding bit will be set in this\nregister.  To clear the Event, set the corresponding bit in this register."
+    },
+    "btevents.ev_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rtc_int",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``rtc_int`` Event"
+        },
+        {
+          "name": "com_int",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``com_int`` Event"
+        }
+      ],
+      "id": "btevents.ev_enable",
+      "name": "ev_enable",
+      "offset": "0x8",
+      "doc": "This register enables the corresponding rtc_int events.  Write a ``0`` to this\nregister to disable individual events."
+    },
+    "messible": {
+      "type": "blk",
+      "children": [
+        "messible.in",
+        "messible.out",
+        "messible.status"
+      ],
+      "id": "messible",
+      "name": "messible",
+      "offset": "0xf000f000",
+      "doc": ""
+    },
+    "messible.in": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "in",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "messible.in",
+      "name": "in",
+      "offset": "0x0",
+      "doc": "Write half of the FIFO to send data out the Messible. Writing to this register\nadvances the write pointer automatically."
+    },
+    "messible.out": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "out",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "messible.out",
+      "name": "out",
+      "offset": "0x4",
+      "doc": "Read half of the FIFO to receive data on the Messible. Reading from this\nregister advances the read pointer automatically."
+    },
+    "messible.status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "have",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if data can be read from the OUT FIFO."
+        },
+        {
+          "name": "full",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`0` if more data can fit into the IN FIFO."
+        }
+      ],
+      "id": "messible.status",
+      "name": "status",
+      "offset": "0x8",
+      "doc": ""
+    },
+    "messible2": {
+      "type": "blk",
+      "children": [
+        "messible2.in",
+        "messible2.out",
+        "messible2.status"
+      ],
+      "id": "messible2",
+      "name": "messible2",
+      "offset": "0xf0010000",
+      "doc": ""
+    },
+    "messible2.in": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "in",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "messible2.in",
+      "name": "in",
+      "offset": "0x0",
+      "doc": "Write half of the FIFO to send data out the Messible. Writing to this register\nadvances the write pointer automatically."
+    },
+    "messible2.out": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "out",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "messible2.out",
+      "name": "out",
+      "offset": "0x4",
+      "doc": "Read half of the FIFO to receive data on the Messible. Reading from this\nregister advances the read pointer automatically."
+    },
+    "messible2.status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "have",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if data can be read from the OUT FIFO."
+        },
+        {
+          "name": "full",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`0` if more data can fit into the IN FIFO."
+        }
+      ],
+      "id": "messible2.status",
+      "name": "status",
+      "offset": "0x8",
+      "doc": ""
+    },
+    "ticktimer": {
+      "type": "blk",
+      "children": [
+        "ticktimer.control",
+        "ticktimer.time1",
+        "ticktimer.time0",
+        "ticktimer.msleep_target1",
+        "ticktimer.msleep_target0",
+        "ticktimer.ev_status",
+        "ticktimer.ev_pending",
+        "ticktimer.ev_enable"
+      ],
+      "id": "ticktimer",
+      "name": "ticktimer",
+      "offset": "0xf0011000",
+      "doc": ""
+    },
+    "ticktimer.control": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "reset",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a `1` to this bit to reset the count to 0. This bit has priority over all\nother requests."
+        }
+      ],
+      "id": "ticktimer.control",
+      "name": "control",
+      "offset": "0x0",
+      "doc": ""
+    },
+    "ticktimer.time1": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "time",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "ticktimer.time1",
+      "name": "time1",
+      "offset": "0x4",
+      "doc": "Bits 32-63 of `TICKTIMER_TIME`. Elapsed time in systicks"
+    },
+    "ticktimer.time0": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "time",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "ticktimer.time0",
+      "name": "time0",
+      "offset": "0x8",
+      "doc": "Bits 0-31 of `TICKTIMER_TIME`."
+    },
+    "ticktimer.msleep_target1": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "msleep_target",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "ticktimer.msleep_target1",
+      "name": "msleep_target1",
+      "offset": "0xc",
+      "doc": "Bits 32-63 of `TICKTIMER_MSLEEP_TARGET`. Target time in 1.0ms ticks"
+    },
+    "ticktimer.msleep_target0": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "msleep_target",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "ticktimer.msleep_target0",
+      "name": "msleep_target0",
+      "offset": "0x10",
+      "doc": "Bits 0-31 of `TICKTIMER_MSLEEP_TARGET`."
+    },
+    "ticktimer.ev_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "alarm",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``alarm`` event"
+        }
+      ],
+      "id": "ticktimer.ev_status",
+      "name": "ev_status",
+      "offset": "0x14",
+      "doc": "This register contains the current raw level of the alarm event trigger.  Writes\nto this register have no effect."
+    },
+    "ticktimer.ev_pending": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "alarm",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a `alarm` event occurred. This Event is **level triggered** when the\nsignal is **high**."
+        }
+      ],
+      "id": "ticktimer.ev_pending",
+      "name": "ev_pending",
+      "offset": "0x18",
+      "doc": "When a  alarm event occurs, the corresponding bit will be set in this register.\nTo clear the Event, set the corresponding bit in this register."
+    },
+    "ticktimer.ev_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "alarm",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``alarm`` Event"
+        }
+      ],
+      "id": "ticktimer.ev_enable",
+      "name": "ev_enable",
+      "offset": "0x1c",
+      "doc": "This register enables the corresponding alarm events.  Write a ``0`` to this\nregister to disable individual events."
+    },
+    "susres": {
+      "type": "blk",
+      "children": [
+        "susres.control",
+        "susres.resume_time1",
+        "susres.resume_time0",
+        "susres.time1",
+        "susres.time0",
+        "susres.status",
+        "susres.state",
+        "susres.powerdown",
+        "susres.interrupt",
+        "susres.ev_status",
+        "susres.ev_pending",
+        "susres.ev_enable"
+      ],
+      "id": "susres",
+      "name": "susres",
+      "offset": "0xf0012000",
+      "doc": ""
+    },
+    "susres.control": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "load",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "If paused, write a `1` to this bit to load a resume value to the timer. If not\npaused, this bit is ignored."
+        },
+        {
+          "name": "pause",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a `1` to this field to request a pause to counting, 0 for free-run. Count\npauses on the next tick quanta."
+        }
+      ],
+      "id": "susres.control",
+      "name": "control",
+      "offset": "0x0",
+      "doc": ""
+    },
+    "susres.resume_time1": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "resume_time",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "susres.resume_time1",
+      "name": "resume_time1",
+      "offset": "0x4",
+      "doc": "Bits 32-63 of `SUSRES_RESUME_TIME`. Elapsed time to load. Loaded upon writing\n`1` to the load bit in the control register. This will immediately affect the\nmsleep extension."
+    },
+    "susres.resume_time0": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "resume_time",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "susres.resume_time0",
+      "name": "resume_time0",
+      "offset": "0x8",
+      "doc": "Bits 0-31 of `SUSRES_RESUME_TIME`."
+    },
+    "susres.time1": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "time",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "susres.time1",
+      "name": "time1",
+      "offset": "0xc",
+      "doc": "Bits 32-63 of `SUSRES_TIME`. Cycle-accurate mirror copy of time in systicks,\nfrom the TickTimer"
+    },
+    "susres.time0": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "time",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "susres.time0",
+      "name": "time0",
+      "offset": "0x10",
+      "doc": "Bits 0-31 of `SUSRES_TIME`."
+    },
+    "susres.status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "paused",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "When set, indicates that the counter has been paused"
+        }
+      ],
+      "id": "susres.status",
+      "name": "status",
+      "offset": "0x14",
+      "doc": ""
+    },
+    "susres.state": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "was_forced",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Used by the bootloader to indicate to the kernel if the current resume was from\na forced suspend (e.g. a timeout happened and a server may be unclean."
+        },
+        {
+          "name": "resume",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Used to transfer the resume state information from the loader to Xous. If set,\nindicates we are on the resume half of a suspend/resume."
+        }
+      ],
+      "id": "susres.state",
+      "name": "state",
+      "offset": "0x18",
+      "doc": ""
+    },
+    "susres.powerdown": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "powerdown",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a `1` to force an immediate powerdown. Use with care."
+        }
+      ],
+      "id": "susres.powerdown",
+      "name": "powerdown",
+      "offset": "0x1c",
+      "doc": ""
+    },
+    "susres.interrupt": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "interrupt",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Writing this causes an interrupt to fire. Used by Xous to initiate\nsuspend/resume from an interrupt context."
+        }
+      ],
+      "id": "susres.interrupt",
+      "name": "interrupt",
+      "offset": "0x20",
+      "doc": ""
+    },
+    "susres.ev_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "soft_int",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``soft_int`` event"
+        }
+      ],
+      "id": "susres.ev_status",
+      "name": "ev_status",
+      "offset": "0x24",
+      "doc": "This register contains the current raw level of the soft_int event trigger.\nWrites to this register have no effect."
+    },
+    "susres.ev_pending": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "soft_int",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a `soft_int` event occurred. This Event is triggered on a **falling**\nedge."
+        }
+      ],
+      "id": "susres.ev_pending",
+      "name": "ev_pending",
+      "offset": "0x28",
+      "doc": "When a  soft_int event occurs, the corresponding bit will be set in this\nregister.  To clear the Event, set the corresponding bit in this register."
+    },
+    "susres.ev_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "soft_int",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``soft_int`` Event"
+        }
+      ],
+      "id": "susres.ev_enable",
+      "name": "ev_enable",
+      "offset": "0x2c",
+      "doc": "This register enables the corresponding soft_int events.  Write a ``0`` to this\nregister to disable individual events."
+    },
+    "power": {
+      "type": "blk",
+      "children": [
+        "power.power",
+        "power.vibe",
+        "power.ev_status",
+        "power.ev_pending",
+        "power.ev_enable"
+      ],
+      "id": "power",
+      "name": "power",
+      "offset": "0xf0013000",
+      "doc": ""
+    },
+    "power.power": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 9,
+          "nbits": 23,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "selfdestruct",
+          "lsb": 8,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Set this bit to clear BBRAM AES key (if used) and cut power in an annoying-to-\nreset fashion"
+        },
+        {
+          "name": "boostmode",
+          "lsb": 7,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Writing a `1` causes the USB port to source 5V. To be active only when playing\nthe host role."
+        },
+        {
+          "name": "up5k_on",
+          "lsb": 6,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Writing a `1` pulses the UP5K domain to turn on"
+        },
+        {
+          "name": "reset_ec",
+          "lsb": 5,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Writing a `1` forces EC into reset. Requires write of `0` to release reset."
+        },
+        {
+          "name": "state",
+          "lsb": 3,
+          "nbits": 2,
+          "access": "",
+          "reset": "1",
+          "doc": "Current SoC power state. 0x=off or not ready, 10=on and safe to shutdown, 11=on\nand not safe to shut down, resets to 01 to allow extSRAM access immediately\nduring init"
+        },
+        {
+          "name": "ec_snoop",
+          "lsb": 2,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Writing `1` allows the insecure EC to snoop a couple keyboard pads for wakeup\nkey sequence recognition"
+        },
+        {
+          "name": "self",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "1",
+          "doc": "Writing `1` forces self power-on (overrides the EC's ability to power me down)"
+        },
+        {
+          "name": "audio",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write `1` to power on the audio subsystem"
+        }
+      ],
+      "id": "power.power",
+      "name": "power",
+      "offset": "0x0",
+      "doc": ""
+    },
+    "power.vibe": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "vibe",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Turn on vibration motor"
+        }
+      ],
+      "id": "power.vibe",
+      "name": "vibe",
+      "offset": "0x4",
+      "doc": "Vibration motor configuration register"
+    },
+    "power.ev_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "usb_attach",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``usb_attach`` event"
+        }
+      ],
+      "id": "power.ev_status",
+      "name": "ev_status",
+      "offset": "0x8",
+      "doc": "USB attach event"
+    },
+    "power.ev_pending": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "usb_attach",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "USB attach event"
+        }
+      ],
+      "id": "power.ev_pending",
+      "name": "ev_pending",
+      "offset": "0xc",
+      "doc": "USB attach event"
+    },
+    "power.ev_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "usb_attach",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``usb_attach`` Event"
+        }
+      ],
+      "id": "power.ev_enable",
+      "name": "ev_enable",
+      "offset": "0x10",
+      "doc": "USB attach event"
+    },
+    "spinor": {
+      "type": "blk",
+      "children": [
+        "spinor.config",
+        "spinor.delay_config",
+        "spinor.delay_status",
+        "spinor.command",
+        "spinor.cmd_arg",
+        "spinor.cmd_rbk_data",
+        "spinor.status",
+        "spinor.wdata",
+        "spinor.ev_status",
+        "spinor.ev_pending",
+        "spinor.ev_enable",
+        "spinor.ecc_address",
+        "spinor.ecc_status"
+      ],
+      "id": "spinor",
+      "name": "spinor",
+      "offset": "0xf0014000",
+      "doc": ""
+    },
+    "spinor.config": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 5,
+          "nbits": 27,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "dummy",
+          "lsb": 0,
+          "nbits": 5,
+          "access": "",
+          "reset": "10",
+          "doc": "Number of dummy cycles"
+        }
+      ],
+      "id": "spinor.config",
+      "name": "config",
+      "offset": "0x0",
+      "doc": ""
+    },
+    "spinor.delay_config": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 6,
+          "nbits": 26,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "load",
+          "lsb": 5,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Force delay taps to delay_d"
+        },
+        {
+          "name": "d",
+          "lsb": 0,
+          "nbits": 5,
+          "access": "",
+          "reset": "0",
+          "doc": "Delay amount; each increment is 78ps"
+        }
+      ],
+      "id": "spinor.delay_config",
+      "name": "delay_config",
+      "offset": "0x4",
+      "doc": ""
+    },
+    "spinor.delay_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 5,
+          "nbits": 27,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "q",
+          "lsb": 0,
+          "nbits": 5,
+          "access": "",
+          "reset": "0",
+          "doc": "Readback of current delay amount, useful if inc/ce is used to set"
+        }
+      ],
+      "id": "spinor.delay_status",
+      "name": "delay_status",
+      "offset": "0x8",
+      "doc": ""
+    },
+    "spinor.command": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 25,
+          "nbits": 7,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "lock_reads",
+          "lsb": 24,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "When set, locks out read operations (recommended when doing programming)"
+        },
+        {
+          "name": "data_words",
+          "lsb": 16,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": "Number of data words (2x bytes)"
+        },
+        {
+          "name": "dummy_cycles",
+          "lsb": 11,
+          "nbits": 5,
+          "access": "",
+          "reset": "0",
+          "doc": "Number of dummy cycles for manual command; 0 implies a write, >0 implies read"
+        },
+        {
+          "name": "has_arg",
+          "lsb": 10,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "When set, transmits the value of `cmd_arg` as the argument to the command"
+        },
+        {
+          "name": "cmd_code",
+          "lsb": 2,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": "Manual command code (first 8 bits, e.g. PP4B is 0x12)"
+        },
+        {
+          "name": "exec_cmd",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Writing a `1` executes a manual command"
+        },
+        {
+          "name": "wakeup",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Sequence through init & wakeup routine"
+        }
+      ],
+      "id": "spinor.command",
+      "name": "command",
+      "offset": "0xc",
+      "doc": "Write individual bits to issue special commands to SPI; setting multiple bits at\nonce leads to undefined behavior."
+    },
+    "spinor.cmd_arg": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "cmd_arg",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": "Argument to manual command"
+        }
+      ],
+      "id": "spinor.cmd_arg",
+      "name": "cmd_arg",
+      "offset": "0x10",
+      "doc": "Command argument"
+    },
+    "spinor.cmd_rbk_data": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "cmd_rbk_data",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": "Data read back from a cmd_code that has `write_code` set to 0"
+        }
+      ],
+      "id": "spinor.cmd_rbk_data",
+      "name": "cmd_rbk_data",
+      "offset": "0x14",
+      "doc": "Readback data from commands"
+    },
+    "spinor.status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "wip",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Operation in progress (write or erease)"
+        }
+      ],
+      "id": "spinor.status",
+      "name": "status",
+      "offset": "0x18",
+      "doc": "Interface status"
+    },
+    "spinor.wdata": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 16,
+          "nbits": 16,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "wdata",
+          "lsb": 0,
+          "nbits": 16,
+          "access": "",
+          "reset": "0",
+          "doc": "16-bit wide write data presented to FLASH, committed to a 128-entry deep FIFO.\nWrites to this register are not cached; note that writes to the SPINOR address\nspace are also committed to the FIFO, but this space is cached by the CPU, and\ntherefore not guaranteed to be coherent or in order. The direct wishbone-write\naddress space is provisioned for e.g. USB bus masters that don't have caching."
+        }
+      ],
+      "id": "spinor.wdata",
+      "name": "wdata",
+      "offset": "0x1c",
+      "doc": "Page data to write to FLASH"
+    },
+    "spinor.ev_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "ecc_error",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``ecc_error`` event"
+        }
+      ],
+      "id": "spinor.ev_status",
+      "name": "ev_status",
+      "offset": "0x20",
+      "doc": "An ECC event has happened on the current block; triggered by falling edge of\nECC_N"
+    },
+    "spinor.ev_pending": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "ecc_error",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "An ECC event has happened on the current block; triggered by falling edge of\nECC_N"
+        }
+      ],
+      "id": "spinor.ev_pending",
+      "name": "ev_pending",
+      "offset": "0x24",
+      "doc": "An ECC event has happened on the current block; triggered by falling edge of\nECC_N"
+    },
+    "spinor.ev_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "ecc_error",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``ecc_error`` Event"
+        }
+      ],
+      "id": "spinor.ev_enable",
+      "name": "ev_enable",
+      "offset": "0x28",
+      "doc": "An ECC event has happened on the current block; triggered by falling edge of\nECC_N"
+    },
+    "spinor.ecc_address": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "ecc_address",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": "Address of the most recent ECC event"
+        }
+      ],
+      "id": "spinor.ecc_address",
+      "name": "ecc_address",
+      "offset": "0x2c",
+      "doc": ""
+    },
+    "spinor.ecc_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "ecc_overflow",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "More than one ECS_N event has happened since th last time ecc_address was\nchecked"
+        },
+        {
+          "name": "ecc_error",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Live status of the ECS_N bit (ECC error on current packet when low)"
+        }
+      ],
+      "id": "spinor.ecc_status",
+      "name": "ecc_status",
+      "offset": "0x30",
+      "doc": ""
+    },
+    "keyboard": {
+      "type": "blk",
+      "children": [
+        "keyboard.uart_char",
+        "keyboard.row0dat",
+        "keyboard.row1dat",
+        "keyboard.row2dat",
+        "keyboard.row3dat",
+        "keyboard.row4dat",
+        "keyboard.row5dat",
+        "keyboard.row6dat",
+        "keyboard.row7dat",
+        "keyboard.row8dat",
+        "keyboard.ev_status",
+        "keyboard.ev_pending",
+        "keyboard.ev_enable",
+        "keyboard.rowchange"
+      ],
+      "id": "keyboard",
+      "name": "keyboard",
+      "offset": "0xf0015000",
+      "doc": ""
+    },
+    "keyboard.uart_char": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 9,
+          "nbits": 23,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "stb",
+          "lsb": 8,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "current strobe value (for debugging)"
+        },
+        {
+          "name": "char",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": "character value being injected"
+        }
+      ],
+      "id": "keyboard.uart_char",
+      "name": "uart_char",
+      "offset": "0x0",
+      "doc": ""
+    },
+    "keyboard.row0dat": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 10,
+          "nbits": 22,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "row0dat",
+          "lsb": 0,
+          "nbits": 10,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "keyboard.row0dat",
+      "name": "row0dat",
+      "offset": "0x4",
+      "doc": "Column data for the given row"
+    },
+    "keyboard.row1dat": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 10,
+          "nbits": 22,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "row1dat",
+          "lsb": 0,
+          "nbits": 10,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "keyboard.row1dat",
+      "name": "row1dat",
+      "offset": "0x8",
+      "doc": "Column data for the given row"
+    },
+    "keyboard.row2dat": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 10,
+          "nbits": 22,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "row2dat",
+          "lsb": 0,
+          "nbits": 10,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "keyboard.row2dat",
+      "name": "row2dat",
+      "offset": "0xc",
+      "doc": "Column data for the given row"
+    },
+    "keyboard.row3dat": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 10,
+          "nbits": 22,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "row3dat",
+          "lsb": 0,
+          "nbits": 10,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "keyboard.row3dat",
+      "name": "row3dat",
+      "offset": "0x10",
+      "doc": "Column data for the given row"
+    },
+    "keyboard.row4dat": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 10,
+          "nbits": 22,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "row4dat",
+          "lsb": 0,
+          "nbits": 10,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "keyboard.row4dat",
+      "name": "row4dat",
+      "offset": "0x14",
+      "doc": "Column data for the given row"
+    },
+    "keyboard.row5dat": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 10,
+          "nbits": 22,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "row5dat",
+          "lsb": 0,
+          "nbits": 10,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "keyboard.row5dat",
+      "name": "row5dat",
+      "offset": "0x18",
+      "doc": "Column data for the given row"
+    },
+    "keyboard.row6dat": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 10,
+          "nbits": 22,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "row6dat",
+          "lsb": 0,
+          "nbits": 10,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "keyboard.row6dat",
+      "name": "row6dat",
+      "offset": "0x1c",
+      "doc": "Column data for the given row"
+    },
+    "keyboard.row7dat": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 10,
+          "nbits": 22,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "row7dat",
+          "lsb": 0,
+          "nbits": 10,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "keyboard.row7dat",
+      "name": "row7dat",
+      "offset": "0x20",
+      "doc": "Column data for the given row"
+    },
+    "keyboard.row8dat": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 10,
+          "nbits": 22,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "row8dat",
+          "lsb": 0,
+          "nbits": 10,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "keyboard.row8dat",
+      "name": "row8dat",
+      "offset": "0x24",
+      "doc": "Column data for the given row"
+    },
+    "keyboard.ev_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "inject",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``inject`` event"
+        },
+        {
+          "name": "keypressed",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``keypressed`` event"
+        }
+      ],
+      "id": "keyboard.ev_status",
+      "name": "ev_status",
+      "offset": "0x28",
+      "doc": "Key injection request received"
+    },
+    "keyboard.ev_pending": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "inject",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Key injection request received"
+        },
+        {
+          "name": "keypressed",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Triggered every time there is a difference in the row state"
+        }
+      ],
+      "id": "keyboard.ev_pending",
+      "name": "ev_pending",
+      "offset": "0x2c",
+      "doc": "Key injection request received"
+    },
+    "keyboard.ev_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "inject",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``inject`` Event"
+        },
+        {
+          "name": "keypressed",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``keypressed`` Event"
+        }
+      ],
+      "id": "keyboard.ev_enable",
+      "name": "ev_enable",
+      "offset": "0x30",
+      "doc": "Key injection request received"
+    },
+    "keyboard.rowchange": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 9,
+          "nbits": 23,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "rowchange",
+          "lsb": 0,
+          "nbits": 9,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "keyboard.rowchange",
+      "name": "rowchange",
+      "offset": "0x34",
+      "doc": "The rows that changed at the point of interrupt generation. Does not update\nagain until the interrupt is serviced."
+    },
+    "keyinject": {
+      "type": "blk",
+      "children": [
+        "keyinject.uart_char"
+      ],
+      "id": "keyinject",
+      "name": "keyinject",
+      "offset": "0xf0016000",
+      "doc": ""
+    },
+    "keyinject.uart_char": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 9,
+          "nbits": 23,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "disable",
+          "lsb": 8,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "writing a 1 permanently disables the block, until the next cold boot"
+        },
+        {
+          "name": "char",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": "character value to inject. Automatically raises an interrupt upon write. There\nis no interlock or FIFO buffering on this, so you can lose characters if you\ninject too fast."
+        }
+      ],
+      "id": "keyinject.uart_char",
+      "name": "uart_char",
+      "offset": "0x0",
+      "doc": ""
+    },
+    "seed": {
+      "type": "blk",
+      "children": [
+        "seed.seed1",
+        "seed.seed0"
+      ],
+      "id": "seed",
+      "name": "seed",
+      "offset": "0xf0017000",
+      "doc": ""
+    },
+    "seed.seed1": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "seed",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "534400013",
+          "doc": ""
+        }
+      ],
+      "id": "seed.seed1",
+      "name": "seed1",
+      "offset": "0x0",
+      "doc": "Bits 32-63 of `SEED_SEED`. Seed used for the build"
+    },
+    "seed.seed0": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "seed",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "1540989043",
+          "doc": ""
+        }
+      ],
+      "id": "seed.seed0",
+      "name": "seed0",
+      "offset": "0x4",
+      "doc": "Bits 0-31 of `SEED_SEED`."
+    },
+    "keyrom": {
+      "type": "blk",
+      "children": [
+        "keyrom.address",
+        "keyrom.data"
+      ],
+      "id": "keyrom",
+      "name": "keyrom",
+      "offset": "0xf0018000",
+      "doc": ""
+    },
+    "keyrom.address": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "address",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "keyrom.address",
+      "name": "address",
+      "offset": "0x0",
+      "doc": "address for ROM"
+    },
+    "keyrom.data": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "data",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "keyrom.data",
+      "name": "data",
+      "offset": "0x4",
+      "doc": "data from ROM"
+    },
+    "audio": {
+      "type": "blk",
+      "children": [
+        "audio.ev_status",
+        "audio.ev_pending",
+        "audio.ev_enable",
+        "audio.rx_ctl",
+        "audio.rx_stat",
+        "audio.rx_conf",
+        "audio.tx_ctl",
+        "audio.tx_stat",
+        "audio.tx_conf"
+      ],
+      "id": "audio",
+      "name": "audio",
+      "offset": "0xf0019000",
+      "doc": ""
+    },
+    "audio.ev_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 4,
+          "nbits": 28,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "tx_error",
+          "lsb": 3,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``tx_error`` event"
+        },
+        {
+          "name": "tx_ready",
+          "lsb": 2,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``tx_ready`` event"
+        },
+        {
+          "name": "rx_error",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``rx_error`` event"
+        },
+        {
+          "name": "rx_ready",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``rx_ready`` event"
+        }
+      ],
+      "id": "audio.ev_status",
+      "name": "ev_status",
+      "offset": "0x0",
+      "doc": "Indicates a Tx error has happened (over/underflow"
+    },
+    "audio.ev_pending": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 4,
+          "nbits": 28,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "tx_error",
+          "lsb": 3,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Indicates a Tx error has happened (over/underflow"
+        },
+        {
+          "name": "tx_ready",
+          "lsb": 2,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Indicates enough space available for next Tx quanta of 256 words"
+        },
+        {
+          "name": "rx_error",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Indicates an Rx error has happened (over/underflow)"
+        },
+        {
+          "name": "rx_ready",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Indicates FIFO is ready to read"
+        }
+      ],
+      "id": "audio.ev_pending",
+      "name": "ev_pending",
+      "offset": "0x4",
+      "doc": "Indicates a Tx error has happened (over/underflow"
+    },
+    "audio.ev_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 4,
+          "nbits": 28,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "tx_error",
+          "lsb": 3,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``tx_error`` Event"
+        },
+        {
+          "name": "tx_ready",
+          "lsb": 2,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``tx_ready`` Event"
+        },
+        {
+          "name": "rx_error",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``rx_error`` Event"
+        },
+        {
+          "name": "rx_ready",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``rx_ready`` Event"
+        }
+      ],
+      "id": "audio.ev_enable",
+      "name": "ev_enable",
+      "offset": "0x8",
+      "doc": "Indicates a Tx error has happened (over/underflow"
+    },
+    "audio.rx_ctl": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "reset",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Writing `1` resets the FIFO. Reset happens regardless of enable state."
+        },
+        {
+          "name": "enable",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Enable the receiving data"
+        }
+      ],
+      "id": "audio.rx_ctl",
+      "name": "rx_ctl",
+      "offset": "0xc",
+      "doc": "Rx data path control"
+    },
+    "audio.rx_stat": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "concatenate_channels",
+          "lsb": 31,
+          "nbits": 1,
+          "access": "",
+          "reset": "1",
+          "doc": "Receive and send both channels atomically"
+        },
+        {
+          "name": "fifo_depth",
+          "lsb": 22,
+          "nbits": 9,
+          "access": "",
+          "reset": "0",
+          "doc": "FIFO depth as synthesized"
+        },
+        {
+          "name": "rdcount",
+          "lsb": 13,
+          "nbits": 9,
+          "access": "",
+          "reset": "0",
+          "doc": "Read count"
+        },
+        {
+          "name": "wrcount",
+          "lsb": 4,
+          "nbits": 9,
+          "access": "",
+          "reset": "0",
+          "doc": "Write count"
+        },
+        {
+          "name": "empty",
+          "lsb": 3,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "No data available in FIFO to read"
+        },
+        {
+          "name": "dataready",
+          "lsb": 2,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "256 words of data loaded and ready to read"
+        },
+        {
+          "name": "underflow",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Rx underflow"
+        },
+        {
+          "name": "overflow",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Rx overflow"
+        }
+      ],
+      "id": "audio.rx_stat",
+      "name": "rx_stat",
+      "offset": "0x10",
+      "doc": "Rx data path status"
+    },
+    "audio.rx_conf": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "lrck_freq",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "",
+          "reset": "44100",
+          "doc": "Audio sampling rate frequency"
+        },
+        {
+          "name": "sample_width",
+          "lsb": 2,
+          "nbits": 6,
+          "access": "",
+          "reset": "16",
+          "doc": "Single sample width"
+        },
+        {
+          "name": "format",
+          "lsb": 0,
+          "nbits": 2,
+          "access": "",
+          "reset": "1",
+          "doc": "I2S sample format. I2S_FORMAT.I2S_LEFT_JUSTIFIED is left-justified,\nI2S_FORMAT.I2S_STANDARD is I2S standard"
+        }
+      ],
+      "id": "audio.rx_conf",
+      "name": "rx_conf",
+      "offset": "0x14",
+      "doc": "Rx configuration"
+    },
+    "audio.tx_ctl": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "reset",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Writing `1` resets the FIFO. Reset happens regardless of enable state."
+        },
+        {
+          "name": "enable",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Enable the transmission data"
+        }
+      ],
+      "id": "audio.tx_ctl",
+      "name": "tx_ctl",
+      "offset": "0x18",
+      "doc": "Tx data path control"
+    },
+    "audio.tx_stat": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 25,
+          "nbits": 7,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "concatenate_channels",
+          "lsb": 24,
+          "nbits": 1,
+          "access": "",
+          "reset": "1",
+          "doc": "Receive and send both channels atomically"
+        },
+        {
+          "name": "rdcount",
+          "lsb": 15,
+          "nbits": 9,
+          "access": "",
+          "reset": "0",
+          "doc": "Tx read count"
+        },
+        {
+          "name": "wrcount",
+          "lsb": 6,
+          "nbits": 9,
+          "access": "",
+          "reset": "0",
+          "doc": "Tx write count"
+        },
+        {
+          "name": "empty",
+          "lsb": 5,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "FIFO is empty"
+        },
+        {
+          "name": "full",
+          "lsb": 4,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "FIFO is full or overfull"
+        },
+        {
+          "name": "almostfull",
+          "lsb": 3,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Less than 8 words space available"
+        },
+        {
+          "name": "free",
+          "lsb": 2,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "At least 256 words of space free"
+        },
+        {
+          "name": "underflow",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Tx underflow"
+        },
+        {
+          "name": "overflow",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Tx overflow"
+        }
+      ],
+      "id": "audio.tx_stat",
+      "name": "tx_stat",
+      "offset": "0x1c",
+      "doc": "Tx data path status"
+    },
+    "audio.tx_conf": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "lrck_freq",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "",
+          "reset": "44100",
+          "doc": "Audio sampling rate frequency"
+        },
+        {
+          "name": "sample_width",
+          "lsb": 2,
+          "nbits": 6,
+          "access": "",
+          "reset": "16",
+          "doc": "Single sample width"
+        },
+        {
+          "name": "format",
+          "lsb": 0,
+          "nbits": 2,
+          "access": "",
+          "reset": "1",
+          "doc": "I2S sample format. I2S_FORMAT.I2S_LEFT_JUSTIFIED is left-justified,\nI2S_FORMAT.I2S_STANDARD is I2S standard"
+        }
+      ],
+      "id": "audio.tx_conf",
+      "name": "tx_conf",
+      "offset": "0x20",
+      "doc": "TX configuration"
+    },
+    "trng_kernel": {
+      "type": "blk",
+      "children": [
+        "trng_kernel.status",
+        "trng_kernel.data",
+        "trng_kernel.ev_status",
+        "trng_kernel.ev_pending",
+        "trng_kernel.ev_enable"
+      ],
+      "id": "trng_kernel",
+      "name": "trng_kernel",
+      "offset": "0xf001a000",
+      "doc": ""
+    },
+    "trng_kernel.status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 22,
+          "nbits": 10,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "wrcount",
+          "lsb": 12,
+          "nbits": 10,
+          "access": "",
+          "reset": "0",
+          "doc": "Write fifo pointer"
+        },
+        {
+          "name": "rdcount",
+          "lsb": 2,
+          "nbits": 10,
+          "access": "",
+          "reset": "0",
+          "doc": "Read fifo pointer"
+        },
+        {
+          "name": "avail",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Indicates that the read FIFO is not empty"
+        },
+        {
+          "name": "ready",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "When set, indicates that the TRNG interface is capable of generating numbers"
+        }
+      ],
+      "id": "trng_kernel.status",
+      "name": "status",
+      "offset": "0x0",
+      "doc": ""
+    },
+    "trng_kernel.data": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "data",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": "Latest random data from the FIFO; only valid if ``avail`` bit is set"
+        }
+      ],
+      "id": "trng_kernel.data",
+      "name": "data",
+      "offset": "0x4",
+      "doc": ""
+    },
+    "trng_kernel.ev_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "error",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``error`` event"
+        },
+        {
+          "name": "avail",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``avail`` event"
+        }
+      ],
+      "id": "trng_kernel.ev_status",
+      "name": "ev_status",
+      "offset": "0x8",
+      "doc": "Triggered whenever an underrun condition first occurs on the kernel interface"
+    },
+    "trng_kernel.ev_pending": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "error",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Triggered whenever an underrun condition first occurs on the kernel interface"
+        },
+        {
+          "name": "avail",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Triggered anytime there is data available on the kernel interface"
+        }
+      ],
+      "id": "trng_kernel.ev_pending",
+      "name": "ev_pending",
+      "offset": "0xc",
+      "doc": "Triggered whenever an underrun condition first occurs on the kernel interface"
+    },
+    "trng_kernel.ev_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "error",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``error`` Event"
+        },
+        {
+          "name": "avail",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``avail`` Event"
+        }
+      ],
+      "id": "trng_kernel.ev_enable",
+      "name": "ev_enable",
+      "offset": "0x10",
+      "doc": "Triggered whenever an underrun condition first occurs on the kernel interface"
+    },
+    "trng_server": {
+      "type": "blk",
+      "children": [
+        "trng_server.control",
+        "trng_server.data",
+        "trng_server.status",
+        "trng_server.av_config",
+        "trng_server.ro_config",
+        "trng_server.errors",
+        "trng_server.ev_status",
+        "trng_server.ev_pending",
+        "trng_server.ev_enable"
+      ],
+      "id": "trng_server",
+      "name": "trng_server",
+      "offset": "0xf001b000",
+      "doc": ""
+    },
+    "trng_server.control": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 6,
+          "nbits": 26,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "clr_err",
+          "lsb": 5,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write ``1`` to this bit to clear the ``errors`` register"
+        },
+        {
+          "name": "no_check",
+          "lsb": 4,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "When set, disables on-line health checking (for power saving)"
+        },
+        {
+          "name": "powersave",
+          "lsb": 3,
+          "nbits": 1,
+          "access": "",
+          "reset": "1",
+          "doc": "When set, TRNGs are automatically turned off until the low water mark is hit;\nwhen cleared, TRNGs are always on"
+        },
+        {
+          "name": "av_dis",
+          "lsb": 2,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "When set, disables the avalanche generator as an entropy source"
+        },
+        {
+          "name": "ro_dis",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "When set, disables the ring oscillator as an entropy source"
+        },
+        {
+          "name": "enable",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "1",
+          "doc": "Power on the management interface and auto-fill random numbers"
+        }
+      ],
+      "id": "trng_server.control",
+      "name": "control",
+      "offset": "0x0",
+      "doc": ""
+    },
+    "trng_server.data": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "data",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": "Latest random data from the FIFO; only valid if available bit is set"
+        }
+      ],
+      "id": "trng_server.data",
+      "name": "data",
+      "offset": "0x4",
+      "doc": ""
+    },
+    "trng_server.status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 22,
+          "nbits": 10,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "full",
+          "lsb": 21,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Both kernel and server FIFOs have been topped off"
+        },
+        {
+          "name": "wrcount",
+          "lsb": 11,
+          "nbits": 10,
+          "access": "",
+          "reset": "0",
+          "doc": "Write fifo pointer"
+        },
+        {
+          "name": "rdcount",
+          "lsb": 1,
+          "nbits": 10,
+          "access": "",
+          "reset": "0",
+          "doc": "Read fifo pointer"
+        },
+        {
+          "name": "avail",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "FIFO data is available"
+        }
+      ],
+      "id": "trng_server.status",
+      "name": "status",
+      "offset": "0x8",
+      "doc": ""
+    },
+    "trng_server.av_config": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 29,
+          "nbits": 3,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "test",
+          "lsb": 28,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "When set, puts the generator into test mode -- full-size, raw ADC samples are\ndirectly placed into the FIFO at full rate, creating a 'virtual oscilloscope'\nsnapshot of the avalanche generator waveform."
+        },
+        {
+          "name": "samples",
+          "lsb": 20,
+          "nbits": 8,
+          "access": "",
+          "reset": "32",
+          "doc": "Number of samples to fold into a single result. Smaller values increase rate but\ndecrease quality. Default is 32."
+        },
+        {
+          "name": "powerdelay",
+          "lsb": 0,
+          "nbits": 20,
+          "access": "",
+          "reset": "50000",
+          "doc": "Delay in microseconds for avalanche generator to stabilize"
+        }
+      ],
+      "id": "trng_server.av_config",
+      "name": "av_config",
+      "offset": "0xc",
+      "doc": ""
+    },
+    "trng_server.ro_config": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "oversampling",
+          "lsb": 24,
+          "nbits": 8,
+          "access": "",
+          "reset": "3",
+          "doc": "Number of stages to oversample entropy. Normally, each bit is just sampled and\nshifted once (so 32 times for 32-bit word). Each increment of oversampling will\nadd another stage."
+        },
+        {
+          "name": "fuzz",
+          "lsb": 23,
+          "nbits": 1,
+          "access": "",
+          "reset": "1",
+          "doc": "Modulate the `delay`/`dwell` parameter slightly from run-to-run,  based on\nprevious run's random values. May help to break ring oscillator resonances\ntrained by the delay/dwell periodicity."
+        },
+        {
+          "name": "delay",
+          "lsb": 13,
+          "nbits": 10,
+          "access": "",
+          "reset": "4",
+          "doc": "Sampler delay time. Sets the delay between when the small rings are merged\ntogether, and when the final entropy result is sampled. Value encodes number of\nsysclk edges to pass during the delay period. Delay should be long enough for\nthe signal to propagate around the merged ring, but longer times also means more\ncoupling of the deterministic sysclk noise into the rings."
+        },
+        {
+          "name": "dwell",
+          "lsb": 1,
+          "nbits": 12,
+          "access": "",
+          "reset": "100",
+          "doc": "Prescaler to set dwell-time of entropy collection.  Controls the period of how\nlong the oscillators are in a metastable state to collect entropy  before\nsampling. Value encodes the number of sysclk edges to pass during the dwell\nperiod."
+        },
+        {
+          "name": "gang",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "1",
+          "doc": "Fold in collective gang entropy during dwell time"
+        }
+      ],
+      "id": "trng_server.ro_config",
+      "name": "ro_config",
+      "offset": "0x10",
+      "doc": ""
+    },
+    "trng_server.errors": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 22,
+          "nbits": 10,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "av_health",
+          "lsb": 21,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "When `1`, Avalanche generator has failed an on-line health test"
+        },
+        {
+          "name": "ro_health",
+          "lsb": 20,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "When `1`, Ring oscillator has failed an on-line health test"
+        },
+        {
+          "name": "kernel_underrun",
+          "lsb": 10,
+          "nbits": 10,
+          "access": "",
+          "reset": "0",
+          "doc": "If non-zero, a kernel underrun has occurred. Will count number of underruns up\nto max field size"
+        },
+        {
+          "name": "server_underrun",
+          "lsb": 0,
+          "nbits": 10,
+          "access": "",
+          "reset": "0",
+          "doc": "If non-zero, a server underrun has occurred. Will count number of underruns up\nto max field size"
+        }
+      ],
+      "id": "trng_server.errors",
+      "name": "errors",
+      "offset": "0x14",
+      "doc": ""
+    },
+    "trng_server.ev_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 3,
+          "nbits": 29,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "health",
+          "lsb": 2,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``health`` event"
+        },
+        {
+          "name": "error",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``error`` event"
+        },
+        {
+          "name": "avail",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``avail`` event"
+        }
+      ],
+      "id": "trng_server.ev_status",
+      "name": "ev_status",
+      "offset": "0x18",
+      "doc": "Triggered whenever a health event first occurs"
+    },
+    "trng_server.ev_pending": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 3,
+          "nbits": 29,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "health",
+          "lsb": 2,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Triggered whenever a health event first occurs"
+        },
+        {
+          "name": "error",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Triggered whenever an error condition first occurs on the server interface"
+        },
+        {
+          "name": "avail",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Triggered anytime there is data available on the server interface"
+        }
+      ],
+      "id": "trng_server.ev_pending",
+      "name": "ev_pending",
+      "offset": "0x1c",
+      "doc": "Triggered whenever a health event first occurs"
+    },
+    "trng_server.ev_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 3,
+          "nbits": 29,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "health",
+          "lsb": 2,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``health`` Event"
+        },
+        {
+          "name": "error",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``error`` Event"
+        },
+        {
+          "name": "avail",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``avail`` Event"
+        }
+      ],
+      "id": "trng_server.ev_enable",
+      "name": "ev_enable",
+      "offset": "0x20",
+      "doc": "Triggered whenever a health event first occurs"
+    },
+    "trng": {
+      "type": "blk",
+      "children": [
+        "trng.xadc_temperature",
+        "trng.xadc_vccint",
+        "trng.xadc_vccaux",
+        "trng.xadc_vccbram",
+        "trng.xadc_vbus",
+        "trng.xadc_usb_p",
+        "trng.xadc_usb_n",
+        "trng.xadc_noise0",
+        "trng.xadc_noise1",
+        "trng.xadc_eoc",
+        "trng.xadc_eos",
+        "trng.xadc_gpio5",
+        "trng.xadc_gpio2",
+        "trng.xadc_drp_enable",
+        "trng.xadc_drp_read",
+        "trng.xadc_drp_write",
+        "trng.xadc_drp_drdy",
+        "trng.xadc_drp_adr",
+        "trng.xadc_drp_dat_w",
+        "trng.xadc_drp_dat_r"
+      ],
+      "id": "trng",
+      "name": "trng",
+      "offset": "0xf001c000",
+      "doc": ""
+    },
+    "trng.xadc_temperature": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 12,
+          "nbits": 20,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "xadc_temperature",
+          "lsb": 0,
+          "nbits": 12,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "trng.xadc_temperature",
+      "name": "xadc_temperature",
+      "offset": "0x0",
+      "doc": "Raw Temperature value from XADC.\n\nTemperature (°C) = ``Value`` x 503.975 / 4096 - 273.15."
+    },
+    "trng.xadc_vccint": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 12,
+          "nbits": 20,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "xadc_vccint",
+          "lsb": 0,
+          "nbits": 12,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "trng.xadc_vccint",
+      "name": "xadc_vccint",
+      "offset": "0x4",
+      "doc": "Raw VCCINT value from XADC.\n\nVCCINT (V) = ``Value`` x 3 / 4096."
+    },
+    "trng.xadc_vccaux": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 12,
+          "nbits": 20,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "xadc_vccaux",
+          "lsb": 0,
+          "nbits": 12,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "trng.xadc_vccaux",
+      "name": "xadc_vccaux",
+      "offset": "0x8",
+      "doc": "Raw VCCAUX value from XADC.\n\nVCCAUX (V) = ``Value`` x 3 / 4096."
+    },
+    "trng.xadc_vccbram": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 12,
+          "nbits": 20,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "xadc_vccbram",
+          "lsb": 0,
+          "nbits": 12,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "trng.xadc_vccbram",
+      "name": "xadc_vccbram",
+      "offset": "0xc",
+      "doc": "Raw VCCBRAM value from XADC.\n\nVCCBRAM (V) = ``Value`` x 3 / 4096."
+    },
+    "trng.xadc_vbus": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 12,
+          "nbits": 20,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "xadc_vbus",
+          "lsb": 0,
+          "nbits": 12,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "trng.xadc_vbus",
+      "name": "xadc_vbus",
+      "offset": "0x10",
+      "doc": "Raw VBUS value from XADC"
+    },
+    "trng.xadc_usb_p": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 12,
+          "nbits": 20,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "xadc_usb_p",
+          "lsb": 0,
+          "nbits": 12,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "trng.xadc_usb_p",
+      "name": "xadc_usb_p",
+      "offset": "0x14",
+      "doc": "Voltage on USB_P pin"
+    },
+    "trng.xadc_usb_n": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 12,
+          "nbits": 20,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "xadc_usb_n",
+          "lsb": 0,
+          "nbits": 12,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "trng.xadc_usb_n",
+      "name": "xadc_usb_n",
+      "offset": "0x18",
+      "doc": "Voltage on USB_N pin"
+    },
+    "trng.xadc_noise0": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 12,
+          "nbits": 20,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "xadc_noise0",
+          "lsb": 0,
+          "nbits": 12,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "trng.xadc_noise0",
+      "name": "xadc_noise0",
+      "offset": "0x1c",
+      "doc": "Raw noise0"
+    },
+    "trng.xadc_noise1": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 12,
+          "nbits": 20,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "xadc_noise1",
+          "lsb": 0,
+          "nbits": 12,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "trng.xadc_noise1",
+      "name": "xadc_noise1",
+      "offset": "0x20",
+      "doc": "Raw noise1"
+    },
+    "trng.xadc_eoc": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "xadc_eoc",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "trng.xadc_eoc",
+      "name": "xadc_eoc",
+      "offset": "0x24",
+      "doc": "End of Convertion Status, ``1``: Convertion Done."
+    },
+    "trng.xadc_eos": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "xadc_eos",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "trng.xadc_eos",
+      "name": "xadc_eos",
+      "offset": "0x28",
+      "doc": "End of Sequence Status, ``1``: Sequence Done."
+    },
+    "trng.xadc_gpio5": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 12,
+          "nbits": 20,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "xadc_gpio5",
+          "lsb": 0,
+          "nbits": 12,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "trng.xadc_gpio5",
+      "name": "xadc_gpio5",
+      "offset": "0x2c",
+      "doc": "GPIO5 value"
+    },
+    "trng.xadc_gpio2": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 12,
+          "nbits": 20,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "xadc_gpio2",
+          "lsb": 0,
+          "nbits": 12,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "trng.xadc_gpio2",
+      "name": "xadc_gpio2",
+      "offset": "0x30",
+      "doc": "GPIO2 value"
+    },
+    "trng.xadc_drp_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "xadc_drp_enable",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "trng.xadc_drp_enable",
+      "name": "xadc_drp_enable",
+      "offset": "0x34",
+      "doc": ""
+    },
+    "trng.xadc_drp_read": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "xadc_drp_read",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "trng.xadc_drp_read",
+      "name": "xadc_drp_read",
+      "offset": "0x38",
+      "doc": ""
+    },
+    "trng.xadc_drp_write": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "xadc_drp_write",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "trng.xadc_drp_write",
+      "name": "xadc_drp_write",
+      "offset": "0x3c",
+      "doc": ""
+    },
+    "trng.xadc_drp_drdy": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "xadc_drp_drdy",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "trng.xadc_drp_drdy",
+      "name": "xadc_drp_drdy",
+      "offset": "0x40",
+      "doc": ""
+    },
+    "trng.xadc_drp_adr": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 7,
+          "nbits": 25,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "xadc_drp_adr",
+          "lsb": 0,
+          "nbits": 7,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "trng.xadc_drp_adr",
+      "name": "xadc_drp_adr",
+      "offset": "0x44",
+      "doc": ""
+    },
+    "trng.xadc_drp_dat_w": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 16,
+          "nbits": 16,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "xadc_drp_dat_w",
+          "lsb": 0,
+          "nbits": 16,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "trng.xadc_drp_dat_w",
+      "name": "xadc_drp_dat_w",
+      "offset": "0x48",
+      "doc": ""
+    },
+    "trng.xadc_drp_dat_r": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 16,
+          "nbits": 16,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "xadc_drp_dat_r",
+          "lsb": 0,
+          "nbits": 16,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "trng.xadc_drp_dat_r",
+      "name": "xadc_drp_dat_r",
+      "offset": "0x4c",
+      "doc": ""
+    },
+    "sha512": {
+      "type": "blk",
+      "children": [
+        "sha512.config",
+        "sha512.command",
+        "sha512.digest01",
+        "sha512.digest00",
+        "sha512.digest11",
+        "sha512.digest10",
+        "sha512.digest21",
+        "sha512.digest20",
+        "sha512.digest31",
+        "sha512.digest30",
+        "sha512.digest41",
+        "sha512.digest40",
+        "sha512.digest51",
+        "sha512.digest50",
+        "sha512.digest61",
+        "sha512.digest60",
+        "sha512.digest71",
+        "sha512.digest70",
+        "sha512.msg_length1",
+        "sha512.msg_length0",
+        "sha512.ev_status",
+        "sha512.ev_pending",
+        "sha512.ev_enable",
+        "sha512.fifo"
+      ],
+      "id": "sha512",
+      "name": "sha512",
+      "offset": "0xf001d000",
+      "doc": ""
+    },
+    "sha512.config": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 4,
+          "nbits": 28,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "select_256",
+          "lsb": 3,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Select SHA512/256 IV constants when set to `1`"
+        },
+        {
+          "name": "digest_swap",
+          "lsb": 2,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Swap the endianness on the output digest"
+        },
+        {
+          "name": "endian_swap",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Swap the endianness on the input data"
+        },
+        {
+          "name": "sha_en",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Enable the SHA512 core"
+        }
+      ],
+      "id": "sha512.config",
+      "name": "config",
+      "offset": "0x0",
+      "doc": "Configuration register for the HMAC block"
+    },
+    "sha512.command": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "hash_process",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Writing a 1 digests the hash data"
+        },
+        {
+          "name": "hash_start",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Writing a 1 indicates the beginning of hash data"
+        }
+      ],
+      "id": "sha512.command",
+      "name": "command",
+      "offset": "0x4",
+      "doc": "Command register for the HMAC block"
+    },
+    "sha512.digest01": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "digest0",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "sha512.digest01",
+      "name": "digest01",
+      "offset": "0x8",
+      "doc": "Bits 32-63 of `SHA512_DIGEST0`. digest word 0"
+    },
+    "sha512.digest00": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "digest0",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "sha512.digest00",
+      "name": "digest00",
+      "offset": "0xc",
+      "doc": "Bits 0-31 of `SHA512_DIGEST0`."
+    },
+    "sha512.digest11": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "digest1",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "sha512.digest11",
+      "name": "digest11",
+      "offset": "0x10",
+      "doc": "Bits 32-63 of `SHA512_DIGEST1`. digest word 1"
+    },
+    "sha512.digest10": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "digest1",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "sha512.digest10",
+      "name": "digest10",
+      "offset": "0x14",
+      "doc": "Bits 0-31 of `SHA512_DIGEST1`."
+    },
+    "sha512.digest21": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "digest2",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "sha512.digest21",
+      "name": "digest21",
+      "offset": "0x18",
+      "doc": "Bits 32-63 of `SHA512_DIGEST2`. digest word 2"
+    },
+    "sha512.digest20": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "digest2",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "sha512.digest20",
+      "name": "digest20",
+      "offset": "0x1c",
+      "doc": "Bits 0-31 of `SHA512_DIGEST2`."
+    },
+    "sha512.digest31": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "digest3",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "sha512.digest31",
+      "name": "digest31",
+      "offset": "0x20",
+      "doc": "Bits 32-63 of `SHA512_DIGEST3`. digest word 3"
+    },
+    "sha512.digest30": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "digest3",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "sha512.digest30",
+      "name": "digest30",
+      "offset": "0x24",
+      "doc": "Bits 0-31 of `SHA512_DIGEST3`."
+    },
+    "sha512.digest41": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "digest4",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "sha512.digest41",
+      "name": "digest41",
+      "offset": "0x28",
+      "doc": "Bits 32-63 of `SHA512_DIGEST4`. digest word 4"
+    },
+    "sha512.digest40": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "digest4",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "sha512.digest40",
+      "name": "digest40",
+      "offset": "0x2c",
+      "doc": "Bits 0-31 of `SHA512_DIGEST4`."
+    },
+    "sha512.digest51": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "digest5",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "sha512.digest51",
+      "name": "digest51",
+      "offset": "0x30",
+      "doc": "Bits 32-63 of `SHA512_DIGEST5`. digest word 5"
+    },
+    "sha512.digest50": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "digest5",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "sha512.digest50",
+      "name": "digest50",
+      "offset": "0x34",
+      "doc": "Bits 0-31 of `SHA512_DIGEST5`."
+    },
+    "sha512.digest61": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "digest6",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "sha512.digest61",
+      "name": "digest61",
+      "offset": "0x38",
+      "doc": "Bits 32-63 of `SHA512_DIGEST6`. digest word 6"
+    },
+    "sha512.digest60": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "digest6",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "sha512.digest60",
+      "name": "digest60",
+      "offset": "0x3c",
+      "doc": "Bits 0-31 of `SHA512_DIGEST6`."
+    },
+    "sha512.digest71": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "digest7",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "sha512.digest71",
+      "name": "digest71",
+      "offset": "0x40",
+      "doc": "Bits 32-63 of `SHA512_DIGEST7`. digest word 7"
+    },
+    "sha512.digest70": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "digest7",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "sha512.digest70",
+      "name": "digest70",
+      "offset": "0x44",
+      "doc": "Bits 0-31 of `SHA512_DIGEST7`."
+    },
+    "sha512.msg_length1": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "msg_length",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "sha512.msg_length1",
+      "name": "msg_length1",
+      "offset": "0x48",
+      "doc": "Bits 32-63 of `SHA512_MSG_LENGTH`. Bottom 64 bits of length of digested message,\nin bits"
+    },
+    "sha512.msg_length0": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "msg_length",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "sha512.msg_length0",
+      "name": "msg_length0",
+      "offset": "0x4c",
+      "doc": "Bits 0-31 of `SHA512_MSG_LENGTH`."
+    },
+    "sha512.ev_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 3,
+          "nbits": 29,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "sha512_done",
+          "lsb": 2,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``sha512_done`` event"
+        },
+        {
+          "name": "fifo_full",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``fifo_full`` event"
+        },
+        {
+          "name": "err_valid",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``err_valid`` event"
+        }
+      ],
+      "id": "sha512.ev_status",
+      "name": "ev_status",
+      "offset": "0x50",
+      "doc": "SHA512 is done"
+    },
+    "sha512.ev_pending": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 3,
+          "nbits": 29,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "sha512_done",
+          "lsb": 2,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "SHA512 is done"
+        },
+        {
+          "name": "fifo_full",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "FIFO is full"
+        },
+        {
+          "name": "err_valid",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Error flag was generated"
+        }
+      ],
+      "id": "sha512.ev_pending",
+      "name": "ev_pending",
+      "offset": "0x54",
+      "doc": "SHA512 is done"
+    },
+    "sha512.ev_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 3,
+          "nbits": 29,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "sha512_done",
+          "lsb": 2,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``sha512_done`` Event"
+        },
+        {
+          "name": "fifo_full",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``fifo_full`` Event"
+        },
+        {
+          "name": "err_valid",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``err_valid`` Event"
+        }
+      ],
+      "id": "sha512.ev_enable",
+      "name": "ev_enable",
+      "offset": "0x58",
+      "doc": "SHA512 is done"
+    },
+    "sha512.fifo": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 23,
+          "nbits": 9,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "running",
+          "lsb": 22,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "hash engine is running and controls are locked out"
+        },
+        {
+          "name": "almost_empty",
+          "lsb": 21,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "almost empty"
+        },
+        {
+          "name": "almost_full",
+          "lsb": 20,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "almost full"
+        },
+        {
+          "name": "write_error",
+          "lsb": 19,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "write error occurred"
+        },
+        {
+          "name": "read_error",
+          "lsb": 18,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "read error occurred"
+        },
+        {
+          "name": "write_count",
+          "lsb": 9,
+          "nbits": 9,
+          "access": "",
+          "reset": "0",
+          "doc": "write pointer"
+        },
+        {
+          "name": "read_count",
+          "lsb": 0,
+          "nbits": 9,
+          "access": "",
+          "reset": "0",
+          "doc": "read pointer"
+        }
+      ],
+      "id": "sha512.fifo",
+      "name": "fifo",
+      "offset": "0x5c",
+      "doc": "FIFO status"
+    },
+    "engine": {
+      "type": "blk",
+      "children": [
+        "engine.window",
+        "engine.mpstart",
+        "engine.mplen",
+        "engine.control",
+        "engine.status",
+        "engine.ev_status",
+        "engine.ev_pending",
+        "engine.ev_enable",
+        "engine.instruction"
+      ],
+      "id": "engine",
+      "name": "engine",
+      "offset": "0xf001e000",
+      "doc": ""
+    },
+    "engine.window": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 4,
+          "nbits": 28,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "window",
+          "lsb": 0,
+          "nbits": 4,
+          "access": "",
+          "reset": "0",
+          "doc": "Selects the current register window to use"
+        }
+      ],
+      "id": "engine.window",
+      "name": "window",
+      "offset": "0x0",
+      "doc": ""
+    },
+    "engine.mpstart": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 10,
+          "nbits": 22,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "mpstart",
+          "lsb": 0,
+          "nbits": 10,
+          "access": "",
+          "reset": "0",
+          "doc": "Where to start execution"
+        }
+      ],
+      "id": "engine.mpstart",
+      "name": "mpstart",
+      "offset": "0x4",
+      "doc": ""
+    },
+    "engine.mplen": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 10,
+          "nbits": 22,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "mplen",
+          "lsb": 0,
+          "nbits": 10,
+          "access": "",
+          "reset": "0",
+          "doc": "Length of the current microcode program. Thus valid code must be in the range of\n[mpstart, mpstart + mplen]"
+        }
+      ],
+      "id": "engine.mplen",
+      "name": "mplen",
+      "offset": "0x8",
+      "doc": ""
+    },
+    "engine.control": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "go",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Writing to this puts the engine in `run` mode, and it will execute mplen\nmicrocode instructions starting at mpstart"
+        }
+      ],
+      "id": "engine.control",
+      "name": "control",
+      "offset": "0xc",
+      "doc": ""
+    },
+    "engine.status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 11,
+          "nbits": 21,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "mpc",
+          "lsb": 1,
+          "nbits": 10,
+          "access": "",
+          "reset": "0",
+          "doc": "Current location of the microcode program counter. Mostly for debug."
+        },
+        {
+          "name": "running",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "When set, the microcode engine is running. All wishbone access to RF and\nmicrocode memory areas will stall until this bit is clear"
+        }
+      ],
+      "id": "engine.status",
+      "name": "status",
+      "offset": "0x10",
+      "doc": ""
+    },
+    "engine.ev_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "illegal_opcode",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``illegal_opcode`` event"
+        },
+        {
+          "name": "finished",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``finished`` event"
+        }
+      ],
+      "id": "engine.ev_status",
+      "name": "ev_status",
+      "offset": "0x14",
+      "doc": "Illegal opcode encountered"
+    },
+    "engine.ev_pending": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "illegal_opcode",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Illegal opcode encountered"
+        },
+        {
+          "name": "finished",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Microcode run finished execution"
+        }
+      ],
+      "id": "engine.ev_pending",
+      "name": "ev_pending",
+      "offset": "0x18",
+      "doc": "Illegal opcode encountered"
+    },
+    "engine.ev_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "illegal_opcode",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``illegal_opcode`` Event"
+        },
+        {
+          "name": "finished",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``finished`` Event"
+        }
+      ],
+      "id": "engine.ev_enable",
+      "name": "ev_enable",
+      "offset": "0x1c",
+      "doc": "Illegal opcode encountered"
+    },
+    "engine.instruction": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "immediate",
+          "lsb": 23,
+          "nbits": 9,
+          "access": "",
+          "reset": "0",
+          "doc": "Used by jumps to load the next PC value"
+        },
+        {
+          "name": "wd",
+          "lsb": 18,
+          "nbits": 5,
+          "access": "",
+          "reset": "0",
+          "doc": "write register"
+        },
+        {
+          "name": "cb",
+          "lsb": 17,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "set to substitute constant table value for B"
+        },
+        {
+          "name": "rb",
+          "lsb": 12,
+          "nbits": 5,
+          "access": "",
+          "reset": "0",
+          "doc": "operand B read register"
+        },
+        {
+          "name": "ca",
+          "lsb": 11,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "set to substitute constant table value for A"
+        },
+        {
+          "name": "ra",
+          "lsb": 6,
+          "nbits": 5,
+          "access": "",
+          "reset": "0",
+          "doc": "operand A read register"
+        },
+        {
+          "name": "opcode",
+          "lsb": 0,
+          "nbits": 6,
+          "access": "",
+          "reset": "0",
+          "doc": "opcode to be executed"
+        }
+      ],
+      "id": "engine.instruction",
+      "name": "instruction",
+      "offset": "0x20",
+      "doc": "Current instruction being executed by the engine. The format of this register\nexactly reflects the binary layout of an Engine instruction."
+    },
+    "jtag": {
+      "type": "blk",
+      "children": [
+        "jtag.next",
+        "jtag.tdo"
+      ],
+      "id": "jtag",
+      "name": "jtag",
+      "offset": "0xf001f000",
+      "doc": ""
+    },
+    "jtag.next": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "tms",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "TMS pin value"
+        },
+        {
+          "name": "tdi",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "TDI pin value"
+        }
+      ],
+      "id": "jtag.next",
+      "name": "next",
+      "offset": "0x0",
+      "doc": "Next state for TDI/TMS; writing automatically clocks TCK"
+    },
+    "jtag.tdo": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 2,
+          "nbits": 30,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "ready",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "JTAG machine is ready for a new cycle; also indicates TDO is valid"
+        },
+        {
+          "name": "tdo",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "TDO pin value"
+        }
+      ],
+      "id": "jtag.tdo",
+      "name": "tdo",
+      "offset": "0x4",
+      "doc": "TDO resulting from previous cycle"
+    },
+    "wdt": {
+      "type": "blk",
+      "children": [
+        "wdt.watchdog",
+        "wdt.period",
+        "wdt.interrupt",
+        "wdt.state",
+        "wdt.ev_status",
+        "wdt.ev_pending",
+        "wdt.ev_enable"
+      ],
+      "id": "wdt",
+      "name": "wdt",
+      "offset": "0xf0020000",
+      "doc": ""
+    },
+    "wdt.watchdog": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 17,
+          "nbits": 15,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "enable",
+          "lsb": 16,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Enable the watchdog timer. Cannot be disabled once enabled, except with a reset.\nNotably, a watchdog reset will disable the watchdog."
+        },
+        {
+          "name": "reset_code",
+          "lsb": 0,
+          "nbits": 16,
+          "access": "",
+          "reset": "0",
+          "doc": "Write `600d` then `c0de` in sequence to this register to reset the watchdog\ntimer"
+        }
+      ],
+      "id": "wdt.watchdog",
+      "name": "watchdog",
+      "offset": "0x0",
+      "doc": ""
+    },
+    "wdt.period": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "period",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "325000000",
+          "doc": "Number of 'approximately 65MHz' CFGMCLK cycles before each reset_code must be\nentered. Defaults to a range of 1.67-5.00 seconds"
+        }
+      ],
+      "id": "wdt.period",
+      "name": "period",
+      "offset": "0x4",
+      "doc": ""
+    },
+    "wdt.interrupt": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "interrupt",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Writing this causes an interrupt to fire. Used by the kernel to initiate a\nroutine to reset the WDT in an interrupt context."
+        }
+      ],
+      "id": "wdt.interrupt",
+      "name": "interrupt",
+      "offset": "0x8",
+      "doc": ""
+    },
+    "wdt.state": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 4,
+          "nbits": 28,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "disarmed",
+          "lsb": 3,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "WDT in the disarmed state"
+        },
+        {
+          "name": "armed2",
+          "lsb": 2,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "WDT in the armed2 state"
+        },
+        {
+          "name": "armed1",
+          "lsb": 1,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "WDT in the armed1 state"
+        },
+        {
+          "name": "enabled",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "WDT has been enabled"
+        }
+      ],
+      "id": "wdt.state",
+      "name": "state",
+      "offset": "0xc",
+      "doc": ""
+    },
+    "wdt.ev_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "soft_int",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``soft_int`` event"
+        }
+      ],
+      "id": "wdt.ev_status",
+      "name": "ev_status",
+      "offset": "0x10",
+      "doc": "This register contains the current raw level of the soft_int event trigger.\nWrites to this register have no effect."
+    },
+    "wdt.ev_pending": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "soft_int",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a `soft_int` event occurred. This Event is triggered on a **falling**\nedge."
+        }
+      ],
+      "id": "wdt.ev_pending",
+      "name": "ev_pending",
+      "offset": "0x14",
+      "doc": "When a  soft_int event occurs, the corresponding bit will be set in this\nregister.  To clear the Event, set the corresponding bit in this register."
+    },
+    "wdt.ev_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "soft_int",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``soft_int`` Event"
+        }
+      ],
+      "id": "wdt.ev_enable",
+      "name": "ev_enable",
+      "offset": "0x18",
+      "doc": "This register enables the corresponding soft_int events.  Write a ``0`` to this\nregister to disable individual events."
+    },
+    "d11ctime": {
+      "type": "blk",
+      "children": [
+        "d11ctime.control",
+        "d11ctime.heartbeat"
+      ],
+      "id": "d11ctime",
+      "name": "d11ctime",
+      "offset": "0xf0021000",
+      "doc": ""
+    },
+    "d11ctime.control": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 15,
+          "nbits": 17,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "count",
+          "lsb": 0,
+          "nbits": 15,
+          "access": "",
+          "reset": "1638",
+          "doc": "Number of 1/32768 second ticks before creating a heart beat"
+        }
+      ],
+      "id": "d11ctime.control",
+      "name": "control",
+      "offset": "0x0",
+      "doc": ""
+    },
+    "d11ctime.heartbeat": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "beat",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Set to `1` at the next `count` interval rollover since `clear` was set."
+        }
+      ],
+      "id": "d11ctime.heartbeat",
+      "name": "heartbeat",
+      "offset": "0x4",
+      "doc": ""
+    },
+    "identifier_mem": {
+      "type": "blk",
+      "children": [
+        "identifier_mem.identifier_mem"
+      ],
+      "id": "identifier_mem",
+      "name": "identifier_mem",
+      "offset": "0xf0022000",
+      "doc": ""
+    },
+    "identifier_mem.identifier_mem": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 8,
+          "nbits": 24,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "identifier_mem",
+          "lsb": 0,
+          "nbits": 8,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "identifier_mem.identifier_mem",
+      "name": "identifier_mem",
+      "offset": "0x0",
+      "doc": "8 x 19-bit memory"
+    },
+    "timer0": {
+      "type": "blk",
+      "children": [
+        "timer0.load",
+        "timer0.reload",
+        "timer0.en",
+        "timer0.update_value",
+        "timer0.value",
+        "timer0.ev_status",
+        "timer0.ev_pending",
+        "timer0.ev_enable"
+      ],
+      "id": "timer0",
+      "name": "timer0",
+      "offset": "0xf0023000",
+      "doc": ""
+    },
+    "timer0.load": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "load",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "timer0.load",
+      "name": "load",
+      "offset": "0x0",
+      "doc": "Load value when Timer is (re-)enabled. In One-Shot mode, the value written to\nthis register specifies the Timer's duration in clock cycles."
+    },
+    "timer0.reload": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "reload",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "timer0.reload",
+      "name": "reload",
+      "offset": "0x4",
+      "doc": "Reload value when Timer reaches ``0``. In Periodic mode, the value written to\nthis register specify the Timer's period in clock cycles."
+    },
+    "timer0.en": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "en",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "timer0.en",
+      "name": "en",
+      "offset": "0x8",
+      "doc": "Enable flag of the Timer. Set this flag to ``1`` to enable/start the Timer.  Set\nto ``0`` to disable the Timer."
+    },
+    "timer0.update_value": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "update_value",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "timer0.update_value",
+      "name": "update_value",
+      "offset": "0xc",
+      "doc": "Update trigger for the current countdown value. A write to this register latches\nthe current countdown value to ``value`` register."
+    },
+    "timer0.value": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "value",
+          "lsb": 0,
+          "nbits": 32,
+          "access": "",
+          "reset": "0",
+          "doc": ""
+        }
+      ],
+      "id": "timer0.value",
+      "name": "value",
+      "offset": "0x10",
+      "doc": "Latched countdown value. This value is updated by writing to ``update_value``."
+    },
+    "timer0.ev_status": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "zero",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Level of the ``zero`` event"
+        }
+      ],
+      "id": "timer0.ev_status",
+      "name": "ev_status",
+      "offset": "0x14",
+      "doc": "This register contains the current raw level of the zero event trigger.  Writes\nto this register have no effect."
+    },
+    "timer0.ev_pending": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "zero",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "`1` if a `zero` event occurred. This Event is triggered on a **falling** edge."
+        }
+      ],
+      "id": "timer0.ev_pending",
+      "name": "ev_pending",
+      "offset": "0x18",
+      "doc": "When a  zero event occurs, the corresponding bit will be set in this register.\nTo clear the Event, set the corresponding bit in this register."
+    },
+    "timer0.ev_enable": {
+      "type": "reg",
+      "fields": [
+        {
+          "name": "rsvd0",
+          "lsb": 1,
+          "nbits": 31,
+          "access": "rsvd",
+          "reset": "0",
+          "doc": "Reserved"
+        },
+        {
+          "name": "zero",
+          "lsb": 0,
+          "nbits": 1,
+          "access": "",
+          "reset": "0",
+          "doc": "Write a ``1`` to enable the ``zero`` Event"
+        }
+      ],
+      "id": "timer0.ev_enable",
+      "name": "ev_enable",
+      "offset": "0x1c",
+      "doc": "This register enables the corresponding zero events.  Write a ``0`` to this\nregister to disable individual events."
+    }
+  }
+}

@@ -1,0 +1,448 @@
+{
+    "schema": {
+        "name": "register-description-format",
+        "version": "v1"
+    },
+    "root": {
+        "desc": "ARMCM3xxx",
+        "version": "1.0",
+        "children": [
+            "timer0",
+            "timer1",
+            "timer2"
+        ]
+    },
+    "elements": {
+        "timer0": {
+            "type": "blk",
+            "children": [
+                "timer0.cr",
+                "timer0.sr",
+                "timer0.int",
+                "timer0.count",
+                "timer0.match",
+                "timer0.prescale_rd",
+                "timer0.prescale_wr",
+                "timer0.reload0",
+                "timer0.reload1",
+                "timer0.reload2",
+                "timer0.reload3"
+            ],
+            "id": "timer0",
+            "name": "timer0",
+            "offset": "0x40010000",
+            "doc": "32 Timer / Counter, counting up or down from different sources"
+        },
+        "timer0.cr": {
+            "type": "reg",
+            "fields": [
+                {
+                    "name": "s",
+                    "lsb": 31,
+                    "nbits": 1,
+                    "access": "read-write",
+                    "reset": "0",
+                    "doc": "Starts and Stops the Timer / Counter"
+                },
+                {
+                    "name": "rsvd2",
+                    "lsb": 28,
+                    "nbits": 3,
+                    "access": "rsvd",
+                    "reset": "0",
+                    "doc": "Reserved"
+                },
+                {
+                    "name": "idr",
+                    "lsb": 26,
+                    "nbits": 2,
+                    "access": "read-write",
+                    "reset": "0",
+                    "doc": "Selects, if Reload Register number is incremented, decremented or not modified"
+                },
+                {
+                    "name": "reload",
+                    "lsb": 24,
+                    "nbits": 2,
+                    "access": "read-write",
+                    "reset": "0",
+                    "doc": "Select RELOAD Register n to reload Timer on condition"
+                },
+                {
+                    "name": "rsvd1",
+                    "lsb": 22,
+                    "nbits": 2,
+                    "access": "rsvd",
+                    "reset": "0",
+                    "doc": "Reserved"
+                },
+                {
+                    "name": "trgext",
+                    "lsb": 20,
+                    "nbits": 2,
+                    "access": "read-write",
+                    "reset": "0",
+                    "doc": "Triggers an other Peripheral"
+                },
+                {
+                    "name": "rsvd0",
+                    "lsb": 18,
+                    "nbits": 2,
+                    "access": "rsvd",
+                    "reset": "0",
+                    "doc": "Reserved"
+                },
+                {
+                    "name": "capedge",
+                    "lsb": 16,
+                    "nbits": 2,
+                    "access": "read-write",
+                    "reset": "0",
+                    "doc": "Capture Edge, select which Edge should result in a counter increment or decrement"
+                },
+                {
+                    "name": "capsrc",
+                    "lsb": 12,
+                    "nbits": 4,
+                    "access": "read-write",
+                    "reset": "0",
+                    "doc": "Timer / Counter Capture Source"
+                },
+                {
+                    "name": "cntsrc",
+                    "lsb": 8,
+                    "nbits": 4,
+                    "access": "read-write",
+                    "reset": "0",
+                    "doc": "Timer / Counter Source Divider"
+                },
+                {
+                    "name": "psc",
+                    "lsb": 7,
+                    "nbits": 1,
+                    "access": "read-write",
+                    "reset": "0",
+                    "doc": "Use Prescaler"
+                },
+                {
+                    "name": "mode",
+                    "lsb": 4,
+                    "nbits": 3,
+                    "access": "read-write",
+                    "reset": "0",
+                    "doc": "Operation Mode"
+                },
+                {
+                    "name": "cnt",
+                    "lsb": 2,
+                    "nbits": 2,
+                    "access": "read-write",
+                    "reset": "0",
+                    "doc": "Counting direction"
+                },
+                {
+                    "name": "rst",
+                    "lsb": 1,
+                    "nbits": 1,
+                    "access": "write-only",
+                    "reset": "0",
+                    "doc": "Reset Timer"
+                },
+                {
+                    "name": "en",
+                    "lsb": 0,
+                    "nbits": 1,
+                    "access": "read-write",
+                    "reset": "0",
+                    "doc": "Enable"
+                }
+            ],
+            "id": "timer0.cr",
+            "name": "cr",
+            "offset": "0x0",
+            "doc": "Control Register"
+        },
+        "timer0.sr": {
+            "type": "reg",
+            "fields": [
+                {
+                    "name": "rsvd3",
+                    "lsb": 16,
+                    "nbits": 16,
+                    "access": "rsvd",
+                    "reset": "0",
+                    "doc": "Reserved"
+                },
+                {
+                    "name": "reload",
+                    "lsb": 14,
+                    "nbits": 2,
+                    "access": "read-only",
+                    "reset": "0",
+                    "doc": "Shows the currently active RELOAD Register"
+                },
+                {
+                    "name": "rsvd2",
+                    "lsb": 13,
+                    "nbits": 1,
+                    "access": "rsvd",
+                    "reset": "0",
+                    "doc": "Reserved"
+                },
+                {
+                    "name": "rst",
+                    "lsb": 12,
+                    "nbits": 1,
+                    "access": "read-only",
+                    "reset": "0",
+                    "doc": "Shows if Timer is in RESET state"
+                },
+                {
+                    "name": "rsvd1",
+                    "lsb": 11,
+                    "nbits": 1,
+                    "access": "rsvd",
+                    "reset": "0",
+                    "doc": "Reserved"
+                },
+                {
+                    "name": "ov",
+                    "lsb": 10,
+                    "nbits": 1,
+                    "access": "read-write",
+                    "reset": "0",
+                    "doc": "Shows if an overflow occured. This flag is sticky"
+                },
+                {
+                    "name": "un",
+                    "lsb": 9,
+                    "nbits": 1,
+                    "access": "read-write",
+                    "reset": "0",
+                    "doc": "Shows if an underflow occured. This flag is sticky"
+                },
+                {
+                    "name": "match",
+                    "lsb": 8,
+                    "nbits": 1,
+                    "access": "read-write",
+                    "reset": "0",
+                    "doc": "Shows if the MATCH was hit"
+                },
+                {
+                    "name": "rsvd0",
+                    "lsb": 1,
+                    "nbits": 7,
+                    "access": "rsvd",
+                    "reset": "0",
+                    "doc": "Reserved"
+                },
+                {
+                    "name": "run",
+                    "lsb": 0,
+                    "nbits": 1,
+                    "access": "read-only",
+                    "reset": "0",
+                    "doc": "Shows if Timer is running or not"
+                }
+            ],
+            "id": "timer0.sr",
+            "name": "sr",
+            "offset": "0x4",
+            "doc": "Status Register"
+        },
+        "timer0.int": {
+            "type": "reg",
+            "fields": [
+                {
+                    "name": "rsvd1",
+                    "lsb": 7,
+                    "nbits": 25,
+                    "access": "rsvd",
+                    "reset": "0",
+                    "doc": "Reserved"
+                },
+                {
+                    "name": "mode",
+                    "lsb": 4,
+                    "nbits": 3,
+                    "access": "read-write",
+                    "reset": "0",
+                    "doc": "Interrupt Mode, selects on which condition the Timer should generate an Interrupt"
+                },
+                {
+                    "name": "rsvd0",
+                    "lsb": 1,
+                    "nbits": 3,
+                    "access": "rsvd",
+                    "reset": "0",
+                    "doc": "Reserved"
+                },
+                {
+                    "name": "en",
+                    "lsb": 0,
+                    "nbits": 1,
+                    "access": "read-write",
+                    "reset": "0",
+                    "doc": "Interrupt Enable"
+                }
+            ],
+            "id": "timer0.int",
+            "name": "int",
+            "offset": "0x10",
+            "doc": "Interrupt Register"
+        },
+        "timer0.count": {
+            "type": "reg",
+            "fields": [
+                {
+                    "name": "inferred",
+                    "lsb": 0,
+                    "nbits": 32,
+                    "access": "inferred",
+                    "reset": "0",
+                    "doc": "inferred"
+                }
+            ],
+            "id": "timer0.count",
+            "name": "count",
+            "offset": "0x20",
+            "doc": "The Counter Register reflects the actual Value of the Timer/Counter"
+        },
+        "timer0.match": {
+            "type": "reg",
+            "fields": [
+                {
+                    "name": "inferred",
+                    "lsb": 0,
+                    "nbits": 32,
+                    "access": "inferred",
+                    "reset": "0",
+                    "doc": "inferred"
+                }
+            ],
+            "id": "timer0.match",
+            "name": "match",
+            "offset": "0x24",
+            "doc": "The Match Register stores the compare Value for the MATCH condition"
+        },
+        "timer0.prescale_rd": {
+            "type": "reg",
+            "fields": [
+                {
+                    "name": "inferred",
+                    "lsb": 0,
+                    "nbits": 32,
+                    "access": "inferred",
+                    "reset": "0",
+                    "doc": "inferred"
+                }
+            ],
+            "id": "timer0.prescale_rd",
+            "name": "prescale_rd",
+            "offset": "0x28",
+            "doc": "The Prescale Register stores the Value for the prescaler. The cont event gets divided by this value"
+        },
+        "timer0.prescale_wr": {
+            "type": "reg",
+            "fields": [
+                {
+                    "name": "inferred",
+                    "lsb": 0,
+                    "nbits": 32,
+                    "access": "inferred",
+                    "reset": "0",
+                    "doc": "inferred"
+                }
+            ],
+            "id": "timer0.prescale_wr",
+            "name": "prescale_wr",
+            "offset": "0x28",
+            "doc": "The Prescale Register stores the Value for the prescaler. The cont event gets divided by this value"
+        },
+        "timer0.reload0": {
+            "type": "reg",
+            "fields": [
+                {
+                    "name": "inferred",
+                    "lsb": 0,
+                    "nbits": 32,
+                    "access": "inferred",
+                    "reset": "0",
+                    "doc": "inferred"
+                }
+            ],
+            "id": "timer0.reload0",
+            "name": "reload0",
+            "offset": "0x50",
+            "doc": "The Reload Register stores the Value the COUNT Register gets reloaded on a when a condition was met."
+        },
+        "timer0.reload1": {
+            "type": "reg",
+            "fields": [
+                {
+                    "name": "inferred",
+                    "lsb": 0,
+                    "nbits": 32,
+                    "access": "inferred",
+                    "reset": "0",
+                    "doc": "inferred"
+                }
+            ],
+            "id": "timer0.reload1",
+            "name": "reload1",
+            "offset": "0x54",
+            "doc": "The Reload Register stores the Value the COUNT Register gets reloaded on a when a condition was met."
+        },
+        "timer0.reload2": {
+            "type": "reg",
+            "fields": [
+                {
+                    "name": "inferred",
+                    "lsb": 0,
+                    "nbits": 32,
+                    "access": "inferred",
+                    "reset": "0",
+                    "doc": "inferred"
+                }
+            ],
+            "id": "timer0.reload2",
+            "name": "reload2",
+            "offset": "0x58",
+            "doc": "The Reload Register stores the Value the COUNT Register gets reloaded on a when a condition was met."
+        },
+        "timer0.reload3": {
+            "type": "reg",
+            "fields": [
+                {
+                    "name": "inferred",
+                    "lsb": 0,
+                    "nbits": 32,
+                    "access": "inferred",
+                    "reset": "0",
+                    "doc": "inferred"
+                }
+            ],
+            "id": "timer0.reload3",
+            "name": "reload3",
+            "offset": "0x5c",
+            "doc": "The Reload Register stores the Value the COUNT Register gets reloaded on a when a condition was met."
+        },
+        "timer1": {
+            "type": "blk",
+            "children": [],
+            "id": "timer1",
+            "name": "timer1",
+            "offset": "0x40010100",
+            "doc": ""
+        },
+        "timer2": {
+            "type": "blk",
+            "children": [],
+            "id": "timer2",
+            "name": "timer2",
+            "offset": "0x40010200",
+            "doc": ""
+        }
+    }
+}

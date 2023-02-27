@@ -1,0 +1,118 @@
+{
+  "schema": {
+    "version": "v1",
+    "name": "register-description-format"
+  },
+  "root": {
+    "version": "v1.0",
+    "desc": "Multi-SoC Example",
+    "links": [
+      {
+        "text": "GitHub",
+        "href": "https://github.jpl.nasa.gov/regvue/demos"
+      }
+    ],
+    "children": [
+      "ARM_Sample",
+      "AT91SAM9CN11",
+      "EFM32G200F16",
+      "LPC1102_4_v4",
+      "M051_Series",
+      "M061",
+      "MB9AF10xN",
+      "MK02F12810",
+      "STM32F030",
+      "e310x",
+      "esp32c3",
+      "ht32f125x",
+      "nrf51",
+      "rp2040"
+    ]
+  },
+  "elements": {
+    "ARM_Sample": {
+      "id": "ARM_Sample",
+      "name": "ARM_Sample",
+      "type": "include",
+      "url": "ARM_Sample.svd.json"
+    },
+    "AT91SAM9CN11": {
+      "id": "AT91SAM9CN11",
+      "name": "AT91SAM9CN11",
+      "type": "include",
+      "url": "AT91SAM9CN11.svd.json"
+    },
+    "EFM32G200F16": {
+      "id": "EFM32G200F16",
+      "name": "EFM32G200F16",
+      "type": "include",
+      "url": "EFM32G200F16.svd.json"
+    },
+    "LPC1102_4_v4": {
+      "id": "LPC1102_4_v4",
+      "name": "LPC1102_4_v4",
+      "type": "include",
+      "url": "LPC1102_4_v4.svd.json"
+    },
+    "M051_Series": {
+      "id": "M051_Series",
+      "name": "M051_Series",
+      "type": "include",
+      "url": "M051_Series.svd.json"
+    },
+    "M061": {
+      "id": "M061",
+      "name": "M061",
+      "type": "include",
+      "url": "M061.svd.json"
+    },
+    "MB9AF10xN": {
+      "id": "MB9AF10xN",
+      "name": "MB9AF10xN",
+      "type": "include",
+      "url": "MB9AF10xN.svd.json"
+    },
+    "MK02F12810": {
+      "id": "MK02F12810",
+      "name": "MK02F12810",
+      "type": "include",
+      "url": "MK02F12810.svd.json"
+    },
+    "STM32F030": {
+      "id": "STM32F030",
+      "name": "STM32F030",
+      "type": "include",
+      "url": "STM32F030.svd.json"
+    },
+    "e310x": {
+      "id": "e310x",
+      "name": "e310x",
+      "type": "include",
+      "url": "e310x.svd.json"
+    },
+    "esp32c3": {
+      "id": "esp32c3",
+      "name": "esp32c3",
+      "type": "include",
+      "url": "esp32c3.svd.json"
+    },
+    "ht32f125x": {
+      "id": "ht32f125x",
+      "name": "ht32f125x",
+      "type": "include",
+      "url": "ht32f125x.svd.json"
+    },
+    "nrf51": {
+      "id": "nrf51",
+      "name": "nrf51",
+      "type": "include",
+      "url": "nrf51.svd.json"
+    },
+    "rp2040": {
+      "id": "rp2040",
+      "name": "rp2040",
+      "type": "include",
+      "url": "rp2040.svd.json"
+    }
+  }
+}
