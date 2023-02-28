@@ -1,4 +1,4 @@
-= regvue
+= Regvue
 :imagesdir: images
 :toc: macro
 
@@ -8,6 +8,9 @@
 :demo_register_description: https://nasa-jpl.github.io/regvue/v1/example.json
 
 A modern web-based viewer for FPGA/ASIC register documentation.
+
+NOTE: This repository is in the process of being migrated from JPL GitHub Enterprise to GitHub.com.
+The Git repository has been migrated but the issues, pull requests, and releases have not.
 
 toc::[]
 
