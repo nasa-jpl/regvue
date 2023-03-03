@@ -18,6 +18,8 @@ toc::[]
 
 image::https://user-images.githubusercontent.com/28975/221743969-e6512938-a2f4-4c40-85e7-7aa7fba6b551.png[]
 
+Disclaimer: Reference herein to any specific commercial product, process, or service by trade name, trademark, manufacturer, or otherwise, does not constitute or imply its endorsement by the United States Government or the Jet Propulsion Laboratory, California Institute of Technology.
+
 == Demos
 
 * https://nasa-jpl.github.io/regvue/v1/#/?data=example.json[Basic demo]
