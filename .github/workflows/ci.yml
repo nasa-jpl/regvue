@@ -1,0 +1,55 @@
+name: 'CI'
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  unit-tests:
+    name: "Unit tests"
+    runs-on: "ubuntu-latest"
+    defaults:
+      run:
+        working-directory: app
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm clean-install
+      - run: npm test
+
+  e2e-tests:
+    name: "End-to-end tests"
+    runs-on: "ubuntu-latest"
+    defaults:
+      run:
+        working-directory: app
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm clean-install
+      - run: npx playwright install
+      - run: npm run playwright
+
+  lint:
+    name: "Lint"
+    runs-on: "ubuntu-latest"
+    defaults:
+      run:
+        working-directory: app
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm clean-install
+      - run: npm run lint
